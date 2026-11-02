@@ -22,8 +22,14 @@ let client=null,authed=false,entries=[],research=null;
 function setAuthState(ok,status){
  authed=ok;
  $("owner-content").hidden=!ok;
- $("login-button").hidden=ok;
- $("logout-button").hidden=!ok;
+ // The site-wide Google gate has identically named controls. Keep its
+ // navigation sign-out independent of this nested private ledger.
+ const panel=$("login-panel");
+ if(panel)panel.hidden=ok;
+ const localLogin=panel?.querySelector("#login-button");
+ const localLogout=panel?.querySelector("#logout-button");
+ if(localLogin)localLogin.hidden=ok;
+ if(localLogout)localLogout.hidden=!ok;
  msg("private-status",status);
 }
 function clearLocal(){
@@ -183,8 +189,8 @@ async function previewPrivateFile(){
 }
 async function initialize(){
  $("entry-date").value=todayLocal();
- $("login-button").addEventListener("click",signIn);
- $("logout-button").addEventListener("click",signOut);
+ $("login-panel")?.querySelector("#login-button")?.addEventListener("click",signIn);
+ $("login-panel")?.querySelector("#logout-button")?.addEventListener("click",signOut);
  $("entry-form").addEventListener("submit",addEntry);
  $("research-file").addEventListener("change",previewPrivateFile);
  $("clear-research").addEventListener("click",()=>{
