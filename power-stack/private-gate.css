@@ -1,0 +1,27 @@
+[hidden]{display:none!important}
+.gate-wrap{min-height:70vh;max-width:620px;margin:12vh auto;padding:0 20px}
+.gate-box{border:1px solid #304037;background:#111b1b;border-radius:17px;padding:30px}
+.gate-mark{color:#9fd7bb;font-size:12px;font-weight:800;letter-spacing:.15em}
+.gate-box h1{font-size:clamp(30px,5vw,48px);margin:14px 0 10px}
+.gate-box p{color:#acbec0;line-height:1.6}
+.gate-button,.gate-logout{background:#a3e3c5;color:#071813;border:1px solid #659d7f;padding:10px 15px;border-radius:9px;font-weight:800;cursor:pointer}
+.gate-logout{background:transparent;color:#a3e3c5;padding:6px 10px;font-size:11px}
+.gate-button:disabled{opacity:.55}
+.gate-status{font-size:12px;min-height:18px;margin-top:18px}
+.owner-label{font-size:11px;color:#a3c5b6}
+.ps-owner-table{margin:22px 0;padding:18px;background:#10181d;border:1px solid #263c41;border-radius:15px}
+.ps-table-head{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.ps-table-head h2{margin:0;font-size:20px}.ps-table-head p,.ps-table-note{font-size:12px;color:#a7b8ba}
+.ps-table-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.ps-table-controls input{min-width:180px;flex:1;max-width:360px;border:1px solid #345052;border-radius:8px;background:#071115;color:#f0f8ef;padding:10px}
+.ps-table-chips{display:flex;gap:7px}.ps-chip,.ps-sort,.ps-ticker{cursor:pointer;background:transparent;color:#a3dac0;border:1px solid #386354;border-radius:6px;padding:7px 9px}
+.ps-chip[aria-pressed=true]{background:#28563d;color:#fff}
+.ps-table{width:100%;border-collapse:collapse;min-width:850px;font-size:12px}
+.ps-table th,.ps-table td{padding:10px;border-bottom:1px solid #26353b;text-align:left}
+.ps-table th{color:#afc6c5;font-size:11px}
+.ps-table td[data-direction=up]{color:#80cda9}
+.ps-table td[data-direction=down]{color:#eead99}
+.ps-ticker{text-align:left;border:0;padding:2px;color:#e1f8e9}
+.ps-row-details{background:#1a2a2c;color:#d9e9e7}
+.ps-row-details p{margin:8px 0;font-size:12px}
+@media(max-width:680px){.gate-wrap{margin:6vh auto}.gate-box{padding:20px}.ps-owner-table{padding:10px}.ps-table-head{display:block}}
