@@ -34,7 +34,7 @@ function render(){
  const scope=$("decision-scope").value,order=$("decision-order").value;
  const shown=records.filter(r=>
   (scope==="all"||scope==="holdings"&&r.held||scope==="watchlist"&&r.watch
-   ||scope==="gaps"&&!COVERAGE[r.ticker])
+   ||scope==="gaps"&&researchFor(r.ticker).posture==="NOT YET UNDERWRITTEN")
   &&(!needle||[r.ticker,r.name,researchFor(r.ticker).sector,researchFor(r.ticker).signal]
    .join(" ").toLowerCase().includes(needle)));
  shown.sort((a,b)=>{
@@ -70,7 +70,7 @@ function render(){
  }
  const numHeld=records.filter(x=>x.held).length;
  const numWatch=records.filter(x=>x.watch).length;
- const covered=records.filter(x=>COVERAGE[x.ticker]).length;
+ const covered=records.filter(x=>researchFor(x.ticker).posture!=="NOT YET UNDERWRITTEN").length;
  $("decision-stats").replaceChildren(
   text("span",numHeld+" archived holding names"),
   text("span",numWatch+" archived watchlist names"),
