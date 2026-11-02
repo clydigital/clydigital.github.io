@@ -1,0 +1,58 @@
+
+/* Compact Power Stack sector research and owner-private decisions */
+.sectorHero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.65fr);gap:13px;margin:25px 0 35px}
+.sectorHero>div:first-child{padding:27px;background:linear-gradient(115deg,#142920,#101b1c);border:1px solid #436753;border-radius:12px}
+.sectorHero h1{font-size:clamp(31px,4.5vw,50px);letter-spacing:-1.1px;line-height:1.1}
+.sectorHero h1 span{color:#a6daba}
+.sectorBrief{border:1px solid #30413d;background:#14211c;border-radius:12px;padding:19px;display:grid;gap:5px;align-content:start}
+.sectorBrief>span{font-size:10px;letter-spacing:.12em;color:#a2d6bd;font-weight:800;margin-bottom:12px}
+.sectorBrief>strong{font-size:14px;margin:5px 0 0}
+.sectorBrief p{font-size:12px;color:#bac8c4;margin:2px 0 10px}
+.metricTriplet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.metricTriplet>div{background:#151e20;border:1px solid #2b4440;border-radius:9px;padding:14px}
+.metricTriplet small,.metricTriplet span{display:block;font-size:10px;color:#b4cac4}
+.metricTriplet strong{font-size:25px;display:block;color:#c2eecf;margin:5px 0}
+.sectorLead{font-size:14px;color:#cdd8d6;line-height:1.75;margin:17px 0;max-width:950px}
+.researchTableWrap{overflow-x:auto;border:1px solid #314741;border-radius:9px;background:#11191d}
+.researchTable{min-width:850px;width:100%;border-collapse:collapse;font-size:12px}
+.researchTable th,.researchTable td{padding:14px;border-bottom:1px solid #2c3a38;vertical-align:top;text-align:left;line-height:1.62}
+.researchTable thead th{background:#172722;color:#bfdad0;text-transform:uppercase;font-size:10px;letter-spacing:.06em}
+.researchTable tbody th{font-size:14px;min-width:135px}
+.researchTable tbody th small{display:block;font-size:11px;color:#a9beb9;font-weight:500}
+.researchTable td:nth-child(2){min-width:230px}
+.researchTable a{font-size:11px}
+.researchTable td small{display:block;font-size:11px;color:#b6c6bd;margin-top:7px}
+.state{font-size:10px;color:#afebcc;font-weight:850;display:inline-block;border:1px solid #44745e;border-radius:3px;padding:4px 6px;letter-spacing:.04em}
+.state-wait{color:#f0d2a0;border-color:#776148}
+.twoResearch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.twoResearch>div{border:1px solid #344d44;border-radius:10px;background:#121d1a;padding:19px}
+.twoResearch h3{margin:0 0 8px;font-size:19px}
+.twoResearch p{color:#bbc9c5;font-size:13px;line-height:1.68}
+.twoResearch .bigstat{font-size:23px;color:#a9e5c2}
+.ownerPanel{border:1px solid #426355;background:linear-gradient(100deg,#12211c,#11191b);padding:20px;border-radius:12px;margin:20px 0}
+.ownerPanel h1{font-size:clamp(26px,3.6vw,36px);letter-spacing:-.8px;margin:6px 0 9px}
+.ownerPanel p{font-size:13px;color:#bfcfca}
+.ownerPanel button,.ownerPanel input{font:inherit}
+.ownerPanel button{cursor:pointer;background:#a5ddbb;color:#15271d;border:1px solid #7db79b;border-radius:7px;padding:10px 13px;font-weight:800}
+.ownerPanel button:disabled{opacity:.5}
+.ownerPanel button.secondary{background:#11231a;color:#c3edcc}
+.ownerStatus{font-size:12px;color:#f1d5a3}
+.ownerActions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.ownerControls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:10px;justify-content:space-between;margin:15px 0 12px}
+.ownerControls label{display:grid;gap:6px;font-size:11px;color:#b7cec3}
+.ownerControls input,.ownerControls select{border:1px solid #49645a;border-radius:6px;padding:9px;background:#111c1b;color:#e6f1ea;min-width:190px}
+.ownerStats{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.ownerStats span{padding:7px 10px;border:1px solid #365549;color:#cbded6;border-radius:7px;background:#15251f;font-size:11px}
+.ownerTable{width:100%;min-width:800px;border-collapse:collapse;font-size:12px}
+.ownerTable th,.ownerTable td{padding:12px;border-bottom:1px solid #32463f;vertical-align:top;text-align:left}
+.ownerTable thead{background:#1c3027;font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.ownerTable th small,.ownerTable td small{display:block;font-size:10px;color:#a9c4b9;font-weight:400;margin-top:6px}
+.ownerTable tbody th{font-size:14px}
+.ownerTable td strong{display:block;color:#c3e8d1;margin-bottom:3px}
+.ownerTable td p{margin:5px 0 0;font-size:11px;color:#bacdc2}
+.ownerTable a{font-size:11px}
+.ownerTable .pending{color:#f1d7ad}
+.ownerExplanation{border-top:1px solid #3a5148;padding:15px 3px 6px;max-width:990px;font-size:12px;color:#b9ccc4;line-height:1.7}
+.ownerExplanation strong{color:#e4f7ec}
+.hidden-by-default[hidden]{display:none!important}
+@media(max-width:790px){.sectorHero{grid-template-columns:1fr}.twoResearch{grid-template-columns:1fr}.metricTriplet{grid-template-columns:1fr}.ownerControls{align-items:stretch}.ownerControls input{width:100%}}
