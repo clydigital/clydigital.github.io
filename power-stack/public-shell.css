@@ -1,1 +1,56 @@
 :root{color-scheme:dark;--bg:#090d10;--panel:#131a1c;--muted:#a6b5b8;--text:#eff6ef;--mint:#9fd7bb;--line:#29363b;--gold:#e9bd75}*{box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);margin:0;font:14px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--mint)}a:focus-visible{outline:2px solid var(--mint);outline-offset:4px}.wrap{max-width:1160px;margin:auto;padding-left:22px;padding-right:22px}.site-header{background:#0d1214;border-bottom:1px solid var(--line)}.nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-top:16px;padding-bottom:16px}.brand{color:#fff;text-decoration:none;letter-spacing:-.7px;font-size:18px;font-weight:850}.brand em{font-style:normal;color:var(--mint)}.brand small{color:var(--muted);font-size:10px;margin-left:12px;letter-spacing:0;font-weight:500}nav{display:flex;flex-wrap:wrap;gap:17px}nav a{text-decoration:none;color:#d3dddc;font-size:12px}nav a[aria-current=page]{color:var(--mint);text-decoration:underline;text-underline-offset:7px}.status{font-size:10px;color:#a4b3ba;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:20px;letter-spacing:.06em;font-weight:700}.dot{display:inline-block;width:7px;height:7px;background:var(--mint);border-radius:50%;margin-right:7px}.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(290px,.77fr);gap:17px;margin:25px 0 42px}.hero-left{padding:28px 25px;background:linear-gradient(128deg,#152520 0%,#13191b 64%,#101618 100%);border:1px solid #355247;border-radius:15px}.eyebrow{font-size:10px;letter-spacing:.11em;color:var(--mint);font-weight:800;text-transform:uppercase;margin:0 0 9px}h1{font-size:clamp(28px,4.7vw,49px);letter-spacing:-1.5px;line-height:1.1;margin:9px 0 13px}h1 span{color:#b5e5c8}.lead{font-size:15px;max-width:700px;color:#cfdbdb;line-height:1.65}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.primary,.secondary{display:inline-flex;align-items:center;gap:6px;border:1px solid #4e876b;border-radius:9px;text-decoration:none;padding:10px 14px;font-weight:750;font-size:12px}.primary{background:var(--mint);color:#15271c}.secondary{background:#142521;color:var(--mint)}.guard{color:#a9bcbb;font-size:11px;margin-top:18px;max-width:690px;padding-top:12px;border-top:1px solid #33443f}.hero-right{border:1px solid #3b4546;border-radius:15px;background:var(--panel);padding:22px}.aside-overline,.meta,.tag{font-size:10px;letter-spacing:.08em;font-weight:800;color:#9dcab7}.hero-right h2{font-size:20px;line-height:1.2;margin:8px 0 19px}.rule{display:flex;gap:13px;padding:12px 0;border-top:1px solid #2e3839}.rule>span{font-size:12px;color:var(--gold);font-weight:850}.rule strong{font-size:13px}.rule p{color:var(--muted);font-size:11px;margin:3px 0}.aside-footer{border-top:1px solid var(--line);font-size:11px;color:var(--gold);padding-top:13px;margin-top:4px}.section{margin:35px 0}.section-title{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:12px;margin-bottom:15px}.section-title h2{font-size:24px;letter-spacing:-.4px;margin:2px 0 0}.section-title a{text-decoration:none;font-size:12px}.columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;min-height:175px}.card h3{font-size:19px;line-height:1.25;margin:8px 0 6px}.card p{color:#bac7c7;font-size:13px;margin:0}.footer-text{border-top:1px solid var(--line);color:#9bcbb3;font-weight:650;font-size:10px;margin-top:auto;padding-top:12px;letter-spacing:.04em}.research-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.lens{background:#10181a;border:1px solid var(--line);border-radius:12px;padding:19px;text-decoration:none;display:block;transition:border-color .12s}.lens:hover{border-color:#4c8f72}.lens h3{color:#eff5f1;font-size:18px;line-height:1.3;margin:8px 0}.lens p{color:#bac8c6;font-size:12px;margin:0}.private{background:linear-gradient(118deg,#10251d,#12191b);border:1px solid #416450;border-radius:13px;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:22px;margin:35px 0}.private h2{margin:0;font-size:21px}.private p:not(.eyebrow){color:#bfceca;font-size:12px;margin:7px 0 0;max-width:690px}.private .primary{white-space:nowrap}.disclaimer{font-size:11px;color:#97a5a9;margin:24px 0 36px;line-height:1.7}.research-hero{padding:20px 0 5px;margin:18px 0 25px}.research-hero h1{max-width:850px}.narrative{padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.narrative p{margin:0 0 10px;font-size:13px;color:#ced8d6}.narrative .muted{color:var(--muted);font-size:11px;margin-bottom:0}footer{border-top:1px solid var(--line);background:#0c1113}.footerrow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:22px;padding-bottom:25px;font-size:11px;color:#88999d}@media(max-width:870px){.hero{grid-template-columns:1fr}.columns{grid-template-columns:1fr}.private{align-items:start;flex-direction:column}}@media(max-width:620px){.wrap{padding:0 15px}.nav{align-items:start}.brand small{display:block;margin:0}.research-grid{grid-template-columns:1fr}.hero-left{padding:20px}.status{font-size:9px}.private{padding:15px}}
+
+/* 2 Nov 2026 editorial issue — evidence/decision-first, mobile readable. */
+.leadStory{margin:24px 0 36px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(255px,.72fr);gap:14px}
+.leadStory>div{border:1px solid #416757;background:linear-gradient(118deg,#11251e,#121c1e);border-radius:13px;padding:28px}
+.leadStory h1{max-width:720px;font-size:clamp(30px,4.3vw,50px);letter-spacing:-1.7px}
+.leadStory h1 span,.research-hero h1 span{color:var(--mint,#9fd7bb)}
+.leadStory .lead{font-size:15px;max-width:750px;line-height:1.75}
+.conviction{background:#141c20;border:1px solid var(--line,#29363b);padding:19px;border-radius:13px}
+.conviction>span{display:block;color:var(--mint);font-size:10px;font-weight:850;letter-spacing:.12em;margin-bottom:10px}
+.conviction>div{padding:12px 0;border-top:1px solid #324044}
+.conviction small{display:block;color:#a7bcbc;font-size:10px;font-weight:750;text-transform:uppercase}
+.conviction strong{display:block;font-size:clamp(22px,2.3vw,30px);margin:5px 0 2px;letter-spacing:-.8px}
+.conviction p{color:#b9c6c7;font-size:11px;margin:0}
+.negative{color:#f5aba2}.positive{color:#a2e1c7}
+.sourceLine{font-size:11px!important;color:#9eb4b9!important;line-height:1.65;margin:13px 0 0}
+.sourceLine a{color:#bae6cc}.sourceLine a:hover{text-decoration:none}
+.tableScroll{overflow-x:auto;border:1px solid #334248;border-radius:11px;background:#12191e}
+.equityTable{border-collapse:collapse;min-width:800px;width:100%;font-size:12px}
+.equityTable th,.equityTable td{border-bottom:1px solid #293a3f;padding:14px 13px;text-align:left;vertical-align:top}
+.equityTable thead th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#a8c7c7;background:#1b282b}
+.equityTable tbody th{font-size:15px;color:#e8fff0;white-space:nowrap}
+.equityTable tbody th small{display:block;font-size:11px;font-weight:400;color:#adbfbe}
+.equityTable tbody td:nth-child(4){max-width:290px}
+.equityTable tbody td:last-child{font-size:10px;color:var(--mint);font-weight:700}
+.decision{gap:7px}
+.decision .test{font-size:11px;border-top:1px solid #354145;color:#c3d5d0;margin-top:auto;padding-top:10px}
+.decision .test b{color:#b1e2c5}
+.decision a{font-size:11px;font-weight:750;text-decoration:none;margin-top:8px}
+.macroBar{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:23px;border:1px solid #54705e;background:#131f1a;border-radius:12px;margin:31px 0}
+.macroBar h2{margin:0 0 8px;font-size:24px}.macroBar p:not(.eyebrow){max-width:730px;color:#c6d2d1;font-size:13px;line-height:1.65}
+.macroBar a{font-size:12px}
+.macroBar aside{min-width:175px;border-left:1px solid #465d52;padding-left:18px}
+.macroBar aside strong,.macroBar aside small{display:block;font-size:11px;color:#b1d5c6}
+.macroBar aside span{font-size:28px;display:block;white-space:nowrap;font-weight:850;color:#f1e5bc;margin:6px 0}
+.queue{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.queue>div{display:flex;gap:12px;border:1px solid var(--line,#29363b);padding:15px;background:#131a1e;border-radius:10px}
+.queue b{color:#dcbf82;font-size:15px}.queue p{margin:0}
+.queue strong{display:block;font-size:13px;margin-bottom:4px}.queue span{display:block;color:#b9c8c9;font-size:12px}
+.quiet{color:#99afb1;font-size:11px}
+.jumpLinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.jumpLinks a{border:1px solid #385a4e;background:#15251e;padding:7px 10px;border-radius:6px;text-decoration:none;font-weight:800;font-size:11px}
+.case{margin:22px 0 33px;border:1px solid var(--line,#29363b);border-radius:12px;padding:22px;background:#121b1f;scroll-margin-top:18px}
+.caseTop h2{font-size:clamp(22px,2.7vw,31px);line-height:1.21;margin:9px 0 10px;letter-spacing:-.5px}
+.caseStand{font-size:14px;line-height:1.72;color:#d3dedc;max-width:980px}
+.factStrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:17px 0;padding:10px;background:#0e1519;border-radius:9px}
+.factStrip>div{padding:10px}
+.factStrip small{display:block;color:#a2b7b8;font-size:10px;min-height:32px}.factStrip strong{display:block;font-size:21px;color:#eaf5ee;letter-spacing:-.45px}
+.factStrip strong.negative{color:#f5aba2}.factStrip strong.positive{color:#a2e1c7}
+.caseGrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr);gap:22px}
+.caseGrid h3{font-size:16px;margin:13px 0 5px}.caseGrid p{font-size:13px;color:#c5d0ce;line-height:1.72;margin:8px 0 14px}
+.decisionBox{padding:16px 17px;border:1px solid #496e61;background:#10231d;border-radius:9px}
+.decisionBox h3{margin:0 0 10px;color:#b7e3c6}
+.decisionBox strong{color:#d3e9d8}
+.research-hero{margin-top:24px}
+@media(max-width:880px){.leadStory,.caseGrid{grid-template-columns:1fr}.leadStory>div{padding:21px}.conviction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.conviction>span,.conviction>.sourceLine{grid-column:1/-1}.conviction>div{padding:12px}.macroBar{flex-direction:column;align-items:start}.macroBar aside{border-left:0;border-top:1px solid #465d52;padding:13px 0 0}.factStrip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.conviction{grid-template-columns:1fr}.conviction>span,.conviction>.sourceLine{grid-column:auto}.queue{grid-template-columns:1fr}.case{padding:15px}.factStrip strong{font-size:19px}.caseGrid{gap:12px}.leadStory{margin-top:14px}}
