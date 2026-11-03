@@ -34,6 +34,15 @@ export async function loadPriceFeed(fetcher=fetch) {
   return data;
  } catch {return null;}
 }
+function approvedQuoteSource(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol!=="https:"||url.username||url.password)return false;
+  return (["query1.finance.yahoo.com","query2.finance.yahoo.com"].includes(url.hostname)
+    &&url.pathname.startsWith("/v8/finance/chart/"))
+   ||(url.hostname==="stooq.com"&&url.pathname==="/q/d/l/");
+ }catch{return false;}
+}
 function quotes(feed){
  const result=new Map();
  for(const raw of list(feed?.rows,100)){
@@ -41,8 +50,7 @@ function quotes(feed){
   if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate)
     ||price===null||price<=0)continue;
   if(!["USD","HKD","MYR"].includes(raw.currency))continue;
-  if(typeof raw.sourceUrl!=="string"||
-    !/^https:\/\/(?:query1|query2)\.finance\.yahoo\.com\/v8\/finance\/chart\/|stooq\.com\/q\/d\/l\/)/.test(raw.sourceUrl))continue;
+  if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl))continue;
   result.set(id,{
    close:price,day:num(raw.changePct),threeDay:num(raw.change3dPct),
    fiveDay:num(raw.change5dPct),session:raw.sessionDate,currency:raw.currency,
