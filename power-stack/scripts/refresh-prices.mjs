@@ -191,15 +191,29 @@ export async function collect({now=new Date(),fetcher=fetch,concurrency=5}={}){
 async function main(){
  const target=path.join(ROOT,"market-prices.json");
  if(process.argv.includes("--check")){
-  validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
+  const specs=validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
   const data=JSON.parse(readFileSync(target,"utf8"));
-  if(data.contractVersion!==CONTRACT||!Array.isArray(data.rows))throw Error("Invalid stored quote tape");
-  console.log("Power Stack price feed format verified");return;
+  if(data.contractVersion!==CONTRACT||!Array.isArray(data.rows)||data.rows.length!==specs.length)
+    throw Error("Invalid or incomplete public quote tape");
+  for(let i=0;i<specs.length;i++){
+   const row=data.rows[i],spec=specs[i];
+   if(!row||row.ticker!==spec.ticker||row.currency!==spec.currency
+     ||!["CLOSED","STALE","UNAVAILABLE"].includes(row.status)
+     ||(spec.marketType==="unresolved"&&row.status!=="UNAVAILABLE"))
+     throw Error("Public ticker identity, status or unsupported-mapping mismatch");
+  }
+  console.log("Power Stack public quote tape verified for "+specs.length+" neutral research symbols");return;
  }
  if(process.argv.includes("--assert-coverage")){
    const tape=JSON.parse(readFileSync(target,"utf8"));
-   if(tape.coverage?.fresh<1)throw Error("ZERO_FRESH_MARKET_PRICES: provider unavailable or exchange tape stale");
-   console.log("Fresh session quotes:",tape.coverage.fresh,"/",tape.coverage.tracked);return;
+   const specs=validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
+   const priceable=specs.filter(s=>s.marketType!=="unresolved").length;
+   const minFresh=Math.ceil(priceable*0.75);
+   if((tape.coverage?.fresh??0)<minFresh)
+     throw Error("LOW_LIVE_MARKET_COVERAGE: only "+(tape.coverage?.fresh??0)+
+      "/"+priceable+" supported sources fresh; minimum "+minFresh);
+   console.log("Independent source-dated daily coverage:",tape.coverage.fresh,"/",priceable,
+      "priceable; unsupported names stay unpriced");return;
  }
  const tape=await collect();
  mkdirSync(path.dirname(target),{recursive:true});
