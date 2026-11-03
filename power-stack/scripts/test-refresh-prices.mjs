@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import path from "node:path";
+import {execFileSync} from "node:child_process";
+import {quotes,recentSession,approvedQuoteSource} from "../owner-portfolio-table.mjs";
+import {COVERAGE,RESEARCH_PRIORITIES,researchPriority} from "../research-cases.mjs";
 import {
  parseYahooChart,parseStooqCsv,parseCoinGeckoBitcoin,validateManifest,recentBusinessSession,
  asPriceFeed,fetchSymbol,CONTRACT,
@@ -129,4 +132,56 @@ test("unmapped instruments are retained as unavailable without requesting their 
   assert.equal(q.close,null);assert.equal(q.sourceUrl,null);
  }
  assert.equal(requests,0);
+});
+
+test("portfolio quote consumer accepts CNY and BTC UTC samples but rejects malformed feeds",()=>{
+ const btcUrl="https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30";
+ const now=new Date("2026-11-04T12:00:00Z");
+ assert.equal(recentSession("2026-10-30",now),true);
+ assert.equal(recentSession("2026-10-30",new Date("2026-11-05T12:00:00Z")),false);
+ assert.equal(recentSession("2026-11-10",now),false);
+ assert.equal(approvedQuoteSource(btcUrl,"BTC"),true);
+ assert.equal(approvedQuoteSource(btcUrl,"XOM"),false);
+ assert.equal(approvedQuoteSource("http://api.coingecko.com/api/v3/coins/bitcoin/market_chart","BTC"),false);
+ assert.equal(approvedQuoteSource("https://attacker.example/v8/finance/chart/XOM","XOM"),false);
+ const feed={generatedAt:"2026-11-04T00:00:00Z",coverage:{tracked:6,fresh:4},rows:[
+  {ticker:"688825",currency:"CNY",status:"CLOSED",sessionDate:"2026-11-03",close:62.3,
+   sourceUrl:"https://query2.finance.yahoo.com/v8/finance/chart/688825.SS?interval=1d&range=1mo&includePrePost=false",changePct:2},
+  {ticker:"BTC",currency:"USD",status:"CLOSED",sessionDate:"2026-11-03",close:71000,
+   marketBasis:"BTC/USD daily UTC sample; not exchange-listed shares or a stock-market close",
+   sourceUrl:btcUrl},
+  {ticker:"XOM",currency:"USD",status:"CLOSED",sessionDate:"2026-11-03",close:200,
+   sourceUrl:"https://attacker.example/v8/finance/chart/XOM"},
+  {ticker:"6742UW",status:"UNAVAILABLE",sessionDate:null,close:null,sourceUrl:null},
+  {ticker:"DAYANG",currency:"MYR",status:"STALE",sessionDate:"2026-10-20",close:3,
+   sourceUrl:"https://query2.finance.yahoo.com/v8/finance/chart/5141.KL"},
+  {ticker:"FUTURE",currency:"USD",status:"CLOSED",sessionDate:"2026-11-10",close:3,
+   sourceUrl:"https://query2.finance.yahoo.com/v8/finance/chart/FUTURE"}
+ ]};
+ const scan=quotes(feed,now);
+ assert.equal(scan.holding.get("688825")?.close,62.3);
+ assert.equal(scan.holding.get("BTC")?.basis,"BTC UTC daily sample");
+ for(const ticker of ["XOM","6742UW","DAYANG","FUTURE"])
+  assert.equal(scan.holding.has(ticker),false,ticker);
+});
+test("all issuer research statuses have deterministic priority; refreshed Q3 cases retain source dates",()=>{
+ for(const [ticker,item] of Object.entries(COVERAGE))
+  assert.ok(Object.hasOwn(RESEARCH_PRIORITIES,item.posture),ticker+" "+item.posture);
+ assert.equal(researchPriority("ADVANCE DILIGENCE / CREDIT GATE"),3);
+ assert.equal(researchPriority("EVENT GATE"),1);
+ assert.equal(researchPriority("UNKNOWN NEW STATUS"),8);
+ assert.equal(COVERAGE.ETN.asOf,"2026-11-03");
+ assert.equal(COVERAGE.GEV.asOf,"2026-10-28");
+ assert.equal(COVERAGE.CF.posture,"EVENT GATE");
+ assert.match(COVERAGE.ETN.source,/sec\.gov/);
+ assert.match(COVERAGE.GEV.source,/sec\.gov/);
+});
+test("Power Stack site modules parse and owner-only auth has no hardcoded email",()=>{
+ for(const name of ["owner-portfolio-table.mjs","owner-decisions.mjs","research-cases.mjs","auth-gate.mjs"])
+  assert.doesNotThrow(()=>execFileSync(process.execPath,["--check",path.join(ROOT,name)],{stdio:"pipe"}),name);
+ const auth=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
+ assert.doesNotMatch(auth,/APPROVED_EMAIL|gmail\.com/);
+ assert.match(auth,/app_metadata\?\.provider/);
+ const portfolio=readFileSync(path.join(ROOT,"owner-portfolio-table.mjs"),"utf8");
+ assert.match(portfolio,/\.eq\("owner_user_id",user.id\)/);
 });
