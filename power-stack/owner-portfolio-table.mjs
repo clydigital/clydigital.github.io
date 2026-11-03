@@ -1,5 +1,5 @@
-// Bluebelly OwnerPowerStackFullScan / OwnerPortfolioSortableTable port for static GitHub Pages.
-// The only input is the existing RLS-protected historical Supabase owner snapshot.
+// Static owner-only portfolio + independent public delayed quote tape.
+// Holdings/watchlist membership remains RLS-protected; quotes are company-level only.
 const safe=(v,max=250)=>typeof v==="string"?v.trim().slice(0,max):"";
 const num=v=>typeof v==="number"&&Number.isFinite(v)?v:null;
 const list=(v,n)=>Array.isArray(v)?v.slice(0,n).filter(x=>x&&typeof x==="object"&&!Array.isArray(x)):[];
@@ -20,28 +20,53 @@ function recentSession(date){
  for(let t=stamp+86400000;t<=now;t+=86400000){const day=new Date(t).getUTCDay();if(day&&day!==6)businessDays++;}
  return businessDays<=2;
 }
-function quotes(snapshot){
- const scan=snapshot?.quoteScan;
- if(scan?.contractVersion!=="bluebelly-private-power-stack-scan/1")return {asOf:null,holding:new Map(),watch:new Map()};
- function read(rows){
-  const result=new Map();
-  for(const raw of list(rows,200)){
-   const id=ticker(raw.ticker);
-   if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate)||!num(raw.close)||raw.close<=0)continue;
-   result.set(id,{close:raw.close,day:num(raw.changePct),threeDay:num(raw.change3dPct),fiveDay:num(raw.change5dPct),session:raw.sessionDate});
-  }
-  return result;
- }
- return {asOf:safe(scan.generatedAt,50)||null,holding:read(scan.holdings),watch:read(scan.watchlist)};
+/** Public, issuer-level daily quote tape is independent of private portfolio
+ * membership. The market-prices.json endpoint has no account, holdings, size,
+ * score, Google token, or Bluebelly-derived scan. No arbitrary ticker requests.
+ */
+export async function loadPriceFeed(fetcher=fetch) {
+ try {
+  const response=await fetcher("./market-prices.json",{cache:"no-store"});
+  if(!response.ok)throw Error("public market quote feed "+response.status);
+  const data=await response.json();
+  if(data?.contractVersion!=="power-stack-public-prices/1"||!Array.isArray(data.rows)
+    ||data.rows.length>100)return null;
+  return data;
+ } catch {return null;}
 }
-function project(snapshot){
- const scan=quotes(snapshot),result=new Map();
+function approvedQuoteSource(value){
+ try{
+  const url=new URL(value);
+  if(url.protocol!=="https:"||url.username||url.password)return false;
+  return (["query1.finance.yahoo.com","query2.finance.yahoo.com"].includes(url.hostname)
+    &&url.pathname.startsWith("/v8/finance/chart/"))
+   ||(url.hostname==="stooq.com"&&url.pathname==="/q/d/l/");
+ }catch{return false;}
+}
+function quotes(feed){
+ const result=new Map();
+ for(const raw of list(feed?.rows,100)){
+  const id=ticker(raw.ticker),price=num(raw.close);
+  if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate)
+    ||price===null||price<=0)continue;
+  if(!["USD","HKD","MYR"].includes(raw.currency))continue;
+  if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl))continue;
+  result.set(id,{
+   close:price,day:num(raw.changePct),threeDay:num(raw.change3dPct),
+   fiveDay:num(raw.change5dPct),session:raw.sessionDate,currency:raw.currency,
+  });
+ }
+ return {asOf:typeof feed?.generatedAt==="string"?feed.generatedAt:null,holding:result,watch:result,
+  tracked:feed?.coverage?.tracked??0,fresh:feed?.coverage?.fresh??0};
+}
+function project(snapshot,priceFeed){
+ const scan=quotes(priceFeed),result=new Map();
  for(const h of list(snapshot?.holdings,100)){
   const id=ticker(h.ticker);if(!id)continue;
   const p=h.position&&typeof h.position==="object"?h.position:{};
   const q=scan.holding.get(id)||{};
   result.set(id,{ticker:id,name:safe(h.name,100)||id,held:true,onWatchlist:false,
-   quantity:num(p.quantity),currency:safe(p.currency,8),quantityAsOf:safe(p.quantityAsOf,30),
+   quantity:num(p.quantity),currency:q.currency||safe(p.currency,8),quantityAsOf:safe(p.quantityAsOf,30),
    rank:null,score:num(h.score),close:q.close??null,day:q.day??null,threeDay:q.threeDay??null,
    fiveDay:q.fiveDay??null,session:q.session??null,action:safe(h.action,240),
    thesis:safe(h.verdict,240),entry:"",invalidation:safe(h.weakness,300)});
@@ -51,7 +76,7 @@ function project(snapshot){
   const old=result.get(id)||{},q=scan.watch.get(id)||scan.holding.get(id)||{};
   result.set(id,{ticker:id,name:old.name||safe(w.name,100)||id,
    held:old.held||false,onWatchlist:true,quantity:old.quantity??null,
-   currency:old.currency||"",quantityAsOf:old.quantityAsOf||"",rank:num(w.rank),
+   currency:old.currency||q.currency||"",quantityAsOf:old.quantityAsOf||"",rank:num(w.rank),
    score:num(w.score)??old.score??null,close:old.close??q.close??null,
    day:old.day??q.day??null,threeDay:old.threeDay??q.threeDay??null,
    fiveDay:old.fiveDay??q.fiveDay??null,session:old.session??q.session??null,
@@ -79,14 +104,15 @@ export async function initPortfolioTable(db,host){
  const {data,error}=await db.from("power_stack_owner_snapshots")
   .select("snapshot_as_of,legacy_source_retired,snapshot").order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
- const {lines,asOf}=project(data.snapshot);
+ const priceFeed=await loadPriceFeed();
+ const {lines,asOf}=project(data.snapshot,priceFeed);
  let sort="ticker",direction="asc",scope="all",search="",expanded=null;
  host.replaceChildren();
  const heading=el("div",null,"ps-table-head"),title=el("div");
  title.append(el("h2","My Portfolio · Holdings & Watchlist"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
    " watchlist names · Historical snapshot "+data.snapshot_as_of));
- heading.append(title,el("span","Quote scan: "+(asOf||"unavailable"),"ps-table-note"));host.append(heading);
+ heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh","ps-table-note"));host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
  input.addEventListener("input",()=>{search=input.value.trim().toLowerCase();render();});
@@ -104,7 +130,7 @@ export async function initPortfolioTable(db,host){
   th.append(button);hrow.append(th);
  }
  thead.append(hrow);table.append(thead,tbody);wrap.append(table);host.append(wrap);
- host.append(el("p","Archived or completed-session observations only. Missing or stale quotes show —. Quantities are not broker-confirmed. Select a ticker for research.","ps-table-note"));
+ host.append(el("p","Standalone delayed exchange closes, never executable prices. Listing currency comes from the source; quantities remain private and broker-unverified. Missing or stale quotes show —. No Bluebelly dependency.","ps-table-note"));
  function render(){
   for(const b of chips.children)b.setAttribute("aria-pressed",String(b.dataset.scope===scope));
   const selected=lines.filter(r=>(scope==="all"||scope==="holdings"&&r.held||scope==="watchlist"&&r.onWatchlist)
