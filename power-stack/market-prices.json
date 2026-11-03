@@ -1,14 +1,14 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-03T17:10:30.732Z",
+  "generatedAt": "2026-11-03T17:13:26.372Z",
   "isDelayed": true,
   "description": "Completed equity sessions and aggregated BTC/USD UTC daily samples. Independent from Bluebelly and personal positions. Unmapped derivatives stay unavailable; not executable quotes.",
   "universeSource": "market-symbols.json",
   "coverage": {
     "tracked": 98,
-    "fresh": 96,
+    "fresh": 97,
     "stale": 0,
-    "unavailable": 2
+    "unavailable": 1
   },
   "rows": [
     {
@@ -767,17 +767,16 @@
       "ticker": "MNHLDG",
       "providerSymbol": "0245.KL",
       "currency": "MYR",
-      "status": "UNAVAILABLE",
-      "sessionDate": null,
-      "close": null,
-      "previousClose": null,
-      "changePct": null,
-      "change3dPct": null,
-      "change5dPct": null,
-      "sourceName": null,
-      "sourceUrl": null,
-      "refreshStatus": "PENDING_FIRST_RUN",
-      "reason": "Verified Bursa ordinary-share stock code 0245; first delayed close pending approved source retrieval"
+      "status": "CLOSED",
+      "sessionDate": "2026-11-02",
+      "close": 3.82,
+      "previousClose": 3.89,
+      "changePct": -1.799,
+      "change3dPct": -2.799,
+      "change5dPct": -1.546,
+      "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
+      "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/0245.KL?interval=1d&range=1mo&includePrePost=false",
+      "refreshStatus": "OK"
     },
     {
       "ticker": "MPC",
