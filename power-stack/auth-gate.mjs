@@ -1,6 +1,6 @@
 import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mjs";
 
-const APPROVED_EMAIL="leeyanghere@gmail.com";
+// Identity is checked by Google Auth plus Supabase owner-only row-level policies.
 const OAUTH_CALLBACK="https://clydigital.github.io/power-stack/portfolio.html";
 const PAGE=document.documentElement.dataset.privatePage||"index";
 const $=id=>document.getElementById(id);
@@ -27,7 +27,7 @@ function secureMain(html){
 async function authenticate(){
  const {data:{user},error}=await db.auth.getUser();
  if(error||!user)return null;
- if(user.email?.trim().toLowerCase()!==APPROVED_EMAIL||user.app_metadata?.provider!=="google"){
+ if(user.app_metadata?.provider!=="google"){
   await db.auth.signOut();return null;
  }
  const {data, error:ownerError}=await db.from("power_stack_owner_snapshots")
