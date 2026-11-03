@@ -11,14 +11,14 @@ const columns=[
  ["close","Last close",true],["day","1D",true],["threeDay","3D",true],["fiveDay","5D",true],
  ["score","Old score",true],["session","Session",false]
 ];
-function recentSession(date){
+export function recentSession(date,now=new Date()){
  if(typeof date!=="string"||!/^20\d{2}-\d{2}-\d{2}$/.test(date))return false;
  const stamp=Date.parse(date+"T00:00:00Z");
- const now=Date.parse(new Date().toISOString().slice(0,10)+"T00:00:00Z");
- if(!Number.isFinite(stamp)||stamp>now)return false;
+ const today=Date.parse(now.toISOString().slice(0,10)+"T00:00:00Z");
+ if(!Number.isFinite(stamp)||stamp>today)return false;
  let businessDays=0;
- for(let t=stamp+86400000;t<=now;t+=86400000){const day=new Date(t).getUTCDay();if(day&&day!==6)businessDays++;}
- return businessDays<=2;
+ for(let t=stamp+86400000;t<=today;t+=86400000){const day=new Date(t).getUTCDay();if(day&&day!==6)businessDays++;}
+ return businessDays<=3; // Same business-day grace as producer.
 }
 /** Public, issuer-level daily quote tape is independent of private portfolio
  * membership. The market-prices.json endpoint has no account, holdings, size,
@@ -34,26 +34,33 @@ export async function loadPriceFeed(fetcher=fetch) {
   return data;
  } catch {return null;}
 }
-function approvedQuoteSource(value){
+export function approvedQuoteSource(value,id){
  try{
   const url=new URL(value);
   if(url.protocol!=="https:"||url.username||url.password)return false;
+  if(id==="BTC")return url.hostname==="api.coingecko.com"
+   &&url.pathname==="/api/v3/coins/bitcoin/market_chart"
+   &&url.searchParams.get("vs_currency")==="usd"&&url.searchParams.get("days")==="30"
+   &&[...url.searchParams.keys()].length===2;
   return (["query1.finance.yahoo.com","query2.finance.yahoo.com"].includes(url.hostname)
     &&url.pathname.startsWith("/v8/finance/chart/"))
    ||(url.hostname==="stooq.com"&&url.pathname==="/q/d/l/");
  }catch{return false;}
 }
-function quotes(feed){
+export function quotes(feed,now=new Date()){
  const result=new Map();
  for(const raw of list(feed?.rows,100)){
   const id=ticker(raw.ticker),price=num(raw.close);
-  if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate)
+  if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate,now)
     ||price===null||price<=0)continue;
-  if(!["USD","HKD","MYR"].includes(raw.currency))continue;
-  if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl))continue;
+  if(!["USD","HKD","MYR","CNY"].includes(raw.currency))continue;
+  if(id==="BTC"&&(raw.currency!=="USD"||typeof raw.marketBasis!=="string"
+    ||!raw.marketBasis.startsWith("BTC/USD daily UTC sample")))continue;
+  if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl,id))continue;
   result.set(id,{
    close:price,day:num(raw.changePct),threeDay:num(raw.change3dPct),
    fiveDay:num(raw.change5dPct),session:raw.sessionDate,currency:raw.currency,
+   basis:id==="BTC"?"BTC UTC daily sample":"Exchange close",
   });
  }
  return {asOf:typeof feed?.generatedAt==="string"?feed.generatedAt:null,holding:result,watch:result,
@@ -68,7 +75,7 @@ function project(snapshot,priceFeed){
   result.set(id,{ticker:id,name:safe(h.name,100)||id,held:true,onWatchlist:false,
    quantity:num(p.quantity),currency:q.currency||safe(p.currency,8),quantityAsOf:safe(p.quantityAsOf,30),
    rank:null,score:num(h.score),close:q.close??null,day:q.day??null,threeDay:q.threeDay??null,
-   fiveDay:q.fiveDay??null,session:q.session??null,action:safe(h.action,240),
+   fiveDay:q.fiveDay??null,session:q.session??null,basis:q.basis||"",action:safe(h.action,240),
    thesis:safe(h.verdict,240),entry:"",invalidation:safe(h.weakness,300)});
  }
  for(const w of list(snapshot?.watchlist,200)){
@@ -80,6 +87,7 @@ function project(snapshot,priceFeed){
    score:num(w.score)??old.score??null,close:old.close??q.close??null,
    day:old.day??q.day??null,threeDay:old.threeDay??q.threeDay??null,
    fiveDay:old.fiveDay??q.fiveDay??null,session:old.session??q.session??null,
+   basis:old.basis||q.basis||"",
    action:safe(w.latestDecision,240)||safe(w.action,240)||old.action||"",
    thesis:safe(w.thesis,260)||old.thesis||"",entry:safe(w.entry,320),
    invalidation:safe(w.invalidation,320)||old.invalidation||""});
@@ -101,8 +109,11 @@ function rowValue(r,key){
  return r[key]??null;
 }
 export async function initPortfolioTable(db,host){
+ const {data:{user}={},error:authError}=await db.auth.getUser();
+ if(authError||!user?.id){host.textContent="Owner session unavailable; no private portfolio displayed.";return;}
  const {data,error}=await db.from("power_stack_owner_snapshots")
-  .select("snapshot_as_of,legacy_source_retired,snapshot").order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
+  .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",user.id)
+  .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
  const priceFeed=await loadPriceFeed();
  const {lines,asOf}=project(data.snapshot,priceFeed);
@@ -111,7 +122,7 @@ export async function initPortfolioTable(db,host){
  const heading=el("div",null,"ps-table-head"),title=el("div");
  title.append(el("h2","My Portfolio · Holdings & Watchlist"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
-   " watchlist names · Historical snapshot "+data.snapshot_as_of));
+   " watchlist names · ARCHIVED "+data.snapshot_as_of+" · NOT BROKER-VERIFIED));
  heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh","ps-table-note"));host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
@@ -130,7 +141,7 @@ export async function initPortfolioTable(db,host){
   th.append(button);hrow.append(th);
  }
  thead.append(hrow);table.append(thead,tbody);wrap.append(table);host.append(wrap);
- host.append(el("p","Standalone delayed exchange closes, never executable prices. Listing currency comes from the source; quantities remain private and broker-unverified. Missing or stale quotes show —. No Bluebelly dependency.","ps-table-note"));
+ host.append(el("p","Recorded units are historical, not proof of current holdings. Cash, cost basis, MYR portfolio value and unrealised P&L are unavailable until broker reconciliation. Delayed equity closes are non-executable; BTC is a completed UTC daily sample, not an exchange close. Missing or stale quotes show —. No Bluebelly dependency.","ps-table-note"));
  function render(){
   for(const b of chips.children)b.setAttribute("aria-pressed",String(b.dataset.scope===scope));
   const selected=lines.filter(r=>(scope==="all"||scope==="holdings"&&r.held||scope==="watchlist"&&r.onWatchlist)
@@ -156,7 +167,7 @@ export async function initPortfolioTable(db,host){
     const td=cell(tr,pct(v));td.dataset.direction=v===null?"unknown":v>0?"up":v<0?"down":"flat";
    }
    cell(tr,r.score===null?"—":fmt(r.score,1)+" (archived)");
-   cell(tr,r.session||"—");tbody.append(tr);
+   cell(tr,r.session?(r.session+(r.basis==="BTC UTC daily sample"?" · BTC UTC sample":"")):"—");tbody.append(tr);
    if(expanded===r.ticker){
     const detail=el("tr"),td=el("td");td.colSpan=9;td.className="ps-row-details";
     for(const [label,val] of [["Research",r.action||r.thesis||"Pending"],["Entry / confirmation",r.entry||"Not recorded"],
