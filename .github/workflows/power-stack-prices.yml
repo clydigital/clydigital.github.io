@@ -1,0 +1,70 @@
+name: Power Stack independent delayed price refresh
+on:
+  pull_request:
+    paths:
+      - 'power-stack/market-symbols.json'
+      - 'power-stack/market-prices.json'
+      - 'power-stack/scripts/refresh-prices.mjs'
+      - 'power-stack/scripts/test-refresh-prices.mjs'
+      - 'power-stack/owner-portfolio-table.mjs'
+      - 'power-stack/portfolio.html'
+      - '.github/workflows/power-stack-prices.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'power-stack/market-symbols.json'
+      - 'power-stack/scripts/refresh-prices.mjs'
+      - 'power-stack/scripts/test-refresh-prices.mjs'
+      - '.github/workflows/power-stack-prices.yml'
+  # Completed US close and separate Asian close; GitHub scheduled dispatch can be delayed.
+  schedule:
+    - cron: '20 0 * * 2-6'
+    - cron: '20 11 * * 1-5'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: power-stack-price-refresh-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate standalone quote logic and privacy
+        run: |
+          node --check power-stack/scripts/refresh-prices.mjs
+          node --check power-stack/owner-portfolio-table.mjs
+          node --test power-stack/scripts/test-refresh-prices.mjs
+          node power-stack/scripts/refresh-prices.mjs --check
+  refresh:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh source-dated delayed closes
+        run: node power-stack/scripts/refresh-prices.mjs
+      - name: Persist only the public research-universe price tape
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add power-stack/market-prices.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(power-stack): refresh source-dated delayed closes [skip ci]"
+            git push origin HEAD:main
+          fi
+      - name: Fail visibly if every provider is unavailable
+        run: node power-stack/scripts/refresh-prices.mjs --assert-coverage
