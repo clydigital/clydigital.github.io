@@ -56,6 +56,9 @@ jobs:
         with:
           node-version: '22'
       - name: Refresh source-dated delayed closes
+        env:
+          # Optional free CoinGecko Demo key; unconfigured runs use the public endpoint.
+          COINGECKO_DEMO_API_KEY: ${{ secrets.COINGECKO_DEMO_API_KEY }}
         run: node power-stack/scripts/refresh-prices.mjs
       - name: Persist only the public research-universe price tape
         run: |

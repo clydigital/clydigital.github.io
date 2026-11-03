@@ -1,162 +1,56 @@
 {
   "contractVersion": "power-stack-public-symbols/1",
-  "description": "Sanitized issuer/ETF research universe, NOT owner holdings or private watchlist membership. Session closes only. DXY and cryptocurrency require separate quote basis.",
+  "description": "Neutral previously public issuer/ETF research universe; NOT derived from owner portfolio, holdings, ranking or watchlist. No private membership, quantities or cost basis. Includes explicit unsupported-series gates and 24/7 Bitcoin USD observations.",
   "symbols": [
     {
-      "ticker": "CCJ",
-      "providerSymbol": "CCJ",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "1164.HK",
+      "providerSymbol": "1164.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
-      "ticker": "LEU",
-      "providerSymbol": "LEU",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "1816.HK",
+      "providerSymbol": "1816.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
-      "ticker": "BWXT",
-      "providerSymbol": "BWXT",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "3191.HK",
+      "providerSymbol": "3191.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
-      "ticker": "CEG",
-      "providerSymbol": "CEG",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "3308.HK",
+      "providerSymbol": "3308.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
-      "ticker": "SMR",
-      "providerSymbol": "SMR",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "6742UW",
+      "providerSymbol": null,
+      "currency": null,
+      "timeZone": null,
+      "marketType": "unresolved",
+      "reason": "Structured warrant; issuer, listing series and strike require a verified quote mapping"
     },
     {
-      "ticker": "PWR",
-      "providerSymbol": "PWR",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "6809.HK",
+      "providerSymbol": "6809.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
-      "ticker": "BKR",
-      "providerSymbol": "BKR",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "688825",
+      "providerSymbol": "688825.SS",
+      "currency": "CNY",
+      "timeZone": "Asia/Shanghai"
     },
     {
-      "ticker": "XOM",
-      "providerSymbol": "XOM",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "MISC",
-      "providerSymbol": "3816.KL",
-      "currency": "MYR",
-      "timeZone": "Asia/Kuala_Lumpur"
-    },
-    {
-      "ticker": "HIBISCS",
-      "providerSymbol": "5199.KL",
-      "currency": "MYR",
-      "timeZone": "Asia/Kuala_Lumpur"
-    },
-    {
-      "ticker": "DAYANG",
-      "providerSymbol": "5141.KL",
-      "currency": "MYR",
-      "timeZone": "Asia/Kuala_Lumpur"
-    },
-    {
-      "ticker": "YTLPOWR",
-      "providerSymbol": "6742.KL",
-      "currency": "MYR",
-      "timeZone": "Asia/Kuala_Lumpur"
-    },
-    {
-      "ticker": "TSLA",
-      "providerSymbol": "TSLA",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "TTWO",
-      "providerSymbol": "TTWO",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "GRAB",
-      "providerSymbol": "GRAB",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "MU",
-      "providerSymbol": "MU",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "LNG",
-      "providerSymbol": "LNG",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "NTR",
-      "providerSymbol": "NTR",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "CF",
-      "providerSymbol": "CF",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "ETN",
-      "providerSymbol": "ETN",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "GEV",
-      "providerSymbol": "GEV",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "CRDO",
-      "providerSymbol": "CRDO",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "VST",
-      "providerSymbol": "VST",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "FCX",
-      "providerSymbol": "FCX",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "CTVA",
-      "providerSymbol": "CTVA",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "TSM",
-      "providerSymbol": "TSM",
-      "currency": "USD",
-      "timeZone": "America/New_York"
+      "ticker": "9988.HK",
+      "providerSymbol": "9988.HK",
+      "currency": "HKD",
+      "timeZone": "Asia/Hong_Kong"
     },
     {
       "ticker": "AAPL",
@@ -165,38 +59,8 @@
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "PLTR",
-      "providerSymbol": "PLTR",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "AMZN",
-      "providerSymbol": "AMZN",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "MSFT",
-      "providerSymbol": "MSFT",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "GOOGL",
-      "providerSymbol": "GOOGL",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "META",
-      "providerSymbol": "META",
-      "currency": "USD",
-      "timeZone": "America/New_York"
-    },
-    {
-      "ticker": "NVDA",
-      "providerSymbol": "NVDA",
+      "ticker": "AEM",
+      "providerSymbol": "AEM",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
@@ -207,26 +71,305 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "AMZN",
+      "providerSymbol": "AMZN",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "ARKK",
+      "providerSymbol": "ARKK",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "AVGO",
+      "providerSymbol": "AVGO",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "BG",
+      "providerSymbol": "BG",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "BKR",
+      "providerSymbol": "BKR",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "BTC",
+      "providerSymbol": null,
+      "currency": "USD",
+      "timeZone": "UTC",
+      "marketType": "crypto"
+    },
+    {
+      "ticker": "BWXT",
+      "providerSymbol": "BWXT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CCJ",
+      "providerSymbol": "CCJ",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CEG",
+      "providerSymbol": "CEG",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CF",
+      "providerSymbol": "CF",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "COIN",
+      "providerSymbol": "COIN",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CRDO",
+      "providerSymbol": "CRDO",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CRM",
+      "providerSymbol": "CRM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CRWD",
+      "providerSymbol": "CRWD",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CTVA",
+      "providerSymbol": "CTVA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "DAYANG",
+      "providerSymbol": "5141.KL",
+      "currency": "MYR",
+      "timeZone": "Asia/Kuala_Lumpur"
+    },
+    {
+      "ticker": "DELL",
+      "providerSymbol": "DELL",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "DIA",
+      "providerSymbol": "DIA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "ETN",
+      "providerSymbol": "ETN",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "FCFS",
+      "providerSymbol": "FCFS",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "FCX",
+      "providerSymbol": "FCX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "FLEX",
+      "providerSymbol": "FLEX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GDX",
+      "providerSymbol": "GDX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GEV",
+      "providerSymbol": "GEV",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GLD",
+      "providerSymbol": "GLD",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GLDM",
+      "providerSymbol": "GLDM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GOOGL",
+      "providerSymbol": "GOOGL",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "GRAB",
+      "providerSymbol": "GRAB",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "HIBISCS",
+      "providerSymbol": "5199.KL",
+      "currency": "MYR",
+      "timeZone": "Asia/Kuala_Lumpur"
+    },
+    {
+      "ticker": "HYG",
+      "providerSymbol": "HYG",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "IEF",
+      "providerSymbol": "IEF",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "IGV",
+      "providerSymbol": "IGV",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "INTC",
       "providerSymbol": "INTC",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "SNDK",
-      "providerSymbol": "SNDK",
+      "ticker": "IWM",
+      "providerSymbol": "IWM",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "SOXX",
-      "providerSymbol": "SOXX",
+      "ticker": "LEU",
+      "providerSymbol": "LEU",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "SPY",
-      "providerSymbol": "SPY",
+      "ticker": "LNG",
+      "providerSymbol": "LNG",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "LQD",
+      "providerSymbol": "LQD",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "META",
+      "providerSymbol": "META",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "MISC",
+      "providerSymbol": "3816.KL",
+      "currency": "MYR",
+      "timeZone": "Asia/Kuala_Lumpur"
+    },
+    {
+      "ticker": "MNHLDG",
+      "providerSymbol": null,
+      "currency": null,
+      "timeZone": null,
+      "marketType": "unresolved",
+      "reason": "Ambiguous instrument identity; no unverified mapping"
+    },
+    {
+      "ticker": "MPC",
+      "providerSymbol": "MPC",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "MSFT",
+      "providerSymbol": "MSFT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "MSTR",
+      "providerSymbol": "MSTR",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "MU",
+      "providerSymbol": "MU",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "NTR",
+      "providerSymbol": "NTR",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "NVDA",
+      "providerSymbol": "NVDA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "NVT",
+      "providerSymbol": "NVT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "PLTR",
+      "providerSymbol": "PLTR",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "PSX",
+      "providerSymbol": "PSX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "PWR",
+      "providerSymbol": "PWR",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
@@ -249,32 +392,50 @@
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "VGIT",
-      "providerSymbol": "VGIT",
+      "ticker": "SLB",
+      "providerSymbol": "SLB",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "TLT",
-      "providerSymbol": "TLT",
+      "ticker": "SMH",
+      "providerSymbol": "SMH",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "GLDM",
-      "providerSymbol": "GLDM",
+      "ticker": "SMR",
+      "providerSymbol": "SMR",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "GDX",
-      "providerSymbol": "GDX",
+      "ticker": "SNDK",
+      "providerSymbol": "SNDK",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
-      "ticker": "IEF",
-      "providerSymbol": "IEF",
+      "ticker": "SOXX",
+      "providerSymbol": "SOXX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "SPY",
+      "providerSymbol": "SPY",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "STNG",
+      "providerSymbol": "STNG",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "SYM",
+      "providerSymbol": "SYM",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
@@ -285,22 +446,154 @@
       "timeZone": "Asia/Kuala_Lumpur"
     },
     {
-      "ticker": "9988.HK",
-      "providerSymbol": "9988.HK",
-      "currency": "HKD",
-      "timeZone": "Asia/Hong_Kong"
+      "ticker": "TLT",
+      "providerSymbol": "TLT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
     },
     {
-      "ticker": "1816.HK",
-      "providerSymbol": "1816.HK",
-      "currency": "HKD",
-      "timeZone": "Asia/Hong_Kong"
+      "ticker": "TSLA",
+      "providerSymbol": "TSLA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
     },
     {
-      "ticker": "1164.HK",
-      "providerSymbol": "1164.HK",
-      "currency": "HKD",
-      "timeZone": "Asia/Hong_Kong"
+      "ticker": "TSM",
+      "providerSymbol": "TSM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "TTWO",
+      "providerSymbol": "TTWO",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VGIT",
+      "providerSymbol": "VGIT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VGT",
+      "providerSymbol": "VGT",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VLO",
+      "providerSymbol": "VLO",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VMI",
+      "providerSymbol": "VMI",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VST",
+      "providerSymbol": "VST",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "VYX",
+      "providerSymbol": "VYX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "WPM",
+      "providerSymbol": "WPM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XBI",
+      "providerSymbol": "XBI",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLB",
+      "providerSymbol": "XLB",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLC",
+      "providerSymbol": "XLC",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLE",
+      "providerSymbol": "XLE",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLF",
+      "providerSymbol": "XLF",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLI",
+      "providerSymbol": "XLI",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLK",
+      "providerSymbol": "XLK",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLP",
+      "providerSymbol": "XLP",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLRE",
+      "providerSymbol": "XLRE",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLU",
+      "providerSymbol": "XLU",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLV",
+      "providerSymbol": "XLV",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XLY",
+      "providerSymbol": "XLY",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "XOM",
+      "providerSymbol": "XOM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "YTLPOWR",
+      "providerSymbol": "6742.KL",
+      "currency": "MYR",
+      "timeZone": "Asia/Kuala_Lumpur"
     }
   ]
 }

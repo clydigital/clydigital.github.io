@@ -74,12 +74,33 @@ export function validateManifest(input){
  const seen=new Set();
  return input.symbols.map(x=>{
   if(!x||!/^([A-Z0-9][A-Z0-9.\-]{0,17})$/.test(x.ticker||"")
-   ||!/^([A-Z0-9][A-Z0-9.\-]{0,24})$/.test(x.providerSymbol||"")
-   ||!["USD","MYR","HKD"].includes(x.currency)
-   ||!["America/New_York","Asia/Kuala_Lumpur","Asia/Hong_Kong"].includes(x.timeZone)
    ||seen.has(x.ticker))throw Error("Duplicate or unqualified research symbol");
   seen.add(x.ticker);
-  if((x.providerSymbol.endsWith(".KL")? "MYR":x.providerSymbol.endsWith(".HK")?"HKD":"USD")!==x.currency)
+  // Unmapped instruments remain present for gap visibility but NEVER receive
+  // a guessed underlying share quote or invented tradable price.
+  if(x.marketType==="unresolved"){
+   if(!["6742UW","MNHLDG"].includes(x.ticker)||x.providerSymbol!==null
+     ||x.currency!==null||x.timeZone!==null
+     ||typeof x.reason!=="string"||x.reason.length<12)
+      throw Error("Unapproved unsupported instrument mapping");
+   return x;
+  }
+  if(x.marketType==="crypto"){
+   if(x.ticker!=="BTC"||x.providerSymbol!==null
+     ||x.currency!=="USD"||x.timeZone!=="UTC")
+      throw Error("Unapproved 24/7 crypto market mapping");
+   return x;
+  }
+  if(x.marketType!==undefined
+   ||!/^([A-Z0-9][A-Z0-9.\-]{0,24})$/.test(x.providerSymbol||"")
+   ||!["USD","MYR","HKD","CNY"].includes(x.currency)
+   ||!["America/New_York","Asia/Kuala_Lumpur","Asia/Hong_Kong","Asia/Shanghai"].includes(x.timeZone))
+    throw Error("Invalid public research ticker mapping");
+  const expected=x.providerSymbol.endsWith(".KL")?["MYR","Asia/Kuala_Lumpur"]
+   :x.providerSymbol.endsWith(".HK")?["HKD","Asia/Hong_Kong"]
+   :x.providerSymbol.endsWith(".SS")||x.providerSymbol.endsWith(".SZ")?["CNY","Asia/Shanghai"]
+   :["USD","America/New_York"];
+  if(x.currency!==expected[0]||x.timeZone!==expected[1])
     throw Error("Unreviewed provider-market mapping for "+x.ticker);
   return x;
  });
@@ -96,7 +117,43 @@ async function getUrl(url,asText=false,fetcher=fetch,timeoutMs=8500){
  if(!response.ok)throw Error("HTTP "+response.status);
  return asText?response.text():response.json();
 }
+/** CoinGecko aggregated BTC/USD UTC daily samples, NOT an exchange close.
+ * The free keyless endpoint can be throttled. An optional GitHub Actions secret
+ * enables a Demo key in request headers; never persist it in the source URL.
+ */
+export function parseCoinGeckoBitcoin(data,spec,now=new Date(),sourceUrl=""){
+ if(spec.marketType!=="crypto"||spec.ticker!=="BTC"||spec.currency!=="USD"
+   ||!Array.isArray(data?.prices))throw Error("Unqualified aggregated BTC/USD source");
+ const today=now.toISOString().slice(0,10);
+ const observations=data.prices.map(x=>Array.isArray(x)&&x.length>=2?
+  {stamp:Number(x[0]),close:Number(x[1])}:null)
+  .filter(x=>x&&Number.isFinite(x.stamp)&&x.stamp>0
+     &&Number.isFinite(x.close)&&x.close>0)
+  .map(x=>({sessionDate:new Date(x.stamp).toISOString().slice(0,10),close:x.close}))
+  .filter(x=>x.sessionDate<today);
+ const base=fromBars({...spec,timeZone:"UTC"},observations,{
+  name:"CoinGecko aggregated BTC/USD UTC daily sample (24/7, delayed)",
+  url:sourceUrl,
+ },now);
+ const ageDays=(Date.parse(today+"T00:00:00Z")
+  -Date.parse(base.sessionDate+"T00:00:00Z"))/86400000;
+ return {...base,status:ageDays<=2?"CLOSED":"STALE",
+  marketBasis:"BTC/USD daily UTC sample; not exchange-listed shares or a stock-market close"};
+}
+export async function fetchCryptoBitcoin(spec,{now=new Date(),fetcher=fetch}={}){
+ const url="https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30";
+ const apiKey=process.env.COINGECKO_DEMO_API_KEY;
+ const headers={accept:"application/json",...(apiKey?{"x-cg-demo-api-key":apiKey}:{})};
+ const response=await fetcher(url,{headers,signal:AbortSignal.timeout(9000),cache:"no-store"});
+ if(!response.ok)throw Error("CoinGecko BTC/USD HTTP "+response.status);
+ return parseCoinGeckoBitcoin(await response.json(),spec,now,url);
+}
 export async function fetchSymbol(spec,{now=new Date(),fetcher=fetch}={}){
+ if(spec.marketType==="unresolved")return {...noQuote(spec,spec.reason),refreshStatus:"UNMAPPED"};
+ if(spec.marketType==="crypto"){
+  try{return await fetchCryptoBitcoin(spec,{now,fetcher});}
+  catch(err){return noQuote(spec,"BTC/USD source unavailable: "+String(err.message||err));}
+ }
  const errors=[];
  for(const host of HOSTS){
   const url=host+"/v8/finance/chart/"+encodeURIComponent(spec.providerSymbol)+"?interval=1d&range=1mo&includePrePost=false";
@@ -116,7 +173,7 @@ export function asPriceFeed(specs,quotes,now=new Date()){
  const rows=specs.map((s,i)=>quotes[i]||noQuote(s,"Collector did not return a row"));
  const fresh=rows.filter(r=>r.status==="CLOSED").length,stale=rows.filter(r=>r.status==="STALE").length;
  return {contractVersion:CONTRACT,generatedAt:now.toISOString(),isDelayed:true,
-  description:"Completed exchange sessions only. Independent from Bluebelly and personal positions. Not executable quotes.",
+  description:"Completed equity sessions and aggregated BTC/USD UTC daily samples. Independent from Bluebelly and personal positions. Unmapped derivatives stay unavailable; not executable quotes.",
   universeSource:"market-symbols.json",coverage:{tracked:rows.length,fresh,stale,unavailable:rows.length-fresh-stale},
   rows};
 }
@@ -134,15 +191,29 @@ export async function collect({now=new Date(),fetcher=fetch,concurrency=5}={}){
 async function main(){
  const target=path.join(ROOT,"market-prices.json");
  if(process.argv.includes("--check")){
-  validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
+  const specs=validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
   const data=JSON.parse(readFileSync(target,"utf8"));
-  if(data.contractVersion!==CONTRACT||!Array.isArray(data.rows))throw Error("Invalid stored quote tape");
-  console.log("Power Stack price feed format verified");return;
+  if(data.contractVersion!==CONTRACT||!Array.isArray(data.rows)||data.rows.length!==specs.length)
+    throw Error("Invalid or incomplete public quote tape");
+  for(let i=0;i<specs.length;i++){
+   const row=data.rows[i],spec=specs[i];
+   if(!row||row.ticker!==spec.ticker||row.currency!==spec.currency
+     ||!["CLOSED","STALE","UNAVAILABLE"].includes(row.status)
+     ||(spec.marketType==="unresolved"&&row.status!=="UNAVAILABLE"))
+     throw Error("Public ticker identity, status or unsupported-mapping mismatch");
+  }
+  console.log("Power Stack public quote tape verified for "+specs.length+" neutral research symbols");return;
  }
  if(process.argv.includes("--assert-coverage")){
    const tape=JSON.parse(readFileSync(target,"utf8"));
-   if(tape.coverage?.fresh<1)throw Error("ZERO_FRESH_MARKET_PRICES: provider unavailable or exchange tape stale");
-   console.log("Fresh session quotes:",tape.coverage.fresh,"/",tape.coverage.tracked);return;
+   const specs=validateManifest(JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8")));
+   const priceable=specs.filter(s=>s.marketType!=="unresolved").length;
+   const minFresh=Math.ceil(priceable*0.75);
+   if((tape.coverage?.fresh??0)<minFresh)
+     throw Error("LOW_LIVE_MARKET_COVERAGE: only "+(tape.coverage?.fresh??0)+
+      "/"+priceable+" supported sources fresh; minimum "+minFresh);
+   console.log("Independent source-dated daily coverage:",tape.coverage.fresh,"/",priceable,
+      "priceable; unsupported names stay unpriced");return;
  }
  const tape=await collect();
  mkdirSync(path.dirname(target),{recursive:true});
