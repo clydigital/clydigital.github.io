@@ -307,11 +307,9 @@
     },
     {
       "ticker": "MNHLDG",
-      "providerSymbol": null,
-      "currency": null,
-      "timeZone": null,
-      "marketType": "unresolved",
-      "reason": "Ambiguous instrument identity; no unverified mapping"
+      "providerSymbol": "0245.KL",
+      "currency": "MYR",
+      "timeZone": "Asia/Kuala_Lumpur"
     },
     {
       "ticker": "MPC",
