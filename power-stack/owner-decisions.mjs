@@ -1,5 +1,5 @@
 import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mjs";
-import {RESEARCH_AS_OF,researchFor,researchPriority} from "./research-cases.mjs";
+import {RESEARCH_AS_OF,researchFor,researchPriority} from "./research-cases.mjs?v=20261104-ps8";
 /** Owner identity and row-level security live in Supabase. No backend proxy or Vercel. */
 const $=id=>document.getElementById(id);
 const root="https://clydigital.github.io/power-stack/decisions.html";
