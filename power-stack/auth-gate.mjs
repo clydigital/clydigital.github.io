@@ -54,13 +54,13 @@ async function load(){
   slot.textContent="Loading historical portfolio table…";
   content.querySelector("#login-panel")?.before(slot);
   try{
-   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs");
+   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261104-ps8");
    await initPortfolioTable(db,slot);
    await import("./owner-portfolio.js");
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
  }
  if(PAGE==="decisions"){
-  try{await import("./owner-decisions.mjs");}
+  try{await import("./owner-decisions.mjs?v=20261104-ps8");}
   catch(e){console.error("Private decisions unavailable",e);}
  }
  const planned=sessionStorage.getItem("power-stack-target");

@@ -185,3 +185,16 @@ test("Power Stack site modules parse and owner-only auth has no hardcoded email"
  const portfolio=readFileSync(path.join(ROOT,"owner-portfolio-table.mjs"),"utf8");
  assert.match(portfolio,/\.eq\("owner_user_id",user.id\)/);
 });
+
+test("every private page and dynamic module uses the same versioned release assets",()=>{
+ const version="20261104-ps8";
+ for(const page of ["index","research","sectors","decisions","portfolio"]){
+  const shell=readFileSync(path.join(ROOT,page+".html"),"utf8");
+  assert.ok(shell.includes('src="auth-gate.mjs?v='+version+'"'),page);
+ }
+ const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
+ for(const name of ["owner-portfolio-table","owner-decisions"])
+  assert.ok(gate.includes('./'+name+'.mjs?v='+version),name);
+ const decisions=readFileSync(path.join(ROOT,"owner-decisions.mjs"),"utf8");
+ assert.ok(decisions.includes('./research-cases.mjs?v='+version));
+});
