@@ -4,7 +4,7 @@ import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import path from "node:path";
 import {
- parseYahooChart,parseStooqCsv,validateManifest,recentBusinessSession,
+ parseYahooChart,parseStooqCsv,parseCoinGeckoBitcoin,validateManifest,recentBusinessSession,
  asPriceFeed,fetchSymbol,CONTRACT,
 } from "./refresh-prices.mjs";
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
@@ -18,7 +18,7 @@ function yahoo(spec,days=["2026-10-26","2026-10-27","2026-10-28","2026-10-29","2
 }
 test("manifest uses a non-owner public research universe and no holdings quantities",()=>{
  const m=JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8"));
- assert.equal(validateManifest(m).length,50);
+ assert.equal(validateManifest(m).length,98);
  assert.ok(!JSON.stringify(m).includes("quantityAsOf"));
  assert.ok(!JSON.stringify(m).includes("owner_user_id"));
  assert.ok(!JSON.stringify(m.symbols).includes("holdings"));
@@ -76,4 +76,57 @@ test("producer preserves per-symbol missingness and a zero-success coverage warn
  const js=readFileSync(path.join(ROOT,"owner-portfolio-table.mjs"),"utf8");
  assert.match(js,/market-prices\.json/);
  assert.doesNotMatch(js,/quoteScan|bluebelly-private-power-stack-scan/);
+});
+
+test("neutral research catalogue covers overseas and emerging-market tickers without guessing a warrant listing",()=>{
+ const manifest=JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8"));
+ const names=new Map(validateManifest(manifest).map(x=>[x.ticker,x]));
+ assert.deepEqual(names.get("688825"),{ticker:"688825",providerSymbol:"688825.SS",
+    currency:"CNY",timeZone:"Asia/Shanghai"});
+ assert.deepEqual(names.get("3191.HK"),{ticker:"3191.HK",providerSymbol:"3191.HK",
+    currency:"HKD",timeZone:"Asia/Hong_Kong"});
+ assert.equal(names.get("6742UW")?.marketType,"unresolved");
+ assert.equal(names.get("MNHLDG")?.marketType,"unresolved");
+ assert.equal(names.get("BTC")?.marketType,"crypto");
+ assert.throws(()=>validateManifest({...manifest,symbols:[{...names.get("6742UW"),providerSymbol:"6742.KL"}]}),
+   /unsupported instrument mapping/);
+ assert.throws(()=>validateManifest({...manifest,symbols:[{...names.get("688825"),currency:"USD"}]}),
+   /mapping/);
+});
+test("24/7 BTC/USD uses completed UTC daily samples rather than US stock-session timestamps",async()=>{
+ const spec={ticker:"BTC",providerSymbol:null,currency:"USD",timeZone:"UTC",marketType:"crypto"};
+ const dates=["2026-10-25","2026-10-26","2026-10-27","2026-10-28","2026-10-29",
+   "2026-10-30","2026-10-31","2026-11-01","2026-11-02","2026-11-03"];
+ const data={prices:dates.map((d,i)=>[Date.parse(d+"T00:00:00Z"),100000+i*1000])};
+ const parsed=parseCoinGeckoBitcoin(data,spec,new Date("2026-11-03T19:00:00Z"),
+   "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30");
+ assert.equal(parsed.sessionDate,"2026-11-02");
+ assert.equal(parsed.close,108000);
+ assert.equal(parsed.status,"CLOSED");
+ assert.match(parsed.sourceName,/BTC\/USD UTC/);
+ assert.match(parsed.marketBasis,/not exchange-listed shares/);
+ const full=await fetchSymbol(spec,{now:new Date("2026-11-03T19:00:00Z"),
+   fetcher:async()=>new Response(JSON.stringify(data),{status:200})});
+ assert.equal(full.close,108000);
+ assert.equal(full.currency,"USD");
+ assert.match(full.sourceUrl,/api.coingecko.com/);
+ const unavailable=await fetchSymbol(spec,{now,
+   fetcher:async()=>new Response("429 rate-limited",{status:429})});
+ assert.equal(unavailable.status,"UNAVAILABLE");
+ assert.equal(unavailable.close,null);
+});
+test("unmapped instruments are retained as unavailable without requesting their underlying or guessed series",async()=>{
+ const specs=[
+  {ticker:"6742UW",providerSymbol:null,currency:null,timeZone:null,marketType:"unresolved",
+   reason:"Series and strike unavailable; no proxy"},
+  {ticker:"MNHLDG",providerSymbol:null,currency:null,timeZone:null,marketType:"unresolved",
+   reason:"Unidentified listing; no proxy"},
+ ];
+ let requests=0;
+ for(const spec of specs){
+  const q=await fetchSymbol(spec,{now,fetcher:async()=>{requests++;throw Error("should not fetch")}});
+  assert.equal(q.status,"UNAVAILABLE");assert.equal(q.refreshStatus,"UNMAPPED");
+  assert.equal(q.close,null);assert.equal(q.sourceUrl,null);
+ }
+ assert.equal(requests,0);
 });
