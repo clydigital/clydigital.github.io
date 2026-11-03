@@ -2,7 +2,7 @@
  * PUBLIC company/sector research facts only. No portfolio membership, owner
  * positions, P&L, cash, valuation score, broker records or credentials.
  * Decision labels are MANUAL RESEARCH TRIAGE, not orders or approved sizing.
- * Base edition 2026-11-02; case-level update 2026-11-04 for BWXT and GRAB only.
+ * Base edition 2026-11-02; case-level update 2026-11-04 for BWXT, GRAB, ETN, GEV and the CF calendar gate.
  * Other issuer cases retain their previous source dates and do not imply a whole-universe refresh.
  */
 export const RESEARCH_AS_OF="2026-11-02";
@@ -25,9 +25,9 @@ export const COVERAGE={
  "MU":{sector:"AI memory / HBM",posture:"ADVANCE / PRICE GATE",signal:"Micron FY26 Q4 issuer release reported US$54.23bn revenue and US$43.97bn operating cash flow amid an exceptional memory cycle.",next:"Verify ASP, mix, HBM supply contracts and capex normalisation; avoid extrapolating a peak cycle.",kill:"Supply additions and memory price declines break 2027 margin/FCF assumptions.",asOf:"2026-09-30",source:"https://investors.micron.com/financials/quarterly-results/default.aspx"},
  "LNG":{sector:"LNG infrastructure",posture:"VERIFY CURRENT VALUATION",signal:"Global LNG expansion creates contracted cash opportunity, but specific Cheniere 2026 Q3 cash/guide was not completed in this pass.",next:"Read latest Cheniere release for volumes, net debt, shareholder distributions and capacity finance.",kill:"Export utilisation, spread or debt economics deteriorate.",asOf:"2026-11-02",source:"https://lngir.cheniere.com/"},
  "NTR":{sector:"Potash / fertilisers",posture:"SOURCE GAP / WAIT",signal:"Potash production and farmer affordability are a different price cycle from gas-fed nitrogen. Latest quarterly margins not independently checked.",next:"Get original Q3 results, potash realised prices, volumes and free cash flow.",kill:"Rising supply/weak farmer demand overwhelms margin recovery.",asOf:"2026-11-02",source:"https://www.nutrien.com/investors"},
- "CF":{sector:"Nitrogen fertiliser",posture:"SOURCE GAP / WAIT",signal:"Nitrogen margins depend on ammonia/urea prices, natural-gas feedstock and plant utilisation; no Q3 confirmation in this sweep.",next:"Obtain current cash margins and gas spread from issuer release.",kill:"Fertiliser selling-price decline overwhelms feedstock advantage.",asOf:"2026-11-02",source:"https://www.cfindustries.com/investors"},
- "ETN":{sector:"Grid / electrical distribution",posture:"VERIFY PRICE / ORDERS",signal:"Electrical equipment could benefit from power and data-centre investment; no current issuer order/margin reconciliation in this pass.",next:"Confirm 2026 Q3 organic orders, backlogs, margins and valuation.",kill:"Bookings slow while multiples still price continued acceleration.",asOf:"2026-11-02",source:"https://www.eaton.com/us/en-us/company/investor-relations.html"},
- "GEV":{sector:"Power generation / grid",posture:"VERIFY PRICE / ORDERS",signal:"Gas turbines and grid infrastructure are plausible multi-year demand beneficiaries; project margins and valuation not verified.",next:"Compare equipment backlog, service profitability and execution capacity.",kill:"Manufacturing costs or project delays absorb incremental revenue.",asOf:"2026-11-02",source:"https://www.gevernova.com/investors"},
+ "CF":{sector:"Nitrogen fertiliser",posture:"EVENT GATE",signal:"Q3 2026 issuer results scheduled after the Wednesday 4 Nov US market close (Thursday 5 Nov MYT); no Q3 actual verified in this pre-release research pass.",next:"After original results, reconcile realised fertiliser selling prices, natural-gas input spread, operating cash, capex, FCF and earnings guidance before entry decisions.",kill:"Nitrogen prices fall faster than feedstock costs or financial performance fails to convert to durable cash.",asOf:"2026-10-07",source:"https://investor.cfindustries.com/Investors/news/news-details/2026/CF-Industries-Holdings-Inc--Announces-Planned-Schedule-for-Quarterly-Financial-Results-to-be-Released-in-2026/default.aspx"},
+ "ETN":{sector:"Grid / electrical distribution",posture:"ADVANCE / PRICE GATE",signal:"Q3 2026 sales US$8.947bn (+28% YoY, +19% organic); record segment margin 25.3%. GAAP EPS US$2.77 vs adjusted EPS US$3.68. Operating cash flow US$1.310bn; company-reported FCF US$1.034bn. These figures establish progress, not a buying price.",next:"Verify Electrical Americas and Global organic orders and backlog conversion, acquisition spending, 2027 FCF, net debt and price versus sustainable earnings.",kill:"Orders fail to become recurring profitable cash or valuation requires an uninterrupted data-centre boom.",asOf:"2026-11-03",source:"https://www.sec.gov/Archives/edgar/data/1551182/000155118226000037/0001551182-26-000037-index.htm"},
+ "GEV":{sector:"Power generation / grid",posture:"ADVANCE / PRICE GATE",signal:"Q3 2026 orders US$29.3bn (+96% organically), revenue US$12.6bn, backlog US$197bn, operating cash US$6.1bn and issuer-defined FCF US$5.4bn. FY2026 issuer FCF guide rose to US$16–17bn. These are company results, not a present-price verdict.",next:"Test backlog-to-cash conversion, gas-turbine slots, Power/Electrification margin durability, Trench Group US$9bn acquisition terms and current valuation.",kill:"Backlog converts more slowly or capital allocation absorbs excess cash despite headline order growth.",asOf:"2026-10-28",source:"https://www.sec.gov/Archives/edgar/data/1996810/000199681026000162/gevpressrelease3q26.htm"},
  "CRDO":{sector:"AI networking",posture:"VERIFY EXPOSURE / PRICE",signal:"AI networking is exposed to hyperscaler capacity investment, but customer concentration and latest earnings were not verified.",next:"Check product mix, contract concentration, cash conversion and forward valuation.",kill:"One-customer slowdown or valuation re-rating erodes the thesis.",asOf:"2026-11-02",source:"https://investors.credosemi.com/"},
  "VST":{sector:"Power generation",posture:"VERIFY FLEET CASH",signal:"Electricity contracts and realised margins, not uranium prices alone, determine power-generation economics.",next:"Read Q3 realised generation margins, hedge book, power purchase agreements and leverage.",kill:"Unhedged merchant exposure offsets nuclear/gas fleet benefits.",asOf:"2026-11-02",source:"https://investor.vistracorp.com/"},
  "FCX":{sector:"Copper / mining",posture:"VERIFY SUPPLY / CASH",signal:"Copper is relevant to grid expansion but mine-level costs, production and valuation are not yet reconciled here.",next:"Compare unit costs, volumes and mine-development capex with copper price.",kill:"Operational disruption or capex erodes cash despite a strong copper theme.",asOf:"2026-11-02",source:"https://investors.fcx.com/"},
@@ -50,4 +50,20 @@ export function researchFor(ticker){
    kill:"A key underwriting assumption cannot be supported by primary filings.",
    asOf:RESEARCH_AS_OF,source:null
  };
+}
+
+/** Research-queue priority is not a security rating or execution instruction. */
+export const RESEARCH_PRIORITIES=Object.freeze({
+ "URGENT TERMS CHECK":0,
+ "EVENT GATE":1,"EVENT GATE / WAIT":1,
+ "RE-UNDERWRITE / NO ADD":2,"RE-UNDERWRITE / NO ADD YET":2,
+ "ADVANCE DILIGENCE":3,"ADVANCE DILIGENCE / CREDIT GATE":3,"ADVANCE / PRICE GATE":3,
+ "HOLD CASE / NORMALISE":4,"HOLD CASE / PRICE GATE":4,"HOLD CASE / REVALUE":4,
+ "VERIFY CURRENT VALUATION":5,"VERIFY PRICE / ORDERS":5,"VERIFY EXPOSURE / PRICE":5,
+ "VERIFY FLEET CASH":5,"VERIFY SUPPLY / CASH":5,
+ "SOURCE GAP / WAIT":6,"WAIT / HIGH SPECULATION":6,
+ "NOT YET UNDERWRITTEN":7
+});
+export function researchPriority(posture){
+ return Object.hasOwn(RESEARCH_PRIORITIES,posture)?RESEARCH_PRIORITIES[posture]:8;
 }
