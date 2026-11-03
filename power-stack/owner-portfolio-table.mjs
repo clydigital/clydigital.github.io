@@ -122,7 +122,7 @@ export async function initPortfolioTable(db,host){
  const heading=el("div",null,"ps-table-head"),title=el("div");
  title.append(el("h2","My Portfolio · Holdings & Watchlist"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
-   " watchlist names · ARCHIVED "+data.snapshot_as_of+" · NOT BROKER-VERIFIED));
+   " watchlist names · ARCHIVED "+data.snapshot_as_of+" · NOT BROKER-VERIFIED"));
  heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh","ps-table-note"));host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
