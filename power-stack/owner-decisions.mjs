@@ -1,5 +1,5 @@
 import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mjs";
-import {RESEARCH_AS_OF,COVERAGE,researchFor} from "./research-cases.mjs";
+import {RESEARCH_AS_OF,researchFor,researchPriority} from "./research-cases.mjs";
 /** Owner identity and row-level security live in Supabase. No backend proxy or Vercel. */
 const $=id=>document.getElementById(id);
 const root="https://clydigital.github.io/power-stack/decisions.html";
@@ -14,7 +14,7 @@ function link(url,label){const a=text("a",label);a.href=url;a.rel="noopener nore
 function setStatus(s){$("decisions-status").textContent=s;}
 function showOwner(yes){$("decisions-owner").hidden=!yes;$("decisions-login").hidden=yes;$("decisions-logout").hidden=!yes;}
 function rows(v,limit){return Array.isArray(v)?v.slice(0,limit).filter(x=>x&&typeof x==="object"&&!Array.isArray(x)):[];}
-const PRIORITIES={"URGENT TERMS CHECK":0,"EVENT GATE":1,"RE-UNDERWRITE / NO ADD":2,"RE-UNDERWRITE / NO ADD YET":2,"ADVANCE DILIGENCE":3,"ADVANCE / PRICE GATE":3,"HOLD CASE / NORMALISE":4,"HOLD CASE / PRICE GATE":4,"HOLD CASE / REVALUE":4,"HOLD CASE / REVALUE":4,"HOLD CASE / REVALUE":4,"WAIT / HIGH SPECULATION":6,"NOT YET UNDERWRITTEN":7};
+// Research status ranking is centralised in research-cases.mjs.
 function projection(snapshot){
  const map=new Map();
  for(const h of rows(snapshot?.holdings,100)){
@@ -41,7 +41,7 @@ function render(){
   if(order==="symbol")return a.ticker.localeCompare(b.ticker);
   if(order==="sector")return researchFor(a.ticker).sector.localeCompare(researchFor(b.ticker).sector)||a.ticker.localeCompare(b.ticker);
   if(order==="source")return researchFor(b.ticker).asOf.localeCompare(researchFor(a.ticker).asOf)||a.ticker.localeCompare(b.ticker);
-  return (PRIORITIES[researchFor(a.ticker).posture]??5)-(PRIORITIES[researchFor(b.ticker).posture]??5)
+  return researchPriority(researchFor(a.ticker).posture)-researchPriority(researchFor(b.ticker).posture)
    ||Number(b.held)-Number(a.held)||a.ticker.localeCompare(b.ticker);
  });
  const tbody=$("decision-body");tbody.replaceChildren();
@@ -76,7 +76,7 @@ function render(){
   text("span",numWatch+" archived watchlist names"),
   text("span",covered+"/"+records.length+" source-linked issuer cases"),
   text("span",shown.length+" displayed"),
-  text("span","Editorial cut-off "+RESEARCH_AS_OF)
+  text("span","Research base "+RESEARCH_AS_OF+" · per-issuer source dates vary")
  );
 }
 async function refresh(){
@@ -95,8 +95,8 @@ async function refresh(){
  else{showOwner(true);setStatus("Owner verified · private RLS records loaded");}
  $("decisions-provenance").textContent=
   "Owner snapshot as of "+snapshotDate+"; holding quantities may refer to older dates. "+
-  "This is NOT a broker-confirmed current position list. Research updated "+RESEARCH_AS_OF+
-  "; no price, cost basis, cash balance or transaction advice is inferred.";
+  "This is NOT a broker-confirmed current position list. Research base "+RESEARCH_AS_OF+
+  "; each issuer has its own original source date. No verified cost basis, cash or transaction advice is inferred.";
  render();
 }
 async function signIn(){
