@@ -86,7 +86,8 @@ test("neutral research catalogue covers overseas and emerging-market tickers wit
  assert.deepEqual(names.get("3191.HK"),{ticker:"3191.HK",providerSymbol:"3191.HK",
     currency:"HKD",timeZone:"Asia/Hong_Kong"});
  assert.equal(names.get("6742UW")?.marketType,"unresolved");
- assert.equal(names.get("MNHLDG")?.marketType,"unresolved");
+ assert.deepEqual(names.get("MNHLDG"),{ticker:"MNHLDG",providerSymbol:"0245.KL",
+   currency:"MYR",timeZone:"Asia/Kuala_Lumpur"});
  assert.equal(names.get("BTC")?.marketType,"crypto");
  assert.throws(()=>validateManifest({...manifest,symbols:[{...names.get("6742UW"),providerSymbol:"6742.KL"}]}),
    /unsupported instrument mapping/);
@@ -119,8 +120,7 @@ test("unmapped instruments are retained as unavailable without requesting their 
  const specs=[
   {ticker:"6742UW",providerSymbol:null,currency:null,timeZone:null,marketType:"unresolved",
    reason:"Series and strike unavailable; no proxy"},
-  {ticker:"MNHLDG",providerSymbol:null,currency:null,timeZone:null,marketType:"unresolved",
-   reason:"Unidentified listing; no proxy"},
+
  ];
  let requests=0;
  for(const spec of specs){

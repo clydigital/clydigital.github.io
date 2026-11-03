@@ -79,7 +79,7 @@ export function validateManifest(input){
   // Unmapped instruments remain present for gap visibility but NEVER receive
   // a guessed underlying share quote or invented tradable price.
   if(x.marketType==="unresolved"){
-   if(!["6742UW","MNHLDG"].includes(x.ticker)||x.providerSymbol!==null
+   if(x.ticker!=="6742UW"||x.providerSymbol!==null
      ||x.currency!==null||x.timeZone!==null
      ||typeof x.reason!=="string"||x.reason.length<12)
       throw Error("Unapproved unsupported instrument mapping");
