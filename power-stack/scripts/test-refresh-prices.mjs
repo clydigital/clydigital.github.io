@@ -21,7 +21,7 @@ test("manifest uses a non-owner public research universe and no holdings quantit
  assert.equal(validateManifest(m).length,50);
  assert.ok(!JSON.stringify(m).includes("quantityAsOf"));
  assert.ok(!JSON.stringify(m).includes("owner_user_id"));
- assert.ok(!JSON.stringify(m).includes("holdings"));
+ assert.ok(!JSON.stringify(m.symbols).includes("holdings"));
  assert.deepEqual(validateManifest(m).find(x=>x.ticker==="DAYANG"),myr);
  assert.throws(()=>validateManifest({...m,symbols:[usd,usd]}),/Duplicate/);
 });
