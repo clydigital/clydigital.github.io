@@ -765,8 +765,8 @@
     },
     {
       "ticker": "MNHLDG",
-      "providerSymbol": null,
-      "currency": null,
+      "providerSymbol": "0245.KL",
+      "currency": "MYR",
       "status": "UNAVAILABLE",
       "sessionDate": null,
       "close": null,
@@ -776,8 +776,8 @@
       "change5dPct": null,
       "sourceName": null,
       "sourceUrl": null,
-      "refreshStatus": "UNMAPPED",
-      "reason": "Ambiguous instrument identity; no unverified mapping"
+      "refreshStatus": "PENDING_FIRST_RUN",
+      "reason": "Verified Bursa ordinary-share stock code 0245; first delayed close pending approved source retrieval"
     },
     {
       "ticker": "MPC",
