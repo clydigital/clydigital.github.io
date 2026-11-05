@@ -60,7 +60,7 @@ async function load(){
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
  }
  if(PAGE==="decisions"){
-  try{await import("./owner-decisions.mjs?v=20261104-ps8");}
+  try{await import("./owner-decisions.mjs?v=20261106-riskoff1");}
   catch(e){console.error("Private decisions unavailable",e);}
  }
  const planned=sessionStorage.getItem("power-stack-target");
