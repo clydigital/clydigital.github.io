@@ -120,9 +120,9 @@ export async function initPortfolioTable(db,host){
  let sort="ticker",direction="asc",scope=location.hash==="#watchlist"?"watchlist":"all",search="",expanded=null;
  host.replaceChildren();
  const heading=el("div",null,"ps-table-head"),title=el("div");
- title.append(el("h2","My Portfolio · Holdings & Watchlist"),
+ title.append(el("h2","Market watch & holdings"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
-   " watchlist names · ARCHIVED "+data.snapshot_as_of+" · NOT BROKER-VERIFIED"));
+   " watchlist names · Research snapshot "+data.snapshot_as_of+" (unverified)"));
  const feedGeneratedAt=asOf&&Number.isFinite(Date.parse(asOf))?Date.parse(asOf):null;
  const feedAgeHours=feedGeneratedAt===null?null:Math.max(0,Math.floor((Date.now()-feedGeneratedAt)/3600000));
  const eligibleNow=quotes(priceFeed).holding.size;
@@ -131,7 +131,11 @@ export async function initPortfolioTable(db,host){
   +" · "+eligibleNow+" valid now"+(feedAgeHours===null?"":" · generated "+feedAgeHours+"h ago")
   +(feedAgeHours!==null&&feedAgeHours>72?" · REFRESH OVERDUE":"")
   :" · FEED UNAVAILABLE";
- heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+coverageLabel,"ps-table-note"));host.append(heading);
+ heading.append(title,el("span","Delayed prices · "+(asOf||"not available")+
+  (feedAgeHours!==null&&feedAgeHours>72?" · update overdue":"")+
+  (priceFeed?" · "+eligibleNow+" instruments available":""),"ps-table-note"));
+ const opportunities=el("a","Review investment ideas →","ps-table-opportunities");
+ opportunities.href="ideas.html";heading.append(opportunities);host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
  input.addEventListener("input",()=>{search=input.value.trim().toLowerCase();render();});
@@ -149,7 +153,7 @@ export async function initPortfolioTable(db,host){
   th.append(button);hrow.append(th);
  }
  thead.append(hrow);table.append(thead,tbody);wrap.append(table);host.append(wrap);
- host.append(el("p","Recorded units are historical, not proof of current holdings. Cash, cost basis, MYR portfolio value and unrealised P&L are unavailable until broker reconciliation. Delayed equity closes are non-executable; BTC is a completed UTC daily sample, not an exchange close. Missing or stale quotes show —. No Bluebelly dependency.","ps-table-note"));
+ host.append(el("p","Prices are delayed. Recorded holdings and available cash require broker reconciliation; unavailable quotes show —.","ps-table-note"));
  function render(){
   for(const b of chips.children)b.setAttribute("aria-pressed",String(b.dataset.scope===scope));
   const selected=lines.filter(r=>(scope==="all"||scope==="holdings"&&r.held||scope==="watchlist"&&r.onWatchlist)
