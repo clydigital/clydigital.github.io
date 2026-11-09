@@ -46,6 +46,16 @@ test("strict Greenblatt cannot be assigned to TSM ADR or GRAB financial platform
   assert(validateFrameworkPacket(bad,bad.case_key).includes("STRICT_GREENBLATT_EXCLUSION"));
  }
 });
+test("CF must identify unnormalized commodity cycle before research packet is considered complete",()=>{
+ const bad=structuredClone(CF);bad.unresolved_gaps=["Broker status missing"];
+ assert(validateFrameworkPacket(bad,bad.case_key).includes("COMMODITY_CYCLE_NOT_DISCLOSED"));
+ const strict=structuredClone(CF);strict.lenses.find(x=>x.id==="GREENBLATT_STRICT").applicability="DIRECT";
+ assert(validateFrameworkPacket(strict,strict.case_key).includes("STRICT_GREENBLATT_UNIVERSE_UNVERIFIED"));
+});
+test("GRAB must disclose cash-flow basis or a verified reconciliation",()=>{
+ const bad=structuredClone(GRAB);bad.unresolved_gaps=["Quote missing"];
+ assert(validateFrameworkPacket(bad,bad.case_key).includes("FINTECH_CASH_BRIDGE_NOT_DISCLOSED"));
+});
 test("issuer PEG and Greenblatt economics cannot score the ETF",()=>{
  const bad=structuredClone(RSP);
  bad.lenses.find(x=>x.id==="LYNCH_GARP").applicability="DIRECT";
