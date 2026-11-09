@@ -1,0 +1,251 @@
+/* Power Stack high-contrast angular visual layer (10 Nov 2026).
+ * Loaded in <head> after Fin Pulse. Presentation only; no account data. */
+:root{
+ --ps-bg:#060b15;
+ --ps-sidebar:#091323;
+ --ps-panel:#121e30;
+ --ps-panel-alt:#16263d;
+ --ps-panel-soft:#1b2d46;
+ --ps-stroke:#405a79;
+ --ps-fg:#f5f8ff;
+ --ps-subtle:#c0d0e2;
+ --ps-blue:#3488ff;
+ --ps-blue-bright:#8bc5ff;
+ --ps-success:#46e0ab;
+ --ps-danger:#ff8293;
+ --ps-warn:#ffcd67;
+ --ps-rad:5px;
+}
+body.ps-fin-pulse{
+ background:#060b15!important;color:#f5f8ff!important;
+ font-size:14px!important;line-height:1.52!important;
+}
+body.ps-fin-pulse :where(p,small,label){color:#b7c8df}
+body.ps-fin-pulse :where(h1,h2,h3,strong){color:#f5f8ff}
+body.ps-fin-pulse :where(a){text-underline-offset:3px}
+body.ps-fin-pulse #site-header.site-header{
+ background:#091323!important;border-right:1px solid #40506b!important;
+}
+body.ps-fin-pulse #site-header.site-header[hidden]{display:none!important}
+body.ps-fin-pulse #site-header .brand{font-size:19px!important;letter-spacing:-.05em}
+body.ps-fin-pulse #site-header .brand small{color:#b1c7e3!important;font-size:11px!important}
+body.ps-fin-pulse .ps-pulse-mark{
+ border-radius:3px!important;background:#2979ec!important;box-shadow:none!important;
+}
+body.ps-fin-pulse .ps-sidebar-label{color:#a4b8d1!important;font-size:10px!important}
+body.ps-fin-pulse .ps-advisor-nav>a:not(.brand),
+body.ps-fin-pulse .ps-advisor-more>summary{
+ border-radius:3px!important;color:#d4e1f2!important;font-size:13px!important;
+ font-weight:700!important;
+}
+body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"]{
+ background:#163456!important;color:#fff!important;
+ box-shadow:inset 4px 0 0 #70b5ff!important;
+}
+body.ps-fin-pulse .ps-advisor-nav>a:hover,
+body.ps-fin-pulse .ps-advisor-more>summary:hover{background:#173250!important;color:#fff!important}
+body.ps-fin-pulse .ps-advisor-more>div,
+body.ps-fin-pulse .ps-advisor-more>div a{border-radius:3px!important}
+body.ps-fin-pulse #site-header .gate-logout{
+ border-radius:3px!important;color:#e0e9f7!important;border-color:#566b87!important;
+}
+body.ps-fin-pulse :where(.eyebrow,.psd-root .psd-overline){
+ color:#8fc7ff!important;font-size:11px!important;font-weight:850!important;
+ letter-spacing:.095em!important;
+}
+body.ps-fin-pulse .psd-top h1,
+body.ps-fin-pulse .psi-hero h1,
+body.ps-fin-pulse .shell .hero h1{
+ color:#fff!important;font-weight:820!important;letter-spacing:-.035em!important;
+}
+body.ps-fin-pulse .psd-top p:not(.psd-overline),
+body.ps-fin-pulse .psi-hero p:not(.eyebrow),
+body.ps-fin-pulse .shell .hero p{
+ color:#c6d6e9!important;font-size:14px!important;
+}
+/* Visible hierarchy: flat-panel edges, distinct surfaces, less empty air. */
+body.ps-fin-pulse :where(
+ .psd-executive-main,.psd-summary-metrics,.psd-summary-metric,
+ .psd-ideas-panel,.psd-root .psd-lane,.psd-root .psd-book,
+ .psd-root .psd-review-card,.psd-root .psd-review-metric,
+ .psi-stat,.psi-card,.psi-metric,.psi-editor,
+ #owner-sortable-portfolio.ps-owner-table,.ps-advisor-records,
+ .ps-advisor-records #owner-content>.card,.gate-box,
+ .case,.sectorBrief,.narrative,.macroBar,.ps-table-controls input,
+ .ps-table-controls button,.psi-tools input,.psi-tools select,
+ .psi-form-grid input,.psi-form-grid select
+){border-radius:4px!important;box-shadow:none!important}
+body.ps-fin-pulse :where(
+ .psd-executive-main,.psd-summary-metrics,.psd-ideas-panel,
+ .psd-root .psd-lane,.psi-card,.psi-stat,
+ #owner-sortable-portfolio.ps-owner-table,.ps-advisor-records
+){background:#121e30!important;border:1px solid #455e7d!important}
+body.ps-fin-pulse :where(
+ .psd-summary-metric,.psd-root .psd-review-metric,
+ .psi-metric
+){background:#1c2c43!important;border:1px solid #385271!important}
+body.ps-fin-pulse .psd-root .psd-active{
+ background:#162946!important;border-color:#5b88b9!important;
+ border-left:4px solid #62b2ff!important;
+}
+body.ps-fin-pulse .psd-root .psd-risk{
+ background:#211c2b!important;border-left:4px solid #ffad6c!important;
+}
+body.ps-fin-pulse .psd-root .psd-watch{
+ background:#151f31!important;border-left:4px solid #829dc7!important;
+}
+body.ps-fin-pulse .psd-executive{gap:12px!important;margin-bottom:16px!important}
+body.ps-fin-pulse .psd-executive-main,
+body.ps-fin-pulse .psd-summary-metrics{padding:20px 22px!important}
+body.ps-fin-pulse .psd-executive-main h2{
+ color:#fff!important;font-size:clamp(23px,2.2vw,32px)!important;line-height:1.28!important;
+}
+body.ps-fin-pulse .psd-executive-main>p:last-of-type{color:#cad8e9!important;font-size:13px!important}
+body.ps-fin-pulse .psd-summary-metric{padding:15px 16px!important}
+body.ps-fin-pulse .psd-summary-metric strong{
+ color:#f9fcff!important;font-size:clamp(27px,2.6vw,37px)!important;
+ font-variant-numeric:tabular-nums;
+}
+body.ps-fin-pulse .psd-summary-metric:first-child strong{color:#91ccff!important}
+body.ps-fin-pulse .psd-summary-metric span{color:#d0dded!important;font-size:12px!important}
+body.ps-fin-pulse .ps-pulse-heading strong{color:#e4edf9!important}
+body.ps-fin-pulse .ps-pulse-heading span,
+body.ps-fin-pulse .ps-pulse-col>small{color:#bccce0!important;font-size:11px!important}
+body.ps-fin-pulse .ps-pulse-col>strong{font-size:14px!important;color:#fff!important}
+body.ps-fin-pulse .ps-pulse-track{border-radius:1px!important;background:#253852!important}
+body.ps-fin-pulse .ps-pulse-fill{border-radius:1px 1px 0 0!important}
+body.ps-fin-pulse .ps-pulse-fill.ps-pulse-aligned{background:#42d9a2!important}
+body.ps-fin-pulse .ps-pulse-fill.ps-pulse-watch{background:#6da8ed!important}
+body.ps-fin-pulse .ps-pulse-fill.ps-pulse-divergence{background:#ffc36b!important}
+body.ps-fin-pulse .ps-pulse-fill.ps-pulse-recheck{background:#657a9e!important}
+/* Decision-first financial grid; labels and numeric columns are legible. */
+body.ps-fin-pulse .psd-section-heading{padding:19px 21px!important}
+body.ps-fin-pulse .psd-section-heading h2,
+body.ps-fin-pulse .psd-lane-head h2{font-size:19px!important;color:#fff!important}
+body.ps-fin-pulse .psd-section-heading a{color:#9ed4ff!important;font-size:13px!important;text-decoration:underline}
+body.ps-fin-pulse .psd-idea-head{background:#24364d!important;color:#cbdcef!important}
+body.ps-fin-pulse .psd-idea-head span{
+ color:#dae6f6!important;font-size:11px!important;font-weight:850!important;letter-spacing:.04em!important;
+}
+body.ps-fin-pulse .psd-idea-row{border-top:1px solid #3a4d67!important;min-height:66px!important}
+body.ps-fin-pulse .psd-idea-row:nth-child(even){background:#15233a!important}
+body.ps-fin-pulse .psd-idea-row:hover{background:#243a56!important}
+body.ps-fin-pulse .psd-idea-name strong{font-size:17px!important;color:#fff!important}
+body.ps-fin-pulse .psd-idea-name small,
+body.ps-fin-pulse .psd-idea-price small{font-size:11px!important;color:#c2d3e8!important}
+body.ps-fin-pulse .psd-idea-price strong,
+body.ps-fin-pulse .psd-idea-zone,
+body.ps-fin-pulse .psd-idea-peg{
+ font-size:14px!important;font-weight:820!important;color:#f4f9ff!important;
+ font-variant-numeric:tabular-nums;
+}
+body.ps-fin-pulse .psd-idea-zone{color:#a9d3ff!important}
+body.ps-fin-pulse .psd-idea-verdict strong{
+ border-radius:2px!important;font-size:11px!important;padding:6px 9px!important;
+ text-transform:uppercase;letter-spacing:.015em;
+}
+body.ps-fin-pulse .psd-idea-verdict small{color:#bdcee4!important;font-size:11px!important}
+body.ps-fin-pulse .psd-idea-aligned .psd-idea-verdict strong{color:#9af5c9!important;border-color:#388e70!important;background:#123b31!important}
+body.ps-fin-pulse .psd-idea-divergence .psd-idea-verdict strong{color:#ffe0a8!important;border-color:#a27230!important;background:#402f18!important}
+body.ps-fin-pulse .psd-root .psd-grid{gap:12px!important}
+body.ps-fin-pulse .psd-root .psd-lane{padding:20px 21px!important}
+body.ps-fin-pulse .psd-card h3{font-size:18px!important;color:#fff!important}
+body.ps-fin-pulse .psd-ticker{color:#a8d5ff!important;font-size:12px!important}
+body.ps-fin-pulse .psd-detail-label{color:#a7c8f3!important;font-size:11px!important}
+body.ps-fin-pulse .psd-detail-row p{color:#edf3fb!important;font-size:13px!important}
+body.ps-fin-pulse .psd-badge{border-radius:2px!important;color:#e9f4ff!important;font-size:11px!important}
+body.ps-fin-pulse .psd-root .psd-empty,
+body.ps-fin-pulse .psd-root .psd-historical p{color:#d0dcee!important;font-size:12px!important}
+body.ps-fin-pulse .psd-archive>summary{color:#b8dcff!important;font-size:13px!important}
+body.ps-fin-pulse .psd-review-note,
+body.ps-fin-pulse .psd-brief-footer{color:#b4c4d9!important;font-size:12px!important}
+/* Opportunities screen: card = readable table row, not low contrast bubble. */
+body.ps-fin-pulse .psi-shell{padding-top:22px!important}
+body.ps-fin-pulse .psi-hero{padding-bottom:16px!important;border-color:#526b89!important}
+body.ps-fin-pulse .psi-stats{gap:10px!important}
+body.ps-fin-pulse .psi-stat{padding:16px 18px!important}
+body.ps-fin-pulse .psi-stat strong{font-size:34px!important;color:#fff!important}
+body.ps-fin-pulse .psi-stat:first-child strong{color:#91cdff!important}
+body.ps-fin-pulse .psi-stat small{font-size:12px!important;color:#cad8ed!important}
+body.ps-fin-pulse .psi-card{padding:16px 20px!important;gap:13px!important}
+body.ps-fin-pulse .psi-card.psi-aligned{border-left:5px solid #35dba3!important}
+body.ps-fin-pulse .psi-card.psi-divergence{border-left:5px solid #ffcb71!important}
+body.ps-fin-pulse .psi-card:hover{background:#1c2e48!important;border-color:#749aca!important}
+body.ps-fin-pulse .psi-card-head strong.psi-ticker{font-size:25px!important;color:#fff!important}
+body.ps-fin-pulse .psi-card-head small{font-size:12px!important;color:#c1d2e9!important}
+body.ps-fin-pulse .psi-badge{
+ border-radius:2px!important;font-size:11px!important;font-weight:850!important;
+ padding:6px 9px!important;color:#eff6ff!important;
+}
+body.ps-fin-pulse .psi-metric{padding:11px 12px!important}
+body.ps-fin-pulse .psi-metric strong{font-size:16px!important;color:#fff!important}
+body.ps-fin-pulse .psi-metric small{font-size:11px!important;color:#c1d2e9!important}
+body.ps-fin-pulse .psi-why{font-size:12px!important;color:#d7e3f4!important}
+body.ps-fin-pulse .psi-card summary{color:#b2dcff!important;font-size:12px!important}
+body.ps-fin-pulse .psi-card-actions button,
+body.ps-fin-pulse .psi-shortcuts a,
+body.ps-fin-pulse .psi-shortcuts button{border-radius:3px!important;font-size:12px!important}
+body.ps-fin-pulse .psi-tools label,
+body.ps-fin-pulse .psi-editor label{color:#d4e2f1!important;font-size:12px!important}
+body.ps-fin-pulse .psi-tools input,
+body.ps-fin-pulse .psi-tools select,
+body.ps-fin-pulse .psi-form-grid input,
+body.ps-fin-pulse .psi-form-grid select{
+ background:#0e1a2b!important;border-color:#617794!important;
+ color:#f1f7ff!important;border-radius:3px!important;font-size:13px!important;
+}
+body.ps-fin-pulse .psi-editor{background:#15243a!important;border-color:#597496!important}
+body.ps-fin-pulse .psi-disclaimer{color:#adbed4!important;font-size:11px!important}
+/* Market screen: tight high-contrast rows, explicit up/down, visible controls. */
+body.ps-fin-pulse #owner-sortable-portfolio.ps-owner-table{padding:0!important}
+body.ps-fin-pulse .ps-table-head{padding:19px 22px 14px!important}
+body.ps-fin-pulse .ps-table-head h2{font-size:23px!important;color:#fff!important}
+body.ps-fin-pulse .ps-table-head p,
+body.ps-fin-pulse .ps-table-note{font-size:12px!important;color:#c5d4e6!important}
+body.ps-fin-pulse .ps-table-controls{padding:9px 22px 15px!important}
+body.ps-fin-pulse .ps-table-controls input{
+ background:#0e1b2f!important;border:1px solid #617794!important;color:#fff!important;
+ border-radius:3px!important;font-size:13px!important;
+}
+body.ps-fin-pulse .ps-chip{border-radius:2px!important;font-size:12px!important;font-weight:800!important}
+body.ps-fin-pulse .ps-chip[aria-pressed=true]{background:#255eaa!important;border-color:#80baff!important}
+body.ps-fin-pulse .ps-table{font-size:13px!important}
+body.ps-fin-pulse .ps-table thead{background:#24354c!important}
+body.ps-fin-pulse .ps-table th{color:#e2ecfa!important;font-size:11px!important;font-weight:850!important;letter-spacing:.05em!important}
+body.ps-fin-pulse .ps-table th,
+body.ps-fin-pulse .ps-table td{padding:12px 12px!important;border-color:#3a506c!important}
+body.ps-fin-pulse .ps-table tbody tr:nth-child(even){background:#15253a!important}
+body.ps-fin-pulse .ps-table tbody tr:hover{background:#283c58!important}
+body.ps-fin-pulse .ps-table tbody td{font-size:13px!important;color:#eef4ff!important}
+body.ps-fin-pulse .ps-table td[data-direction=up]{color:#63f0a6!important;font-weight:800!important}
+body.ps-fin-pulse .ps-table td[data-direction=down]{color:#ff9da9!important;font-weight:800!important}
+body.ps-fin-pulse .ps-sort{color:#d0e2f7!important;font-size:11px!important}
+body.ps-fin-pulse .ps-sort:hover{color:#fff!important}
+body.ps-fin-pulse .ps-ticker{font-size:13px!important;font-weight:850!important;color:#a7d3ff!important}
+body.ps-fin-pulse .ps-row-details{background:#233750!important}
+body.ps-fin-pulse .ps-table-opportunities{font-size:12px!important;color:#a9d5ff!important}
+body.ps-fin-pulse .ps-advisor-records,
+body.ps-fin-pulse .gate-box{border-radius:4px!important;border-color:#4e6a8d!important}
+body.ps-fin-pulse .gate-box h1{color:#fff!important}
+body.ps-fin-pulse .gate-box p,
+body.ps-fin-pulse .gate-status{color:#c4d3e5!important}
+body.ps-fin-pulse .gate-button,
+body.ps-fin-pulse .psd-brief-footer button{border-radius:3px!important}
+body.ps-fin-pulse .ps-legacy-note{color:#c3d6ef!important}
+/* Mobile keeps the square geometry and enlarges tap labels without overflow. */
+@media(max-width:1020px){
+ body.ps-fin-pulse #site-header.site-header{border-bottom:2px solid #45638a!important}
+ body.ps-fin-pulse .ps-advisor-nav>a:not(.brand){font-size:12px!important}
+}
+@media(max-width:760px){
+ body.ps-fin-pulse .psd-executive-main,body.ps-fin-pulse .psd-summary-metrics{padding:17px 18px!important}
+ body.ps-fin-pulse .psd-summary-metric strong{font-size:26px!important}
+ body.ps-fin-pulse .psi-card{padding:15px!important}
+ body.ps-fin-pulse .ps-table{min-width:780px!important}
+ body.ps-fin-pulse .psd-idea-row{padding:12px 15px!important}
+ body.ps-fin-pulse .psd-idea-zone{font-size:13px!important}
+}
+@media(prefers-contrast:more){
+ body.ps-fin-pulse{--ps-stroke:#7894b7;--ps-subtle:#e5edf9}
+ body.ps-fin-pulse :where(.psi-card,.psd-ideas-panel,.psd-root .psd-lane){border-color:#8ca9cd!important}
+}
