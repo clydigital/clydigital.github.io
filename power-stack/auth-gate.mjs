@@ -39,14 +39,26 @@ async function load(){
  status("Checking owner access…");
  const user=await authenticate();
  if(!user){deny("Google sign-in required. Only the registered owner may enter.");return;}
- const {data,error}=await db.from("power_stack_private_pages").select("body_html")
-  .eq("page_key",PAGE).limit(1).maybeSingle();
- if(error||!data?.body_html){deny("Private research could not be retrieved. No public fallback is available.");return;}
- const content=secureMain(data.body_html);
+ let content;
+ if(PAGE==="ideas"){
+  // The shell is empty until owner authentication; ideas are fetched with RLS.
+  content=document.createElement("main");
+  content.id="owner-ideas-content";
+ }else{
+  const {data,error}=await db.from("power_stack_private_pages").select("body_html")
+   .eq("page_key",PAGE).limit(1).maybeSingle();
+  if(error||!data?.body_html){deny("Private research could not be retrieved. No public fallback is available.");return;}
+  content=secureMain(data.body_html);
+ }
  $("private-main").replaceWith(content);
  $("site-header").hidden=false;$("gate-panel").hidden=true;
  authorised=true;
  $("owner-indicator").textContent="Owner · "+user.email;
+ const nav=$("site-header").querySelector("nav");
+ if(PAGE!=="ideas"&&nav&&!nav.querySelector('a[href="ideas.html"]')){
+  const link=document.createElement("a");link.href="ideas.html";link.textContent="Ideas tracker";
+  nav.querySelector('a[href="portfolio.html"]')?.before(link);
+ }
  if(["research","sectors","decisions"].includes(PAGE)){
   const notice=document.createElement("aside");
   notice.className="ps-legacy-note";
@@ -88,10 +100,22 @@ async function load(){
   try{await import("./owner-decisions.mjs?v=20261106-riskoff1");}
   catch(e){console.error("Private decisions unavailable",e);}
  }
+ if(PAGE==="ideas"){
+  try{
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-ideas1");
+   await initIdeasTracker(db,content,user);
+  }catch(error){
+   content.replaceChildren();
+   const alert=document.createElement("p");
+   alert.setAttribute("role","status");
+   alert.textContent="Private Ideas Tracker unavailable. No purchase signal can be evaluated.";
+   content.append(alert);console.error("Ideas Tracker unavailable",error);
+  }
+ }
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
-  const safe=["index","research","sectors","decisions","portfolio","archive"].includes(planned)?planned:"index";
+  const safe=["index","research","sectors","decisions","portfolio","archive","ideas"].includes(planned)?planned:"index";
   if(safe!==PAGE){location.replace(safe+".html");return;}
  }
 }
