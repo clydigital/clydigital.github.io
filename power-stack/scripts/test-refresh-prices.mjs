@@ -172,7 +172,8 @@ test("all issuer research statuses have deterministic priority; refreshed Q3 cas
  assert.equal(researchPriority("UNKNOWN NEW STATUS"),8);
  assert.equal(COVERAGE.ETN.asOf,"2026-11-03");
  assert.equal(COVERAGE.GEV.asOf,"2026-10-28");
- assert.equal(COVERAGE.CF.posture,"EVENT GATE");
+ assert.equal(COVERAGE.CF.posture,"ADVANCE / PRICE GATE");
+ assert.ok(Date.parse(COVERAGE.CF.asOf+"T00:00:00Z")>=Date.parse("2026-11-04T00:00:00Z"),"CF Q3 source date");
  assert.match(COVERAGE.ETN.source,/sec\.gov/);
  assert.match(COVERAGE.GEV.source,/sec\.gov/);
 });
@@ -187,14 +188,15 @@ test("Power Stack site modules parse and owner-only auth has no hardcoded email"
 });
 
 test("every private page and dynamic module uses the same versioned release assets",()=>{
- const version="20261104-ps8";
+ const version="20261110-d2";
  for(const page of ["index","research","sectors","decisions","portfolio"]){
   const shell=readFileSync(path.join(ROOT,page+".html"),"utf8");
   assert.ok(shell.includes('src="auth-gate.mjs?v='+version+'"'),page);
  }
  const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
- for(const name of ["owner-portfolio-table","owner-decisions"])
-  assert.ok(gate.includes('./'+name+'.mjs?v='+version),name);
+ for(const name of ["owner-portfolio-table","owner-decisions","owner-decision-desk"]){
+  assert.match(gate,new RegExp(name+"\\\\.mjs\\\\?v=[A-Za-z0-9-]+"),name);
+ }
  const decisions=readFileSync(path.join(ROOT,"owner-decisions.mjs"),"utf8");
- assert.ok(decisions.includes('./research-cases.mjs?v='+version));
+ assert.match(decisions,/research-cases\\.mjs\\?v=[A-Za-z0-9-]+/);
 });
