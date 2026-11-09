@@ -47,6 +47,19 @@ async function load(){
  $("site-header").hidden=false;$("gate-panel").hidden=true;
  authorised=true;
  $("owner-indicator").textContent="Owner · "+user.email;
+ if(PAGE==="index"){
+  try{
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d2");
+   await initDecisionDesk(db,content,user);
+  }catch(error){
+   const notice=document.createElement("p");
+   notice.setAttribute("role","status");
+   notice.textContent="Decision memory unavailable. Original private research remains accessible.";
+   notice.className="psd-status";
+   content.prepend(notice);
+   console.error("Decision desk enhancement unavailable",error);
+  }
+ }
  if(PAGE==="portfolio"){
   const slot=document.createElement("section");
   slot.id="owner-sortable-portfolio";slot.className="card ps-owner-table";

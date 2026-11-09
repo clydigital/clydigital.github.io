@@ -1,0 +1,42 @@
+name: Power Stack decision continuity checks
+on:
+  pull_request:
+    paths:
+      - 'power-stack/owner-decision-*.mjs'
+      - 'power-stack/owner-decision-*.css'
+      - 'power-stack/auth-gate.mjs'
+      - 'power-stack/index.html'
+      - 'power-stack/scripts/test-decision-continuity.mjs'
+      - '.github/workflows/power-stack-decision-continuity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'power-stack/owner-decision-*.mjs'
+      - 'power-stack/scripts/test-decision-continuity.mjs'
+permissions:
+  contents: read
+jobs:
+  decision-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse source
+        run: |
+          node --check power-stack/owner-decision-core.mjs
+          node --check power-stack/owner-decision-desk.mjs
+          node --check power-stack/auth-gate.mjs
+      - name: Decision reasoning regression
+        run: node --test power-stack/scripts/test-decision-continuity.mjs
+      - name: Public asset privacy smoke
+        shell: bash
+        run: |
+          if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com|"owner_user_id":|"cash_delta":' power-stack/owner-decision-*.mjs; then
+            echo "Owner data or sensitive key detected in public client asset"; exit 1
+          fi
+          test -f power-stack/owner-decision-desk.css
+          grep -q 'PAGE==="index"' power-stack/auth-gate.mjs
+          grep -q 'owner-decision-desk.css' power-stack/index.html
