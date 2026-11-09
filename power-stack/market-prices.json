@@ -1,6 +1,6 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-09T22:28:24.979Z",
+  "generatedAt": "2026-11-09T23:49:59.114Z",
   "isDelayed": true,
   "description": "Completed equity sessions and aggregated BTC/USD UTC daily samples. Independent from Bluebelly and personal positions. Unmapped derivatives stay unavailable; not executable quotes.",
   "universeSource": "market-symbols.json",
