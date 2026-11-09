@@ -123,7 +123,15 @@ export async function initPortfolioTable(db,host){
  title.append(el("h2","My Portfolio · Holdings & Watchlist"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
    " watchlist names · ARCHIVED "+data.snapshot_as_of+" · NOT BROKER-VERIFIED"));
- heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh","ps-table-note"));host.append(heading);
+ const feedGeneratedAt=asOf&&Number.isFinite(Date.parse(asOf))?Date.parse(asOf):null;
+ const feedAgeHours=feedGeneratedAt===null?null:Math.max(0,Math.floor((Date.now()-feedGeneratedAt)/3600000));
+ const eligibleNow=quotes(priceFeed).holding.size;
+ const coverageLabel=priceFeed
+  ?" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh at generation"
+  +" · "+eligibleNow+" valid now"+(feedAgeHours===null?"":" · generated "+feedAgeHours+"h ago")
+  +(feedAgeHours!==null&&feedAgeHours>72?" · REFRESH OVERDUE":"")
+  :" · FEED UNAVAILABLE";
+ heading.append(title,el("span","Standalone daily quote feed: "+(asOf||"unavailable")+coverageLabel,"ps-table-note"));host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
  input.addEventListener("input",()=>{search=input.value.trim().toLowerCase();render();});
