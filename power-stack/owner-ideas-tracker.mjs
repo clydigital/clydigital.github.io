@@ -20,13 +20,13 @@ export async function initIdeasTracker(db,main,user){
  main.innerHTML=`
  <div class="psi-hero">
   <div><p class="eyebrow">POWER STACK / OWNER IDEAS</p><h1>Ideas Tracker</h1>
-  <p>Wait for PEG, macro and price to align. A green signal means <strong>review a purchase</strong>, never an automatic order.</p></div>
+  <p>PEG, macro and price can identify <strong>research candidates</strong>. Even a screen match is not a confirmed valuation or investment decision.</p></div>
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="portfolio.html#watchlist">Market watchlist</a><a href="index.html">Decision desk</a><button type="button" id="psi-add">+ Add idea</button></nav>
  </div>
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
- <label for="psi-filter">Signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="ALIGNED">Aligned</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
+ <label for="psi-filter">Signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
  <div id="psi-cards" class="psi-cards" aria-live="polite"></div>
  <section id="psi-editor" class="psi-editor" hidden>
   <div class="psi-editor-top"><h2 id="psi-editor-title">Track investment idea</h2><button type="button" class="psi-secondary" id="psi-cancel">Cancel</button></div>
@@ -48,7 +48,7 @@ export async function initIdeasTracker(db,main,user){
    <label class="psi-span">What to watch / invalidation<input name="note" maxlength="800" placeholder="Wait for crude stabilization; reassess if earnings estimates fall"></label>
   </div><div class="psi-submit"><button type="submit" id="psi-save">Save private idea</button><span id="psi-form-status" role="status"></span></div></form>
  </section>
- <p class="psi-disclaimer">Prices are delayed completed-session quotes, not executable prices. A PEG below 1 is not proof of cheapness for cyclical businesses; normalization and earnings revisions still require review. Macro and PEG update only when manually researched and saved. Watch price bands are research hypotheses, not orders.</p>`;
+ <p class="psi-disclaimer">Prices are delayed completed-session quotes, not executable prices. A PEG below 1 is not a buy signal. ETFs have no issuer-level PEG; cyclical and platform-fintech models require cash-flow or midcycle normalization. Unknown business models need classification before a screen match. Macro and PEG update only when manually researched and saved. Watch price bands are research hypotheses, not orders.</p>`;
  const $=id=>main.querySelector("#"+id);
  const state={ideas:[],prices:new Map(),feedAt:null,editing:null};
  const form=$("psi-form");
@@ -59,11 +59,11 @@ export async function initIdeasTracker(db,main,user){
   const head=el("div",null,"psi-card-head"),left=el("div"),right=el("div",null,"psi-right");
   left.append(el("strong",row.ticker,"psi-ticker"),el("small",row.name||row.ticker));
   left.append(el("span",row.idea_type==="TRADE"?"Trade setup":"Investment idea","psi-type"));
-  right.append(el("span",a.status==="ALIGNED"?"ALIGNMENT · REVIEW":a.status.replaceAll("_"," "),"psi-badge psi-"+a.status.toLowerCase()));
+  right.append(el("span",a.status==="ALIGNED"?"SCREEN MATCH · RESEARCH":a.status.replaceAll("_"," "),"psi-badge psi-"+a.status.toLowerCase()));
   head.append(left,right);node.append(head);
   const metrics=el("div",null,"psi-metrics");
   const values=[
-   ["PEG",a.peg===null?"—":a.peg.toFixed(2),a.pegVerified?"Verified "+row.peg_as_of:"Source / growth check required"],
+   ["PEG",a.pegSuitability==="NOT_APPLICABLE"?"N/A":a.peg===null?"—":a.peg.toFixed(2),a.pegVerified?"Dated input "+row.peg_as_of:"Source / growth check required"],
    ["Last close",fmt(q?.close,q?.currency||row.currency),q?.session?"Session "+q.session:"Fresh close unavailable"],
    ["Watch price",a.zoneVerified?fmt(a.low,row.currency)+" – "+fmt(a.high,row.currency):"Set a range",
     a.distance===null?"":a.distance>0?"Above zone "+a.distance.toFixed(1)+"%":a.distance<0?"Below zone "+Math.abs(a.distance).toFixed(1)+"%":"Inside zone"],
@@ -74,6 +74,7 @@ export async function initIdeasTracker(db,main,user){
   node.append(metrics,el("p",a.why,"psi-why"));
   const detail=el("details"),summary=el("summary","Evidence and next test");detail.append(summary);
   const body=el("div",null,"psi-detail");
+  body.append(el("p","PEG applicability: "+a.pegSuitability+" — "+a.pegSuitabilityReason));
   body.append(el("p","PEG methodology: "+(row.peg_basis||"Not recorded")));
   body.append(el("p","Macro: "+(row.macro_reason||"Not reviewed")));
   body.append(el("p","What to watch: "+(row.note||"Not recorded")));
@@ -90,7 +91,7 @@ export async function initIdeasTracker(db,main,user){
  function render(){
   const signals=sweepSignals(state.ideas,state.prices),counts=Object.fromEntries(["ALIGNED","DIVERGENCE","WATCH","RECHECK"].map(k=>[k,signals.filter(x=>x.status===k).length]));
   $("psi-stats").replaceChildren();
-  for(const [label,value] of [["Aligned",counts.ALIGNED],["Divergences",counts.DIVERGENCE],["Watch",counts.WATCH],["Needs review",counts.RECHECK]]){
+  for(const [label,value] of [["Screen matches",counts.ALIGNED],["Divergences",counts.DIVERGENCE],["Watch",counts.WATCH],["Needs review",counts.RECHECK]]){
    const item=el("div",null,"psi-stat");item.append(el("strong",value),el("small",label));$("psi-stats").append(item);
   }
   const filter=$("psi-filter").value,search=$("psi-search").value.toUpperCase().trim(),results=$("psi-cards");
