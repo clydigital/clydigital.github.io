@@ -54,12 +54,12 @@ export function assessIdea(idea,quote,now=new Date()) {
   else if(!macroVerified)why="Macro assessment needs fresh dated evidence.";
   else if(!zoneVerified)why="A numeric entry/watch price range has not been set.";
   else if(!priceVerified)why="A verified recent market-close price is unavailable.";
-  else if(suitability.status==="LOW_CONFIDENCE") {
+  else if(idea.macro_state==="ADVERSE"&&peg<1) {
+    status="DIVERGENCE";why="Low PEG and adverse macro conditions warrant a value-trap review; confirm underlying earnings quality. "+suitability.reason;
+  } else if(suitability.status==="LOW_CONFIDENCE") {
     status="WATCH";why="PEG, macro and watch-price inputs are only a research lead. "+suitability.reason;
   } else if(suitability.status==="UNCLASSIFIED") {
     status="WATCH";why="Inputs may match, but an investor-framework suitability review is required. "+suitability.reason;
-  } else if(idea.macro_state==="ADVERSE"&&peg<1) {
-    status="DIVERGENCE";why="Low PEG conflicts with adverse macro conditions: possible value trap.";
   } else if(idea.macro_state==="SUPPORTIVE"&&peg>=1) {
     status="DIVERGENCE";why="Supportive macro, but PEG does not clear the valuation gate.";
   } else if(idea.macro_state==="SUPPORTIVE"&&peg<1&&price>=low&&price<=high) {
