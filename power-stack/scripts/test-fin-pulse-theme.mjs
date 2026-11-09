@@ -42,7 +42,7 @@ test("dashboard chart is derived from tracked ideas, not fabricated performance"
  assert(dashboard.includes('const max=Math.max(1,...Object.values(counts))'));
  assert(dashboard.includes('psd-pulse-bars'));
  assert(dashboard.includes('const bars=$(host,"psd-pulse-bars")'));
- assert(dashboard.includes('sweepSignals(state.ideaRows,state.priceMap)'));
+ assert(dashboard.includes('sweepSignals(companyIdeas,state.priceMap)'));
  assert(dashboard.includes('loadPriceFeed()'));
  assert(dashboard.includes('power_stack_idea_tracker'));
  assert.doesNotMatch(dashboard,/Growth Over Time|Risk Score: 64|\$22,731\.60/);
@@ -69,7 +69,7 @@ test("each private page loads the final theme in head before auth script",()=>{
   const html=read(page+".html");
   const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
   const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
-  const auth=html.indexOf('src="auth-gate.mjs?v=20261110-noflash1"');
+  const auth=html.indexOf('src="auth-gate.mjs?v=20261110-coverage1"');
   assert(advisor>0&&pulse>advisor&&auth>pulse,page+" theme must precede auth script");
  }
 });
