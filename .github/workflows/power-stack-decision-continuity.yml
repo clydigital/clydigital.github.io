@@ -7,12 +7,14 @@ on:
       - 'power-stack/auth-gate.mjs'
       - 'power-stack/index.html'
       - 'power-stack/scripts/test-decision-continuity.mjs'
+      - 'power-stack/scripts/test-decision-performance.mjs'
       - '.github/workflows/power-stack-decision-continuity.yml'
   push:
     branches: [main]
     paths:
       - 'power-stack/owner-decision-*.mjs'
       - 'power-stack/scripts/test-decision-continuity.mjs'
+      - 'power-stack/scripts/test-decision-performance.mjs'
 permissions:
   contents: read
 jobs:
@@ -27,10 +29,11 @@ jobs:
       - name: Parse source
         run: |
           node --check power-stack/owner-decision-core.mjs
+          node --check power-stack/owner-decision-performance.mjs
           node --check power-stack/owner-decision-desk.mjs
           node --check power-stack/auth-gate.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
