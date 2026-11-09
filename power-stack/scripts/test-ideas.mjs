@@ -4,7 +4,7 @@ import {readFileSync} from "node:fs";
 import {assessIdea,sweepSignals,freshDate} from "../owner-ideas-core.mjs";
 const now=new Date("2026-11-10T05:00:00Z");
 const evidence={
- ticker:"CVX",idea_type:"INVESTMENT",peg:.73,peg_as_of:"2026-11-06",
+ ticker:"TSM",idea_type:"INVESTMENT",peg:.73,peg_as_of:"2026-11-06",
  peg_basis:"Five-year expected earnings growth",peg_source_url:"https://finance.yahoo.com/quote/CVX/key-statistics/",
  macro_state:"SUPPORTIVE",macro_as_of:"2026-11-09",macro_reason:"Verified demand and earnings regime improving",
  macro_source_url:"https://www.eia.gov/",watch_low:190,watch_high:200,currency:"USD",
@@ -51,8 +51,34 @@ test("missing watch price level blocks alignment",()=>{
 });
 test("sweep flags divergences alongside opportunities",()=>{
  const r=sweepSignals([evidence,{...evidence,ticker:"XOM",macro_state:"ADVERSE"}],
-  new Map([["CVX",q],["XOM",q]]),now);
+  new Map([["TSM",q],["XOM",q]]),now);
  assert.equal(r[0].status,"ALIGNED");assert.equal(r[1].status,"DIVERGENCE");
+});
+test("TSM is a dated research screen match, never a completed underwriting",()=>{
+ const a=assessIdea(evidence,q,now);
+ assert.equal(a.status,"ALIGNED");
+ assert.equal(a.pegSuitability,"FORECAST_SENSITIVE");
+ assert.match(a.why,/NOT a buy signal/);
+});
+test("GRAB and CF low PEG does not become an aligned buy-like signal",()=>{
+ for(const ticker of ["GRAB","CF","CVX","XOM"]){
+  const a=assessIdea({...evidence,ticker},q,now);
+  assert.equal(a.status,"WATCH",ticker);
+  assert.equal(a.pegSuitability,"LOW_CONFIDENCE");
+ }
+});
+test("RSP and named ETFs cannot have an issuer PEG",()=>{
+ for(const input of [{...evidence,ticker:"RSP"},{...evidence,ticker:"ETFX",name:"Example ETF"},{...evidence,ticker:"ABCD",instrument_kind:"ETF"}]){
+  const a=assessIdea(input,q,now);
+  assert.equal(a.status,"RECHECK");
+  assert.equal(a.pegVerified,false);
+  assert.equal(a.pegSuitability,"NOT_APPLICABLE");
+ }
+});
+test("unclassified companies require framework suitability before an aligned indicator",()=>{
+ const a=assessIdea({...evidence,ticker:"NEWCOMPANY"},q,now);
+ assert.equal(a.status,"WATCH");
+ assert.equal(a.pegSuitability,"UNCLASSIFIED");
 });
 test("public static shell has no member quotes, holdings or private investment idea records",()=>{
  const html=readFileSync(new URL("../ideas.html",import.meta.url),"utf8");
