@@ -46,7 +46,7 @@ export function validateFrameworkPacket(packet,expectedKey=null){
  if(!populated(packet.case_key)||!/^.{1,70}\|(NEW_ENTRY|HELD_POSITION|PORTFOLIO_ALLOCATION|TRADE_SETUP)\|(TRADE|TACTICAL|MANDATE|STRUCTURAL)$/.test(packet.case_key))errors.push("CASE_KEY_INVALID");
  if(expectedKey!==null&&packet.case_key!==expectedKey)errors.push("CASE_KEY_MISMATCH");
  if(!isoTime(packet.researched_at))errors.push("RESEARCH_TIME_INVALID");
- if(!isObject(packet.instrument)||!populated(packet.instrument.ticker)||!KINDS.has(packet.instrument.kind)||!populated(packet.instrument.currency))errors.push("INSTRUMENT_INVALID");
+ if(!isObject(packet.instrument)||!(typeof packet.instrument.ticker==="string"&&/^[A-Z0-9][A-Z0-9.:-]{0,19}$/.test(packet.instrument.ticker))||!KINDS.has(packet.instrument.kind)||!(typeof packet.instrument.currency==="string"&&/^[A-Z]{3}$/.test(packet.instrument.currency)))errors.push("INSTRUMENT_INVALID");
  if(!ARCHETYPES.has(packet.operating_archetype))errors.push("ARCHETYPE_INVALID");
  if(!["NOT_EXECUTABLE","COMPLETED_SESSION_VERIFIED","UNVERIFIED"].includes(packet.price_state))errors.push("PRICE_STATUS_INVALID");
  if(!populated(packet.primary_variant_question))errors.push("VARIANT_QUESTION_MISSING");
@@ -56,7 +56,7 @@ export function validateFrameworkPacket(packet,expectedKey=null){
  const sources=new Set();
  if(!Array.isArray(packet.source_ledger))errors.push("SOURCE_LEDGER_INVALID");
  else for(const s of packet.source_ledger){
-  if(!isObject(s)||!populated(s.id)||!safeSourceUrl(s.url)||!date(s.published_date)||!populated(s.source_type))errors.push("SOURCE_ENTRY_INVALID");
+  if(!isObject(s)||!(typeof s.id==="string"&&s.id.length>0)||!safeSourceUrl(s.url)||!date(s.published_date)||!populated(s.source_type))errors.push("SOURCE_ENTRY_INVALID");
   else sources.add(s.id);
  }
  if(!Array.isArray(packet.lenses)||packet.lenses.length===0)errors.push("LENSES_MISSING");
