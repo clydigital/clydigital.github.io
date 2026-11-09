@@ -14,13 +14,13 @@ export const approvedEvidence = value => {
 };
 // Non-authoritative, conservative pre-screen safeguards. Add issuer classification
 // only from reviewed research; unknown instruments never get a buy-like green state.
-const ETFS=new Set(["ARKK","DIA","GDX","GLD","GLDM","HYG","IEF","IGV","IWM","LQD","QQQ","RSP","SGOV","SMH","SOXX","SPY","SPYG","SPYV","TLT","VGIT","VOO","VTI","XLK","XLE","XLF","XLI","XLP","XLU","XLY","XLB","XLC","XLV","RSP","RSPT","VUG"]);
+const ETFS=new Set(["ARKK","DIA","GDX","GLD","GLDM","HYG","IEF","IGV","IWM","LQD","QQQ","RSP","SGOV","SMH","SOXX","SPY","SPYG","SPYV","TLT","VGIT","VOO","VTI","XLK","XLE","XLF","XLI","XLP","XLU","XLY","XLB","XLC","XLV","RSPT","VUG"]);
 const CYCLICALS=new Set(["CF","NTR","XOM","CVX","MPC","PSX","SLB","BKR","HAL","FCX","BG","DAYANG","HIBISCS"]);
 const FINTECH=new Set(["GRAB"]);
 export function pegSuitability(idea){
  const ticker=String(idea?.ticker||"").trim().toUpperCase();
  const name=String(idea?.name||"");
- if(ETFS.has(ticker)||/(?:\\bETF\\b|exchange.traded fund|\\bindex fund\\b)/i.test(name)||
+ if(ETFS.has(ticker)||/(?:\bETF\b|exchange.traded fund|\bindex fund\b)/i.test(name)||
   ["ETF","FUND"].includes(String(idea?.instrument_kind||"").toUpperCase()))
   return {status:"NOT_APPLICABLE",reason:"Fund instrument: single-company PEG is not meaningful; use fund costs, exposures and benchmark valuation."};
  if(FINTECH.has(ticker))return {status:"LOW_CONFIDENCE",reason:"Platform/fintech: reconcile credit assets and GAAP versus adjusted cash-flow before valuing growth."};
