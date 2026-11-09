@@ -3,6 +3,7 @@ import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,finger
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {sweepSignals} from "./owner-ideas-core.mjs";
+import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -89,9 +90,27 @@ export async function initDecisionDesk(db,main,user){
  <section class="psd-executive" aria-label="Portfolio briefing">
   <div class="psd-executive-main"><p class="psd-overline">THE CURRENT VIEW</p><h2 id="psd-thesis">Reviewing opportunities</h2>
    <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p>
-   <div class="ps-pulse-graph"><div class="ps-pulse-heading"><strong>Opportunity distribution</strong><span>Tracked ideas · current evidence</span></div>
+   <div class="ps-pulse-graph"><div class="ps-pulse-heading"><strong>Opportunity distribution</strong><span>Company ideas · current evidence</span></div>
     <div id="psd-pulse-bars" class="ps-pulse-bars" role="img" aria-label="Distribution of tracked ideas by investment assessment"></div></div></div>
   <div id="psd-summary-metrics" class="psd-summary-metrics"></div>
+ </section>
+ <section class="psd-coverage-panel" aria-labelledby="psd-holdings-heading">
+  <div class="psd-section-heading"><div><p class="psd-overline">MY PORTFOLIO / RECORDED</p><h2 id="psd-holdings-heading">My holdings</h2>
+    <p id="psd-holdings-note" class="psd-coverage-note">Loading historical position records…</p></div>
+    <a href="portfolio.html#holdings">View all holdings →</a></div>
+  <div class="psd-coverage-scroll"><table class="psd-coverage-table" aria-label="Historically recorded holdings and recent delayed prices">
+    <thead><tr><th>Recorded holding</th><th>Units (historic)</th><th>Last close</th><th>1D</th><th>3D</th><th>5D</th></tr></thead>
+    <tbody id="psd-holdings-rows"></tbody></table></div>
+ </section>
+ <section class="psd-coverage-panel psd-bonds-panel" aria-labelledby="psd-bond-heading">
+  <div class="psd-section-heading"><div><p class="psd-overline">TREASURIES & FIXED INCOME</p><h2 id="psd-bond-heading">Bond ETF watch <span class="psd-section-pill">TLT priority</span></h2>
+    <p class="psd-coverage-note">Bond ideas, not holdings. PEG is not a meaningful ETF valuation measure.</p></div>
+    <a href="ideas.html#bonds">Research all bond ETFs →</a></div>
+  <div class="psd-coverage-scroll"><table class="psd-coverage-table" aria-label="Tracked bond ETFs with delayed prices and reviewed macro status">
+    <thead><tr><th>Bond ETF</th><th>Last close</th><th>1D</th><th>3D</th><th>5D</th><th>Macro view</th></tr></thead>
+    <tbody id="psd-bond-rows"></tbody></table></div>
+  <div class="psd-coverage-foot"><span id="psd-bond-count">Loading bond watch…</span>
+    <a href="portfolio.html#bonds">Compare bond ETFs in Market Watch →</a></div>
  </section>
  <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
   <div class="psd-section-heading"><div><p class="psd-overline">OPPORTUNITY MONITOR</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2></div>
@@ -126,8 +145,49 @@ export async function initDecisionDesk(db,main,user){
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
   ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null};
  function status(s){$(host,"psd-status").textContent=s}
+ function renderCoverage(){
+  const numeric=(v,d=2)=>Number(v).toLocaleString("en-GB",{maximumFractionDigits:d});
+  const percent=v=>typeof v==="number"&&Number.isFinite(v)?(v>0?"+":"")+v.toFixed(2)+"%":"—";
+  const change=(tr,v)=>{
+   const td=txt("td",percent(v));td.className="psd-delta";
+   td.dataset.direction=typeof v!=="number"?"unknown":v>0?"up":v<0?"down":"flat";tr.append(td);
+  };
+  const positionHost=$(host,"psd-holdings-rows");positionHost.replaceChildren();
+  const holdings=recordedHoldings(state.snapshot,state.priceMap);
+  $(host,"psd-holdings-note").textContent=holdings.length+" recorded positions · Snapshot "+
+    (state.snapshotDate||"unknown")+" · Not broker-confirmed";
+  for(const item of holdings){
+   const tr=txt("tr"),name=txt("td"),id=txt("strong",item.ticker),sub=txt("small",item.name);
+   name.append(id,sub);tr.append(name);
+   tr.append(txt("td",item.quantity===null?"—":numeric(item.quantity,8),"psd-number"));
+   tr.append(txt("td",item.quote?.close?item.quote.currency+" "+numeric(item.quote.close,3):"—","psd-number"));
+   for(const changeValue of [item.quote?.day,item.quote?.threeDay,item.quote?.fiveDay])change(tr,changeValue);
+   positionHost.append(tr);
+  }
+  if(!holdings.length){const tr=txt("tr"),td=txt("td","No recorded holdings available.");td.colSpan=6;tr.append(td);positionHost.append(tr);}
+  const bondHost=$(host,"psd-bond-rows");bondHost.replaceChildren();
+  const bonds=bondWatch(state.ideaRows,state.priceMap);
+  $(host,"psd-bond-count").textContent=state.ideaError?"Bond research unavailable":
+    bonds.length+" bond funds tracked · Price feed "+(state.marketAsOf?"updated "+state.marketAsOf.slice(0,10):"unavailable");
+  for(const item of bonds.slice(0,8)){
+   const tr=txt("tr");if(item.ticker==="TLT")tr.className="psd-bond-priority";
+   const td=txt("td"),link=txt("a",item.ticker);link.href="ideas.html#bonds";
+   td.append(link,txt("small",item.name));tr.append(td);
+   tr.append(txt("td",item.quote?.close?item.quote.currency+" "+numeric(item.quote.close,3):"—","psd-number"));
+   for(const v of [item.quote?.day,item.quote?.threeDay,item.quote?.fiveDay])change(tr,v);
+   const view=txt("td");view.append(txt("strong",item.macroState==="UNKNOWN"?"Not assessed":item.macroState,"psd-bond-macro"),
+     txt("small",item.macroAsOf?"Research "+item.macroAsOf:"Review date missing"));
+   if(item.ticker==="TLT"&&item.note){
+    const details=txt("details"),summary=txt("summary","View TLT investment thesis");
+    details.append(summary,txt("p",item.note));view.append(details);
+   }
+   tr.append(view);bondHost.append(tr);
+  }
+  if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
+ }
  function renderIdeaBrief(){
-  const signals=sweepSignals(state.ideaRows,state.priceMap);
+  const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
+  const signals=sweepSignals(companyIdeas,state.priceMap);
   const counts={ALIGNED:0,DIVERGENCE:0,WATCH:0,RECHECK:0};
   for(const v of signals)counts[v.status]=(counts[v.status]||0)+1;
   const thesis=$(host,"psd-thesis"),note=$(host,"psd-thesis-context");
@@ -135,9 +195,10 @@ export async function initDecisionDesk(db,main,user){
   else if(counts.ALIGNED){
     thesis.textContent=counts.ALIGNED+" research "+(counts.ALIGNED===1?"match":"matches")+" in the current screen";
     note.textContent="A screen match is not a buy recommendation. Check earnings quality, valuation and portfolio fit.";
-  }else if(state.ideaRows.length){
-    thesis.textContent="No research screen match yet";
-    note.textContent=state.ideaRows.length+" investment "+(state.ideaRows.length===1?"idea remains":"ideas remain")+" under review. Watch prices and macro evidence for a stronger setup.";
+  }else if(companyIdeas.length){
+    thesis.textContent="No company screen match yet";
+    note.textContent=companyIdeas.length+" company investment "+(companyIdeas.length===1?"idea remains":"ideas remain")+
+      " under review. Bond ETFs are tracked separately below.";
   }else{
     thesis.textContent="Build your opportunity shortlist";
     note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
@@ -182,6 +243,7 @@ export async function initDecisionDesk(db,main,user){
   if(!signals.length)board.append(txt("p",state.ideaError?"Investment ideas could not be verified.":"No tracked ideas yet. Create a watch price and investment case to begin.","psd-empty"));
  }
  function draw(){
+  renderCoverage();
   renderIdeaBrief();
   const latest=latestByCase(state.rows),historyByKey=new Map();
   for(const row of state.rows){
