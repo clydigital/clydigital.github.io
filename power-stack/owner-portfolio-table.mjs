@@ -1,3 +1,4 @@
+import {expandMarketRows} from "./owner-market-views.mjs";
 // Static owner-only portfolio + independent public delayed quote tape.
 // Holdings/watchlist membership remains RLS-protected; quotes are company-level only.
 const safe=(v,max=250)=>typeof v==="string"?v.trim().slice(0,max):"";
@@ -104,7 +105,7 @@ function cell(tr,value,tag="td"){
  const n=el(tag,value);tr.append(n);return n;
 }
 function rowValue(r,key){
- if(key==="group")return r.held?"Holding":r.onWatchlist?"Watchlist":"Research";
+ if(key==="group")return r.held?"Holding":r.ideaTracked?"Research idea":r.onWatchlist?"Watchlist":"Market tape";
  if(key==="quantity")return r.held?r.quantity:null;
  return r[key]??null;
 }
@@ -115,34 +116,53 @@ export async function initPortfolioTable(db,host){
   .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",user.id)
   .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
- const priceFeed=await loadPriceFeed();
- const {lines,asOf}=project(data.snapshot,priceFeed);
- let sort="ticker",direction="asc",scope=location.hash==="#watchlist"?"watchlist":"all",search="",expanded=null;
+ const [priceFeed,ideaResult]=await Promise.all([
+  loadPriceFeed(),
+  db.from("power_stack_idea_tracker")
+   .select("ticker,name,idea_type,currency,macro_state,macro_reason")
+   .eq("owner_user_id",user.id).limit(150)
+ ]);
+ const feedAt=Date.parse(priceFeed?.generatedAt||"");
+ const validFeed=Number.isFinite(feedAt)&&feedAt<=Date.now()
+  &&Date.now()-feedAt<=72*3600000?priceFeed:null;
+ const {lines:recorded,asOf}=project(data.snapshot,validFeed);
+ const trackedIdeas=ideaResult.error?[]:(ideaResult.data||[]);
+ const lines=expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding);
+ const scopeFromHash=hash=>({"#holdings":"holdings","#watchlist":"watchlist",
+  "#bonds":"bonds","#research":"ideas","#markets":"markets"})[hash]||"all";
+ let sort="ticker",direction="asc",scope=scopeFromHash(location.hash),search="",expanded=null;
  host.replaceChildren();
  const heading=el("div",null,"ps-table-head"),title=el("div");
  title.append(el("h2","Market watch & holdings"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
-   " watchlist names · Research snapshot "+data.snapshot_as_of+" (unverified)"));
+   " saved watchlist · "+lines.filter(r=>r.ideaTracked).length+" research ideas · "+
+   lines.filter(r=>r.marketTracked).length+" market instruments · Snapshot "+data.snapshot_as_of+
+   " (not broker-verified)"));
  const feedGeneratedAt=asOf&&Number.isFinite(Date.parse(asOf))?Date.parse(asOf):null;
  const feedAgeHours=feedGeneratedAt===null?null:Math.max(0,Math.floor((Date.now()-feedGeneratedAt)/3600000));
- const eligibleNow=quotes(priceFeed).holding.size;
+ const eligibleNow=quotes(validFeed).holding.size;
  const coverageLabel=priceFeed
   ?" · "+(priceFeed?.coverage?.fresh??0)+"/"+(priceFeed?.coverage?.tracked??0)+" fresh at generation"
   +" · "+eligibleNow+" valid now"+(feedAgeHours===null?"":" · generated "+feedAgeHours+"h ago")
   +(feedAgeHours!==null&&feedAgeHours>72?" · REFRESH OVERDUE":"")
   :" · FEED UNAVAILABLE";
- heading.append(title,el("span","Delayed prices · "+(asOf||"not available")+
-  (feedAgeHours!==null&&feedAgeHours>72?" · update overdue":"")+
-  (priceFeed?" · "+eligibleNow+" instruments available":""),"ps-table-note"));
+ heading.append(title,el("span","Delayed closes · "+
+  (validFeed?asOf:"feed unavailable or overdue")+
+  (validFeed?" · "+eligibleNow+" source-qualified quotes":""),"ps-table-note"));
  const opportunities=el("a","Review investment ideas →","ps-table-opportunities");
  opportunities.href="ideas.html";heading.append(opportunities);host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
  input.addEventListener("input",()=>{search=input.value.trim().toLowerCase();render();});
  controls.append(input,chips);host.append(controls);
- for(const [key,label] of [["all","All"],["holdings","Holdings"],["watchlist","Watchlist"]]){
+ for(const [key,label] of [["all","My coverage"],["holdings","Holdings"],["watchlist","Watchlist + ideas"],
+    ["bonds","Bond ETFs"],["ideas","Research ideas"],["markets","All markets"]]){
   const b=el("button",label,"ps-chip");b.type="button";b.dataset.scope=key;
-  b.addEventListener("click",()=>{scope=key;render();});chips.append(b);
+  b.addEventListener("click",()=>{scope=key;
+   const hashes={all:"",holdings:"#holdings",watchlist:"#watchlist",
+    bonds:"#bonds",ideas:"#research",markets:"#markets"};
+   if(location.hash!==hashes[key])history.replaceState(null,"",location.pathname+hashes[key]);
+   render();});chips.append(b);
  }
  const wrap=el("div",null,"table-wrap"),table=el("table",null,"ps-table"),
   thead=el("thead"),hrow=el("tr"),tbody=el("tbody");
@@ -156,7 +176,13 @@ export async function initPortfolioTable(db,host){
  host.append(el("p","Prices are delayed. Recorded holdings and available cash require broker reconciliation; unavailable quotes show —.","ps-table-note"));
  function render(){
   for(const b of chips.children)b.setAttribute("aria-pressed",String(b.dataset.scope===scope));
-  const selected=lines.filter(r=>(scope==="all"||scope==="holdings"&&r.held||scope==="watchlist"&&r.onWatchlist)
+  const selected=lines.filter(r=>
+   (scope==="all"&&!r.marketOnly
+    ||scope==="holdings"&&r.held
+    ||scope==="watchlist"&&(r.onWatchlist||r.ideaTracked)
+    ||scope==="bonds"&&r.bond&&(r.ideaTracked||r.onWatchlist||r.held)
+    ||scope==="ideas"&&r.ideaTracked
+    ||scope==="markets"&&r.marketTracked)
    &&(!search||[r.ticker,r.name,r.action,r.thesis].join(" ").toLowerCase().includes(search)));
   const mult=direction==="asc"?1:-1;
   selected.sort((a,b)=>{const av=rowValue(a,sort),bv=rowValue(b,sort);
@@ -172,7 +198,8 @@ export async function initPortfolioTable(db,host){
    button.type="button";button.setAttribute("aria-expanded",String(expanded===r.ticker));
    button.addEventListener("click",()=>{expanded=expanded===r.ticker?null:r.ticker;render();});
    th.append(button);tr.append(th);
-   cell(tr,r.held?"Holding"+(r.onWatchlist?" + watchlist":""):"Watchlist");
+   cell(tr,r.held?"Recorded holding":r.ideaTracked?(r.onWatchlist?"Watch + research":"Research idea"):
+     r.onWatchlist?"Watchlist":"Market tape");
    cell(tr,r.held?fmt(r.quantity,8):"—");
    cell(tr,r.close===null?"—":(r.currency?r.currency+" ":"")+fmt(r.close,3));
    for(const v of [r.day,r.threeDay,r.fiveDay]){
@@ -181,7 +208,9 @@ export async function initPortfolioTable(db,host){
    cell(tr,r.session?(r.session+(r.basis==="BTC UTC daily sample"?" · BTC UTC sample":"")):"—");tbody.append(tr);
    if(expanded===r.ticker){
     const detail=el("tr"),td=el("td");td.colSpan=8;td.className="ps-row-details";
-    for(const [label,val] of [["Research",r.action||r.thesis||"Pending"],["Entry / confirmation",r.entry||"Not recorded"],
+    for(const [label,val] of [["Research",r.action||r.thesis||"Pending"],["Category",
+      r.held?"Recorded holding":r.ideaTracked?"Research idea":r.onWatchlist?"Watchlist":"Market tape"],
+      ["Entry / confirmation",r.entry||"Not recorded"],
       ["Invalidation",r.invalidation||"Not recorded"],["Quantity date",r.quantityAsOf||"Unknown"]]){
       const p=el("p");p.append(el("strong",label+": "),document.createTextNode(val));td.append(p);
     }
@@ -189,5 +218,6 @@ export async function initPortfolioTable(db,host){
    }
   }
  }
+ window.addEventListener("hashchange",()=>{scope=scopeFromHash(location.hash);render();});
  render();
 }

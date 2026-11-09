@@ -1,5 +1,6 @@
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
+import {isBondEtf} from "./owner-market-views.mjs";
 
 const T="power_stack_idea_tracker";
 const el=(tag,content,cls)=>{
@@ -26,7 +27,7 @@ export async function initIdeasTracker(db,main,user){
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
- <label for="psi-filter">Signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
+ <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
  <div id="psi-cards" class="psi-cards" aria-live="polite"></div>
  <section id="psi-editor" class="psi-editor" hidden>
   <div class="psi-editor-top"><h2 id="psi-editor-title">Track investment idea</h2><button type="button" class="psi-secondary" id="psi-cancel">Cancel</button></div>
@@ -98,7 +99,8 @@ export async function initIdeasTracker(db,main,user){
   results.replaceChildren();
   const lookup=new Map(signals.map(s=>[s.ticker+"|"+s.idea_type,s.status]));
   const order={ALIGNED:0,DIVERGENCE:1,WATCH:2,RECHECK:3};
-  const filtered=state.ideas.filter(row=>(filter==="ALL"||lookup.get(row.ticker+"|"+row.idea_type)===filter)
+  const filtered=state.ideas.filter(row=>(filter==="ALL"||filter==="BONDS"&&isBondEtf(row.ticker)
+    ||lookup.get(row.ticker+"|"+row.idea_type)===filter)
    &&(!search||[row.ticker,row.name,row.note].join(" ").toUpperCase().includes(search)))
    .sort((a,b)=>(order[lookup.get(a.ticker+"|"+a.idea_type)]??4)-(order[lookup.get(b.ticker+"|"+b.idea_type)]??4)
     ||a.ticker.localeCompare(b.ticker));
@@ -143,6 +145,10 @@ export async function initIdeasTracker(db,main,user){
  $("psi-cancel").addEventListener("click",()=>{$("psi-editor").hidden=true;state.editing=null;});
  $("psi-search").addEventListener("input",render);
  $("psi-filter").addEventListener("change",render);
+ if(location.hash==="#bonds")$("psi-filter").value="BONDS";
+ window.addEventListener("hashchange",()=>{
+  if(location.hash==="#bonds"){$("psi-filter").value="BONDS";render();}
+ });
  form.addEventListener("submit",async event=>{
   event.preventDefault();const btn=$("psi-save"),notice=$("psi-form-status");btn.disabled=true;notice.textContent="Saving…";
   try{

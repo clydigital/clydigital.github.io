@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-fp1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-coverage1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -92,7 +92,7 @@ async function load(){
   slot.textContent="Loading historical portfolio table…";
   content.querySelector("#login-panel")?.before(slot);
   try{
-   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-a1");
+   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-coverage1");
    await initPortfolioTable(db,slot);
    await import("./owner-portfolio.js");
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-a1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-coverage1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
@@ -116,7 +116,7 @@ async function load(){
  // Both presentation stylesheets are loaded by the HTML <head> before first paint.
  // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-fp1");
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-coverage1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  const planned=sessionStorage.getItem("power-stack-target");

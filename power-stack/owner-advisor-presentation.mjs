@@ -10,6 +10,7 @@ function navIcon(kind){
   index:["rect:3,3,8,8,1.5","rect:13,3,8,5,1.5","rect:13,10,8,11,1.5","rect:3,13,8,8,1.5"],
   ideas:["path:M12 2v4","path:M7.4 6.4a7 7 0 0 1 9.2 10.7c-1 .8-1.6 1.9-1.6 3H9c0-1.1-.6-2.2-1.6-3A7 7 0 0 1 7.4 6.4Z","path:M9 22h6"],
   market:["path:M3 18l6-6 4 3 8-9","path:M16 6h5v5"],
+  bonds:["path:M3 4h18","path:M3 10h18","path:M3 16h18","path:M3 21h18","path:M7 4v17"],
   portfolio:["rect:2.5,6,19,15,2","path:M2.5 10.5h19","path:M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2","path:M15 15h4"],
   research:["path:M4 19.5V4a2 2 0 0 1 2-2h13v20H6a2 2 0 0 1-2-2.5Z","path:M8 7h7","path:M8 11h7","path:M8 15h4"],
   sectors:["rect:3,3,7,7,1","rect:14,3,7,7,1","rect:3,14,7,7,1","rect:14,14,7,7,1"],
@@ -36,17 +37,23 @@ export function presentClientView(page,main){
   const signout=nav.querySelector("#logout-button");
   const links=[
    ["index.html","Overview","index"],
-   ["ideas.html","Opportunities","ideas"],
+   ["portfolio.html#holdings","My holdings","portfolio"],
    ["portfolio.html#watchlist","Market watch","market"],
-   ["portfolio.html","Portfolio","portfolio"],
+   ["portfolio.html#bonds","Bond ETFs","bonds"],
+   ["ideas.html","Opportunities","ideas"],
    ["research.html","Research","research"]
   ];
   const fragment=document.createDocumentFragment();
   const label=document.createElement("p");label.textContent="YOUR WORKSPACE";label.className="ps-sidebar-label";fragment.append(label);
   for(const [href,label,slug] of links){
    const a=document.createElement("a");a.href=href;a.textContent=label;
-   if(slug===page||(slug==="market"&&page==="portfolio"&&location.hash==="#watchlist"))
+   const portfolioTab=page==="portfolio"&&(
+     slug==="market"&&location.hash==="#watchlist"||
+     slug==="bonds"&&location.hash==="#bonds"||
+     slug==="portfolio"&&!["#watchlist","#bonds"].includes(location.hash));
+   if(page!=="portfolio"&&slug===page||portfolioTab)
      a.setAttribute("aria-current","page");
+   a.dataset.slug=slug;
    a.prepend(navIcon(slug));fragment.append(a);
   }
   const more=document.createElement("details");more.className="ps-advisor-more";
@@ -62,6 +69,14 @@ export function presentClientView(page,main){
   if(owner){owner.textContent="PRIVATE CLIENT VIEW";fragment.append(owner)}
   if(signout)fragment.append(signout);
   nav.replaceChildren(fragment);nav.classList.add("ps-advisor-nav");
+  if(page==="portfolio")window.addEventListener("hashchange",()=>{
+   for(const a of nav.querySelectorAll("a[data-slug]")){
+    const slug=a.dataset.slug,active=slug==="market"&&location.hash==="#watchlist"||
+      slug==="bonds"&&location.hash==="#bonds"||
+      slug==="portfolio"&&!["#watchlist","#bonds"].includes(location.hash);
+    if(active)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");
+   }
+  });
  }
  const subtitle=document.querySelector("#site-header .brand small");
  if(subtitle)subtitle.textContent="Investment intelligence";

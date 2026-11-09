@@ -249,3 +249,84 @@ body.ps-fin-pulse .ps-legacy-note{color:#c3d6ef!important}
  body.ps-fin-pulse{--ps-stroke:#7894b7;--ps-subtle:#e5edf9}
  body.ps-fin-pulse :where(.psi-card,.psd-ideas-panel,.psd-root .psd-lane){border-color:#8ca9cd!important}
 }
+
+/* Unhide the positions that motivated the research: holding/ETF market coverage. */
+body.ps-fin-pulse .psd-coverage-panel{
+ background:#121e30;border:1px solid #496281;border-radius:4px;
+ margin:16px 0 18px;overflow:hidden;
+}
+body.ps-fin-pulse .psd-coverage-panel .psd-section-heading{
+ display:flex;justify-content:space-between;align-items:center;gap:14px;
+ padding:17px 22px 16px!important;border-bottom:1px solid #415774;
+}
+body.ps-fin-pulse .psd-coverage-panel .psd-section-heading h2{
+ font-size:21px!important;letter-spacing:-.03em;color:#fff;
+}
+body.ps-fin-pulse .psd-coverage-note{font-size:12px;color:#d0dceb;margin:6px 0 0}
+body.ps-fin-pulse .psd-coverage-panel .psd-section-heading a,
+body.ps-fin-pulse .psd-coverage-foot a{
+ color:#b1dcff!important;font-size:12px;font-weight:800;text-decoration:underline;
+}
+body.ps-fin-pulse .psd-coverage-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#536d8d #15243b}
+body.ps-fin-pulse .psd-coverage-table{
+ border-collapse:collapse;border-spacing:0;width:100%;min-width:680px;
+ table-layout:fixed;font-size:12px;font-variant-numeric:tabular-nums;
+}
+body.ps-fin-pulse .psd-coverage-table th{
+ background:#20324b;color:#e7f0fc;font-weight:850;font-size:11px;
+ letter-spacing:.05em;text-transform:uppercase;text-align:right;
+ padding:11px 13px;border-bottom:1px solid #49617f;
+}
+body.ps-fin-pulse .psd-coverage-table th:first-child{text-align:left;width:34%}
+body.ps-fin-pulse .psd-holdings-panel .psd-coverage-table th:nth-child(2){width:16%}
+body.ps-fin-pulse .psd-bonds-panel .psd-coverage-table th:last-child{width:17%}
+body.ps-fin-pulse .psd-coverage-table td{
+ border-bottom:1px solid #364d68;text-align:right;
+ color:#eef5ff;font-size:13px;padding:9px 13px;
+}
+body.ps-fin-pulse .psd-coverage-table td:first-child{text-align:left}
+body.ps-fin-pulse .psd-coverage-table tbody tr:nth-child(even){background:#17283e}
+body.ps-fin-pulse .psd-coverage-table tbody tr:hover{background:#233b57}
+body.ps-fin-pulse .psd-coverage-table td strong{
+ color:#fff;font-size:14px;font-weight:850;display:block;
+}
+body.ps-fin-pulse .psd-coverage-table td small{
+ display:block;font-size:11px;color:#cad8e9;line-height:1.45;
+}
+body.ps-fin-pulse .psd-coverage-table td a{
+ color:#a9d7ff;font-size:16px;font-weight:850;text-decoration:underline;
+}
+body.ps-fin-pulse .psd-coverage-table .psd-number{font-weight:800}
+body.ps-fin-pulse .psd-coverage-table .psd-delta[data-direction="up"]{color:#69efad;font-weight:850}
+body.ps-fin-pulse .psd-coverage-table .psd-delta[data-direction="down"]{color:#ff9fa6;font-weight:850}
+body.ps-fin-pulse .psd-bond-priority{
+ background:#153a51!important;box-shadow:inset 5px 0 0 #84caff;
+}
+body.ps-fin-pulse .psd-bond-priority td:first-child strong,
+body.ps-fin-pulse .psd-bond-priority td:first-child a{color:#d1ecff!important}
+body.ps-fin-pulse .psd-section-pill{
+ display:inline-block;vertical-align:middle;font-size:10px;
+ padding:4px 7px;background:#1c4a6f;color:#bfe5ff;border:1px solid #497aa9;
+ border-radius:2px;margin-left:5px;font-weight:800;letter-spacing:0;
+}
+body.ps-fin-pulse .psd-bond-macro{font-size:12px!important;color:#f7d793!important}
+body.ps-fin-pulse .psd-coverage-table details{margin-top:6px;text-align:left}
+body.ps-fin-pulse .psd-coverage-table details summary{
+ cursor:pointer;color:#addbff;font-size:11px;font-weight:750;
+}
+body.ps-fin-pulse .psd-coverage-table details p{
+ white-space:normal;line-height:1.6;margin:7px 0 0;
+ color:#d1dfed;font-size:11px;
+}
+body.ps-fin-pulse .psd-coverage-foot{
+ padding:10px 21px;display:flex;justify-content:space-between;gap:12px;
+ align-items:center;flex-wrap:wrap;background:#182941;
+ font-size:11px;color:#d0def0;
+}
+body.ps-fin-pulse .psd-coverage-foot span{color:#d0def0}
+@media(max-width:760px){
+ body.ps-fin-pulse .psd-coverage-panel .psd-section-heading{padding:14px 15px!important}
+ body.ps-fin-pulse .psd-coverage-panel .psd-section-heading h2{font-size:19px!important}
+ body.ps-fin-pulse .psd-coverage-table th,body.ps-fin-pulse .psd-coverage-table td{padding:10px}
+ body.ps-fin-pulse .psd-coverage-table{min-width:715px}
+}
