@@ -117,7 +117,7 @@ export async function initPortfolioTable(db,host){
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
  const priceFeed=await loadPriceFeed();
  const {lines,asOf}=project(data.snapshot,priceFeed);
- let sort="ticker",direction="asc",scope="all",search="",expanded=null;
+ let sort="ticker",direction="asc",scope=location.hash==="#watchlist"?"watchlist":"all",search="",expanded=null;
  host.replaceChildren();
  const heading=el("div",null,"ps-table-head"),title=el("div");
  title.append(el("h2","My Portfolio · Holdings & Watchlist"),
