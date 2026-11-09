@@ -1,0 +1,42 @@
+.psi-shell{max-width:1160px;margin:auto;padding:28px 22px 48px;color:#edf5f0}
+.psi-hero{display:flex;align-items:end;justify-content:space-between;gap:24px;flex-wrap:wrap;border-bottom:1px solid #2a3938;padding-bottom:22px}
+.psi-hero h1{margin:7px 0 10px;letter-spacing:-.06em;font-size:clamp(28px,4.5vw,48px)}
+.psi-hero p:not(.eyebrow){max-width:650px;color:#a9c0bc;margin:0;font-size:13px}
+.psi-hero strong{color:#a7e1c2}.psi-shortcuts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.psi-shortcuts a,.psi-shortcuts button,.psi-submit button{display:inline-block;border:1px solid #436d5c;border-radius:8px;color:#c8f1d9;background:#152c23;font-size:12px;font-weight:750;padding:9px 12px;text-decoration:none;cursor:pointer}
+.psi-shortcuts button,.psi-submit button{background:#a3dec0;color:#0b211a}
+.psi-feed{font-size:11px;color:#a9bcb9;margin:17px 0}
+.psi-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0 19px}
+.psi-stat{background:#121b1d;border:1px solid #2a3638;border-radius:10px;padding:13px}
+.psi-stat strong{display:block;font-size:24px;line-height:1.2}
+.psi-stat small{display:block;color:#a5bab7;font-size:10px;letter-spacing:.05em;margin-top:5px}
+.psi-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 15px}
+.psi-tools label{font-size:11px;color:#aabdbb}
+.psi-tools input,.psi-tools select,.psi-form-grid input,.psi-form-grid select{border:1px solid #36514b;background:#0a1416;color:#e8f3eb;border-radius:7px;padding:10px;min-width:0}
+.psi-tools input{flex:1;max-width:330px}.psi-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.psi-card{border:1px solid #2b3839;background:linear-gradient(145deg,#121b1e,#0c1215);border-radius:13px;padding:17px;min-width:0}
+.psi-card.psi-aligned{border-color:#447e5f}.psi-card.psi-divergence{border-color:#8d6243}
+.psi-card-head{display:flex;justify-content:space-between;gap:9px}.psi-card-head strong.psi-ticker{font-size:23px;display:block;letter-spacing:-.04em}
+.psi-card-head small{display:block;font-size:11px;color:#b0c2c0}.psi-type{display:inline-block;font-size:10px;color:#99aeaa;margin-top:5px}
+.psi-badge{display:inline-block;border:1px solid #4c5b5b;border-radius:20px;font-weight:800;font-size:10px;padding:5px 9px;letter-spacing:.02em;text-align:center;white-space:nowrap}
+.psi-badge.psi-aligned{color:#b5f4cc;background:#183625;border-color:#518567}.psi-badge.psi-divergence{color:#f5c2a2;background:#33211a;border-color:#9a6b4e}
+.psi-badge.psi-watch{color:#e8ca91;background:#292315;border-color:#82683e}.psi-badge.psi-recheck{color:#adc3d0;background:#16212c;border-color:#354b60}
+.psi-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0}
+.psi-metric{background:#0a1216;border:1px solid #253434;border-radius:9px;padding:11px}
+.psi-metric small{display:block;color:#92a6a7;font-size:10px;line-height:1.5}.psi-metric strong{display:block;font-size:17px;line-height:1.35;margin:3px 0;overflow-wrap:anywhere}
+.psi-why{font-size:12px;line-height:1.6;color:#c6d7d3;margin:12px 0}
+.psi-card details{border-top:1px solid #2a3539;padding-top:9px;color:#b5c6c5;font-size:11px}
+.psi-card summary{cursor:pointer;color:#99dfc0;font-weight:750}
+.psi-detail p{margin:9px 0;line-height:1.6}.psi-detail a{display:inline-block;margin:0 12px 8px 0}
+.psi-card-actions{display:flex;gap:7px;margin-top:12px}
+.psi-secondary{border:1px solid #3c5951;background:transparent;color:#c4e8d5;border-radius:7px;padding:7px 10px;font:inherit;font-size:11px;cursor:pointer}
+.psi-editor{border:1px solid #446d56;background:#111d1c;border-radius:13px;padding:20px;margin:25px 0}
+.psi-editor-top,.psi-submit{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.psi-editor-top h2{margin:0 0 12px;font-size:19px}.psi-form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.psi-form-grid label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:#bdcec9}
+.psi-form-grid .psi-span{grid-column:span 2}.psi-form-grid input,.psi-form-grid select{width:100%;font:inherit}
+.psi-form-grid input::placeholder{color:#768e8a}.psi-submit{margin-top:18px}
+.psi-submit span{font-size:11px;color:#f1c9aa}.psi-empty{border:1px dashed #37524b;border-radius:11px;padding:25px;color:#abc3b9}
+.psi-disclaimer{font-size:11px;line-height:1.7;color:#91aaa7;margin:26px 0}
+@media(max-width:800px){.psi-cards{grid-template-columns:1fr}.psi-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.psi-shell{padding:18px 14px 40px}.psi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.psi-form-grid{grid-template-columns:1fr}.psi-form-grid .psi-span{grid-column:auto}.psi-card{padding:13px}.psi-metric strong{font-size:15px}}
