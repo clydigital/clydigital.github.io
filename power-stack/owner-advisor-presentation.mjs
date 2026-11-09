@@ -1,5 +1,35 @@
-/* Client-presentation layer. Private portfolio, evidence and actions remain unchanged. */
+/* Client-presentation layer. Data, investment calls and owner-only permissions are unchanged. */
+const SVG_NS="http://www.w3.org/2000/svg";
+function navIcon(kind){
+ const svg=document.createElementNS(SVG_NS,"svg");
+ svg.setAttribute("width","18");svg.setAttribute("height","18");svg.setAttribute("viewBox","0 0 24 24");
+ svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");
+ svg.setAttribute("stroke-width","1.75");svg.setAttribute("stroke-linecap","round");svg.setAttribute("stroke-linejoin","round");
+ svg.setAttribute("aria-hidden","true");
+ const shapes={
+  index:["rect:3,3,8,8,1.5","rect:13,3,8,5,1.5","rect:13,10,8,11,1.5","rect:3,13,8,8,1.5"],
+  ideas:["path:M12 2v4","path:M7.4 6.4a7 7 0 0 1 9.2 10.7c-1 .8-1.6 1.9-1.6 3H9c0-1.1-.6-2.2-1.6-3A7 7 0 0 1 7.4 6.4Z","path:M9 22h6"],
+  market:["path:M3 18l6-6 4 3 8-9","path:M16 6h5v5"],
+  portfolio:["rect:2.5,6,19,15,2","path:M2.5 10.5h19","path:M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2","path:M15 15h4"],
+  research:["path:M4 19.5V4a2 2 0 0 1 2-2h13v20H6a2 2 0 0 1-2-2.5Z","path:M8 7h7","path:M8 11h7","path:M8 15h4"],
+  sectors:["rect:3,3,7,7,1","rect:14,3,7,7,1","rect:3,14,7,7,1","rect:14,14,7,7,1"],
+  decisions:["path:M9 12l2 2 4-4","path:M12 22c5.5-2.2 8-6 8-11V5l-8-3-8 3v6c0 5 2.5 8.8 8 11Z"],
+  archive:["rect:3,4,18,17,2","path:M3 9h18","path:M9 13h6"]
+ };
+ for(const raw of shapes[kind]||shapes.index){
+  const [type,attrs]=raw.split(":");
+  const node=document.createElementNS(SVG_NS,type);
+  if(type==="rect"){
+   const [x,y,width,height,rx]=attrs.split(",");
+   for(const [attr,val] of Object.entries({x,y,width,height,rx}))node.setAttribute(attr,val);
+  } else node.setAttribute("d",attrs);
+  svg.append(node);
+ }
+ return svg;
+}
 export function presentClientView(page,main){
+ document.body.classList.add("ps-fin-pulse");
+ document.documentElement.dataset.psTheme="fin-pulse";
  const nav=document.querySelector("#site-header nav");
  if(nav){
   const owner=nav.querySelector("#owner-indicator");
@@ -12,25 +42,33 @@ export function presentClientView(page,main){
    ["research.html","Research","research"]
   ];
   const fragment=document.createDocumentFragment();
+  const label=document.createElement("p");label.textContent="YOUR WORKSPACE";label.className="ps-sidebar-label";fragment.append(label);
   for(const [href,label,slug] of links){
    const a=document.createElement("a");a.href=href;a.textContent=label;
    if(slug===page||(slug==="market"&&page==="portfolio"&&location.hash==="#watchlist"))
      a.setAttribute("aria-current","page");
-   fragment.append(a);
+   a.prepend(navIcon(slug));fragment.append(a);
   }
   const more=document.createElement("details");more.className="ps-advisor-more";
   const summary=document.createElement("summary");summary.textContent="More";more.append(summary);
   const list=document.createElement("div");
   for(const [href,label] of [["sectors.html","Sector research"],["decisions.html","Company decisions"],["archive.html","Past editions"]]){
-   const link=document.createElement("a");link.href=href;link.textContent=label;list.append(link);
+   const link=document.createElement("a");link.href=href;link.textContent=label;
+   link.prepend(navIcon(label==="Sector research"?"sectors":label==="Company decisions"?"decisions":"archive"));
+   list.append(link);
   }
   more.append(list);fragment.append(more);
-  if(owner){owner.textContent="Private";fragment.append(owner)}
+  const spacer=document.createElement("div");spacer.className="ps-sidebar-spacer";fragment.append(spacer);
+  if(owner){owner.textContent="PRIVATE CLIENT VIEW";fragment.append(owner)}
   if(signout)fragment.append(signout);
   nav.replaceChildren(fragment);nav.classList.add("ps-advisor-nav");
  }
  const subtitle=document.querySelector("#site-header .brand small");
- if(subtitle)subtitle.textContent="INVESTMENT BRIEF";
+ if(subtitle)subtitle.textContent="Investment intelligence";
+ const brand=document.querySelector("#site-header .brand");
+ if(brand&&!brand.querySelector(".ps-pulse-mark")){
+  const logo=document.createElement("span");logo.className="ps-pulse-mark";logo.textContent="P";logo.setAttribute("aria-hidden","true");brand.prepend(logo);
+ }
  if(page==="portfolio"){
   const hero=main.querySelector(".hero h1");
   const lead=main.querySelector(".hero p");
