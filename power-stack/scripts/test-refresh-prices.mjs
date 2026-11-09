@@ -195,8 +195,8 @@ test("every private page and dynamic module uses the same versioned release asse
  }
  const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
  for(const name of ["owner-portfolio-table","owner-decisions","owner-decision-desk"]){
-  assert.match(gate,new RegExp(name+"\\\\.mjs\\\\?v=[A-Za-z0-9-]+"),name);
+  assert.match(gate,new RegExp(name+"\\.mjs\\?v=[A-Za-z0-9-]+"),name);
  }
  const decisions=readFileSync(path.join(ROOT,"owner-decisions.mjs"),"utf8");
- assert.match(decisions,/research-cases\\.mjs\\?v=[A-Za-z0-9-]+/);
+ assert.match(decisions,/research-cases\.mjs\?v=[A-Za-z0-9-]+/);
 });
