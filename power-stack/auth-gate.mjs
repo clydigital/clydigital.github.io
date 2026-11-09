@@ -73,7 +73,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-a1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-fp1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -117,7 +117,10 @@ async function load(){
   const link=document.createElement("link");
   link.rel="stylesheet";link.href="./owner-advisor-theme.css?v=20261110-a1";
   document.head.append(link);
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-a1");
+  // Keep all finance data, RLS and existing controls; only the presentation changes.
+  const pulse=document.createElement("link");pulse.rel="stylesheet";
+  pulse.href="./owner-fin-pulse.css?v=20261110-fp1";document.head.append(pulse);
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-fp1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  const planned=sessionStorage.getItem("power-stack-target");

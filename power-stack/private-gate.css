@@ -25,3 +25,15 @@
 .ps-row-details{background:#1a2a2c;color:#d9e9e7}
 .ps-row-details p{margin:8px 0;font-size:12px}
 @media(max-width:680px){.gate-wrap{margin:6vh auto}.gate-box{padding:20px}.ps-owner-table{padding:10px}.ps-table-head{display:block}}
+
+/* Fin Pulse sign-in experience — no auth or access-control changes. */
+body:not(.ps-fin-pulse){background:#020617;color:#f1f5f9}
+.gate-wrap{max-width:565px;min-height:70vh;margin:9vh auto;padding:0 20px;display:flex;align-items:flex-start}
+.gate-box{width:100%;background:linear-gradient(155deg,#111f36,#0f172a 70%);border:1px solid #273d5d;border-radius:24px;padding:36px 36px 33px;box-shadow:0 30px 65px #0007}
+.gate-mark{color:#60a5fa;font-size:10px;letter-spacing:.18em}
+.gate-box h1{font-size:clamp(29px,4vw,43px);line-height:1.13;letter-spacing:-.045em;color:#f8fafc;margin:15px 0}
+.gate-box p{color:#9aadc6;font-size:13px;line-height:1.7}
+.gate-button{background:#2563eb;color:#fff;border:1px solid #3b82f6;padding:12px 18px;border-radius:11px;box-shadow:0 9px 30px rgba(37,99,235,.15)}
+.gate-button:hover{background:#1d4ed8;border-color:#60a5fa}
+.gate-status{color:#90a6c3;font-size:11px;margin-top:18px}
+@media(max-width:550px){.gate-wrap{margin:8vh auto;padding:0 14px}.gate-box{padding:26px 22px}}

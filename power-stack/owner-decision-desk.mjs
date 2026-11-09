@@ -88,7 +88,9 @@ export async function initDecisionDesk(db,main,user){
  <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
  <section class="psd-executive" aria-label="Portfolio briefing">
   <div class="psd-executive-main"><p class="psd-overline">THE CURRENT VIEW</p><h2 id="psd-thesis">Reviewing opportunities</h2>
-   <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p></div>
+   <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p>
+   <div class="ps-pulse-graph"><div class="ps-pulse-heading"><strong>Opportunity distribution</strong><span>Tracked ideas · current evidence</span></div>
+    <div id="psd-pulse-bars" class="ps-pulse-bars" role="img" aria-label="Distribution of tracked ideas by investment assessment"></div></div></div>
   <div id="psd-summary-metrics" class="psd-summary-metrics"></div>
  </section>
  <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
@@ -139,6 +141,19 @@ export async function initDecisionDesk(db,main,user){
   }else{
     thesis.textContent="Build your opportunity shortlist";
     note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
+  }
+  // These bars represent actual current idea counts, never simulated returns or P&L.
+  const bars=$(host,"psd-pulse-bars");if(bars){
+   bars.replaceChildren();
+   const max=Math.max(1,...Object.values(counts));
+   for(const [key,label] of [["ALIGNED","Aligned"],["WATCH","Watch"],["DIVERGENCE","Divergence"],["RECHECK","Review"]]){
+    const item=txt("div",null,"ps-pulse-col"),plot=txt("div",null,"ps-pulse-track"),
+      bar=txt("span",null,"ps-pulse-fill ps-pulse-"+key.toLowerCase());
+    bar.style.height=(counts[key]===0?0:Math.max(9,counts[key]/max*100))+"%";
+    plot.append(bar);item.append(txt("strong",counts[key]),plot,txt("small",label));bars.append(item);
+   }
+   bars.setAttribute("aria-label",signals.length+" tracked ideas: "+counts.ALIGNED+
+    " aligned, "+counts.WATCH+" watch, "+counts.DIVERGENCE+" divergences, "+counts.RECHECK+" recheck");
   }
   const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
   for(const [value,label] of [[counts.ALIGNED,"Screen matches"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
