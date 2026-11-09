@@ -87,12 +87,10 @@ export function parsePrivateResearch(value){
    horizons:HORIZONS.map(key=>{
      const h=value.horizonAssessments[key];
      if(!h||typeof h!=="object")throw Error("Missing horizon "+key);
-     const score=h.assessmentScore;
-     if(score!==null&&(!finite(score)||score<0||score>100))
-       throw Error("Invalid horizon score");
+     // The old Step-5 numeric assessment is retained only in the source file.
+     // A legacy score or rank is never translated into a current investment verdict.
      return {key,label:key==="Q1_2027"?"Q1 2027":key==="END_2027"?"End-2027":"2–5+ years",
-       score,reviewStatus:h.status==="READY_FOR_HUMAN_ALLOCATION_REVIEW"&&score!==null?
-        "RESEARCH_READY_NOT_TRADE":"NOT_SCORED",
+       reviewStatus:h.status==="READY_FOR_HUMAN_ALLOCATION_REVIEW"?"ARCHIVED_UNDERWRITING":"EVIDENCE_RECHECK",
        gapCount:Array.isArray(h.gaps)?h.gaps.length:0,
        confirmation:typeof h.confirmation==="string"?h.confirmation.slice(0,250):null,
        invalidation:typeof h.invalidation==="string"?h.invalidation.slice(0,250):null};
