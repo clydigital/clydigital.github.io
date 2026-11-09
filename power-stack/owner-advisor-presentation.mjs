@@ -67,7 +67,10 @@ export function presentClientView(page,main){
  if(subtitle)subtitle.textContent="Investment intelligence";
  const brand=document.querySelector("#site-header .brand");
  if(brand&&!brand.querySelector(".ps-pulse-mark")){
-  const logo=document.createElement("span");logo.className="ps-pulse-mark";logo.textContent="P";logo.setAttribute("aria-hidden","true");brand.prepend(logo);
+  const logo=document.createElement("span");logo.className="ps-pulse-mark";logo.textContent="P";logo.setAttribute("aria-hidden","true");
+  const wordmark=document.createElement("span");wordmark.className="ps-pulse-wordmark";
+  while(brand.firstChild)wordmark.append(brand.firstChild);
+  brand.append(logo,wordmark);
  }
  if(page==="portfolio"){
   const hero=main.querySelector(".hero h1");
