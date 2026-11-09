@@ -47,9 +47,21 @@ async function load(){
  $("site-header").hidden=false;$("gate-panel").hidden=true;
  authorised=true;
  $("owner-indicator").textContent="Owner · "+user.email;
+ if(["research","sectors","decisions"].includes(PAGE)){
+  const notice=document.createElement("aside");
+  notice.className="ps-legacy-note";
+  notice.setAttribute("role","note");
+  const message=document.createElement("span");
+  message.textContent="Source-dated research library, not a current trade signal. Re-check original evidence, valuation and portfolio fit before deciding. ";
+  const link=document.createElement("a");
+  link.href="index.html";
+  link.textContent="Open the current Decision Desk";
+  notice.append(message,link);
+  content.prepend(notice);
+ }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d4");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d5");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -79,7 +91,7 @@ async function load(){
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
-  const safe=["index","research","sectors","decisions","portfolio"].includes(planned)?planned:"index";
+  const safe=["index","research","sectors","decisions","portfolio","archive"].includes(planned)?planned:"index";
   if(safe!==PAGE){location.replace(safe+".html");return;}
  }
 }

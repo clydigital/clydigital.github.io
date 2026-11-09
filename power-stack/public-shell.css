@@ -54,3 +54,15 @@
 .research-hero{margin-top:24px}
 @media(max-width:880px){.leadStory,.caseGrid{grid-template-columns:1fr}.leadStory>div{padding:21px}.conviction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.conviction>span,.conviction>.sourceLine{grid-column:1/-1}.conviction>div{padding:12px}.macroBar{flex-direction:column;align-items:start}.macroBar aside{border-left:0;border-top:1px solid #465d52;padding:13px 0 0}.factStrip{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.conviction{grid-template-columns:1fr}.conviction>span,.conviction>.sourceLine{grid-column:auto}.queue{grid-template-columns:1fr}.case{padding:15px}.factStrip strong{font-size:19px}.caseGrid{gap:12px}.leadStory{margin-top:14px}}
+
+/* Research vintage firewall: old editorial is accessible, but never presented as live. */
+.ps-legacy-note,.ps-archive-alert,.ps-archive-pointer{border:1px solid #516453;background:#15231f;color:#ccddd3;border-radius:12px;padding:17px 20px;margin:23px 0}
+.ps-legacy-note{font-size:12px;line-height:1.65}
+.ps-legacy-note a,.ps-archive-alert a,.ps-archive-pointer a{color:#bde9c7;text-underline-offset:4px}
+.ps-archive-alert{border-color:#977c4e;background:linear-gradient(110deg,#2e291a,#19221f)}
+.ps-archive-alert strong{color:#ffe0a1}
+.ps-archive-alert p,.ps-archive-pointer p{color:#bfcbc6;font-size:13px;line-height:1.65;margin:7px 0 0}
+.ps-archive-pointer{background:#101d1c;border-color:#334f45;margin:0 0 25px}
+.ps-archive-pointer h2{font-size:21px;line-height:1.3;margin:3px 0}
+.ps-archive-pointer nav{margin-top:12px;display:flex;flex-wrap:wrap;gap:14px}
+@media(max-width:600px){.ps-legacy-note,.ps-archive-alert,.ps-archive-pointer{padding:13px 15px}}
