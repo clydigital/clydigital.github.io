@@ -49,7 +49,7 @@ async function load(){
  $("owner-indicator").textContent="Owner · "+user.email;
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d2");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d3");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -67,7 +67,7 @@ async function load(){
   slot.textContent="Loading historical portfolio table…";
   content.querySelector("#login-panel")?.before(slot);
   try{
-   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261104-ps8");
+   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-d3");
    await initPortfolioTable(db,slot);
    await import("./owner-portfolio.js");
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
