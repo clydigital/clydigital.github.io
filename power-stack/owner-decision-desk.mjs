@@ -1,3 +1,4 @@
+import {renderFrameworkAppendix,renderEntryComparison} from "./owner-framework-view.mjs";
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
@@ -30,6 +31,7 @@ function makeCard(record,history=[]){
  card.append(mini);
  paragraph(card,"Current judgement",t.recommendation.rationale);
  paragraph(card,"Next condition",t.recommendation.condition);
+ const timingComparison=renderEntryComparison(t);if(timingComparison)card.append(timingComparison);
  if(t.review.review_by)paragraph(card,"Review by",t.review.review_by+" (MYT) · No automatic alert");
  if(t.review.risk_override)card.append(txt("p","Risk override recorded — inspect promptly.","psd-warning"));
  const expand=txt("details");expand.append(txt("summary","Scenarios, countercase and evidence"));
@@ -50,6 +52,7 @@ function makeCard(record,history=[]){
   const a=txt("a","Source "+(refs.children.length+1));a.href=url;a.rel="noopener noreferrer";a.target="_blank";refs.append(a);
  }
  if(refs.childElementCount)detail.append(refs);
+ const frameworks=renderFrameworkAppendix(t);if(frameworks)detail.append(frameworks);
  paragraph(detail,"Saved",stamp(record.created_at)+" · Analytical ticket; not a broker order");
  if(history.length){
   const hist=txt("details",null,"psd-history");hist.append(txt("summary",history.length+" previous revision(s)"));
