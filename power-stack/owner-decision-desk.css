@@ -64,3 +64,17 @@
 
 .psd-import input[type=file]{display:block;width:100%;margin:6px 0 12px;border:1px dashed #547d66;background:#0d1b1a;border-radius:9px;padding:11px;color:#c2e8d4;font-size:12px}
 .psd-import input[type=file]::file-selector-button{background:#27483a;color:#c6eccc;border:1px solid #5a876d;border-radius:6px;padding:8px 11px;margin-right:12px;cursor:pointer}
+
+/* Decision-review metrics are process audits. Return/P&L are deliberately N/A. */
+.psd-readiness-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.95fr);gap:12px;margin:18px 0}
+.psd-review-card{border:1px solid #354d49;background:linear-gradient(140deg,#101d20,#151f20);border-radius:14px;padding:20px;min-width:0}
+.psd-review-card h2{font-size:19px;line-height:1.25;margin:8px 0 14px}
+.psd-review-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.psd-review-metric{border:1px solid #304640;border-radius:8px;padding:11px;background:#0c171b}
+.psd-review-metric strong{display:block;font-size:18px;color:#d4f1df;line-height:1.25;font-variant-numeric:tabular-nums}
+.psd-review-metric span{display:block;font-size:10px;color:#9fb4b2;line-height:1.4;margin-top:4px}
+.psd-review-note{font-size:11px;line-height:1.6;color:#a9c0bc;margin:13px 0 0}
+.psd-reconcile-state{font-size:12px;color:#ecc7a1;font-weight:800;letter-spacing:.035em}
+.psd-text-link{display:inline-block;margin-top:15px;color:#bdeacb;font-size:12px;text-underline-offset:3px}
+@media(max-width:850px){.psd-readiness-grid{grid-template-columns:1fr}}
+@media(max-width:450px){.psd-review-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
