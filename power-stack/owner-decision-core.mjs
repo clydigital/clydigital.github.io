@@ -1,3 +1,4 @@
+import {validateFrameworkPacket} from "./owner-framework-evidence.mjs";
 /**
  * Public, dependency-free decision logic. Never contains owner records.
  * The site cannot infer trade readiness from research; only owner-saved tickets.
@@ -58,6 +59,7 @@ export function validateTicket(t){
  if(e.source_status==="UNAVAILABLE"&&d.classification==="NO_CHANGE")errors.push("UNVERIFIED_NO_CHANGE");
  if(v.risk_override&&r.decision_state==="NO_NEW_DECISION")errors.push("RISK_OVERRIDE_SUPPRESSED");
  if(!Array.isArray(t.capital_alternatives)||!t.capital_alternatives.length)errors.push("NO_CAPITAL_ALTERNATIVE");
+ if(t.framework_evidence!==undefined)errors.push(...validateFrameworkPacket(t.framework_evidence,caseKey(t)).map(code=>"FRAMEWORK_"+code));
  for(const type of ["bear","base","bull"]){
   const s=t.scenarios[type];
   if(!object(s)||!["driver","observable_condition","investment_implication","response"].every(k=>filled(s[k])))errors.push("SCENARIO_"+type.toUpperCase()+"_INCOMPLETE");
