@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {FRAMEWORK_CONTRACT,validateFrameworkPacket,assessPeg,entryPathSummary,uniqueSourceObservations} from "../owner-framework-evidence.mjs";
-import {validateTicket,materialSignature} from "../owner-decision-core.mjs";
+import {validateTicket,materialSignature,compareDecision} from "../owner-decision-core.mjs";
 const source={id:"issuer2026",url:"https://example.org/investors/quarterly-earnings",source_type:"ISSUER_RELEASE",published_date:"2026-11-04",underlying_source_id:"original-q3-release"};
 const lens=(id,applicability="DIRECT",signal="MIXED")=>({
  id,applicability,signal,claim:"The economics require an evidence-based valuation review.",
@@ -114,11 +114,18 @@ const v2={
  response:"Re-underwrite before capital deployment."}])),
  capital_alternatives:[{choice:"STAGE",comparison:"Evaluate smaller starter after valuation.",data_limit:"Funding unverified"}]
 };
-test("v2 continuity stays unchanged; optional valid packet does not create a new decision",()=>{
+test("source-reviewed framework evidence can be appended through explicit owner ticket review without a trade",()=>{
  assert.deepEqual(validateTicket(v2),[]);
  const enriched={...v2,framework_evidence:TSM};
  assert.deepEqual(validateTicket(enriched),[]);
- assert.equal(materialSignature(v2),materialSignature(enriched));
+ assert.notEqual(materialSignature(v2),materialSignature(enriched));
+ const cmp=compareDecision({ticket:v2},enriched,new Date("2026-11-10T05:00:00Z"));
+ assert.equal(cmp.status,"MATERIAL_CHANGE");
+ assert.equal(cmp.shouldSave,true);
+ assert.equal(enriched.recommendation.action,"WAIT");
+ assert.equal(enriched.evidence.broker_verified,false);
+ const same={...enriched,framework_evidence:{...TSM,researched_at:"2026-11-11T06:00:00+08:00"}};
+ assert.equal(materialSignature(enriched),materialSignature(same),"Research read time alone cannot create revision noise");
  const bad={...v2,framework_evidence:GRAB};
  assert(validateTicket(bad).some(x=>x.includes("CASE_KEY_MISMATCH")));
 });
