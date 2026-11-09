@@ -1,4 +1,5 @@
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
+import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -79,11 +80,24 @@ export async function initDecisionDesk(db,main,user){
  <section class="psd-lane psd-active"><div class="psd-lane-head"><span class="psd-index">02</span><div><h2>Next capital decision</h2><p>One priority action, with its competing use of money.</p></div></div><div id="psd-active-rows"></div></section>
  <section class="psd-lane psd-watch"><div class="psd-lane-head"><span class="psd-index">03</span><div><h2>Waiting for a trigger</h2><p>Keep the thesis; revisit only on a trigger or due date.</p></div></div><div id="psd-watch-rows"></div></section>
  </div>
+ <div class="psd-readiness-grid">
+  <section class="psd-review-card" aria-labelledby="psd-review-heading">
+   <div><p class="psd-overline">PROCESS, NOT PROFITS</p><h2 id="psd-review-heading">Decision review health</h2></div>
+   <div id="psd-review-metrics" class="psd-review-metrics"></div>
+   <p id="psd-review-note" class="psd-review-note">Review evidence is being checked; no investment performance score is implied.</p>
+  </section>
+  <section class="psd-review-card" aria-labelledby="psd-reconciliation-heading">
+   <div><p class="psd-overline">FUNDING GATE</p><h2 id="psd-reconciliation-heading">Portfolio reconciliation</h2></div>
+   <p id="psd-reconciliation-state" class="psd-reconcile-state">Not yet verified</p>
+   <p id="psd-reconciliation-note" class="psd-review-note">Historical holdings are not broker proof.</p>
+   <a class="psd-text-link" href="portfolio.html">Open private portfolio and transaction ledger</a>
+  </section>
+ </div>
  <section class="psd-book"><div class="psd-book-head"><div><h2>Decision history</h2><p>Owner-saved revisions only. No hidden trades or background monitoring.</p></div><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
  <section id="psd-import-panel" class="psd-import" hidden><div class="psd-book-head"><div><h2>Import a decision</h2><p>Paste a complete <code>power-stack-decision-ticket/v2</code> from the Power Stack plugin. This saves a private, append-only review record, not an order.</p></div><button type="button" id="psd-close-import">Close</button></div><form id="psd-import-form"><label for="psd-ticket-file">Load a Power Stack decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json"><label for="psd-ticket-json">Or paste decision ticket JSON</label><textarea id="psd-ticket-json" rows="11" spellcheck="false" required placeholder="Load a .json file or paste the complete plugin decision ticket here"></textarea><p class="psd-disclaimer">Never treat an analyst report as broker-confirmed buying power. No existing portfolio rows will be edited.</p><button type="submit" id="psd-save">Validate and save private revision</button></form><p id="psd-import-status" role="status"></p></section>
  <p class="psd-footnote">The following archived editorial report is preserved for context. It may predate current market or account conditions.</p>`;
  main.prepend(host);
- const state={rows:[],snapshot:null,snapshotDate:null};
+ const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true};
  function status(s){$(host,"psd-status").textContent=s}
  function draw(){
   const latest=latestByCase(state.rows),historyByKey=new Map();
@@ -115,15 +129,42 @@ export async function initDecisionDesk(db,main,user){
    book.append(makeCard(row,(historyByKey.get(row.case_key)||[]).filter(r=>r.entry_id!==row.entry_id)));
   if(!latest.length)renderEmpty(book,"No owner-saved decisions yet. Your historical research has not been silently converted into a fresh investment recommendation. Import a reviewed ticket to start decision memory.");
   $(host,"psd-count").textContent=latest.length+" active cases · "+state.rows.length+" revisions";
+  const review=decisionReviewStats(state.rows,{totalRows:state.totalRows});
+  const met=$(host,"psd-review-metrics");met.replaceChildren();
+  for(const [label,value] of [
+   ["Saved cases",review.caseCount],
+   ["Review overdue",review.overdue],
+   ["Waiting for trigger",review.awaiting],
+   ["Source-verified (declared)",review.declaredVerified],
+   ["Scenario outcome","Not measured"],
+   ["Realised return","Not measured"]
+  ]){
+   const box=txt("div",null,"psd-review-metric");
+   box.append(txt("strong",value),txt("span",label));met.append(box);
+  }
+  $(host,"psd-review-note").textContent=review.outcomeExplanation+
+   (review.historyTruncated?" More history exists than the 200 revisions loaded; audit counts are partial.":"");
+  const reconciliation=portfolioReconciliationStatus({
+   snapshotAsOf:state.snapshotDate,ledgerCount:state.ledgerCount,ledgerError:state.ledgerError
+  });
+  $(host,"psd-reconciliation-state").textContent="NOT BROKER VERIFIED"+(
+   reconciliation.ledgerEntries===null?" · ledger unavailable":" · "+reconciliation.ledgerEntries+" recorded transaction(s)"
+  );
+  $(host,"psd-reconciliation-note").textContent="Archived snapshot: "+(reconciliation.archivedAsOf||"unknown")+
+   ". "+reconciliation.explanation+" Cash and order sizing remain blocked until verified.";
  }
  async function refresh(){
-  const [saved,snapshot]=await Promise.all([
-   db.from("power_stack_decision_revisions").select("entry_id,case_key,ticket,fingerprint,created_at").order("created_at",{ascending:false}).limit(200),
-   db.from("power_stack_owner_snapshots").select("snapshot_as_of,snapshot,legacy_source_retired").eq("owner_user_id",user.id).limit(1).maybeSingle()
+  const [saved,snapshot,ledger]=await Promise.all([
+   db.from("power_stack_decision_revisions").select("entry_id,case_key,ticket,fingerprint,created_at",{count:"exact"}).order("created_at",{ascending:false}).limit(200),
+   db.from("power_stack_owner_snapshots").select("snapshot_as_of,snapshot,legacy_source_retired").eq("owner_user_id",user.id).limit(1).maybeSingle(),
+   db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id)
   ]);
   if(saved.error)throw Error("Owner decision history unavailable: "+saved.error.message);
   if(snapshot.error||!snapshot.data?.legacy_source_retired)throw Error("Owner portfolio access not verified");
   state.rows=saved.data||[];state.snapshot=snapshot.data.snapshot;state.snapshotDate=snapshot.data.snapshot_as_of;
+  state.totalRows=Number.isInteger(saved.count)?saved.count:state.rows.length;
+  state.ledgerCount=ledger.error?null:ledger.count;
+  state.ledgerError=Boolean(ledger.error);
   draw();status("Owner-only decision records loaded · "+localDate()+" MYT · Historical holdings as of "+state.snapshotDate);
  }
  $(host,"psd-open-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=false;$(host,"psd-ticket-json").focus()});
