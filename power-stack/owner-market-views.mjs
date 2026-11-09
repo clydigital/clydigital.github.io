@@ -34,9 +34,11 @@ export function bondWatch(ideas,quoteMap=new Map()){
 /** The quote universe is not the owner's portfolio. Keep each membership flag explicit. */
 export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
  const combined=new Map();
+ const marketTickers=new Set(rows(feed?.rows).slice(0,100).map(x=>validTicker(x.ticker)).filter(Boolean));
  for(const line of rows(base)){
   const ticker=validTicker(line.ticker);if(ticker)combined.set(ticker,{
-   ...line,ticker,ideaTracked:false,bond:isBondEtf(ticker),marketOnly:false
+   ...line,ticker,ideaTracked:false,bond:isBondEtf(ticker),marketOnly:false,
+   marketTracked:marketTickers.has(ticker)
   });
  }
  for(const idea of rows(ideas)){
@@ -46,6 +48,7 @@ export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
    ticker,name:old?.name||String(idea.name||ticker).slice(0,110),
    held:old?.held||false,onWatchlist:old?.onWatchlist||false,
    ideaTracked:true,bond:isBondEtf(ticker),marketOnly:false,
+   marketTracked:marketTickers.has(ticker),
    quantity:old?.quantity??null,quantityAsOf:old?.quantityAsOf||"",
    currency:quote?.currency||old?.currency||String(idea.currency||""),
    close:quote?.close??old?.close??null,day:quote?.day??old?.day??null,
@@ -59,7 +62,7 @@ export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
   const ticker=validTicker(raw.ticker);if(!ticker||combined.has(ticker))continue;
   const quote=quoteMap.get(ticker);
   combined.set(ticker,{ticker,name:ticker,held:false,onWatchlist:false,
-   ideaTracked:false,bond:isBondEtf(ticker),marketOnly:true,
+   ideaTracked:false,bond:isBondEtf(ticker),marketOnly:true,marketTracked:true,
    quantity:null,quantityAsOf:"",currency:quote?.currency||String(raw.currency||""),
    close:quote?.close??null,day:quote?.day??null,threeDay:quote?.threeDay??null,
    fiveDay:quote?.fiveDay??null,session:quote?.session||null,basis:quote?.basis||"",
