@@ -188,8 +188,8 @@ test("Power Stack site modules parse and owner-only auth has no hardcoded email"
 });
 
 test("every private page and dynamic module uses the same versioned release assets",()=>{
- const version="20261110-d4";
- for(const page of ["index","research","sectors","decisions","portfolio"]){
+ const version="20261110-d5";
+ for(const page of ["index","research","sectors","decisions","portfolio","archive"]){
   const shell=readFileSync(path.join(ROOT,page+".html"),"utf8");
   assert.ok(shell.includes('src="auth-gate.mjs?v='+version+'"'),page);
  }
@@ -199,4 +199,18 @@ test("every private page and dynamic module uses the same versioned release asse
  }
  const decisions=readFileSync(path.join(ROOT,"owner-decisions.mjs"),"utf8");
  assert.match(decisions,/research-cases\.mjs\?v=[A-Za-z0-9-]+/);
+});
+
+test("historical earnings have their own owner-gated archive; current decision shell is distinct",()=>{
+ const archive=readFileSync(path.join(ROOT,"archive.html"),"utf8");
+ const index=readFileSync(path.join(ROOT,"index.html"),"utf8");
+ const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
+ const decision=readFileSync(path.join(ROOT,"owner-decision-desk.mjs"),"utf8");
+ assert.match(archive,/data-private-page="archive"/);
+ assert.match(archive,/auth-gate\.mjs\?v=20261110-d5/);
+ assert.match(gate,/\["index","research","sectors","decisions","portfolio","archive"\]/);
+ assert.match(gate,/ps-legacy-note/);
+ assert.match(index,/owner-decision-desk\.css/);
+ assert.match(decision,/href="archive\.html"/);
+ assert.doesNotMatch(decision,/Amazon's AWS sales accelerated 39%/);
 });
