@@ -49,7 +49,7 @@ async function load(){
  $("owner-indicator").textContent="Owner · "+user.email;
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d3");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d4");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
