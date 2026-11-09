@@ -59,6 +59,12 @@ export function validateFrameworkPacket(packet,expectedKey=null){
   if(!isObject(s)||!(typeof s.id==="string"&&s.id.length>0)||!safeSourceUrl(s.url)||!date(s.published_date)||!populated(s.source_type))errors.push("SOURCE_ENTRY_INVALID");
   else sources.add(s.id);
  }
+ const gapsText=Array.isArray(packet.unresolved_gaps)?packet.unresolved_gaps.join(" ").toLowerCase():"";
+ const sourcedBridge=x=>isObject(x)&&x.status==="VERIFIED"&&Array.isArray(x.source_ids)&&x.source_ids.length>0&&x.source_ids.every(id=>sources.has(id));
+ if(packet.operating_archetype==="PLATFORM_FINTECH"&&!sourcedBridge(packet.cash_flow_bridge)&&!/gaap|cash.flow|fcf|lending|loan|deposit/.test(gapsText))
+  errors.push("FINTECH_CASH_BRIDGE_NOT_DISCLOSED");
+ if(packet.operating_archetype==="CYCLICAL_COMMODITY"&&!sourcedBridge(packet.cycle_normalization)&&!/cycl|midcycle|gas|settlement|fertiliz|commodity/.test(gapsText))
+  errors.push("COMMODITY_CYCLE_NOT_DISCLOSED");
  if(!Array.isArray(packet.lenses)||packet.lenses.length===0)errors.push("LENSES_MISSING");
  else for(const lens of packet.lenses){
   if(!isObject(lens)||!LENSES.has(lens.id)||!APPLICABILITY.has(lens.applicability)||!SIGNALS.has(lens.signal)||
@@ -67,6 +73,7 @@ export function validateFrameworkPacket(packet,expectedKey=null){
    lens.materiality!==undefined&&!MATERIALITY.has(lens.materiality)||
    "score" in lens||"weight" in lens)errors.push("LENS_INVALID");
   if(lens?.applicability==="NOT_APPLICABLE"&&lens.signal!=="NOT_SCORED")errors.push("INAPPLICABLE_LENS_SCORED");
+  if(lens?.id==="GREENBLATT_STRICT"&&lens.applicability==="DIRECT")errors.push("STRICT_GREENBLATT_UNIVERSE_UNVERIFIED");
   if(packet.instrument?.kind==="ETF"&&["BUFFETT_QUALITY","LYNCH_GARP","GREENBLATT_STRICT","GREENBLATT_ADAPTED"].includes(lens?.id)&&lens.applicability!=="NOT_APPLICABLE")errors.push("ETF_COMPANY_LENS_NOT_APPLICABLE");
   if((packet.instrument?.kind==="ADR"||packet.operating_archetype==="PLATFORM_FINTECH")&&lens?.id==="GREENBLATT_STRICT"&&lens.applicability!=="NOT_APPLICABLE")errors.push("STRICT_GREENBLATT_EXCLUSION");
  }
