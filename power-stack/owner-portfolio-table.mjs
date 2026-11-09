@@ -9,7 +9,7 @@ const pct=v=>v===null?"—":(v>0?"+":"")+v.toFixed(2)+"%";
 const columns=[
  ["ticker","Instrument",false],["group","Group",false],["quantity","Recorded units",true],
  ["close","Last close",true],["day","1D",true],["threeDay","3D",true],["fiveDay","5D",true],
- ["score","Old score",true],["session","Session",false]
+ ["session","Session",false]
 ];
 export function recentSession(date,now=new Date()){
  if(typeof date!=="string"||!/^20\d{2}-\d{2}-\d{2}$/.test(date))return false;
@@ -22,7 +22,7 @@ export function recentSession(date,now=new Date()){
 }
 /** Public, issuer-level daily quote tape is independent of private portfolio
  * membership. The market-prices.json endpoint has no account, holdings, size,
- * score, Google token, or Bluebelly-derived scan. No arbitrary ticker requests.
+ * legacy scoring data, Google token, or Bluebelly-derived scan. No arbitrary ticker requests.
  */
 export async function loadPriceFeed(fetcher=fetch) {
  try {
@@ -74,7 +74,7 @@ function project(snapshot,priceFeed){
   const q=scan.holding.get(id)||{};
   result.set(id,{ticker:id,name:safe(h.name,100)||id,held:true,onWatchlist:false,
    quantity:num(p.quantity),currency:q.currency||safe(p.currency,8),quantityAsOf:safe(p.quantityAsOf,30),
-   rank:null,score:num(h.score),close:q.close??null,day:q.day??null,threeDay:q.threeDay??null,
+   close:q.close??null,day:q.day??null,threeDay:q.threeDay??null,
    fiveDay:q.fiveDay??null,session:q.session??null,basis:q.basis||"",action:safe(h.action,240),
    thesis:safe(h.verdict,240),entry:"",invalidation:safe(h.weakness,300)});
  }
@@ -83,8 +83,8 @@ function project(snapshot,priceFeed){
   const old=result.get(id)||{},q=scan.watch.get(id)||scan.holding.get(id)||{};
   result.set(id,{ticker:id,name:old.name||safe(w.name,100)||id,
    held:old.held||false,onWatchlist:true,quantity:old.quantity??null,
-   currency:old.currency||q.currency||"",quantityAsOf:old.quantityAsOf||"",rank:num(w.rank),
-   score:num(w.score)??old.score??null,close:old.close??q.close??null,
+   currency:old.currency||q.currency||"",quantityAsOf:old.quantityAsOf||"",
+   close:old.close??q.close??null,
    day:old.day??q.day??null,threeDay:old.threeDay??q.threeDay??null,
    fiveDay:old.fiveDay??q.fiveDay??null,session:old.session??q.session??null,
    basis:old.basis||q.basis||"",
@@ -166,7 +166,7 @@ export async function initPortfolioTable(db,host){
    return v*mult||a.ticker.localeCompare(b.ticker);
   });
   tbody.replaceChildren();
-  if(!selected.length){const tr=el("tr");const td=cell(tr,"No matching instruments.");td.colSpan=9;tbody.append(tr);return;}
+  if(!selected.length){const tr=el("tr");const td=cell(tr,"No matching instruments.");td.colSpan=8;tbody.append(tr);return;}
   for(const r of selected){
    const tr=el("tr"),th=el("th"),button=el("button",r.ticker+" · "+r.name,"ps-ticker");
    button.type="button";button.setAttribute("aria-expanded",String(expanded===r.ticker));
@@ -178,10 +178,9 @@ export async function initPortfolioTable(db,host){
    for(const v of [r.day,r.threeDay,r.fiveDay]){
     const td=cell(tr,pct(v));td.dataset.direction=v===null?"unknown":v>0?"up":v<0?"down":"flat";
    }
-   cell(tr,r.score===null?"—":fmt(r.score,1)+" (archived)");
    cell(tr,r.session?(r.session+(r.basis==="BTC UTC daily sample"?" · BTC UTC sample":"")):"—");tbody.append(tr);
    if(expanded===r.ticker){
-    const detail=el("tr"),td=el("td");td.colSpan=9;td.className="ps-row-details";
+    const detail=el("tr"),td=el("td");td.colSpan=8;td.className="ps-row-details";
     for(const [label,val] of [["Research",r.action||r.thesis||"Pending"],["Entry / confirmation",r.entry||"Not recorded"],
       ["Invalidation",r.invalidation||"Not recorded"],["Quantity date",r.quantityAsOf||"Unknown"]]){
       const p=el("p");p.append(el("strong",label+": "),document.createTextNode(val));td.append(p);
