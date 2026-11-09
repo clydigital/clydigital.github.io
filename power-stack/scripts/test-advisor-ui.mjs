@@ -15,7 +15,7 @@ test("client overview prioritizes entry levels, recommendations and risks",()=>{
 test("valuation and price evidence stays owner-gated, date-stamped and distinct from broker balance",()=>{
  const brief=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  assert(brief.includes('power_stack_idea_tracker'));
- assert(brief.includes('sweepSignals(state.ideaRows,state.priceMap)'));
+ assert(brief.includes('sweepSignals(companyIdeas,state.priceMap)'));
  assert(brief.includes('loadPriceFeed()'));
  assert(brief.includes('Date.now()-generated<=72*3600000'));
  assert(brief.includes('portfolioReconciliationStatus'));
