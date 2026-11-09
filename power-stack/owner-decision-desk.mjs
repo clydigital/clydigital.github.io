@@ -80,7 +80,7 @@ export async function initDecisionDesk(db,main,user){
  <section class="psd-lane psd-watch"><div class="psd-lane-head"><span class="psd-index">03</span><div><h2>Waiting for a trigger</h2><p>Keep the thesis; revisit only on a trigger or due date.</p></div></div><div id="psd-watch-rows"></div></section>
  </div>
  <section class="psd-book"><div class="psd-book-head"><div><h2>Decision history</h2><p>Owner-saved revisions only. No hidden trades or background monitoring.</p></div><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
- <section id="psd-import-panel" class="psd-import" hidden><div class="psd-book-head"><div><h2>Import a decision</h2><p>Paste a complete <code>power-stack-decision-ticket/v2</code> from the Power Stack plugin. This saves a private, append-only review record, not an order.</p></div><button type="button" id="psd-close-import">Close</button></div><form id="psd-import-form"><label for="psd-ticket-json">Decision ticket JSON</label><textarea id="psd-ticket-json" rows="11" spellcheck="false" required placeholder="Paste the complete plugin decision ticket here"></textarea><p class="psd-disclaimer">Never treat an analyst report as broker-confirmed buying power. No existing portfolio rows will be edited.</p><button type="submit" id="psd-save">Validate and save private revision</button></form><p id="psd-import-status" role="status"></p></section>
+ <section id="psd-import-panel" class="psd-import" hidden><div class="psd-book-head"><div><h2>Import a decision</h2><p>Paste a complete <code>power-stack-decision-ticket/v2</code> from the Power Stack plugin. This saves a private, append-only review record, not an order.</p></div><button type="button" id="psd-close-import">Close</button></div><form id="psd-import-form"><label for="psd-ticket-file">Load a Power Stack decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json"><label for="psd-ticket-json">Or paste decision ticket JSON</label><textarea id="psd-ticket-json" rows="11" spellcheck="false" required placeholder="Load a .json file or paste the complete plugin decision ticket here"></textarea><p class="psd-disclaimer">Never treat an analyst report as broker-confirmed buying power. No existing portfolio rows will be edited.</p><button type="submit" id="psd-save">Validate and save private revision</button></form><p id="psd-import-status" role="status"></p></section>
  <p class="psd-footnote">The following archived editorial report is preserved for context. It may predate current market or account conditions.</p>`;
  main.prepend(host);
  const state={rows:[],snapshot:null,snapshotDate:null};
@@ -128,6 +128,20 @@ export async function initDecisionDesk(db,main,user){
  }
  $(host,"psd-open-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=false;$(host,"psd-ticket-json").focus()});
  $(host,"psd-close-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=true});
+ $(host,"psd-ticket-file").addEventListener("change",async()=>{
+  const pick=$(host,"psd-ticket-file"),file=pick.files?.[0],note=$(host,"psd-import-status");
+  if(!file)return;
+  try{
+   if(file.size>60000)throw Error("Ticket exceeds 60 KB limit");
+   if(!/\.json$/i.test(file.name))throw Error("Only .json decision tickets are accepted");
+   const source=await file.text();
+   const payload=JSON.parse(source),errors=validateTicket(payload);
+   if(errors.length)throw Error("Ticket invalid: "+errors.join(", "));
+   $(host,"psd-ticket-json").value=JSON.stringify(payload,null,2);
+   note.textContent="File validated. Review the decision, then select Validate and save private revision.";
+  }catch(e){note.textContent="File not loaded: "+String(e.message||e).slice(0,300)}
+  finally{pick.value="";}
+ });
  $(host,"psd-import-form").addEventListener("submit",async e=>{
   e.preventDefault();const button=$(host,"psd-save"),note=$(host,"psd-import-status");button.disabled=true;note.textContent="Validating…";
   try{
