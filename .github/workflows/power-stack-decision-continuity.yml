@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'power-stack/owner-decision-*.mjs'
+      - 'power-stack/owner-framework-*.mjs'
       - 'power-stack/owner-decision-*.css'
       - 'power-stack/auth-gate.mjs'
       - 'power-stack/ideas.html'
@@ -12,6 +13,7 @@ on:
       - 'power-stack/scripts/test-ideas.mjs'
       - 'power-stack/index.html'
       - 'power-stack/scripts/test-decision-continuity.mjs'
+      - 'power-stack/scripts/test-framework-evidence.mjs'
       - 'power-stack/scripts/test-decision-performance.mjs'
       - 'power-stack/scripts/test-ideas.mjs'
       - '.github/workflows/power-stack-decision-continuity.yml'
@@ -37,12 +39,14 @@ jobs:
           node --check power-stack/owner-decision-core.mjs
           node --check power-stack/owner-decision-performance.mjs
           node --check power-stack/owner-decision-desk.mjs
+          node --check power-stack/owner-framework-evidence.mjs
+          node --check power-stack/owner-framework-view.mjs
           node --check power-stack/auth-gate.mjs
           node --check power-stack/owner-ideas-core.mjs
           node --check power-stack/owner-ideas-tracker.mjs
           node --check power-stack/owner-portfolio-table.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-framework-evidence.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
