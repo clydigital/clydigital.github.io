@@ -7,7 +7,7 @@ const validTicker = value => {
  return /^[A-Z0-9][A-Z0-9.\-]{0,17}$/.test(ticker)?ticker:"";
 };
 const rows = value => Array.isArray(value)?value.filter(x=>x&&typeof x==="object"&&!Array.isArray(x)):[];
-const number = value => typeof value==="number"&&Number.isFinite(value)?value:null;
+const number = value => (typeof value==="number"||(typeof value==="string"&&value.trim()!==""))&&Number.isFinite(Number(value))?Number(value):null;
 export const isBondEtf = ticker => BOND_ETFS.has(validTicker(ticker));
 
 /** Snapshot is historical; caller must show its date and a broker-unverified label. */
