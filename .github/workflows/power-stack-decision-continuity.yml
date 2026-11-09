@@ -12,6 +12,8 @@ on:
       - 'power-stack/owner-advisor-presentation.mjs'
       - 'power-stack/owner-advisor-theme.css'
       - 'power-stack/owner-fin-pulse.css'
+      - 'power-stack/owner-angular-contrast.css'
+      - 'power-stack/scripts/test-angular-contrast.mjs'
       - 'power-stack/private-gate.css'
       - 'power-stack/scripts/test-fin-pulse-theme.mjs'
       - 'power-stack/scripts/test-advisor-ui.mjs'
@@ -28,6 +30,8 @@ on:
       - 'power-stack/owner-advisor-presentation.mjs'
       - 'power-stack/owner-advisor-theme.css'
       - 'power-stack/owner-fin-pulse.css'
+      - 'power-stack/owner-angular-contrast.css'
+      - 'power-stack/scripts/test-angular-contrast.mjs'
       - 'power-stack/scripts/test-fin-pulse-theme.mjs'
       - '.github/workflows/power-stack-decision-continuity.yml'
   push:
@@ -62,7 +66,7 @@ jobs:
           node --check power-stack/owner-portfolio.js
           node --check power-stack/owner-advisor-presentation.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-framework-evidence.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
@@ -73,6 +77,7 @@ jobs:
           test -f power-stack/ideas.html
           test -f power-stack/owner-ideas.css
           test -f power-stack/owner-fin-pulse.css
+          test -f power-stack/owner-angular-contrast.css
           if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com' power-stack/owner-fin-pulse.css power-stack/owner-advisor-presentation.mjs; then
             echo "Sensitive content in owner-neutral theme"; exit 1
           fi
