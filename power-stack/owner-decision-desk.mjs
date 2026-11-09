@@ -1,5 +1,7 @@
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
+import {sweepSignals} from "./owner-ideas-core.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -73,29 +75,47 @@ export async function initDecisionDesk(db,main,user){
  if(!user?.id||!main)return;
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
- <div class="psd-top"><div><p class="psd-overline">PRIVATE · POWER STACK / DECISION OS</p><h1>Make fewer, better decisions.</h1><p>Investment thesis, timing and capital readiness stay separate. Old research is not a fresh order.</p></div><div class="psd-top-actions"><a href="https://chatgpt.com/plugins/plugins_6ae6ad8f96448191be515675a7469951" target="_blank" rel="noopener noreferrer">Open Power Stack plugin</a><a href="portfolio.html">Portfolio</a><a href="decisions.html">Research cases</a><button type="button" id="psd-open-import">Import decision ticket</button></div></div>
- <p id="psd-status" role="status" class="psd-status">Checking owner decision history…</p>
+ <section class="psd-top" aria-label="Investment brief">
+  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / PRIVATE INVESTMENT BRIEF</p>
+   <h1>Your investment outlook</h1>
+   <p>Clear decisions, attractive entry levels and the risks that matter.</p></div>
+  <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Investment ideas</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">Portfolio</a></div>
+ </section>
+ <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
+ <section class="psd-executive" aria-label="Portfolio briefing">
+  <div class="psd-executive-main"><p class="psd-overline">THE CURRENT VIEW</p><h2 id="psd-thesis">Reviewing opportunities</h2>
+   <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p></div>
+  <div id="psd-summary-metrics" class="psd-summary-metrics"></div>
+ </section>
+ <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
+  <div class="psd-section-heading"><div><p class="psd-overline">OPPORTUNITY MONITOR</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2></div>
+   <a href="ideas.html">View all investment ideas →</a></div>
+  <div class="psd-idea-head" aria-hidden="true"><span>Investment idea</span><span>Last close</span><span>PEG</span><span>Price to watch</span><span>Assessment</span></div>
+  <div id="psd-ideas-rows" class="psd-ideas-rows"></div>
+ </section>
  <div class="psd-grid">
- <section class="psd-lane psd-risk"><div class="psd-lane-head"><span class="psd-index">01</span><div><h2>Protect capital</h2><p>Risks and overdue decisions bypass the opportunity shortlist.</p></div></div><div id="psd-risk-rows"></div></section>
- <section class="psd-lane psd-active"><div class="psd-lane-head"><span class="psd-index">02</span><div><h2>Next capital decision</h2><p>One priority action, with its competing use of money.</p></div></div><div id="psd-active-rows"></div></section>
- <section class="psd-lane psd-watch"><div class="psd-lane-head"><span class="psd-index">03</span><div><h2>Waiting for a trigger</h2><p>Keep the thesis; revisit only on a trigger or due date.</p></div></div><div id="psd-watch-rows"></div></section>
+  <section class="psd-lane psd-active"><div class="psd-lane-head"><div><p class="psd-overline">DECISION PRIORITY</p><h2>Recommended next move</h2></div></div><div id="psd-active-rows"></div></section>
+  <section class="psd-lane psd-risk"><div class="psd-lane-head"><div><p class="psd-overline">RISK FIRST</p><h2>What needs attention</h2></div></div><div id="psd-risk-rows"></div></section>
+  <section class="psd-lane psd-watch"><div class="psd-lane-head"><div><p class="psd-overline">WAIT FOR THE LEVEL</p><h2>Upcoming decision points</h2></div></div><div id="psd-watch-rows"></div></section>
  </div>
- <div class="psd-readiness-grid">
-  <section class="psd-review-card" aria-labelledby="psd-review-heading">
-   <div><p class="psd-overline">PROCESS, NOT PROFITS</p><h2 id="psd-review-heading">Decision review health</h2></div>
-   <div id="psd-review-metrics" class="psd-review-metrics"></div>
-   <p id="psd-review-note" class="psd-review-note">Review evidence is being checked; no investment performance score is implied.</p>
-  </section>
-  <section class="psd-review-card" aria-labelledby="psd-reconciliation-heading">
-   <div><p class="psd-overline">FUNDING GATE</p><h2 id="psd-reconciliation-heading">Portfolio reconciliation</h2></div>
-   <p id="psd-reconciliation-state" class="psd-reconcile-state">Not yet verified</p>
-   <p id="psd-reconciliation-note" class="psd-review-note">Historical holdings are not broker proof.</p>
-   <a class="psd-text-link" href="portfolio.html">Open private portfolio and transaction ledger</a>
-  </section>
- </div>
- <section class="psd-book"><div class="psd-book-head"><div><h2>Decision history</h2><p>Owner-saved revisions only. No hidden trades or background monitoring.</p></div><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
- <section id="psd-import-panel" class="psd-import" hidden><div class="psd-book-head"><div><h2>Import a decision</h2><p>Paste a complete <code>power-stack-decision-ticket/v2</code> from the Power Stack plugin. This saves a private, append-only review record, not an order.</p></div><button type="button" id="psd-close-import">Close</button></div><form id="psd-import-form"><label for="psd-ticket-file">Load a Power Stack decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json"><label for="psd-ticket-json">Or paste decision ticket JSON</label><textarea id="psd-ticket-json" rows="11" spellcheck="false" required placeholder="Load a .json file or paste the complete plugin decision ticket here"></textarea><p class="psd-disclaimer">Never treat an analyst report as broker-confirmed buying power. No existing portfolio rows will be edited.</p><button type="submit" id="psd-save">Validate and save private revision</button></form><p id="psd-import-status" role="status"></p></section>
- <p class="psd-footnote">Older earnings and sector reports are <strong>historical research</strong>, not current investment instructions. <a href="archive.html">Read the archived Nov 2026 earnings edition</a>. New decisions require source-dated evidence, revised scenarios and explicit owner review.</p>`;
+ <details class="psd-archive"><summary>Review history, portfolio checks & evidence</summary>
+  <div class="psd-readiness-grid">
+   <section class="psd-review-card" aria-labelledby="psd-review-heading"><h2 id="psd-review-heading">Review history</h2>
+    <div id="psd-review-metrics" class="psd-review-metrics"></div><p id="psd-review-note" class="psd-review-note"></p></section>
+   <section class="psd-review-card" aria-labelledby="psd-reconciliation-heading"><h2 id="psd-reconciliation-heading">Account verification</h2>
+    <p id="psd-reconciliation-state" class="psd-reconcile-state">Not verified</p>
+    <p id="psd-reconciliation-note" class="psd-review-note"></p><a class="psd-text-link" href="portfolio.html">Open account records</a></section>
+  </div>
+  <section class="psd-book"><div class="psd-book-head"><h2>Past investment decisions</h2><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
+ </details>
+ <section id="psd-import-panel" class="psd-import" hidden>
+  <div class="psd-book-head"><div><h2>Save a reviewed recommendation</h2><p>Import a complete, reviewed decision ticket from Power Stack.</p></div><button type="button" id="psd-close-import">Close</button></div>
+  <form id="psd-import-form"><label for="psd-ticket-file">Choose a decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json">
+   <label for="psd-ticket-json">Or paste the ticket</label><textarea id="psd-ticket-json" rows="8" spellcheck="false" required placeholder="Paste a reviewed decision ticket"></textarea>
+   <button type="submit" id="psd-save">Save reviewed decision</button></form><p id="psd-import-status" role="status"></p>
+ </section>
+ <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
+  <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true};
  function status(s){$(host,"psd-status").textContent=s}
