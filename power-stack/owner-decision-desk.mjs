@@ -1,3 +1,4 @@
+import {renderFrameworkAppendix,renderEntryComparison} from "./owner-framework-view.mjs";
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
@@ -40,7 +41,13 @@ function makeCard(record,history=[]){
   detail.append(d);
  }
  const alternatives=t.capital_alternatives||[];
- for(const v of alternatives.slice(0,6))paragraph(detail,"Alternative: "+v.choice,v.comparison+(v.data_limit?" · Limit: "+v.data_limit:""));
+ const comparison=renderEntryComparison(t);
+ if(comparison)detail.append(comparison);
+ for(const v of alternatives.slice(0,6)){
+  const choice=String(v.choice||"").toUpperCase().replace(/[\s-]+/g,"_");
+  if(comparison&&["BUY_NOW","BUY","STAGE","STAGE_IN","DCA","WAIT","CASH"].includes(choice))continue;
+  paragraph(detail,"Alternative: "+v.choice,v.comparison+(v.data_limit?" · Limit: "+v.data_limit:""));
+ }
  if(t.evidence?.unresolved_gaps?.length)paragraph(detail,"Unresolved",t.evidence.unresolved_gaps.join("; "));
  const refs=txt("div",null,"psd-refs");
  for(const v of (t.evidence?.source_refs||[]).slice(0,8)){
@@ -48,6 +55,7 @@ function makeCard(record,history=[]){
   const a=txt("a","Source "+(refs.children.length+1));a.href=url;a.rel="noopener noreferrer";a.target="_blank";refs.append(a);
  }
  if(refs.childElementCount)detail.append(refs);
+ const frameworks=renderFrameworkAppendix(t);if(frameworks)detail.append(frameworks);
  paragraph(detail,"Reviewed",stamp(record.created_at));
  if(history.length){
   const hist=txt("details",null,"psd-history");hist.append(txt("summary",history.length+" previous revision(s)"));
@@ -123,24 +131,24 @@ export async function initDecisionDesk(db,main,user){
   const thesis=$(host,"psd-thesis"),note=$(host,"psd-thesis-context");
   if(state.ideaError){thesis.textContent="Opportunity assessment unavailable";note.textContent="Research needs refreshing before drawing an entry conclusion."}
   else if(counts.ALIGNED){
-    thesis.textContent=counts.ALIGNED+" potential "+(counts.ALIGNED===1?"entry":"entries")+" meet the current screening gates";
-    note.textContent="Review business quality, position sizing and execution before committing capital.";
+    thesis.textContent=counts.ALIGNED+" research "+(counts.ALIGNED===1?"match":"matches")+" in the current screen";
+    note.textContent="A screen match is not a buy recommendation. Check earnings quality, valuation and portfolio fit.";
   }else if(state.ideaRows.length){
-    thesis.textContent="No confirmed entry yet";
+    thesis.textContent="No research screen match yet";
     note.textContent=state.ideaRows.length+" investment "+(state.ideaRows.length===1?"idea remains":"ideas remain")+" under review. Watch prices and macro evidence for a stronger setup.";
   }else{
     thesis.textContent="Build your opportunity shortlist";
     note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
   }
   const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
-  for(const [value,label] of [[counts.ALIGNED,"Aligned"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
+  for(const [value,label] of [[counts.ALIGNED,"Screen matches"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
     const item=txt("div",null,"psd-summary-metric");
     item.append(txt("strong",value),txt("span",label));metrics.append(item);
   }
   const board=$(host,"psd-ideas-rows");board.replaceChildren();
   const key=s=>s.ticker+"|"+s.idea_type;
   const source=new Map(state.ideaRows.map(x=>[key(x),x]));
-  const labels={ALIGNED:"Review entry",DIVERGENCE:"Divergence",WATCH:"On watch",RECHECK:"Needs review"};
+  const labels={ALIGNED:"Research match",DIVERGENCE:"Divergence",WATCH:"On watch",RECHECK:"Needs review"};
   for(const signal of signals.slice(0,5)){
    const item=source.get(key(signal))||{},quote=state.priceMap.get(signal.ticker);
    const row=txt("div",null,"psd-idea-row psd-idea-"+signal.status.toLowerCase());
@@ -148,7 +156,7 @@ export async function initDecisionDesk(db,main,user){
    const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
    const unit=quote?.currency||item.currency||"USD";
    const price=txt("div",null,"psd-idea-price");price.append(txt("strong",quote?.close?unit+" "+fmt(quote.close):"—"),txt("small",quote?.session||"Price unavailable"));
-   const peg=txt("strong",signal.peg!==null?fmt(signal.peg):"—","psd-idea-peg");
+   const peg=txt("strong",signal.pegSuitability==="NOT_APPLICABLE"?"N/A":signal.peg!==null?fmt(signal.peg):"—","psd-idea-peg");
    const zone=txt("strong",signal.low!==null&&signal.high!==null
      ?unit+" "+fmt(signal.low)+"–"+fmt(signal.high):"Set price range","psd-idea-zone");
    const status=txt("div",null,"psd-idea-verdict");

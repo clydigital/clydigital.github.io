@@ -1,3 +1,4 @@
+import {validateFrameworkPacket} from "./owner-framework-evidence.mjs";
 /**
  * Public, dependency-free decision logic. Never contains owner records.
  * The site cannot infer trade readiness from research; only owner-saved tickets.
@@ -58,6 +59,7 @@ export function validateTicket(t){
  if(e.source_status==="UNAVAILABLE"&&d.classification==="NO_CHANGE")errors.push("UNVERIFIED_NO_CHANGE");
  if(v.risk_override&&r.decision_state==="NO_NEW_DECISION")errors.push("RISK_OVERRIDE_SUPPRESSED");
  if(!Array.isArray(t.capital_alternatives)||!t.capital_alternatives.length)errors.push("NO_CAPITAL_ALTERNATIVE");
+ if(t.framework_evidence!==undefined)errors.push(...validateFrameworkPacket(t.framework_evidence,caseKey(t)).map(code=>"FRAMEWORK_"+code));
  for(const type of ["bear","base","bull"]){
   const s=t.scenarios[type];
   if(!object(s)||!["driver","observable_condition","investment_implication","response"].every(k=>filled(s[k])))errors.push("SCENARIO_"+type.toUpperCase()+"_INCOMPLETE");
@@ -69,12 +71,32 @@ function stable(value){
  if(object(value))return Object.fromEntries(Object.keys(value).sort().map(k=>[k,stable(value[k])]));
  return value===undefined?null:value;
 }
+/** An explicitly saved, source-reviewed appendix is a material evidence change.
+ * Exclude time-of-read alone and forbid independent order/funding decisions.
+ */
+function frameworkSignature(packet){
+ if(!object(packet))return null;
+ return {
+  contract_version:packet.contract_version,case_key:packet.case_key,
+  instrument:packet.instrument,primary_horizon:packet.primary_horizon,
+  operating_archetype:packet.operating_archetype,price_state:packet.price_state,
+  primary_variant_question:packet.primary_variant_question,
+  lenses:packet.lenses,unresolved_gaps:packet.unresolved_gaps,
+  peg_input:packet.peg_input,cash_flow_bridge:packet.cash_flow_bridge,
+  cycle_normalization:packet.cycle_normalization,
+  source_ledger:(packet.source_ledger||[]).map(s=>({
+   id:s.id,url:s.url,published_date:s.published_date,
+   underlying_source_id:s.underlying_source_id
+  }))
+ };
+}
 /** Exclude time-of-read and daily quote noise. Include decisions, assumptions and material evidence IDs. */
 export function materialSignature(t){
  if(!t)return "";
  return JSON.stringify(stable({
   subject:t.subject,horizon:t.horizon,assessment:t.assessment,scenarios:t.scenarios,
   capital_alternatives:t.capital_alternatives,
+  framework_evidence:frameworkSignature(t.framework_evidence),
   recommendation:t.recommendation,review:t.review,
   evidence_sources:t.evidence?.source_refs,
   evidence_gaps:t.evidence?.unresolved_gaps,
