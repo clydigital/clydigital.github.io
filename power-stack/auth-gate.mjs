@@ -73,7 +73,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-d5");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261110-a1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -91,7 +91,7 @@ async function load(){
   slot.textContent="Loading historical portfolio table…";
   content.querySelector("#login-panel")?.before(slot);
   try{
-   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-d3");
+   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-a1");
    await initPortfolioTable(db,slot);
    await import("./owner-portfolio.js");
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
@@ -102,7 +102,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-ideas1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-a1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
@@ -112,6 +112,14 @@ async function load(){
    content.append(alert);console.error("Ideas Tracker unavailable",error);
   }
  }
+ // Advisor-level presentation is applied only after the authenticated content has loaded.
+ try{
+  const link=document.createElement("link");
+  link.rel="stylesheet";link.href="./owner-advisor-theme.css?v=20261110-a1";
+  document.head.append(link);
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-a1");
+  presentClientView(PAGE,content);
+ }catch(error){console.error("Advisor presentation unavailable",error);}
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
