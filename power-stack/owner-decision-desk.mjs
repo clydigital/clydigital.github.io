@@ -72,7 +72,7 @@ export async function initDecisionDesk(db,main,user){
  if(!user?.id||!main)return;
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
- <div class="psd-top"><div><p class="psd-overline">PRIVATE · POWER STACK / DECISION OS</p><h1>Make fewer, better decisions.</h1><p>Investment thesis, timing and capital readiness stay separate. Old research is not a fresh order.</p></div><div class="psd-top-actions"><a href="portfolio.html">Portfolio</a><a href="decisions.html">Research cases</a><button type="button" id="psd-open-import">Import decision ticket</button></div></div>
+ <div class="psd-top"><div><p class="psd-overline">PRIVATE · POWER STACK / DECISION OS</p><h1>Make fewer, better decisions.</h1><p>Investment thesis, timing and capital readiness stay separate. Old research is not a fresh order.</p></div><div class="psd-top-actions"><a href="https://chatgpt.com/plugins/plugins_6ae6ad8f96448191be515675a7469951" target="_blank" rel="noopener noreferrer">Open Power Stack plugin</a><a href="portfolio.html">Portfolio</a><a href="decisions.html">Research cases</a><button type="button" id="psd-open-import">Import decision ticket</button></div></div>
  <p id="psd-status" role="status" class="psd-status">Checking owner decision history…</p>
  <div class="psd-grid">
  <section class="psd-lane psd-risk"><div class="psd-lane-head"><span class="psd-index">01</span><div><h2>Protect capital</h2><p>Risks and overdue decisions bypass the opportunity shortlist.</p></div></div><div id="psd-risk-rows"></div></section>
