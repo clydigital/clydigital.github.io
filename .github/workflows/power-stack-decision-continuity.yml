@@ -5,9 +5,15 @@ on:
       - 'power-stack/owner-decision-*.mjs'
       - 'power-stack/owner-decision-*.css'
       - 'power-stack/auth-gate.mjs'
+      - 'power-stack/ideas.html'
+      - 'power-stack/owner-ideas-*.mjs'
+      - 'power-stack/owner-ideas.css'
+      - 'power-stack/owner-portfolio-table.mjs'
+      - 'power-stack/scripts/test-ideas.mjs'
       - 'power-stack/index.html'
       - 'power-stack/scripts/test-decision-continuity.mjs'
       - 'power-stack/scripts/test-decision-performance.mjs'
+      - 'power-stack/scripts/test-ideas.mjs'
       - '.github/workflows/power-stack-decision-continuity.yml'
   push:
     branches: [main]
@@ -32,8 +38,11 @@ jobs:
           node --check power-stack/owner-decision-performance.mjs
           node --check power-stack/owner-decision-desk.mjs
           node --check power-stack/auth-gate.mjs
+          node --check power-stack/owner-ideas-core.mjs
+          node --check power-stack/owner-ideas-tracker.mjs
+          node --check power-stack/owner-portfolio-table.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
@@ -41,5 +50,10 @@ jobs:
             echo "Owner data or sensitive key detected in public client asset"; exit 1
           fi
           test -f power-stack/owner-decision-desk.css
+          test -f power-stack/ideas.html
+          test -f power-stack/owner-ideas.css
+          if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com|brokerQuantity' power-stack/owner-ideas-*.mjs power-stack/ideas.html; then
+            echo "Sensitive owner data in public ideas files"; exit 1
+          fi
           grep -q 'PAGE==="index"' power-stack/auth-gate.mjs
           grep -q 'owner-decision-desk.css' power-stack/index.html
