@@ -21,7 +21,8 @@ test("valuation and price evidence stays owner-gated, date-stamped and distinct 
  assert(brief.includes('portfolioReconciliationStatus'));
  assert(gate.includes('const user=await authenticate()'));
  assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('presentClientView(PAGE,content)'));
- assert(gate.includes('owner-advisor-theme.css'));
+ assert(read("index.html").includes('owner-advisor-theme.css?v=20261110-noflash1'));
+ assert(gate.indexOf('content.hidden=true')<gate.indexOf('content.hidden=false'));
 });
 test("client navigation keeps price watch, research and sign out reachable",()=>{
  const ui=read("owner-advisor-presentation.mjs");

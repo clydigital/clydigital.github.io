@@ -1,4 +1,6 @@
 /* Fin Pulse-inspired Power Stack presentation. Original CSS: owner-free, no borrowed template assets. */
+/* The login/loading screen uses the same slate palette before owner content appears. */
+body:not(.ps-fin-pulse){background:#020617!important;color:#f1f5f9!important}
 :root{--ps-bg:#020617;--ps-sidebar:#080f20;--ps-panel:#0f172a;--ps-panel-alt:#111e34;--ps-panel-soft:#17243c;--ps-stroke:#25334c;--ps-fg:#f1f5f9;--ps-subtle:#94a3b8;--ps-blue:#3b82f6;--ps-blue-bright:#60a5fa;--ps-blue-glow:rgba(59,130,246,.15);--ps-success:#34d399;--ps-danger:#fb7185;--ps-warn:#fbbf24;--ps-rad:22px}
 body.ps-fin-pulse{background:var(--ps-bg)!important;color:var(--ps-fg)!important;font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important;padding-left:254px;min-height:100vh}
 body.ps-fin-pulse a{color:#93c5fd}

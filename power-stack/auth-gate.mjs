@@ -50,8 +50,9 @@ async function load(){
   if(error||!data?.body_html){deny("Private research could not be retrieved. No public fallback is available.");return;}
   content=secureMain(data.body_html);
  }
+ // Keep the authenticated view invisible until its final layout is ready.
+ content.hidden=true;
  $("private-main").replaceWith(content);
- $("site-header").hidden=false;$("gate-panel").hidden=true;
  authorised=true;
  $("owner-indicator").textContent="Owner · "+user.email;
  const nav=$("site-header").querySelector("nav");
@@ -112,14 +113,9 @@ async function load(){
    content.append(alert);console.error("Ideas Tracker unavailable",error);
   }
  }
- // Advisor-level presentation is applied only after the authenticated content has loaded.
+ // Both presentation stylesheets are loaded by the HTML <head> before first paint.
+ // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const link=document.createElement("link");
-  link.rel="stylesheet";link.href="./owner-advisor-theme.css?v=20261110-a1";
-  document.head.append(link);
-  // Keep all finance data, RLS and existing controls; only the presentation changes.
-  const pulse=document.createElement("link");pulse.rel="stylesheet";
-  pulse.href="./owner-fin-pulse.css?v=20261110-fp1";document.head.append(pulse);
   const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-fp1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
@@ -129,6 +125,11 @@ async function load(){
   const safe=["index","research","sectors","decisions","portfolio","archive","ideas"].includes(planned)?planned:"index";
   if(safe!==PAGE){location.replace(safe+".html");return;}
  }
+ // Reveal everything together; no intermediate old-theme page is shown.
+ document.body.classList.add("ps-fin-pulse");
+ content.hidden=false;
+ $("site-header").hidden=false;
+ $("gate-panel").hidden=true;
 }
 async function init(){
  $("login-button").addEventListener("click",async()=>{
