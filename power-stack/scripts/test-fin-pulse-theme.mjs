@@ -3,11 +3,16 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 
-test("Fin Pulse style is intentionally loaded only after owner authentication",()=>{
+test("Fin Pulse CSS preloads while owner content stays hidden until final layout",()=>{
  const gate=read("auth-gate.mjs"),styles=read("owner-fin-pulse.css");
  const auth=gate.indexOf('const user=await authenticate()');
- const style=gate.indexOf('pulse.href="./owner-fin-pulse.css');
- assert(auth>=0&&style>auth,"Do not style owner shell before gate decision");
+ const hidden=gate.indexOf('content.hidden=true');
+ const present=gate.indexOf('presentClientView(PAGE,content)');
+ const reveal=gate.indexOf('content.hidden=false');
+ assert(auth>=0&&hidden>auth&&present>hidden&&reveal>present,"No intermediate unthemed owner content");
+ assert(!gate.includes('document.head.append(pulse)'),"Do not inject the theme after rendering");
+ assert(!gate.includes('document.head.append(link)'),"Advisor theme must also preload");
+ assert(styles.includes('body:not(.ps-fin-pulse){background:#020617'));
  assert(styles.includes("body.ps-fin-pulse"));
  assert(styles.includes("#site-header.site-header"));
  assert(styles.includes("position:fixed"));
@@ -57,4 +62,14 @@ test("login card matches the slate-blue palette before auth",()=>{
  assert(gate.includes('background:#020617'));
  assert(gate.includes('background:#2563eb'));
  assert(gate.includes('.gate-wrap'));
+});
+
+test("each private page loads the final theme in head before auth script",()=>{
+ for(const page of ["index","ideas","portfolio","research","sectors","decisions","archive"]){
+  const html=read(page+".html");
+  const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
+  const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
+  const auth=html.indexOf('src="auth-gate.mjs?v=20261110-noflash1"');
+  assert(advisor>0&&pulse>advisor&&auth>pulse,page+" theme must precede auth script");
+ }
 });
