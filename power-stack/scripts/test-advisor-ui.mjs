@@ -49,3 +49,22 @@ test("public source does not contain owner portfolio data or private identifiers
  const ui=read("owner-advisor-presentation.mjs"),css=read("owner-advisor-theme.css");
  assert.doesNotMatch(ui+css,/sb_secret_|service_role|@gmail\.com|\"owner_user_id\":/i);
 });
+
+test("legacy scores are absent from current owner views; old research remains compatible",async()=>{
+ const table=read("owner-portfolio-table.mjs"),ui=read("owner-portfolio.js"),model=read("owner-portfolio-model.mjs");
+ assert(!table.includes('"Old score"')&&!table.includes("r.score")&&!table.includes("w.score"));
+ assert(!ui.includes("h.score")&&!ui.includes("/100"));
+ assert(!model.includes("score,reviewStatus")&&!model.includes("const score=h.assessmentScore"));
+ assert(table.includes('"threeDay"')&&table.includes('"fiveDay"')&&table.includes("ps-sort"),"Preserve sortable price table");
+ const {parsePrivateResearch}=await import("../owner-portfolio-model.mjs");
+ const sample={contractVersion:"power-stack-three-horizon-underwriting/v1",ticker:"CF",
+  publicPagesEligible:false,changesExistingScores:false,placesOrders:false,callsVercel:false,
+  horizonAssessments:Object.fromEntries(["Q1_2027","END_2027","LONG_TERM"].map(h=>[
+   h,{assessmentScore:95,status:"READY_FOR_HUMAN_ALLOCATION_REVIEW",
+    confirmation:"Recheck source-dated issuer cash flow.",invalidation:"Thesis failure",gaps:[]}
+  ]))};
+ const out=parsePrivateResearch(sample);
+ assert.equal(out.horizons.length,3);
+ assert(out.horizons.every(h=>h.reviewStatus==="ARCHIVED_UNDERWRITING"&&!Object.hasOwn(h,"score")));
+ assert.equal(out.state,"PRIVATE_RESEARCH_PREVIEW_ONLY");
+});
