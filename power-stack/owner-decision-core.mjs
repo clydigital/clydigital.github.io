@@ -20,7 +20,8 @@ const filled=x=>typeof x==="string"&&x.trim().length>=5;
 const date=x=>typeof x==="string"&&/^20\d{2}-(0[1-9]|1[0-2])-([0-2]\d|3[01])$/.test(x)&&new Date(x+"T00:00:00Z").toISOString().slice(0,10)===x;
 const instant=x=>typeof x==="string"&&!Number.isNaN(Date.parse(x))&&/T/.test(x);
 export function localDate(now=new Date()){
- return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"2-digit",day:"2-digit"}).format(now);
+ const parts=Object.fromEntries(new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now).map(p=>[p.type,p.value]));
+ return [parts.year,parts.month,parts.day].join("-");
 }
 export function caseKey(t){
  if(!object(t?.subject)||!object(t?.horizon))return null;
