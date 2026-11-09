@@ -88,16 +88,15 @@ function renderHistory(){
 function renderResearch(){
  const host=$("horizons");clearChildren(host);
  const data=research?.horizons||[
-  {label:"Q1 2027",score:null,reviewStatus:"NOT_SCORED",gapCount:null},
-  {label:"End-2027",score:null,reviewStatus:"NOT_SCORED",gapCount:null},
-  {label:"2–5+ years",score:null,reviewStatus:"NOT_SCORED",gapCount:null}
+  {label:"Q1 2027",reviewStatus:"EVIDENCE_RECHECK",gapCount:null},
+  {label:"End-2027",reviewStatus:"EVIDENCE_RECHECK",gapCount:null},
+  {label:"2–5+ years",reviewStatus:"EVIDENCE_RECHECK",gapCount:null}
  ];
  for(const h of data){
   const item=document.createElement("article");
-  item.append(txt("h3",h.label),txt("strong",h.score===null?"NOT SCORED":fmt(h.score,1)+"/100"));
-  item.append(txt("p",h.reviewStatus==="RESEARCH_READY_NOT_TRADE"?
-    "Analyst research score only — not an order or portfolio recommendation":
-    "Source or account evidence remains incomplete"));
+  item.append(txt("h3",h.label),txt("strong",h.reviewStatus==="ARCHIVED_UNDERWRITING"?
+    "Archived research · Revalidate":"Research requires verification"));
+  item.append(txt("p","Historical underwriting only. For a current action, use a source-dated decision ticket with valuation, timing, portfolio fit and review gates."));
   if(h.gapCount!==null)item.append(small(h.gapCount+" source / underwriting gaps"));
   if(h.confirmation)item.append(txt("p","Confirm: "+h.confirmation));
   if(h.invalidation)item.append(txt("p","Invalidate: "+h.invalidation));
@@ -183,7 +182,7 @@ async function previewPrivateFile(){
   const report=JSON.parse(await file.text());
   research=parsePrivateResearch(report);
   msg("research-ticker",research.ticker+" · "+(research.createdAt||"undated")+" · Private preview");
-  msg("research-message","Viewed in browser memory only. No file was uploaded or saved; scores remain historical research, not portfolio actions.");
+  msg("research-message","Viewed in browser memory only. This is archived underwriting, not a current recommendation. No file was uploaded or saved.");
   renderResearch();
  }catch(e){research=null;renderResearch();msg("research-message","Research preview rejected: "+String(e.message).slice(0,150))}
 }
