@@ -19,9 +19,9 @@ export async function initIdeasTracker(db,main,user){
  main.className="psi-shell";
  main.innerHTML=`
  <div class="psi-hero">
-  <div><p class="eyebrow">POWER STACK / OWNER IDEAS</p><h1>Ideas Tracker</h1>
-  <p>Wait for PEG, macro and price to align. A green signal means <strong>review a purchase</strong>, never an automatic order.</p></div>
-  <nav class="psi-shortcuts" aria-label="Investment tools"><a href="portfolio.html#watchlist">Market watchlist</a><a href="index.html">Decision desk</a><button type="button" id="psi-add">+ Add idea</button></nav>
+  <div><p class="eyebrow">POWER STACK / OPPORTUNITIES</p><h1>Investment ideas</h1>
+  <p>Attractive valuations, macro conditions and the price worth paying.</p></div>
+  <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
@@ -48,7 +48,7 @@ export async function initIdeasTracker(db,main,user){
    <label class="psi-span">What to watch / invalidation<input name="note" maxlength="800" placeholder="Wait for crude stabilization; reassess if earnings estimates fall"></label>
   </div><div class="psi-submit"><button type="submit" id="psi-save">Save private idea</button><span id="psi-form-status" role="status"></span></div></form>
  </section>
- <p class="psi-disclaimer">Prices are delayed completed-session quotes, not executable prices. A PEG below 1 is not proof of cheapness for cyclical businesses; normalization and earnings revisions still require review. Macro and PEG update only when manually researched and saved. Watch price bands are research hypotheses, not orders.</p>`;
+ <p class="psi-disclaimer">Delayed prices. PEG and macro assessments use dated research; price zones and signals are for investment review, not orders.</p>`;
  const $=id=>main.querySelector("#"+id);
  const state={ideas:[],prices:new Map(),feedAt:null,editing:null};
  const form=$("psi-form");
@@ -59,20 +59,20 @@ export async function initIdeasTracker(db,main,user){
   const head=el("div",null,"psi-card-head"),left=el("div"),right=el("div",null,"psi-right");
   left.append(el("strong",row.ticker,"psi-ticker"),el("small",row.name||row.ticker));
   left.append(el("span",row.idea_type==="TRADE"?"Trade setup":"Investment idea","psi-type"));
-  right.append(el("span",a.status==="ALIGNED"?"ALIGNMENT · REVIEW":a.status.replaceAll("_"," "),"psi-badge psi-"+a.status.toLowerCase()));
+  right.append(el("span",({ALIGNED:"Consider entry",DIVERGENCE:"Conflicting signals",WATCH:"On watch",RECHECK:"Review required"})[a.status]||"Review","psi-badge psi-"+a.status.toLowerCase()));
   head.append(left,right);node.append(head);
   const metrics=el("div",null,"psi-metrics");
   const values=[
-   ["PEG",a.peg===null?"—":a.peg.toFixed(2),a.pegVerified?"Verified "+row.peg_as_of:"Source / growth check required"],
-   ["Last close",fmt(q?.close,q?.currency||row.currency),q?.session?"Session "+q.session:"Fresh close unavailable"],
+   ["PEG",a.peg===null?"—":a.peg.toFixed(2),a.pegVerified?"As of "+row.peg_as_of:"Check valuation source"],
+   ["Last close",fmt(q?.close,q?.currency||row.currency),q?.session?q.session:"Price unavailable"],
    ["Watch price",a.zoneVerified?fmt(a.low,row.currency)+" – "+fmt(a.high,row.currency):"Set a range",
     a.distance===null?"":a.distance>0?"Above zone "+a.distance.toFixed(1)+"%":a.distance<0?"Below zone "+Math.abs(a.distance).toFixed(1)+"%":"Inside zone"],
-   ["Macro",row.macro_state==="UNKNOWN"?"Not assessed":row.macro_state,
-    a.macroVerified?"Reviewed "+row.macro_as_of:"Fresh evidence needed"]
+   ["Macro",row.macro_state==="UNKNOWN"?"Not reviewed":row.macro_state,
+    a.macroVerified?"As of "+row.macro_as_of:"Review macro outlook"]
   ];
   for(const [label,val,sub] of values){const m=el("div",null,"psi-metric");m.append(el("small",label),el("strong",val),el("small",sub));metrics.append(m)}
   node.append(metrics,el("p",a.why,"psi-why"));
-  const detail=el("details"),summary=el("summary","Evidence and next test");detail.append(summary);
+  const detail=el("details"),summary=el("summary","Investment case, assumptions & sources");detail.append(summary);
   const body=el("div",null,"psi-detail");
   body.append(el("p","PEG methodology: "+(row.peg_basis||"Not recorded")));
   body.append(el("p","Macro: "+(row.macro_reason||"Not reviewed")));
@@ -90,7 +90,7 @@ export async function initIdeasTracker(db,main,user){
  function render(){
   const signals=sweepSignals(state.ideas,state.prices),counts=Object.fromEntries(["ALIGNED","DIVERGENCE","WATCH","RECHECK"].map(k=>[k,signals.filter(x=>x.status===k).length]));
   $("psi-stats").replaceChildren();
-  for(const [label,value] of [["Aligned",counts.ALIGNED],["Divergences",counts.DIVERGENCE],["Watch",counts.WATCH],["Needs review",counts.RECHECK]]){
+  for(const [label,value] of [["Consider entry",counts.ALIGNED],["Conflicting signals",counts.DIVERGENCE],["On watch",counts.WATCH],["Research due",counts.RECHECK]]){
    const item=el("div",null,"psi-stat");item.append(el("strong",value),el("small",label));$("psi-stats").append(item);
   }
   const filter=$("psi-filter").value,search=$("psi-search").value.toUpperCase().trim(),results=$("psi-cards");
@@ -135,8 +135,7 @@ export async function initIdeasTracker(db,main,user){
   const parsed=validAge?quotes(feed):null;
   state.prices=parsed?.watch||new Map();
   state.feedAt=validAge?feed.generatedAt:null;
-  setStatus("Private ideas: "+state.ideas.length+" · delayed market feed: "+(state.feedAt||"unavailable / too old")+
-   " · PEG and macro are manually reviewed, never fetched automatically.");
+  setStatus("Last price update · "+(state.feedAt||"unavailable")+" · Valuation and macro reviewed separately.");
   render();
  }
  $("psi-add").addEventListener("click",()=>openEditor());

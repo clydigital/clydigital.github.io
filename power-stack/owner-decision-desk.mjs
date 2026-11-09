@@ -1,5 +1,7 @@
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
+import {sweepSignals} from "./owner-ideas-core.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -24,15 +26,11 @@ function makeCard(record,history=[]){
  title.append(txt("span",t.subject.instrument_id||t.subject.name,"psd-ticker"),txt("h3",t.subject.name));
  const badge=txt("span",pretty(t.recommendation.action),"psd-badge");
  head.append(title,badge);card.append(head);
- const mini=txt("div",null,"psd-tags");
- for(const v of [t.horizon.primary,t.recommendation.decision_state,t.evidence.source_status])
-  mini.append(txt("span",pretty(v)));
- card.append(mini);
- paragraph(card,"Current judgement",t.recommendation.rationale);
- paragraph(card,"Next condition",t.recommendation.condition);
- if(t.review.review_by)paragraph(card,"Review by",t.review.review_by+" (MYT) · No automatic alert");
+ paragraph(card,"Recommendation",t.recommendation.rationale);
+ paragraph(card,"Watch for",t.recommendation.condition);
+ if(t.review.review_by)card.append(txt("small","Next review · "+t.review.review_by,"psd-review-date"));
  if(t.review.risk_override)card.append(txt("p","Risk override recorded — inspect promptly.","psd-warning"));
- const expand=txt("details");expand.append(txt("summary","Scenarios, countercase and evidence"));
+ const expand=txt("details");expand.append(txt("summary","Investment case & sources"));
  const detail=txt("div",null,"psd-details");
  paragraph(detail,"Strongest countercase",t.assessment.strongest_counterargument);
  for(const k of ["bear","base","bull"]){
@@ -50,7 +48,7 @@ function makeCard(record,history=[]){
   const a=txt("a","Source "+(refs.children.length+1));a.href=url;a.rel="noopener noreferrer";a.target="_blank";refs.append(a);
  }
  if(refs.childElementCount)detail.append(refs);
- paragraph(detail,"Saved",stamp(record.created_at)+" · Analytical ticket; not a broker order");
+ paragraph(detail,"Reviewed",stamp(record.created_at));
  if(history.length){
   const hist=txt("details",null,"psd-history");hist.append(txt("summary",history.length+" previous revision(s)"));
   const list=txt("ul");
@@ -73,33 +71,95 @@ export async function initDecisionDesk(db,main,user){
  if(!user?.id||!main)return;
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
- <div class="psd-top"><div><p class="psd-overline">PRIVATE · POWER STACK / DECISION OS</p><h1>Make fewer, better decisions.</h1><p>Investment thesis, timing and capital readiness stay separate. Old research is not a fresh order.</p></div><div class="psd-top-actions"><a href="https://chatgpt.com/plugins/plugins_6ae6ad8f96448191be515675a7469951" target="_blank" rel="noopener noreferrer">Open Power Stack plugin</a><a href="portfolio.html">Portfolio</a><a href="decisions.html">Research cases</a><button type="button" id="psd-open-import">Import decision ticket</button></div></div>
- <p id="psd-status" role="status" class="psd-status">Checking owner decision history…</p>
+ <section class="psd-top" aria-label="Investment brief">
+  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / PRIVATE INVESTMENT BRIEF</p>
+   <h1>Your investment outlook</h1>
+   <p>Clear decisions, attractive entry levels and the risks that matter.</p></div>
+  <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Investment ideas</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">Portfolio</a></div>
+ </section>
+ <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
+ <section class="psd-executive" aria-label="Portfolio briefing">
+  <div class="psd-executive-main"><p class="psd-overline">THE CURRENT VIEW</p><h2 id="psd-thesis">Reviewing opportunities</h2>
+   <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p></div>
+  <div id="psd-summary-metrics" class="psd-summary-metrics"></div>
+ </section>
+ <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
+  <div class="psd-section-heading"><div><p class="psd-overline">OPPORTUNITY MONITOR</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2></div>
+   <a href="ideas.html">View all investment ideas →</a></div>
+  <div class="psd-idea-head" aria-hidden="true"><span>Investment idea</span><span>Last close</span><span>PEG</span><span>Price to watch</span><span>Assessment</span></div>
+  <div id="psd-ideas-rows" class="psd-ideas-rows"></div>
+ </section>
  <div class="psd-grid">
- <section class="psd-lane psd-risk"><div class="psd-lane-head"><span class="psd-index">01</span><div><h2>Protect capital</h2><p>Risks and overdue decisions bypass the opportunity shortlist.</p></div></div><div id="psd-risk-rows"></div></section>
- <section class="psd-lane psd-active"><div class="psd-lane-head"><span class="psd-index">02</span><div><h2>Next capital decision</h2><p>One priority action, with its competing use of money.</p></div></div><div id="psd-active-rows"></div></section>
- <section class="psd-lane psd-watch"><div class="psd-lane-head"><span class="psd-index">03</span><div><h2>Waiting for a trigger</h2><p>Keep the thesis; revisit only on a trigger or due date.</p></div></div><div id="psd-watch-rows"></div></section>
+  <section class="psd-lane psd-active"><div class="psd-lane-head"><div><p class="psd-overline">DECISION PRIORITY</p><h2>Recommended next move</h2></div></div><div id="psd-active-rows"></div></section>
+  <section class="psd-lane psd-risk"><div class="psd-lane-head"><div><p class="psd-overline">RISK FIRST</p><h2>What needs attention</h2></div></div><div id="psd-risk-rows"></div></section>
+  <section class="psd-lane psd-watch"><div class="psd-lane-head"><div><p class="psd-overline">WAIT FOR THE LEVEL</p><h2>Upcoming decision points</h2></div></div><div id="psd-watch-rows"></div></section>
  </div>
- <div class="psd-readiness-grid">
-  <section class="psd-review-card" aria-labelledby="psd-review-heading">
-   <div><p class="psd-overline">PROCESS, NOT PROFITS</p><h2 id="psd-review-heading">Decision review health</h2></div>
-   <div id="psd-review-metrics" class="psd-review-metrics"></div>
-   <p id="psd-review-note" class="psd-review-note">Review evidence is being checked; no investment performance score is implied.</p>
-  </section>
-  <section class="psd-review-card" aria-labelledby="psd-reconciliation-heading">
-   <div><p class="psd-overline">FUNDING GATE</p><h2 id="psd-reconciliation-heading">Portfolio reconciliation</h2></div>
-   <p id="psd-reconciliation-state" class="psd-reconcile-state">Not yet verified</p>
-   <p id="psd-reconciliation-note" class="psd-review-note">Historical holdings are not broker proof.</p>
-   <a class="psd-text-link" href="portfolio.html">Open private portfolio and transaction ledger</a>
-  </section>
- </div>
- <section class="psd-book"><div class="psd-book-head"><div><h2>Decision history</h2><p>Owner-saved revisions only. No hidden trades or background monitoring.</p></div><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
- <section id="psd-import-panel" class="psd-import" hidden><div class="psd-book-head"><div><h2>Import a decision</h2><p>Paste a complete <code>power-stack-decision-ticket/v2</code> from the Power Stack plugin. This saves a private, append-only review record, not an order.</p></div><button type="button" id="psd-close-import">Close</button></div><form id="psd-import-form"><label for="psd-ticket-file">Load a Power Stack decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json"><label for="psd-ticket-json">Or paste decision ticket JSON</label><textarea id="psd-ticket-json" rows="11" spellcheck="false" required placeholder="Load a .json file or paste the complete plugin decision ticket here"></textarea><p class="psd-disclaimer">Never treat an analyst report as broker-confirmed buying power. No existing portfolio rows will be edited.</p><button type="submit" id="psd-save">Validate and save private revision</button></form><p id="psd-import-status" role="status"></p></section>
- <p class="psd-footnote">Older earnings and sector reports are <strong>historical research</strong>, not current investment instructions. <a href="archive.html">Read the archived Nov 2026 earnings edition</a>. New decisions require source-dated evidence, revised scenarios and explicit owner review.</p>`;
+ <details class="psd-archive"><summary>Review history, portfolio checks & evidence</summary><p class="psd-archive-links"><a href="archive.html">Past market reports</a> · <a href="research.html">Full research library</a></p>
+  <div class="psd-readiness-grid">
+   <section class="psd-review-card" aria-labelledby="psd-review-heading"><h2 id="psd-review-heading">Review history</h2>
+    <div id="psd-review-metrics" class="psd-review-metrics"></div><p id="psd-review-note" class="psd-review-note"></p></section>
+   <section class="psd-review-card" aria-labelledby="psd-reconciliation-heading"><h2 id="psd-reconciliation-heading">Account verification</h2>
+    <p id="psd-reconciliation-state" class="psd-reconcile-state">Not verified</p>
+    <p id="psd-reconciliation-note" class="psd-review-note"></p><a class="psd-text-link" href="portfolio.html">Open account records</a></section>
+  </div>
+  <section class="psd-book"><div class="psd-book-head"><h2>Past investment decisions</h2><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
+ </details>
+ <section id="psd-import-panel" class="psd-import" hidden>
+  <div class="psd-book-head"><div><h2>Save a reviewed recommendation</h2><p>Import a complete, reviewed decision ticket from Power Stack.</p></div><button type="button" id="psd-close-import">Close</button></div>
+  <form id="psd-import-form"><label for="psd-ticket-file">Choose a decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json">
+   <label for="psd-ticket-json">Or paste the ticket</label><textarea id="psd-ticket-json" rows="8" spellcheck="false" required placeholder="Paste a reviewed decision ticket"></textarea>
+   <button type="submit" id="psd-save">Save reviewed decision</button></form><p id="psd-import-status" role="status"></p>
+ </section>
+ <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
+  <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
- const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true};
+ const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
+  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null};
  function status(s){$(host,"psd-status").textContent=s}
+ function renderIdeaBrief(){
+  const signals=sweepSignals(state.ideaRows,state.priceMap);
+  const counts={ALIGNED:0,DIVERGENCE:0,WATCH:0,RECHECK:0};
+  for(const v of signals)counts[v.status]=(counts[v.status]||0)+1;
+  const thesis=$(host,"psd-thesis"),note=$(host,"psd-thesis-context");
+  if(state.ideaError){thesis.textContent="Opportunity assessment unavailable";note.textContent="Research needs refreshing before drawing an entry conclusion."}
+  else if(counts.ALIGNED){
+    thesis.textContent=counts.ALIGNED+" potential "+(counts.ALIGNED===1?"entry":"entries")+" meet the current screening gates";
+    note.textContent="Review business quality, position sizing and execution before committing capital.";
+  }else if(state.ideaRows.length){
+    thesis.textContent="No confirmed entry yet";
+    note.textContent=state.ideaRows.length+" investment "+(state.ideaRows.length===1?"idea remains":"ideas remain")+" under review. Watch prices and macro evidence for a stronger setup.";
+  }else{
+    thesis.textContent="Build your opportunity shortlist";
+    note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
+  }
+  const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
+  for(const [value,label] of [[counts.ALIGNED,"Aligned"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
+    const item=txt("div",null,"psd-summary-metric");
+    item.append(txt("strong",value),txt("span",label));metrics.append(item);
+  }
+  const board=$(host,"psd-ideas-rows");board.replaceChildren();
+  const key=s=>s.ticker+"|"+s.idea_type;
+  const source=new Map(state.ideaRows.map(x=>[key(x),x]));
+  const labels={ALIGNED:"Review entry",DIVERGENCE:"Divergence",WATCH:"On watch",RECHECK:"Needs review"};
+  for(const signal of signals.slice(0,5)){
+   const item=source.get(key(signal))||{},quote=state.priceMap.get(signal.ticker);
+   const row=txt("div",null,"psd-idea-row psd-idea-"+signal.status.toLowerCase());
+   const name=txt("div",null,"psd-idea-name");name.append(txt("strong",signal.ticker),txt("small",item.name||"Investment idea"));
+   const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
+   const unit=quote?.currency||item.currency||"USD";
+   const price=txt("div",null,"psd-idea-price");price.append(txt("strong",quote?.close?unit+" "+fmt(quote.close):"—"),txt("small",quote?.session||"Price unavailable"));
+   const peg=txt("strong",signal.peg!==null?fmt(signal.peg):"—","psd-idea-peg");
+   const zone=txt("strong",signal.low!==null&&signal.high!==null
+     ?unit+" "+fmt(signal.low)+"–"+fmt(signal.high):"Set price range","psd-idea-zone");
+   const status=txt("div",null,"psd-idea-verdict");
+   status.append(txt("strong",labels[signal.status]||"Review"));
+   status.append(txt("small",signal.why));
+   row.append(name,price,peg,zone,status);board.append(row);
+  }
+  if(!signals.length)board.append(txt("p",state.ideaError?"Investment ideas could not be verified.":"No tracked ideas yet. Create a watch price and investment case to begin.","psd-empty"));
+ }
  function draw(){
+  renderIdeaBrief();
   const latest=latestByCase(state.rows),historyByKey=new Map();
   for(const row of state.rows){
    if(!historyByKey.has(row.case_key))historyByKey.set(row.case_key,[]);
@@ -113,9 +173,9 @@ export async function initDecisionDesk(db,main,user){
   for(const key of ["risk","active","watch"]){
    const slot=$(host,"psd-"+key+"-rows");slot.replaceChildren();
    const arr=groups[key==="active"?"decision":key];
-   const limit=key==="active"?1:key==="watch"?3:5;
+   const limit=key==="active"?1:2;
    for(const row of arr.slice(0,limit))slot.append(makeCard(row,(historyByKey.get(row.case_key)||[]).filter(r=>r.entry_id!==row.entry_id)));
-   if(!arr.length)renderEmpty(slot,key==="risk"?"No saved urgent decisions. Historical risks below are not confirmed current positions.":key==="active"?"No actionable capital decision saved. Holding cash is a valid outcome.":"No saved trigger-driven decisions yet.");
+   if(!arr.length)renderEmpty(slot,key==="risk"?"No urgent decisions recorded.":key==="active"?"No funded recommendation approved yet.":"No upcoming trade triggers recorded.");
    if(arr.length>limit)slot.append(txt("p",+(arr.length-limit)+" more in decision history","psd-empty"));
   }
   const riskSlot=$(host,"psd-risk-rows");
@@ -127,17 +187,14 @@ export async function initDecisionDesk(db,main,user){
   const book=$(host,"psd-book-rows");book.replaceChildren();
   for(const row of latest.sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))).slice(0,24))
    book.append(makeCard(row,(historyByKey.get(row.case_key)||[]).filter(r=>r.entry_id!==row.entry_id)));
-  if(!latest.length)renderEmpty(book,"No owner-saved decisions yet. Your historical research has not been silently converted into a fresh investment recommendation. Import a reviewed ticket to start decision memory.");
+  if(!latest.length)renderEmpty(book,"No reviewed decisions have been saved yet.");
   $(host,"psd-count").textContent=latest.length+" active cases · "+state.rows.length+" revisions";
   const review=decisionReviewStats(state.rows,{totalRows:state.totalRows});
   const met=$(host,"psd-review-metrics");met.replaceChildren();
   for(const [label,value] of [
-   ["Saved cases",review.caseCount],
-   ["Review overdue",review.overdue],
-   ["Waiting for trigger",review.awaiting],
-   ["Source-verified (declared)",review.declaredVerified],
-   ["Scenario outcome","Not measured"],
-   ["Realised return","Not measured"]
+   ["Reviewed ideas",review.caseCount],
+   ["Reviews due",review.overdue],
+   ["Waiting for trigger",review.awaiting]
   ]){
    const box=txt("div",null,"psd-review-metric");
    box.append(txt("strong",value),txt("span",label));met.append(box);
@@ -154,10 +211,13 @@ export async function initDecisionDesk(db,main,user){
    ". "+reconciliation.explanation+" Cash and order sizing remain blocked until verified.";
  }
  async function refresh(){
-  const [saved,snapshot,ledger]=await Promise.all([
+  const [saved,snapshot,ledger,ideas,feed]=await Promise.all([
    db.from("power_stack_decision_revisions").select("entry_id,case_key,ticket,fingerprint,created_at",{count:"exact"}).order("created_at",{ascending:false}).limit(200),
    db.from("power_stack_owner_snapshots").select("snapshot_as_of,snapshot,legacy_source_retired").eq("owner_user_id",user.id).limit(1).maybeSingle(),
-   db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id)
+   db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id),
+   db.from("power_stack_idea_tracker").select("ticker,name,idea_type,peg,peg_as_of,peg_basis,peg_source_url,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,currency,note")
+    .eq("owner_user_id",user.id).order("updated_at",{ascending:false}).limit(100),
+   loadPriceFeed()
   ]);
   if(saved.error)throw Error("Owner decision history unavailable: "+saved.error.message);
   if(snapshot.error||!snapshot.data?.legacy_source_retired)throw Error("Owner portfolio access not verified");
@@ -165,7 +225,12 @@ export async function initDecisionDesk(db,main,user){
   state.totalRows=Number.isInteger(saved.count)?saved.count:state.rows.length;
   state.ledgerCount=ledger.error?null:ledger.count;
   state.ledgerError=Boolean(ledger.error);
-  draw();status("Owner-only decision records loaded · "+localDate()+" MYT · Historical holdings as of "+state.snapshotDate);
+  state.ideaError=Boolean(ideas.error);state.ideaRows=ideas.error?[]:(ideas.data||[]);
+  const generated=Date.parse(feed?.generatedAt||"");
+  const freshFeed=Number.isFinite(generated)&&Date.now()>=generated&&Date.now()-generated<=72*3600000;
+  state.priceMap=freshFeed?quotes(feed).watch:new Map();
+  state.marketAsOf=freshFeed?feed.generatedAt:null;
+  draw();$(host,"psd-status").hidden=true;
  }
  $(host,"psd-open-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=false;$(host,"psd-ticket-json").focus()});
  $(host,"psd-close-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=true});
