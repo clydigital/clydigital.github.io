@@ -26,15 +26,11 @@ function makeCard(record,history=[]){
  title.append(txt("span",t.subject.instrument_id||t.subject.name,"psd-ticker"),txt("h3",t.subject.name));
  const badge=txt("span",pretty(t.recommendation.action),"psd-badge");
  head.append(title,badge);card.append(head);
- const mini=txt("div",null,"psd-tags");
- for(const v of [t.horizon.primary,t.recommendation.decision_state,t.evidence.source_status])
-  mini.append(txt("span",pretty(v)));
- card.append(mini);
- paragraph(card,"Current judgement",t.recommendation.rationale);
- paragraph(card,"Next condition",t.recommendation.condition);
- if(t.review.review_by)paragraph(card,"Review by",t.review.review_by+" (MYT) · No automatic alert");
+ paragraph(card,"Recommendation",t.recommendation.rationale);
+ paragraph(card,"Watch for",t.recommendation.condition);
+ if(t.review.review_by)card.append(txt("small","Next review · "+t.review.review_by,"psd-review-date"));
  if(t.review.risk_override)card.append(txt("p","Risk override recorded — inspect promptly.","psd-warning"));
- const expand=txt("details");expand.append(txt("summary","Scenarios, countercase and evidence"));
+ const expand=txt("details");expand.append(txt("summary","Investment case & sources"));
  const detail=txt("div",null,"psd-details");
  paragraph(detail,"Strongest countercase",t.assessment.strongest_counterargument);
  for(const k of ["bear","base","bull"]){
@@ -52,7 +48,7 @@ function makeCard(record,history=[]){
   const a=txt("a","Source "+(refs.children.length+1));a.href=url;a.rel="noopener noreferrer";a.target="_blank";refs.append(a);
  }
  if(refs.childElementCount)detail.append(refs);
- paragraph(detail,"Saved",stamp(record.created_at)+" · Analytical ticket; not a broker order");
+ paragraph(detail,"Reviewed",stamp(record.created_at));
  if(history.length){
   const hist=txt("details",null,"psd-history");hist.append(txt("summary",history.length+" previous revision(s)"));
   const list=txt("ul");
@@ -117,9 +113,53 @@ export async function initDecisionDesk(db,main,user){
  <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
   <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
- const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true};
+ const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
+  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null};
  function status(s){$(host,"psd-status").textContent=s}
+ function renderIdeaBrief(){
+  const signals=sweepSignals(state.ideaRows,state.priceMap);
+  const counts={ALIGNED:0,DIVERGENCE:0,WATCH:0,RECHECK:0};
+  for(const v of signals)counts[v.status]=(counts[v.status]||0)+1;
+  const thesis=$(host,"psd-thesis"),note=$(host,"psd-thesis-context");
+  if(state.ideaError){thesis.textContent="Opportunity assessment unavailable";note.textContent="Research needs refreshing before drawing an entry conclusion."}
+  else if(counts.ALIGNED){
+    thesis.textContent=counts.ALIGNED+" potential "+(counts.ALIGNED===1?"entry":"entries")+" meet the current screening gates";
+    note.textContent="Review business quality, position sizing and execution before committing capital.";
+  }else if(state.ideaRows.length){
+    thesis.textContent="No confirmed entry yet";
+    note.textContent=state.ideaRows.length+" investment "+(state.ideaRows.length===1?"idea remains":"ideas remain")+" under review. Watch prices and macro evidence for a stronger setup.";
+  }else{
+    thesis.textContent="Build your opportunity shortlist";
+    note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
+  }
+  const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
+  for(const [value,label] of [[counts.ALIGNED,"Aligned"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
+    const item=txt("div",null,"psd-summary-metric");
+    item.append(txt("strong",value),txt("span",label));metrics.append(item);
+  }
+  const board=$(host,"psd-ideas-rows");board.replaceChildren();
+  const key=s=>s.ticker+"|"+s.idea_type;
+  const source=new Map(state.ideaRows.map(x=>[key(x),x]));
+  const labels={ALIGNED:"Review entry",DIVERGENCE:"Divergence",WATCH:"On watch",RECHECK:"Needs review"};
+  for(const signal of signals.slice(0,5)){
+   const item=source.get(key(signal))||{},quote=state.priceMap.get(signal.ticker);
+   const row=txt("div",null,"psd-idea-row psd-idea-"+signal.status.toLowerCase());
+   const name=txt("div",null,"psd-idea-name");name.append(txt("strong",signal.ticker),txt("small",item.name||"Investment idea"));
+   const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
+   const unit=quote?.currency||item.currency||"USD";
+   const price=txt("div",null,"psd-idea-price");price.append(txt("strong",quote?.close?unit+" "+fmt(quote.close):"—"),txt("small",quote?.session||"Price unavailable"));
+   const peg=txt("strong",signal.peg!==null?fmt(signal.peg):"—","psd-idea-peg");
+   const zone=txt("strong",signal.low!==null&&signal.high!==null
+     ?unit+" "+fmt(signal.low)+"–"+fmt(signal.high):"Set price range","psd-idea-zone");
+   const status=txt("div",null,"psd-idea-verdict");
+   status.append(txt("strong",labels[signal.status]||"Review"));
+   status.append(txt("small",signal.why));
+   row.append(name,price,peg,zone,status);board.append(row);
+  }
+  if(!signals.length)board.append(txt("p",state.ideaError?"Investment ideas could not be verified.":"No tracked ideas yet. Create a watch price and investment case to begin.","psd-empty"));
+ }
  function draw(){
+  renderIdeaBrief();
   const latest=latestByCase(state.rows),historyByKey=new Map();
   for(const row of state.rows){
    if(!historyByKey.has(row.case_key))historyByKey.set(row.case_key,[]);
@@ -133,9 +173,9 @@ export async function initDecisionDesk(db,main,user){
   for(const key of ["risk","active","watch"]){
    const slot=$(host,"psd-"+key+"-rows");slot.replaceChildren();
    const arr=groups[key==="active"?"decision":key];
-   const limit=key==="active"?1:key==="watch"?3:5;
+   const limit=key==="active"?1:2;
    for(const row of arr.slice(0,limit))slot.append(makeCard(row,(historyByKey.get(row.case_key)||[]).filter(r=>r.entry_id!==row.entry_id)));
-   if(!arr.length)renderEmpty(slot,key==="risk"?"No saved urgent decisions. Historical risks below are not confirmed current positions.":key==="active"?"No actionable capital decision saved. Holding cash is a valid outcome.":"No saved trigger-driven decisions yet.");
+   if(!arr.length)renderEmpty(slot,key==="risk"?"No urgent decisions recorded.":key==="active"?"No funded recommendation approved yet.":"No upcoming trade triggers recorded.");
    if(arr.length>limit)slot.append(txt("p",+(arr.length-limit)+" more in decision history","psd-empty"));
   }
   const riskSlot=$(host,"psd-risk-rows");
@@ -147,17 +187,14 @@ export async function initDecisionDesk(db,main,user){
   const book=$(host,"psd-book-rows");book.replaceChildren();
   for(const row of latest.sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))).slice(0,24))
    book.append(makeCard(row,(historyByKey.get(row.case_key)||[]).filter(r=>r.entry_id!==row.entry_id)));
-  if(!latest.length)renderEmpty(book,"No owner-saved decisions yet. Your historical research has not been silently converted into a fresh investment recommendation. Import a reviewed ticket to start decision memory.");
+  if(!latest.length)renderEmpty(book,"No reviewed decisions have been saved yet.");
   $(host,"psd-count").textContent=latest.length+" active cases · "+state.rows.length+" revisions";
   const review=decisionReviewStats(state.rows,{totalRows:state.totalRows});
   const met=$(host,"psd-review-metrics");met.replaceChildren();
   for(const [label,value] of [
-   ["Saved cases",review.caseCount],
-   ["Review overdue",review.overdue],
-   ["Waiting for trigger",review.awaiting],
-   ["Source-verified (declared)",review.declaredVerified],
-   ["Scenario outcome","Not measured"],
-   ["Realised return","Not measured"]
+   ["Reviewed ideas",review.caseCount],
+   ["Reviews due",review.overdue],
+   ["Waiting for trigger",review.awaiting]
   ]){
    const box=txt("div",null,"psd-review-metric");
    box.append(txt("strong",value),txt("span",label));met.append(box);
@@ -174,10 +211,13 @@ export async function initDecisionDesk(db,main,user){
    ". "+reconciliation.explanation+" Cash and order sizing remain blocked until verified.";
  }
  async function refresh(){
-  const [saved,snapshot,ledger]=await Promise.all([
+  const [saved,snapshot,ledger,ideas,feed]=await Promise.all([
    db.from("power_stack_decision_revisions").select("entry_id,case_key,ticket,fingerprint,created_at",{count:"exact"}).order("created_at",{ascending:false}).limit(200),
    db.from("power_stack_owner_snapshots").select("snapshot_as_of,snapshot,legacy_source_retired").eq("owner_user_id",user.id).limit(1).maybeSingle(),
-   db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id)
+   db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id),
+   db.from("power_stack_idea_tracker").select("ticker,name,idea_type,peg,peg_as_of,peg_basis,peg_source_url,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,currency,note")
+    .eq("owner_user_id",user.id).order("updated_at",{ascending:false}).limit(100),
+   loadPriceFeed()
   ]);
   if(saved.error)throw Error("Owner decision history unavailable: "+saved.error.message);
   if(snapshot.error||!snapshot.data?.legacy_source_retired)throw Error("Owner portfolio access not verified");
@@ -185,7 +225,12 @@ export async function initDecisionDesk(db,main,user){
   state.totalRows=Number.isInteger(saved.count)?saved.count:state.rows.length;
   state.ledgerCount=ledger.error?null:ledger.count;
   state.ledgerError=Boolean(ledger.error);
-  draw();status("Owner-only decision records loaded · "+localDate()+" MYT · Historical holdings as of "+state.snapshotDate);
+  state.ideaError=Boolean(ideas.error);state.ideaRows=ideas.error?[]:(ideas.data||[]);
+  const generated=Date.parse(feed?.generatedAt||"");
+  const freshFeed=Number.isFinite(generated)&&Date.now()>=generated&&Date.now()-generated<=72*3600000;
+  state.priceMap=freshFeed?quotes(feed).watch:new Map();
+  state.marketAsOf=freshFeed?feed.generatedAt:null;
+  draw();$(host,"psd-status").hidden=true;
  }
  $(host,"psd-open-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=false;$(host,"psd-ticket-json").focus()});
  $(host,"psd-close-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=true});
