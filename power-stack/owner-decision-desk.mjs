@@ -94,7 +94,7 @@ export async function initDecisionDesk(db,main,user){
   <section class="psd-lane psd-risk"><div class="psd-lane-head"><div><p class="psd-overline">RISK FIRST</p><h2>What needs attention</h2></div></div><div id="psd-risk-rows"></div></section>
   <section class="psd-lane psd-watch"><div class="psd-lane-head"><div><p class="psd-overline">WAIT FOR THE LEVEL</p><h2>Upcoming decision points</h2></div></div><div id="psd-watch-rows"></div></section>
  </div>
- <details class="psd-archive"><summary>Review history, portfolio checks & evidence</summary>
+ <details class="psd-archive"><summary>Review history, portfolio checks & evidence</summary><p class="psd-archive-links"><a href="archive.html">Past market reports</a> · <a href="research.html">Full research library</a></p>
   <div class="psd-readiness-grid">
    <section class="psd-review-card" aria-labelledby="psd-review-heading"><h2 id="psd-review-heading">Review history</h2>
     <div id="psd-review-metrics" class="psd-review-metrics"></div><p id="psd-review-note" class="psd-review-note"></p></section>
