@@ -217,6 +217,6 @@ test("historical earnings have their own owner-gated archive; current decision s
  assert.match(index,/owner-decision-desk\.css/);
  assert.match(decision,/href="archive\.html"/);
  assert.match(decision,/main\.querySelector\("#ps-bluebelly-brief"\)/);
- assert.match(decision,/firstCoverage\.before\(creatorBrief\)/);
+ assert.match(decision,/section\.append\(creatorBrief\)/);
  assert.doesNotMatch(decision,/Amazon's AWS sales accelerated 39%/);
 });
