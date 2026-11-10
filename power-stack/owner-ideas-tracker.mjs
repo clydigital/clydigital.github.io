@@ -2,6 +2,7 @@ import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
+import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 
 const T="power_stack_idea_tracker";
 const el=(tag,content,cls)=>{
@@ -29,6 +30,12 @@ export async function initIdeasTracker(db,main,user){
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
  <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="HIGH">High-priority research</option><option value="ALERT">Inside alert range</option><option value="WAIT_PRICE">Wait for price</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
+ <div class="psv-research-key" role="note">
+  <span>Entry bands are research alerts, not approved trades.</span>
+  <span class="psv-key-item psv-key-ready">In alert range</span>
+  <span class="psv-key-item psv-key-wait">Wait for retrace</span>
+  <span class="psv-key-item psv-key-risk">Below range — recheck</span>
+ </div>
  <div id="psi-cards" class="psi-cards" aria-live="polite"></div>
  <section id="psi-editor" class="psi-editor" hidden>
   <div class="psi-editor-top"><h2 id="psi-editor-title">Track investment idea</h2><button type="button" class="psi-secondary" id="psi-cancel">Cancel</button></div>
@@ -52,6 +59,17 @@ export async function initIdeasTracker(db,main,user){
  </section>
  <p class="psi-disclaimer">Delayed prices and research-only signals, not executable orders. ETFs have no issuer PEG; cyclicals and fintechs require midcycle or cash-flow normalization, and unclassified business models require further evidence.</p>`;
  const $=id=>main.querySelector("#"+id);
+ addHeadingIcon(main,".psi-hero h1","layers");
+ for(const [selector,shape] of [
+  ['.psi-shortcuts a[href="index.html"]',"compass"],
+  ['.psi-shortcuts a[href^="portfolio.html"]',"chart"],
+  ["#psi-add","target"]
+ ]){
+  const link=main.querySelector(selector);if(link)link.prepend(psIcon(shape));
+ }
+ for(const [selector,shape] of [['label[for="psi-search"]',"search"],['label[for="psi-filter"]',"filter"]]){
+  const label=main.querySelector(".psi-tools "+selector);if(label)label.prepend(psIcon(shape));
+ }
  const state={ideas:[],prices:new Map(),feedAt:null,editing:null};
  const form=$("psi-form");
  const setStatus=s=>{$("psi-feed").textContent=s;};
@@ -59,9 +77,12 @@ export async function initIdeasTracker(db,main,user){
  function card(row){
   const q=quote(row.ticker),a=assessIdea(row,q),plan=entryAlert(row,q),node=el("article",null,"psi-card psi-"+a.status.toLowerCase());
   const head=el("div",null,"psi-card-head"),left=el("div"),right=el("div",null,"psi-right");
-  left.append(el("strong",row.ticker,"psi-ticker"),el("small",row.name||row.ticker));
+  left.append(iconText(isBondEtf(row.ticker)?"landmark":"chart",row.ticker,"psv-ticker-mark psi-ticker"),
+    el("small",row.name||row.ticker));
   left.append(el("span",row.idea_type==="TRADE"?"Trade setup":"Investment idea","psi-type"));
-  right.append(el("span",plan.label,"psi-plan-label"+(plan.status==="BELOW_ALERT"?" psi-plan-missed":"")));
+  right.append(iconText(plan.status==="IN_ALERT"?"target":plan.status==="WAIT_RETRACE"?"clock":
+    plan.status==="BELOW_ALERT"?"warning":plan.status==="PRICE_UNAVAILABLE"?"refresh":"calendar",
+    plan.label,"psi-plan-label"+(plan.status==="BELOW_ALERT"?" psi-plan-missed":"")));
   head.append(left,right);node.append(head);
   const metrics=el("div",null,"psi-metrics");
   const values=[
@@ -76,17 +97,25 @@ export async function initIdeasTracker(db,main,user){
   node.append(metrics);
   if(plan.entry||plan.thesis){
    const planbox=el("div",null,"psi-entry-plan");
-   planbox.append(el("strong",plan.priority==="UNRANKED"?"CONDITIONAL RESEARCH":plan.priority+" PRIORITY · CONDITIONAL ENTRY"));
-   if(plan.thesis)planbox.append(el("p","Why it matters: "+plan.thesis));
-   if(plan.entry)planbox.append(el("p","What to wait for: "+plan.entry));
-   if(plan.hasZone)planbox.append(el("small","Price alert only: "+fmt(plan.low,row.currency)+" – "+fmt(plan.high,row.currency)+" · Not validated chart support"));
-   if(plan.invalidation)planbox.append(el("p","No-go: "+plan.invalidation));
-   if(plan.catalyst)planbox.append(el("small","Next test: "+plan.catalyst));
+   planbox.append(iconText("target",plan.priority==="UNRANKED"?"CONDITIONAL RESEARCH":
+    plan.priority+" PRIORITY · CONDITIONAL ENTRY","psv-plan-title"));
+   const line=(shape,title,value,kind="")=>{
+    const item=el("div",null,"psv-plan-line"+(kind?" "+kind:""));
+    item.append(psIcon(shape),el("span",title,"psv-plan-caption"),el("p",value));
+    planbox.append(item);
+   };
+   if(plan.thesis)line("compass","WHY IT MATTERS",plan.thesis);
+   if(plan.entry)line("target","WAIT FOR",plan.entry,"psv-entry-emphasis");
+   if(plan.hasZone)planbox.append(iconText("eye","Provisional alert: "+fmt(plan.low,row.currency)+" – "+
+    fmt(plan.high,row.currency)+" · Not tested technical support","psv-alert-zone"));
+   if(plan.invalidation)line("shield","NO-GO / INVALIDATION",plan.invalidation,"psv-plan-risk");
+   if(plan.catalyst)line("calendar","NEXT CATALYST",plan.catalyst);
    node.append(planbox);
   }
-  node.append(el("p","PEG / macro screen: "+a.why,"psi-why"));
+  if(!(plan.entry||plan.thesis))node.append(el("p","PEG / macro screen: "+a.why,"psi-why"));
   const detail=el("details"),summary=el("summary","Investment case, assumptions & sources");detail.append(summary);
   const body=el("div",null,"psi-detail");
+  body.append(el("p","Screen / evidence: "+a.why));
   body.append(el("p","PEG suitability: "+a.pegSuitability+" — "+a.pegSuitabilityReason));
   body.append(el("p","PEG methodology: "+(row.peg_basis||"Not recorded")));
   body.append(el("p","Macro: "+(row.macro_reason||"Not reviewed")));
@@ -97,8 +126,8 @@ export async function initIdeasTracker(db,main,user){
   }
   detail.append(body);node.append(detail);
   const actions=el("div",null,"psi-card-actions");
-  const edit=el("button","Edit","psi-secondary");edit.type="button";edit.addEventListener("click",()=>openEditor(row));
-  const del=el("button","Remove","psi-secondary");del.type="button";del.addEventListener("click",()=>removeIdea(row));
+  const edit=el("button",null,"psi-secondary");edit.append(psIcon("eye"),document.createTextNode(" Edit"));edit.type="button";edit.addEventListener("click",()=>openEditor(row));
+  const del=el("button",null,"psi-secondary");del.append(psIcon("warning"),document.createTextNode(" Remove"));del.type="button";del.addEventListener("click",()=>removeIdea(row));
   actions.append(edit,del);node.append(actions);
   return node;
  }
@@ -110,8 +139,12 @@ export async function initIdeasTracker(db,main,user){
   const high=ranked.filter(x=>x.entryAlert.priority==="HIGH").length,
     inAlert=ranked.filter(x=>x.entryAlert.status==="IN_ALERT").length,
     waiting=ranked.filter(x=>x.entryAlert.status==="WAIT_RETRACE").length;
-  for(const [label,value] of [["High-priority research",high],["Inside alert range",inAlert],["Wait for retrace",waiting],["PEG/macro checks due",counts.RECHECK]]){
-   const item=el("div",null,"psi-stat");item.append(el("strong",value),el("small",label));$("psi-stats").append(item);
+  for(const [label,value,shape] of [
+   ["High-priority research",high,"bolt"],["Inside alert range",inAlert,"target"],
+   ["Wait for retrace",waiting,"clock"],["PEG/macro checks due",counts.RECHECK,"book"]
+  ]){
+   const item=el("div",null,"psi-stat");
+   item.append(psIcon(shape,"psv-stat-icon"),el("strong",value),el("small",label));$("psi-stats").append(item);
   }
   const filter=$("psi-filter").value,search=$("psi-search").value.toUpperCase().trim(),results=$("psi-cards");
   results.replaceChildren();
@@ -125,7 +158,22 @@ export async function initIdeasTracker(db,main,user){
     lookup.get(row.ticker+"|"+row.idea_type)===filter)
    &&(!search||[row.ticker,row.name,row.note].join(" ").toUpperCase().includes(search)));
   if(!filtered.length){results.append(el("p",state.ideas.length?"No matching research entries.":"No ideas tracked yet. Select + Track idea to begin.","psi-empty"));return;}
-  for(const row of filtered)results.append(card(row));
+  // Group by research priority to avoid a wall of otherwise identical cards.
+  for(const [level,heading,shape] of [
+    ["HIGH","Priority research","bolt"],["MEDIUM","Next candidates","layers"],
+    ["WATCH","Longer-term watch","eye"],["UNRANKED","Further diligence","book"]
+  ]){
+   const members=filtered.filter(row=>row.entryAlert.priority===level);
+   if(!members.length)continue;
+   const section=el("section",null,"psv-idea-group");
+   const header=el("div",null,"psv-idea-group-heading");
+   header.append(iconText(shape,heading,"psv-group-title"),
+    el("small",members.length+" "+(members.length===1?"research idea":"research ideas")));
+   section.append(header);
+   const list=el("div",null,"psv-group-cards");
+   for(const row of members)list.append(card(row));
+   section.append(list);results.append(section);
+  }
  }
 
  function openEditor(row=null){
