@@ -1,6 +1,7 @@
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
+import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
 
 const T="power_stack_idea_tracker";
 const el=(tag,content,cls)=>{
@@ -21,13 +22,13 @@ export async function initIdeasTracker(db,main,user){
  main.innerHTML=`
  <div class="psi-hero">
   <div><p class="eyebrow">POWER STACK / OPPORTUNITIES</p><h1>Investment ideas</h1>
-  <p>Find research candidates by valuation, macro conditions and price. A screen match is not an approved investment decision.</p></div>
+  <p>Research what to do next: conditional entry ranges, the thesis, what would invalidate it, and the next catalyst. A price alert is not a buy order.</p></div>
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
- <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
+ <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="HIGH">High-priority research</option><option value="ALERT">Inside alert range</option><option value="WAIT_PRICE">Wait for price</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
  <div id="psi-cards" class="psi-cards" aria-live="polite"></div>
  <section id="psi-editor" class="psi-editor" hidden>
   <div class="psi-editor-top"><h2 id="psi-editor-title">Track investment idea</h2><button type="button" class="psi-secondary" id="psi-cancel">Cancel</button></div>
@@ -56,11 +57,11 @@ export async function initIdeasTracker(db,main,user){
  const setStatus=s=>{$("psi-feed").textContent=s;};
  const quote=id=>state.prices.get(id);
  function card(row){
-  const q=quote(row.ticker),a=assessIdea(row,q),node=el("article",null,"psi-card psi-"+a.status.toLowerCase());
+  const q=quote(row.ticker),a=assessIdea(row,q),plan=entryAlert(row,q),node=el("article",null,"psi-card psi-"+a.status.toLowerCase());
   const head=el("div",null,"psi-card-head"),left=el("div"),right=el("div",null,"psi-right");
   left.append(el("strong",row.ticker,"psi-ticker"),el("small",row.name||row.ticker));
   left.append(el("span",row.idea_type==="TRADE"?"Trade setup":"Investment idea","psi-type"));
-  right.append(el("span",({ALIGNED:"Screen match · research",DIVERGENCE:"Conflicting signals",WATCH:"On watch",RECHECK:"Review required"})[a.status]||"Review","psi-badge psi-"+a.status.toLowerCase()));
+  right.append(el("span",plan.label,"psi-plan-label"+(plan.status==="BELOW_ALERT"?" psi-plan-missed":"")));
   head.append(left,right);node.append(head);
   const metrics=el("div",null,"psi-metrics");
   const values=[
@@ -72,13 +73,25 @@ export async function initIdeasTracker(db,main,user){
     a.macroVerified?"As of "+row.macro_as_of:"Review macro outlook"]
   ];
   for(const [label,val,sub] of values){const m=el("div",null,"psi-metric");m.append(el("small",label),el("strong",val),el("small",sub));metrics.append(m)}
-  node.append(metrics,el("p",a.why,"psi-why"));
+  node.append(metrics);
+  if(plan.entry||plan.thesis){
+   const planbox=el("div",null,"psi-entry-plan");
+   planbox.append(el("strong",plan.priority==="UNRANKED"?"CONDITIONAL RESEARCH":plan.priority+" PRIORITY · CONDITIONAL ENTRY"));
+   if(plan.thesis)planbox.append(el("p","Why it matters: "+plan.thesis));
+   if(plan.entry)planbox.append(el("p","What to wait for: "+plan.entry));
+   if(plan.hasZone)planbox.append(el("small","Price alert only: "+fmt(plan.low,row.currency)+" – "+fmt(plan.high,row.currency)+" · Not validated chart support"));
+   if(plan.invalidation)planbox.append(el("p","No-go: "+plan.invalidation));
+   if(plan.catalyst)planbox.append(el("small","Next test: "+plan.catalyst));
+   node.append(planbox);
+  }
+  node.append(el("p","PEG / macro screen: "+a.why,"psi-why"));
   const detail=el("details"),summary=el("summary","Investment case, assumptions & sources");detail.append(summary);
   const body=el("div",null,"psi-detail");
   body.append(el("p","PEG suitability: "+a.pegSuitability+" — "+a.pegSuitabilityReason));
   body.append(el("p","PEG methodology: "+(row.peg_basis||"Not recorded")));
   body.append(el("p","Macro: "+(row.macro_reason||"Not reviewed")));
-  body.append(el("p","What to watch: "+(row.note||"Not recorded")));
+  if(!plan.entry)body.append(el("p","What to watch: "+(row.note||"Not recorded")));
+  if(plan.basis)body.append(el("p","Alert basis: "+plan.basis));
   for(const [url,label] of [[row.peg_source_url,"PEG source"],[row.macro_source_url,"Macro source"]]){
    if(approvedEvidence(url)){const anchor=el("a",label+" ↗");anchor.href=url;anchor.target="_blank";anchor.rel="noopener noreferrer";body.append(anchor)}
   }
@@ -90,23 +103,31 @@ export async function initIdeasTracker(db,main,user){
   return node;
  }
  function render(){
-  const signals=sweepSignals(state.ideas,state.prices),counts=Object.fromEntries(["ALIGNED","DIVERGENCE","WATCH","RECHECK"].map(k=>[k,signals.filter(x=>x.status===k).length]));
+  const signals=sweepSignals(state.ideas,state.prices),
+    counts=Object.fromEntries(["ALIGNED","DIVERGENCE","WATCH","RECHECK"].map(k=>[k,signals.filter(x=>x.status===k).length])),
+    ranked=rankEntryIdeas(state.ideas,state.prices);
   $("psi-stats").replaceChildren();
-  for(const [label,value] of [["Screen matches",counts.ALIGNED],["Conflicting signals",counts.DIVERGENCE],["On watch",counts.WATCH],["Research due",counts.RECHECK]]){
+  const high=ranked.filter(x=>x.entryAlert.priority==="HIGH").length,
+    inAlert=ranked.filter(x=>x.entryAlert.status==="IN_ALERT").length,
+    waiting=ranked.filter(x=>x.entryAlert.status==="WAIT_RETRACE").length;
+  for(const [label,value] of [["High-priority research",high],["Inside alert range",inAlert],["Wait for retrace",waiting],["PEG/macro checks due",counts.RECHECK]]){
    const item=el("div",null,"psi-stat");item.append(el("strong",value),el("small",label));$("psi-stats").append(item);
   }
   const filter=$("psi-filter").value,search=$("psi-search").value.toUpperCase().trim(),results=$("psi-cards");
   results.replaceChildren();
-  const lookup=new Map(signals.map(s=>[s.ticker+"|"+s.idea_type,s.status]));
-  const order={ALIGNED:0,DIVERGENCE:1,WATCH:2,RECHECK:3};
-  const filtered=state.ideas.filter(row=>(filter==="ALL"||filter==="BONDS"&&isBondEtf(row.ticker)
-    ||lookup.get(row.ticker+"|"+row.idea_type)===filter)
-   &&(!search||[row.ticker,row.name,row.note].join(" ").toUpperCase().includes(search)))
-   .sort((a,b)=>(order[lookup.get(a.ticker+"|"+a.idea_type)]??4)-(order[lookup.get(b.ticker+"|"+b.idea_type)]??4)
-    ||a.ticker.localeCompare(b.ticker));
-  if(!filtered.length){results.append(el("p",state.ideas.length?"No matching ideas.":"No ideas tracked yet. Select + Add idea to begin.","psi-empty"));return;}
+  const lookup=new Map(signals.map(v=>[v.ticker+"|"+v.idea_type,v.status]));
+  const filtered=ranked.filter(row=>(
+    filter==="ALL"||
+    filter==="HIGH"&&row.entryAlert.priority==="HIGH"||
+    filter==="ALERT"&&row.entryAlert.status==="IN_ALERT"||
+    filter==="WAIT_PRICE"&&row.entryAlert.status==="WAIT_RETRACE"||
+    filter==="BONDS"&&isBondEtf(row.ticker)||
+    lookup.get(row.ticker+"|"+row.idea_type)===filter)
+   &&(!search||[row.ticker,row.name,row.note].join(" ").toUpperCase().includes(search)));
+  if(!filtered.length){results.append(el("p",state.ideas.length?"No matching research entries.":"No ideas tracked yet. Select + Track idea to begin.","psi-empty"));return;}
   for(const row of filtered)results.append(card(row));
  }
+
  function openEditor(row=null){
   state.editing=row?.id??null;
   $("psi-editor-title").textContent=row?"Update "+row.ticker:"Track an idea";

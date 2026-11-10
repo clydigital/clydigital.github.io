@@ -192,7 +192,7 @@ test("Power Stack site modules parse and owner-only auth has no hardcoded email"
 });
 
 test("every private page and dynamic module uses the same versioned release assets",()=>{
- const version="20261110-coverage1";
+ const version="20261110-entries2";
  for(const page of ["index","research","sectors","decisions","portfolio","archive","ideas"]){
   const shell=readFileSync(path.join(ROOT,page+".html"),"utf8");
   assert.ok(shell.includes('src="auth-gate.mjs?v='+version+'"'),page);
@@ -211,12 +211,12 @@ test("historical earnings have their own owner-gated archive; current decision s
  const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
  const decision=readFileSync(path.join(ROOT,"owner-decision-desk.mjs"),"utf8");
  assert.match(archive,/data-private-page="archive"/);
- assert.match(archive,/auth-gate\.mjs\?v=20261110-coverage1/);
+ assert.match(archive,/auth-gate\.mjs\?v=20261110-entries2/);
  assert.match(gate,/\["index","research","sectors","decisions","portfolio","archive","ideas"\]/);
  assert.match(gate,/ps-legacy-note/);
  assert.match(index,/owner-decision-desk\.css/);
  assert.match(decision,/href="archive\.html"/);
  assert.match(decision,/main\.querySelector\("#ps-bluebelly-brief"\)/);
- assert.match(decision,/firstCoverage\.before\(creatorBrief\)/);
+ assert.match(decision,/section\.append\(creatorBrief\)/);
  assert.doesNotMatch(decision,/Amazon's AWS sales accelerated 39%/);
 });

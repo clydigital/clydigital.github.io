@@ -3,6 +3,7 @@ import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,finger
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {sweepSignals} from "./owner-ideas-core.mjs";
+import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
@@ -82,15 +83,20 @@ export async function initDecisionDesk(db,main,user){
  host.innerHTML=`
  <section class="psd-top" aria-label="Investment brief">
   <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / PRIVATE INVESTMENT BRIEF</p>
-   <h1>Your investment outlook</h1>
-   <p>Clear decisions, attractive entry levels and the risks that matter.</p></div>
+   <h1>What to do next</h1>
+   <p>Prioritised reviews and conditional entry alerts, not a feed of unapproved trades.</p></div>
   <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Investment ideas</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">Portfolio</a></div>
  </section>
  <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
+ <section class="psd-quick-queue" aria-labelledby="psd-queue-title">
+  <div class="psd-section-heading"><div><p class="psd-overline">THE THREE NEXT STEPS</p><h2 id="psd-queue-title">Action queue</h2></div>
+   <span class="psd-queue-disclaimer">Research reviews only · broker cash unverified</span></div>
+  <div id="psd-queue-rows" class="psd-queue-rows"></div>
+ </section>
  <section class="psd-executive" aria-label="Portfolio briefing">
   <div class="psd-executive-main"><p class="psd-overline">THE CURRENT VIEW</p><h2 id="psd-thesis">Reviewing opportunities</h2>
    <p id="psd-thesis-context">Investment signals require valuation, macro and price confirmation.</p>
-   <div class="ps-pulse-graph"><div class="ps-pulse-heading"><strong>Opportunity distribution</strong><span>Company ideas · current evidence</span></div>
+   <div class="ps-pulse-graph" hidden><div class="ps-pulse-heading"><strong>Opportunity distribution</strong><span>Company ideas · current evidence</span></div>
     <div id="psd-pulse-bars" class="ps-pulse-bars" role="img" aria-label="Distribution of tracked ideas by investment assessment"></div></div></div>
   <div id="psd-summary-metrics" class="psd-summary-metrics"></div>
  </section>
@@ -113,10 +119,10 @@ export async function initDecisionDesk(db,main,user){
     <a href="portfolio.html#bonds">Compare bond ETFs in Market Watch →</a></div>
  </section>
  <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
-  <div class="psd-section-heading"><div><p class="psd-overline">OPPORTUNITY MONITOR</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2></div>
+  <div class="psd-section-heading"><div><p class="psd-overline">RESEARCH PRIORITIES / 9 NOV CLOSES</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2><p class="psd-coverage-note">Price zones are preliminary alerts, NOT confirmed support or an order. Every entry still needs issuer, macro and broker checks.</p></div>
    <a href="ideas.html">View all investment ideas →</a></div>
-  <div class="psd-idea-head" aria-hidden="true"><span>Investment idea</span><span>Last close</span><span>PEG</span><span>Price to watch</span><span>Assessment</span></div>
   <div id="psd-ideas-rows" class="psd-ideas-rows"></div>
+  <button type="button" id="psd-ideas-expand" class="psd-ideas-expand" hidden>Show all research setups</button>
  </section>
  <div class="psd-grid">
   <section class="psd-lane psd-active"><div class="psd-lane-head"><div><p class="psd-overline">DECISION PRIORITY</p><h2>Recommended next move</h2></div></div><div id="psd-active-rows"></div></section>
@@ -142,15 +148,23 @@ export async function initDecisionDesk(db,main,user){
  <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
   <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
+ // Prioritise actionable research and portfolio risk. Keep full tables lower.
+ const q=host.querySelector(".psd-quick-queue"),ideas=host.querySelector(".psd-ideas-panel"),
+  decisions=host.querySelector(".psd-grid"),overview=host.querySelector(".psd-executive"),
+  statusLine=host.querySelector(".psd-status");
+ statusLine.after(q);q.after(ideas);ideas.after(decisions);decisions.after(overview);
  // The dated creator research is served only after the existing Google owner
  // gate has fetched the RLS-protected index page. It is not public JS data.
  const creatorBrief=main.querySelector("#ps-bluebelly-brief");
  if(creatorBrief){
-  const firstCoverage=host.querySelector(".psd-coverage-panel");
-  if(firstCoverage)firstCoverage.before(creatorBrief);
+  const section=document.createElement("details");section.className="psd-creator-details";
+  section.append(txt("summary","Bluebelly creator disagreements and dated Treasury research — expand to read"));
+  section.append(creatorBrief);
+  host.querySelector(".psd-coverage-panel").before(section);
  }
+
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
-  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null};
+  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null,showAllIdeas:false};
  function status(s){$(host,"psd-status").textContent=s}
  function renderCoverage(){
   const numeric=(v,d=2)=>Number(v).toLocaleString("en-GB",{maximumFractionDigits:d});
@@ -182,73 +196,108 @@ export async function initDecisionDesk(db,main,user){
    td.append(link,txt("small",item.name));tr.append(td);
    tr.append(txt("td",item.quote?.close?item.quote.currency+" "+numeric(item.quote.close,3):"—","psd-number"));
    for(const v of [item.quote?.day,item.quote?.threeDay,item.quote?.fiveDay])change(tr,v);
-   const view=txt("td");view.append(txt("strong",item.macroState==="UNKNOWN"?"Not assessed":item.macroState,"psd-bond-macro"),
-     txt("small",item.macroAsOf?"Research "+item.macroAsOf:"Review date missing"));
-   if(item.ticker==="TLT"&&item.note){
-    const details=txt("details"),summary=txt("summary","View TLT investment thesis");
-    details.append(summary,txt("p",item.note));view.append(details);
-   }
-   tr.append(view);bondHost.append(tr);
+   const view=txt("td"),plan=entryAlert({
+     ticker:item.ticker,watch_low:item.watchLow,watch_high:item.watchHigh,
+     note:item.note,currency:item.currency},item.quote);
+   view.append(txt("strong",plan.label,"psd-bond-macro"),
+     txt("small",item.macroAsOf?"Macro reviewed "+item.macroAsOf:"Macro date missing"));
+   const details=txt("details"),summary=txt("summary","Entry conditions & failure test");
+   details.append(summary);
+   if(plan.entry)details.append(txt("p","Entry: "+plan.entry));
+   if(plan.invalidation)details.append(txt("p","No-go: "+plan.invalidation));
+   if(plan.catalyst)details.append(txt("p","Next: "+plan.catalyst));
+   if(!plan.entry&&item.note)details.append(txt("p",item.note));
+   view.append(details);tr.append(view);bondHost.append(tr);
   }
   if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
  }
  function renderIdeaBrief(){
   const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
   const signals=sweepSignals(companyIdeas,state.priceMap);
+  const ranked=rankEntryIdeas(companyIdeas,state.priceMap);
   const counts={ALIGNED:0,DIVERGENCE:0,WATCH:0,RECHECK:0};
   for(const v of signals)counts[v.status]=(counts[v.status]||0)+1;
-  const thesis=$(host,"psd-thesis"),note=$(host,"psd-thesis-context");
-  if(state.ideaError){thesis.textContent="Opportunity assessment unavailable";note.textContent="Research needs refreshing before drawing an entry conclusion."}
-  else if(counts.ALIGNED){
-    thesis.textContent=counts.ALIGNED+" research "+(counts.ALIGNED===1?"match":"matches")+" in the current screen";
-    note.textContent="A screen match is not a buy recommendation. Check earnings quality, valuation and portfolio fit.";
-  }else if(companyIdeas.length){
-    thesis.textContent="No company screen match yet";
-    note.textContent=companyIdeas.length+" company investment "+(companyIdeas.length===1?"idea remains":"ideas remain")+
-      " under review. Bond ETFs are tracked separately below.";
-  }else{
-    thesis.textContent="Build your opportunity shortlist";
-    note.textContent="Add investment ideas with a PEG basis and a proposed price range.";
-  }
-  // These bars represent actual current idea counts, never simulated returns or P&L.
-  const bars=$(host,"psd-pulse-bars");if(bars){
-   bars.replaceChildren();
-   const max=Math.max(1,...Object.values(counts));
-   for(const [key,label] of [["ALIGNED","Aligned"],["WATCH","Watch"],["DIVERGENCE","Divergence"],["RECHECK","Review"]]){
+  const statKeys={IN_ALERT:0,WAIT_RETRACE:0,BELOW_ALERT:0,CATALYST_GATE:0,PRICE_UNAVAILABLE:0};
+  for(const i of ranked)statKeys[i.entryAlert.status]++;
+  const title=$(host,"psd-thesis"),context=$(host,"psd-thesis-context");
+  title.textContent=state.ideaError?"Research data unavailable":
+    ranked.length+" ideas under review; no automatic buy signals";
+  context.textContent=state.ideaError?"The private idea feed could not be read.":
+    "Check broker exposure first. A price alert becomes a candidate for research only after the thesis, catalyst, valuation and portfolio risk are checked.";
+  const bars=$(host,"psd-pulse-bars");
+  if(bars){
+   bars.replaceChildren();const max=Math.max(1,...Object.values(counts));
+   for(const [key,label] of [["ALIGNED","PEG aligned"],["WATCH","PEG watch"],["DIVERGENCE","PEG divergence"],["RECHECK","PEG research due"]]){
     const item=txt("div",null,"ps-pulse-col"),plot=txt("div",null,"ps-pulse-track"),
-      bar=txt("span",null,"ps-pulse-fill ps-pulse-"+key.toLowerCase());
-    bar.style.height=(counts[key]===0?0:Math.max(9,counts[key]/max*100))+"%";
+     bar=txt("span",null,"ps-pulse-fill ps-pulse-"+key.toLowerCase());
+    bar.style.height=(counts[key]?Math.max(9,counts[key]/max*100):0)+"%";
     plot.append(bar);item.append(txt("strong",counts[key]),plot,txt("small",label));bars.append(item);
    }
-   bars.setAttribute("aria-label",signals.length+" tracked ideas: "+counts.ALIGNED+
-    " aligned, "+counts.WATCH+" watch, "+counts.DIVERGENCE+" divergences, "+counts.RECHECK+" recheck");
   }
   const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
-  for(const [value,label] of [[counts.ALIGNED,"Screen matches"],[counts.WATCH,"On watch"],[counts.DIVERGENCE,"Divergences"],[counts.RECHECK,"Needs review"]]){
-    const item=txt("div",null,"psd-summary-metric");
-    item.append(txt("strong",value),txt("span",label));metrics.append(item);
+  for(const [value,label] of [
+   [statKeys.IN_ALERT,"In price-alert range"],
+   [statKeys.WAIT_RETRACE,"Waiting for retrace"],
+   [statKeys.BELOW_ALERT,"Below zone — recheck"],
+   [statKeys.PRICE_UNAVAILABLE+statKeys.CATALYST_GATE,"Source/catalyst required"]
+  ]){
+   const item=txt("div",null,"psd-summary-metric");item.append(txt("strong",value),txt("span",label));metrics.append(item);
   }
+  const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
   const board=$(host,"psd-ideas-rows");board.replaceChildren();
-  const key=s=>s.ticker+"|"+s.idea_type;
-  const source=new Map(state.ideaRows.map(x=>[key(x),x]));
-  const labels={ALIGNED:"Research match",DIVERGENCE:"Divergence",WATCH:"On watch",RECHECK:"Needs review"};
-  for(const signal of signals.slice(0,5)){
-   const item=source.get(key(signal))||{},quote=state.priceMap.get(signal.ticker);
-   const row=txt("div",null,"psd-idea-row psd-idea-"+signal.status.toLowerCase());
-   const name=txt("div",null,"psd-idea-name");name.append(txt("strong",signal.ticker),txt("small",item.name||"Investment idea"));
-   const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
-   const unit=quote?.currency||item.currency||"USD";
-   const price=txt("div",null,"psd-idea-price");price.append(txt("strong",quote?.close?unit+" "+fmt(quote.close):"—"),txt("small",quote?.session||"Price unavailable"));
-   const peg=txt("strong",signal.pegSuitability==="NOT_APPLICABLE"?"N/A":signal.peg!==null?fmt(signal.peg):"—","psd-idea-peg");
-   const zone=txt("strong",signal.low!==null&&signal.high!==null
-     ?unit+" "+fmt(signal.low)+"–"+fmt(signal.high):"Set price range","psd-idea-zone");
-   const status=txt("div",null,"psd-idea-verdict");
-   status.append(txt("strong",labels[signal.status]||"Review"));
-   status.append(txt("small",signal.why));
-   row.append(name,price,peg,zone,status);board.append(row);
+  const amount=state.showAllIdeas?ranked.length:Math.min(9,ranked.length);
+  for(const item of ranked.slice(0,amount)){
+   const p=item.entryAlert,card=txt("article",null,"psd-setup-card");
+   const top=txt("div",null,"psd-setup-top"),label=txt("div");
+   label.append(txt("strong",item.ticker+" · "+(item.name||"Research idea")));
+   label.append(txt("small",p.priority==="UNRANKED"?"Unranked research":p.priority+" PRIORITY · "+(item.idea_type==="TRADE"?"Tactical":"Investment")+" research"));
+   const flag=txt("span",p.label,"psd-setup-status psd-setup-"+p.status.toLowerCase());
+   top.append(label,flag);card.append(top);
+   const quote=txt("p",null,"psd-setup-quote");
+   quote.append(txt("strong",p.price!==null?p.currency+" "+fmt(p.price):"Price unavailable"),
+     txt("span"," · Session "+(p.session||"unknown")+" · 5D "+(typeof p.fiveDay==="number"?(p.fiveDay>0?"+":"")+p.fiveDay.toFixed(2)+"%":"—")));
+   card.append(quote);
+   if(p.thesis)card.append(txt("p",p.thesis,"psd-setup-thesis"));
+   const next=txt("div",null,"psd-setup-next");next.append(txt("strong","NEXT ENTRY TEST"),
+    txt("p",p.entry||item.note||"Recheck issuer and macro evidence before establishing a trigger."));card.append(next);
+   const zone=txt("div",null,"psd-setup-zone");
+   zone.append(txt("strong","PROVISIONAL ALERT"),
+    txt("span",p.hasZone?p.currency+" "+fmt(p.low)+"–"+fmt(p.high):"No numeric alert set"));
+   card.append(zone);
+   const deeper=txt("details",null,"psd-setup-details");deeper.append(txt("summary","Why it could fail · next catalyst · source"));
+   const content=txt("div",null,"psd-setup-detail");
+   if(p.invalidation)content.append(txt("p","Invalidation: "+p.invalidation));
+   if(p.catalyst)content.append(txt("p","Next catalyst: "+p.catalyst));
+   content.append(txt("p","Basis: "+(p.basis||"Dated source review required. This is research, not a position or an order.")));
+   if(item.macro_reason)content.append(txt("p","Context: "+item.macro_reason));
+   const link=safeUrl(item.macro_source_url);if(link){const a=txt("a","Research source ↗");a.href=link;a.target="_blank";a.rel="noopener noreferrer";content.append(a)}
+   deeper.append(content);card.append(deeper);board.append(card);
   }
-  if(!signals.length)board.append(txt("p",state.ideaError?"Investment ideas could not be verified.":"No tracked ideas yet. Create a watch price and investment case to begin.","psd-empty"));
+  if(!ranked.length)board.append(txt("p",state.ideaError?"Private ideas unavailable.":"No new company ideas recorded.","psd-empty"));
+  const expand=$(host,"psd-ideas-expand");expand.hidden=ranked.length<=9;
+  expand.textContent=state.showAllIdeas?"Show top 9 ideas":"Show all "+ranked.length+" ideas";
+  const queue=$(host,"psd-queue-rows");queue.replaceChildren();
+  const tasks=[];
+  if(state.ledgerError||state.ledgerCount===0)tasks.push({
+    n:"01",name:"Verify broker holdings and buying power",
+    detail:"The Oct 23 position snapshot and old mandate do not establish today's cash. Confirm 6742UW and overlapping YTLPOWR exposure before sizing."});
+  const positions=new Set((state.snapshot?.holdings||[]).map(x=>String(x.ticker||"").toUpperCase()));
+  if(["DAYANG","HIBISCS","XOM"].filter(x=>positions.has(x)).length>=2)
+   tasks.push({n:"02",name:"Review energy concentration before adding",
+     detail:"Recorded XOM / HIBISCS / DAYANG overlap. Recheck current units, business cash flows, Brent sensitivity and the case for recycling capital."});
+  const bond=state.ideaRows.some(x=>x.ticker==="TLT"||x.ticker==="IEF");
+  if(bond)tasks.push({n:"03",name:"Wait for the inflation / yield response",
+    detail:"Compare US 2Y/10Y/30Y yields and real yields after 10 Nov CPI before preferring TLT over lower-duration IEF/VGIT."});
+  const next=ranked.find(x=>x.entryAlert.priority==="HIGH"&&x.entryAlert.status!=="PRICE_UNAVAILABLE");
+  if(next)tasks.push({n:String(tasks.length+1).padStart(2,"0"),name:"Prepare "+next.ticker+" conditional entry review",
+    detail:(next.entryAlert.entry||next.entryAlert.detail).slice(0,260)});
+  for(const task of tasks.slice(0,4)){
+    const row=txt("div",null,"psd-queue-item");
+    row.append(txt("span",task.n,"psd-queue-num"));
+    const details=txt("div");details.append(txt("strong",task.name),txt("p",task.detail));row.append(details);queue.append(row);
+  }
  }
+
  function draw(){
   renderCoverage();
   renderIdeaBrief();
@@ -257,6 +306,7 @@ export async function initDecisionDesk(db,main,user){
    if(!historyByKey.has(row.case_key))historyByKey.set(row.case_key,[]);
    historyByKey.get(row.case_key).push(row);
   }
+  host.querySelector(".psd-grid").hidden=latest.length===0;
   const groups={risk:[],decision:[],watch:[]};
   for(const row of latest)groups[lane(row)].push(row);
   const due=(r)=>r.ticket?.review?.review_by||"9999-12-31";
@@ -324,6 +374,7 @@ export async function initDecisionDesk(db,main,user){
   state.marketAsOf=freshFeed?feed.generatedAt:null;
   draw();$(host,"psd-status").hidden=true;
  }
+ $(host,"psd-ideas-expand").addEventListener("click",()=>{state.showAllIdeas=!state.showAllIdeas;renderIdeaBrief();});
  $(host,"psd-open-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=false;$(host,"psd-ticket-json").focus()});
  $(host,"psd-close-import").addEventListener("click",()=>{$(host,"psd-import-panel").hidden=true});
  $(host,"psd-ticket-file").addEventListener("change",async()=>{

@@ -1,6 +1,6 @@
 // Owner-only market presentation selectors. Never infer a current broker holding from research.
 export const BOND_ETFS = new Set([
- "TLT","TLH","IEF","EDV","ZROZ","GOVT","SHY","SGOV","USFR","TIP","AGG","LQD","HYG"
+ "TLT","TLH","IEF","VGIT","EDV","ZROZ","GOVT","SHY","SGOV","USFR","TIP","AGG","LQD","HYG"
 ]);
 const validTicker = value => {
  const ticker=String(value||"").trim().toUpperCase();
@@ -29,7 +29,11 @@ export function bondWatch(ideas,quoteMap=new Map()){
    macroReason:String(x.macro_reason||""),note:String(x.note||""),
    watchLow:number(x.watch_low),watchHigh:number(x.watch_high),
    currency:String(x.currency||"USD"),type:String(x.idea_type||"INVESTMENT")};
- }).sort((a,b)=> (a.ticker==="TLT"?-1:b.ticker==="TLT"?1:0)||a.ticker.localeCompare(b.ticker));
+ }).sort((a,b)=>{
+  const priority=["TLT","IEF","VGIT","SGOV","EDV","ZROZ","TLH","SHY","USFR"];
+  const ia=priority.indexOf(a.ticker),ib=priority.indexOf(b.ticker);
+  return (ia<0?999:ia)-(ib<0?999:ib)||a.ticker.localeCompare(b.ticker);
+ });
 }
 /** The quote universe is not the owner's portfolio. Keep each membership flag explicit. */
 export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
