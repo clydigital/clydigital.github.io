@@ -4,6 +4,7 @@ import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decisio
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
+import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
@@ -89,7 +90,7 @@ export async function initDecisionDesk(db,main,user){
  </section>
  <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
  <section class="psd-quick-queue" aria-labelledby="psd-queue-title">
-  <div class="psd-section-heading"><div><p class="psd-overline">THE THREE NEXT STEPS</p><h2 id="psd-queue-title">Action queue</h2></div>
+  <div class="psd-section-heading"><div><p class="psd-overline">01 / DO FIRST</p><h2 id="psd-queue-title">Action queue</h2></div>
    <span class="psd-queue-disclaimer">Research reviews only · broker cash unverified</span></div>
   <div id="psd-queue-rows" class="psd-queue-rows"></div>
  </section>
@@ -148,6 +149,20 @@ export async function initDecisionDesk(db,main,user){
  <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
   <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
+ // Distinct section iconography (one icon per section, not decorative repeated badges).
+ for(const [selector,shape] of [
+  ["#psd-queue-title","compass"],["#psd-ideas-heading","target"],
+  ["#psd-holdings-heading","wallet"],["#psd-bond-heading","landmark"],
+  ["#psd-thesis","chart"],[".psd-active h2","check"],
+  [".psd-risk h2","shield"],[".psd-watch h2","clock"]
+ ])addHeadingIcon(host,selector,shape);
+ for(const [selector,shape] of [
+  [".psd-top-actions a:nth-child(1)","target"],
+  [".psd-top-actions a:nth-child(2)","chart"],
+  [".psd-top-actions a:nth-child(3)","wallet"]
+ ]){
+  const link=host.querySelector(selector);if(link)link.prepend(psIcon(shape));
+ }
  // Prioritise actionable research and portfolio risk. Keep full tables lower.
  const q=host.querySelector(".psd-quick-queue"),ideas=host.querySelector(".psd-ideas-panel"),
   decisions=host.querySelector(".psd-grid"),overview=host.querySelector(".psd-executive"),
@@ -158,7 +173,9 @@ export async function initDecisionDesk(db,main,user){
  const creatorBrief=main.querySelector("#ps-bluebelly-brief");
  if(creatorBrief){
   const section=document.createElement("details");section.className="psd-creator-details";
-  section.append(txt("summary","Bluebelly creator disagreements and dated Treasury research — expand to read"));
+  const summary=txt("summary");
+  summary.append(psIcon("book"),document.createTextNode("Bluebelly creator outlooks & Treasury research"));
+  section.append(summary);
   section.append(creatorBrief);
   host.querySelector(".psd-coverage-panel").before(section);
  }
@@ -235,39 +252,54 @@ export async function initDecisionDesk(db,main,user){
    }
   }
   const metrics=$(host,"psd-summary-metrics");metrics.replaceChildren();
-  for(const [value,label] of [
-   [statKeys.IN_ALERT,"In price-alert range"],
-   [statKeys.WAIT_RETRACE,"Waiting for retrace"],
-   [statKeys.BELOW_ALERT,"Below zone — recheck"],
-   [statKeys.PRICE_UNAVAILABLE+statKeys.CATALYST_GATE,"Source/catalyst required"]
+  for(const [value,label,shape] of [
+   [statKeys.IN_ALERT,"In price-alert range","target"],
+   [statKeys.WAIT_RETRACE,"Waiting for retrace","clock"],
+   [statKeys.BELOW_ALERT,"Below zone — recheck","warning"],
+   [statKeys.PRICE_UNAVAILABLE+statKeys.CATALYST_GATE,"Source/catalyst required","book"]
   ]){
-   const item=txt("div",null,"psd-summary-metric");item.append(txt("strong",value),txt("span",label));metrics.append(item);
+   const item=txt("div",null,"psd-summary-metric");
+   item.append(psIcon(shape,"psv-stat-icon"),txt("strong",value),txt("span",label));metrics.append(item);
   }
   const fmt=(x)=>Number(x).toLocaleString("en-GB",{maximumFractionDigits:2});
   const board=$(host,"psd-ideas-rows");board.replaceChildren();
   const amount=state.showAllIdeas?ranked.length:Math.min(9,ranked.length);
+  let lastPriority="";
   for(const item of ranked.slice(0,amount)){
+   const priority=item.entryAlert.priority;
+   if(priority!==lastPriority){
+    lastPriority=priority;
+    const heading=txt("div",null,"psv-radar-divider");
+    heading.append(psIcon(priority==="HIGH"?"bolt":priority==="MEDIUM"?"layers":"eye"),
+     txt("strong",priority==="HIGH"?"Priority research":priority==="MEDIUM"?"Next candidates":"Longer-term watch"));
+    heading.append(txt("span","Entry alerts are conditional · no automatic orders"));
+    board.append(heading);
+   }
    const p=item.entryAlert,card=txt("article",null,"psd-setup-card");
    const top=txt("div",null,"psd-setup-top"),label=txt("div");
    label.append(txt("strong",item.ticker+" · "+(item.name||"Research idea")));
    label.append(txt("small",p.priority==="UNRANKED"?"Unranked research":p.priority+" PRIORITY · "+(item.idea_type==="TRADE"?"Tactical":"Investment")+" research"));
-   const flag=txt("span",p.label,"psd-setup-status psd-setup-"+p.status.toLowerCase());
+   const flag=iconText(p.status==="IN_ALERT"?"target":p.status==="BELOW_ALERT"?"warning":
+    p.status==="PRICE_UNAVAILABLE"?"refresh":p.status==="WAIT_RETRACE"?"clock":"calendar",
+    p.label,"psd-setup-status psd-setup-"+p.status.toLowerCase());
    top.append(label,flag);card.append(top);
    const quote=txt("p",null,"psd-setup-quote");
    quote.append(txt("strong",p.price!==null?p.currency+" "+fmt(p.price):"Price unavailable"),
      txt("span"," · Session "+(p.session||"unknown")+" · 5D "+(typeof p.fiveDay==="number"?(p.fiveDay>0?"+":"")+p.fiveDay.toFixed(2)+"%":"—")));
    card.append(quote);
-   if(p.thesis)card.append(txt("p",p.thesis,"psd-setup-thesis"));
-   const next=txt("div",null,"psd-setup-next");next.append(txt("strong","NEXT ENTRY TEST"),
+   if(p.thesis)card.append(iconText("compass",p.thesis,"psd-setup-thesis psv-icon-copy"));
+   const next=txt("div",null,"psd-setup-next");next.append(iconText("target","NEXT ENTRY TEST","psv-setup-heading"),
     txt("p",p.entry||item.note||"Recheck issuer and macro evidence before establishing a trigger."));card.append(next);
    const zone=txt("div",null,"psd-setup-zone");
-   zone.append(txt("strong","PROVISIONAL ALERT"),
+   zone.append(iconText("eye","PROVISIONAL ALERT","psv-setup-heading"),
     txt("span",p.hasZone?p.currency+" "+fmt(p.low)+"–"+fmt(p.high):"No numeric alert set"));
    card.append(zone);
-   const deeper=txt("details",null,"psd-setup-details");deeper.append(txt("summary","Why it could fail · next catalyst · source"));
+   const deeper=txt("details",null,"psd-setup-details");
+   const deeperLabel=txt("summary");deeperLabel.append(psIcon("shield"),document.createTextNode(" Risks, catalyst & evidence"));
+   deeper.append(deeperLabel);
    const content=txt("div",null,"psd-setup-detail");
-   if(p.invalidation)content.append(txt("p","Invalidation: "+p.invalidation));
-   if(p.catalyst)content.append(txt("p","Next catalyst: "+p.catalyst));
+   if(p.invalidation)content.append(iconText("shield","Invalidation: "+p.invalidation,"psv-detail-line psv-risk"));
+   if(p.catalyst)content.append(iconText("calendar","Next catalyst: "+p.catalyst,"psv-detail-line"));
    content.append(txt("p","Basis: "+(p.basis||"Dated source review required. This is research, not a position or an order.")));
    if(item.macro_reason)content.append(txt("p","Context: "+item.macro_reason));
    const link=safeUrl(item.macro_source_url);if(link){const a=txt("a","Research source ↗");a.href=link;a.target="_blank";a.rel="noopener noreferrer";content.append(a)}
@@ -293,7 +325,9 @@ export async function initDecisionDesk(db,main,user){
     detail:(next.entryAlert.entry||next.entryAlert.detail).slice(0,260)});
   for(const task of tasks.slice(0,4)){
     const row=txt("div",null,"psd-queue-item");
-    row.append(txt("span",task.n,"psd-queue-num"));
+    const glyph=task.name.includes("broker")?"wallet":task.name.includes("energy")?"shield":
+      task.name.includes("inflation")?"landmark":"target";
+    row.append(psIcon(glyph,"psv-queue-icon"),txt("span",task.n,"psd-queue-num"));
     const details=txt("div");details.append(txt("strong",task.name),txt("p",task.detail));row.append(details);queue.append(row);
   }
  }
