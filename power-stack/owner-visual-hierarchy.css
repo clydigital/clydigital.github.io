@@ -1,0 +1,203 @@
+/* Power Stack V2 iconography & visual separation.
+ * Pure presentation. No private data, provider calls, synthetic scores or remote fonts.
+ * Loaded last so the CP-inspired dark/blue contrast design stays intact.
+ */
+.psv-icon{width:17px;height:17px;display:inline-block;flex:0 0 auto;vertical-align:-3px;stroke:currentColor}
+.psv-icon-text{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.psv-heading-icon{width:21px;height:21px;color:#91c9ff;vertical-align:-5px;margin-right:11px}
+.psv-stat-icon{width:18px;height:18px;color:#97caff;display:block;margin-bottom:8px}
+.psv-icon-copy{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.psv-icon-copy>.psv-icon{margin-top:1px}
+.psv-icon-copy,.psv-icon-copy span{white-space:normal;line-height:1.55}
+body.ps-fin-pulse :where(.psd-root,.psi-shell) .psv-icon{stroke-width:1.85}
+body.ps-fin-pulse .psd-top{border:1px solid #527298!important;border-left:4px solid #79baff!important;background:linear-gradient(110deg,#132948 0%,#0b1729 68%)!important;padding:23px 25px!important}
+body.ps-fin-pulse .psd-top-actions{gap:8px}
+body.ps-fin-pulse .psd-top-actions a{display:inline-flex;align-items:center;gap:8px;min-height:38px;border-radius:4px!important}
+.psd-root .psd-top-actions a>.psv-icon{width:16px;height:16px}
+
+/* Distinct numbered sections rather than one stack of visually equal panels. */
+body.ps-fin-pulse .psd-root .psd-quick-queue{
+ margin:20px 0 25px!important;border:1px solid #51779d!important;
+ border-top:3px solid #79baff!important;background:#11243a!important;
+ padding:0 19px 19px!important;border-radius:5px!important;
+}
+body.ps-fin-pulse .psd-root .psd-quick-queue>.psd-section-heading{
+ margin:0 -19px 17px;padding:16px 20px!important;
+ background:#1b304b;border-bottom:1px solid #496483;
+}
+body.ps-fin-pulse .psd-section-heading h2 .psv-heading-icon{color:#8cc6ff}
+body.ps-fin-pulse .psd-quick-queue .psd-queue-rows{gap:12px}
+body.ps-fin-pulse .psd-quick-queue .psd-queue-item{
+ position:relative;display:grid;grid-template-columns:24px minmax(0,1fr);
+ align-items:start;column-gap:11px;
+ border:1px solid #405e7e!important;border-left:3px solid #5e9fd9!important;
+ border-radius:4px!important;padding:13px 14px!important;background:#14263d!important;
+}
+.psd-queue-item .psv-queue-icon{color:#9acbff;width:21px;height:21px;margin-top:1px}
+.psd-queue-item .psd-queue-num{font-size:9px!important;position:absolute;right:11px;top:12px;
+ color:#b1c9e1!important;letter-spacing:.09em}
+.psd-queue-item>div{grid-column:2;min-width:0;padding-right:15px}
+body.ps-fin-pulse .psd-queue-item strong{font-size:13px!important;line-height:1.45!important}
+body.ps-fin-pulse .psd-queue-item p{font-size:11px!important;color:#c1d0e3!important;line-height:1.6!important}
+body.ps-fin-pulse .psd-queue-item:hover{border-color:#7bb8eb!important;background:#1a3150!important}
+
+/* Entry research has its own clearly bounded chapter. */
+body.ps-fin-pulse .psd-root .psd-ideas-panel{
+ margin:24px 0 25px!important;border:1px solid #4c6383!important;
+ border-top:3px solid #6cb5ff!important;background:#101e34!important;
+ border-radius:5px!important;padding:0 19px 19px!important;
+}
+body.ps-fin-pulse .psd-root .psd-ideas-panel>.psd-section-heading{
+ margin:0 -19px 19px!important;padding:17px 20px!important;
+ background:#1c3049;border-bottom:1px solid #466181!important;
+}
+body.ps-fin-pulse .psd-root .psd-ideas-panel .psd-ideas-rows{gap:12px}
+.psv-radar-divider{grid-column:1/-1;display:flex;align-items:center;gap:9px;
+ margin:10px 0 0;padding:10px 2px 9px;border-bottom:1px solid #4d6a86;
+ font-size:12px;color:#c2d6ed;letter-spacing:.035em}
+.psv-radar-divider>.psv-icon{color:#8bcbff;width:18px;height:18px}
+.psv-radar-divider>strong{color:#edf5ff;font-weight:850;text-transform:uppercase}
+.psv-radar-divider>span{margin-left:auto;font-size:10px;color:#a7bdd7;letter-spacing:0}
+body.ps-fin-pulse .psd-setup-card{
+ border:1px solid #425d7d!important;border-left:3px solid #5b87b9!important;
+ background:#16273f!important;border-radius:5px!important;padding:16px!important;
+ gap:11px!important;min-width:0;
+}
+body.ps-fin-pulse .psd-setup-card:hover{border-color:#79b2df!important;background:#1a2e4a!important}
+body.ps-fin-pulse .psd-setup-card .psd-setup-top{
+ border-bottom:1px solid #38516d;padding-bottom:12px;margin-bottom:0;
+}
+body.ps-fin-pulse .psd-setup-top strong{font-size:14px!important;line-height:1.4!important}
+body.ps-fin-pulse .psd-setup-status{display:inline-flex;align-items:center;gap:6px;
+ max-width:175px!important;background:#26394d!important;color:#e0ebf9!important;
+ border:1px solid #4f6b86;border-radius:4px!important;padding:5px 8px!important;
+ text-align:left;font-size:10px!important}
+body.ps-fin-pulse .psd-setup-status>.psv-icon{width:15px;height:15px}
+body.ps-fin-pulse .psd-setup-in_alert{color:#c1f3d9!important;border-color:#4e997b!important;background:#123d34!important}
+body.ps-fin-pulse .psd-setup-below_alert{color:#fbd2b9!important;border-color:#aa7763!important;background:#422c2b!important}
+body.ps-fin-pulse .psd-setup-price_unavailable{color:#f6c6bd!important;border-color:#ac6f6a!important}
+.psd-setup-next{border-left-width:3px!important;padding:11px 12px!important;background:#122d3d!important;
+ border-radius:0 3px 3px 0}
+.psd-setup-next>.psv-icon-text,.psd-setup-zone>.psv-icon-text{font-size:10px;font-weight:850;letter-spacing:.09em}
+.psd-setup-next>.psv-icon-text{color:#94d1ff}
+body.ps-fin-pulse .psd-setup-zone{border-top:1px solid #45607a!important;align-items:center!important;gap:10px}
+.psd-setup-zone .psv-icon-text{color:#a9c8e8}
+.psd-setup-details{border-top:1px dashed #3d5674;padding-top:10px}
+.psd-setup-details summary{display:flex;align-items:center;gap:7px}
+.psd-setup-details summary>.psv-icon{width:16px;height:16px}
+.psv-detail-line{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #30465f;line-height:1.6}
+.psv-detail-line>.psv-icon{margin-top:1px}
+.psv-detail-line.psv-risk{color:#eac4a6}
+body.ps-fin-pulse .psd-ideas-expand{width:100%;max-width:350px;min-height:42px;background:#214469!important;color:#e5f3ff!important;border-color:#6698c4!important}
+
+/* Information / holdings / bond / research are visually subordinate to next actions. */
+body.ps-fin-pulse .psd-root .psd-executive{margin:22px 0!important}
+body.ps-fin-pulse .psd-root .psd-executive-main{border-left:3px solid #668fbf!important}
+body.ps-fin-pulse .psd-root>.psd-coverage-panel{margin:23px 0!important}
+body.ps-fin-pulse .psd-root>.psd-coverage-panel .psd-section-heading{background:#1b304a!important}
+body.ps-fin-pulse .psd-root>.psd-bonds-panel{border-top:3px solid #8fafe0!important}
+body.ps-fin-pulse .psd-root>.psd-coverage-panel:not(.psd-bonds-panel){border-top:3px solid #7097b9!important}
+body.ps-fin-pulse .psd-root .psd-creator-details{border:1px solid #405a7a!important;background:#122039!important;
+ margin:23px 0!important;border-radius:4px!important}
+body.ps-fin-pulse .psd-creator-details>summary{display:flex;gap:9px;align-items:center;min-height:41px;
+ padding:4px 3px;color:#cae4fc!important;font-size:12px!important}
+body.ps-fin-pulse .psd-creator-details>summary>.psv-icon{color:#9bcaff}
+body.ps-fin-pulse .psd-archive{margin-top:26px;padding-top:14px;border-top:1px solid #4d6685}
+body.ps-fin-pulse .psd-summary-metric{position:relative;min-width:0}
+body.ps-fin-pulse .psd-summary-metric>.psv-stat-icon{color:#8fc9ff}
+
+/* Ideas tracker: grouped opportunities and icon-led entry / no-go / next test. */
+body.ps-fin-pulse .psi-hero{border-bottom:1px solid #496581;padding-bottom:20px;margin-bottom:17px}
+body.ps-fin-pulse .psi-hero h1>.psv-heading-icon{width:27px;height:27px;vertical-align:-4px}
+body.ps-fin-pulse .psi-shortcuts a,body.ps-fin-pulse .psi-shortcuts button{
+ display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ border-radius:4px!important;min-height:37px}
+body.ps-fin-pulse .psi-shortcuts .psv-icon{width:16px;height:16px}
+body.ps-fin-pulse .psi-stat{position:relative;padding:14px 15px!important;min-height:111px;
+ border-left:3px solid #668fbf!important}
+body.ps-fin-pulse .psi-stat>.psv-stat-icon{margin-bottom:7px;color:#8dcaff}
+body.ps-fin-pulse .psi-stat strong{font-size:23px!important}
+body.ps-fin-pulse .psi-tools{border:1px solid #425c7a;background:#14233a;
+ padding:15px 16px;margin:19px 0!important;border-radius:4px}
+body.ps-fin-pulse .psi-tools label{display:inline-flex;align-items:center;gap:7px;
+ color:#c7d8eb!important;font-size:11px!important;font-weight:800}
+body.ps-fin-pulse .psi-tools label>.psv-icon{color:#92c8fc;width:17px;height:17px}
+.psv-research-key{display:flex;align-items:center;flex-wrap:wrap;gap:9px 16px;
+ margin:17px 0;padding:10px 14px;background:#101c2e;border-left:3px solid #709acc;
+ color:#bfd1e7;font-size:11px}
+.psv-research-key>span:first-child{margin-right:auto}
+.psv-key-item{display:inline-flex;align-items:center;gap:6px;color:#c4d2e1}
+.psv-key-item::before{content:"";width:7px;height:7px;background:#668db2;display:inline-block;transform:rotate(45deg)}
+.psv-key-ready::before{background:#4bc5a1}
+.psv-key-wait::before{background:#88b9ed}
+.psv-key-risk::before{background:#e9a27f}
+body.ps-fin-pulse .psi-cards{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:22px!important}
+.psv-idea-group{min-width:0;border:1px solid #455e7d;background:#0e1b2d;border-radius:5px;
+ overflow:hidden}
+.psv-idea-group-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;
+ padding:14px 18px;background:#1e324c;border-bottom:1px solid #4b6887}
+.psv-group-title{font-size:14px;font-weight:850!important;color:#ebf5ff}
+.psv-group-title>.psv-icon{color:#9bcdff;width:20px;height:20px}
+.psv-idea-group-heading>small{font-size:11px;color:#b1c9e3}
+.psv-group-cards{padding:13px;display:grid;gap:10px}
+body.ps-fin-pulse .psi-card{display:grid!important;
+ grid-template-columns:minmax(185px,.8fr) minmax(0,2fr)!important;
+ grid-template-rows:auto auto auto auto!important;
+ gap:13px 20px!important;padding:17px!important;
+ background:#172840!important;border-left:3px solid #5d86b3!important}
+body.ps-fin-pulse .psi-card-head{grid-column:1;grid-row:1;align-self:center;min-width:0}
+body.ps-fin-pulse .psi-card .psi-metrics{grid-column:2;grid-row:1;min-width:0}
+body.ps-fin-pulse .psi-card .psi-entry-plan{
+ grid-column:1/-1;grid-row:2;margin:0!important;
+ border:1px solid #3e6680!important;border-left:3px solid #6aa9d9!important;
+ background:#10273c!important;border-radius:3px!important;padding:14px 16px!important
+}
+body.ps-fin-pulse .psi-card .psi-why{grid-column:1/-1;grid-row:2}
+body.ps-fin-pulse .psi-card details{grid-column:1/-1;grid-row:3!important;margin:0!important;border-top:1px dashed #4a6380!important}
+body.ps-fin-pulse .psi-card .psi-card-actions{grid-column:1/-1;grid-row:4!important;margin:0!important}
+body.ps-fin-pulse .psi-card-actions button{display:inline-flex;align-items:center;gap:6px}
+body.ps-fin-pulse .psi-card-actions button>.psv-icon{width:15px;height:15px}
+body.ps-fin-pulse .psi-card .psv-ticker-mark{color:#ebf4ff;font-size:20px;font-weight:850}
+body.ps-fin-pulse .psi-card .psv-ticker-mark>.psv-icon{color:#a2d1ff;width:19px;height:19px}
+body.ps-fin-pulse .psi-plan-label{display:inline-flex;align-items:center;gap:6px;
+ border-radius:4px!important;white-space:normal}
+body.ps-fin-pulse .psi-plan-label>.psv-icon{width:15px;height:15px}
+.psv-plan-title{font-size:10px!important;letter-spacing:.07em;font-weight:850;color:#a5d7ff!important}
+.psv-plan-line{display:grid;grid-template-columns:20px 135px minmax(0,1fr);
+ gap:8px;align-items:start;border-bottom:1px solid #2a435b;padding:11px 0;min-width:0}
+.psv-plan-line:last-child{border-bottom:0}
+.psv-plan-line>.psv-icon{color:#9fc7ec}
+.psv-plan-caption{font-size:10px;font-weight:850;color:#b0cce8;letter-spacing:.075em}
+body.ps-fin-pulse .psv-plan-line p{margin:0!important;font-size:12px!important;line-height:1.55!important;color:#e0eaf3!important}
+.psv-plan-line.psv-plan-risk{border-left:3px solid #d99b79;padding-left:9px;background:rgba(175,95,68,.08)}
+.psv-plan-risk>.psv-icon,.psv-plan-risk>.psv-plan-caption{color:#efc0a2}
+.psv-plan-line.psv-entry-emphasis{background:rgba(65,126,163,.10);margin-top:8px;padding-left:8px;border-left:3px solid #82b9e8}
+.psv-alert-zone{font-size:11px;color:#9dd5ff;margin:9px 0;line-height:1.5}
+.psv-alert-zone>.psv-icon{width:16px;height:16px}
+body.ps-fin-pulse .psi-card summary{display:flex;align-items:center;min-height:30px}
+@media(max-width:1100px){
+ .psv-research-key>span:first-child{width:100%}
+ body.ps-fin-pulse .psi-card{grid-template-columns:minmax(150px,.8fr) minmax(0,1.6fr)!important}
+ body.ps-fin-pulse .psi-card .psi-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+ .psv-radar-divider{flex-wrap:wrap}.psv-radar-divider>span{width:100%;margin-left:28px}
+ .psd-root .psd-top-actions a{font-size:11px}
+ body.ps-fin-pulse .psi-card{grid-template-columns:1fr!important;gap:13px!important}
+ body.ps-fin-pulse .psi-card-head,body.ps-fin-pulse .psi-card .psi-metrics,
+ body.ps-fin-pulse .psi-card .psi-entry-plan,body.ps-fin-pulse .psi-card .psi-why,
+ body.ps-fin-pulse .psi-card details,body.ps-fin-pulse .psi-card .psi-card-actions{grid-column:1!important;grid-row:auto!important}
+ .psv-plan-line{grid-template-columns:19px minmax(0,1fr);gap:5px 8px}
+ .psv-plan-line p{grid-column:2}
+ .psv-plan-caption{grid-column:2}
+ .psv-idea-group-heading{padding:12px}
+ .psv-group-cards{padding:10px}
+}
+@media(max-width:460px){
+ .psd-setup-zone{flex-wrap:wrap}
+ .psd-setup-zone>span:last-child{width:100%;text-align:right}
+ .psv-research-key{gap:8px}
+ .psv-key-item{font-size:10px}
+ body.ps-fin-pulse .psi-stat{min-height:100px}
+ .psv-idea-group-heading>small{font-size:10px}
+}
