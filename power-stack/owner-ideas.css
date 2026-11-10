@@ -40,3 +40,13 @@
 .psi-disclaimer{font-size:11px;line-height:1.7;color:#91aaa7;margin:26px 0}
 @media(max-width:800px){.psi-cards{grid-template-columns:1fr}.psi-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.psi-shell{padding:18px 14px 40px}.psi-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.psi-form-grid{grid-template-columns:1fr}.psi-form-grid .psi-span{grid-column:auto}.psi-card{padding:13px}.psi-metric strong{font-size:15px}}
+
+
+/* Owner-only idea plans: visible entry conditions are distinct from a PEG screen. */
+.psi-entry-plan{border-left:2px solid #a8dfc1;padding:10px 12px;background:#102723;margin:12px 0;border-radius:3px 7px 7px 3px}
+.psi-entry-plan strong{display:block;color:#b9eed4;font-size:10px;letter-spacing:.09em}
+.psi-entry-plan p{font-size:12px;line-height:1.52;margin:5px 0 0;color:#e7efeb}
+.psi-entry-plan small{display:block;font-size:10px;color:#a2bdb2;margin:6px 0 0}
+.psi-plan-label{display:inline-block;padding:5px 8px;font-weight:750;font-size:10px;border:1px solid #547d6c;color:#cdf1db;border-radius:7px}
+.psi-plan-missed{border-color:#b77c66;color:#f2bc9f}
+.psi-plan-source{font-size:10px;line-height:1.4;color:#a6bdb2;margin-top:6px}
