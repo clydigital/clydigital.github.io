@@ -37,5 +37,5 @@ test("owner-only homepage shows at most nine initial plans and a real expand act
  assert.match(dashboard,/rankEntryIdeas\(companyIdeas,state\.priceMap\)/);
  assert.match(tracker,/plan\.invalidation/);
  assert.match(tracker,/plan\.entry/);
- assert.doesNotMatch(dashboard+/n"+tracker,/brokerQuantity|sb_secret_|service_role|@gmail\.com/);
+ assert.doesNotMatch(dashboard+"\n"+tracker,/brokerQuantity|sb_secret_|service_role|@gmail\.com/);
 });
