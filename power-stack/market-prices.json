@@ -5,10 +5,10 @@
   "description": "Completed equity sessions and aggregated BTC/USD UTC daily samples. Independent from Bluebelly and personal positions. Unmapped derivatives stay unavailable; not executable quotes.",
   "universeSource": "market-symbols.json",
   "coverage": {
-    "tracked": 98,
+    "tracked": 101,
     "fresh": 97,
     "stale": 0,
-    "unavailable": 1
+    "unavailable": 4
   },
   "rows": [
     {
@@ -404,6 +404,22 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "CVX",
+      "providerSymbol": "CVX",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_FIRST_FETCH",
+      "reason": "New research symbol; completed-session source has not yet been fetched"
+    },
+    {
       "ticker": "DAYANG",
       "providerSymbol": "5141.KL",
       "currency": "MYR",
@@ -447,6 +463,22 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/DIA?interval=1d&range=1mo&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "EDV",
+      "providerSymbol": "EDV",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_FIRST_FETCH",
+      "reason": "New research symbol; completed-session source has not yet been fetched"
     },
     {
       "ticker": "ETN",
@@ -1482,6 +1514,22 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/6742.KL?interval=1d&range=1mo&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "ZROZ",
+      "providerSymbol": "ZROZ",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_FIRST_FETCH",
+      "reason": "New research symbol; completed-session source has not yet been fetched"
     }
   ]
 }
