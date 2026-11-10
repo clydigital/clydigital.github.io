@@ -9,6 +9,9 @@ on:
       - 'power-stack/ideas.html'
       - 'power-stack/owner-ideas-*.mjs'
       - 'power-stack/owner-entry-plans.mjs'
+      - 'power-stack/owner-visual-icons.mjs'
+      - 'power-stack/owner-visual-hierarchy.css'
+      - 'power-stack/scripts/test-visual-hierarchy.mjs'
       - 'power-stack/scripts/test-entry-plans.mjs'
       - 'power-stack/owner-ideas.css'
       - 'power-stack/owner-advisor-presentation.mjs'
@@ -64,6 +67,7 @@ jobs:
           node --check power-stack/owner-framework-view.mjs
           node --check power-stack/auth-gate.mjs
           node --check power-stack/owner-entry-plans.mjs
+          node --check power-stack/owner-visual-icons.mjs
           node --check power-stack/owner-ideas-core.mjs
           node --check power-stack/owner-ideas-tracker.mjs
           node --check power-stack/owner-portfolio-table.mjs
@@ -72,7 +76,7 @@ jobs:
           node --check power-stack/owner-portfolio.js
           node --check power-stack/owner-advisor-presentation.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
@@ -84,6 +88,8 @@ jobs:
           test -f power-stack/owner-ideas.css
           test -f power-stack/owner-fin-pulse.css
           test -f power-stack/owner-angular-contrast.css
+          test -f power-stack/owner-visual-hierarchy.css
+          test -f power-stack/owner-visual-icons.mjs
           test -f power-stack/owner-market-views.mjs
           if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com' power-stack/owner-fin-pulse.css power-stack/owner-advisor-presentation.mjs; then
             echo "Sensitive content in owner-neutral theme"; exit 1
