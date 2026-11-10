@@ -3,7 +3,7 @@ import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,finger
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {sweepSignals} from "./owner-ideas-core.mjs";
-import {rankEntryIdeas} from "./owner-entry-plans.mjs";
+import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
@@ -196,13 +196,18 @@ export async function initDecisionDesk(db,main,user){
    td.append(link,txt("small",item.name));tr.append(td);
    tr.append(txt("td",item.quote?.close?item.quote.currency+" "+numeric(item.quote.close,3):"—","psd-number"));
    for(const v of [item.quote?.day,item.quote?.threeDay,item.quote?.fiveDay])change(tr,v);
-   const view=txt("td");view.append(txt("strong",item.macroState==="UNKNOWN"?"Not assessed":item.macroState,"psd-bond-macro"),
-     txt("small",item.macroAsOf?"Research "+item.macroAsOf:"Review date missing"));
-   if(item.ticker==="TLT"&&item.note){
-    const details=txt("details"),summary=txt("summary","View TLT investment thesis");
-    details.append(summary,txt("p",item.note));view.append(details);
-   }
-   tr.append(view);bondHost.append(tr);
+   const view=txt("td"),plan=entryAlert({
+     ticker:item.ticker,watch_low:item.watchLow,watch_high:item.watchHigh,
+     note:item.note,currency:item.currency},item.quote);
+   view.append(txt("strong",plan.label,"psd-bond-macro"),
+     txt("small",item.macroAsOf?"Macro reviewed "+item.macroAsOf:"Macro date missing"));
+   const details=txt("details"),summary=txt("summary","Entry conditions & failure test");
+   details.append(summary);
+   if(plan.entry)details.append(txt("p","Entry: "+plan.entry));
+   if(plan.invalidation)details.append(txt("p","No-go: "+plan.invalidation));
+   if(plan.catalyst)details.append(txt("p","Next: "+plan.catalyst));
+   if(!plan.entry&&item.note)details.append(txt("p",item.note));
+   view.append(details);tr.append(view);bondHost.append(tr);
   }
   if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
  }
