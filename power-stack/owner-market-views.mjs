@@ -34,7 +34,7 @@ export function bondWatch(ideas,quoteMap=new Map()){
 /** The quote universe is not the owner's portfolio. Keep each membership flag explicit. */
 export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
  const combined=new Map();
- const marketTickers=new Set(rows(feed?.rows).slice(0,100).map(x=>validTicker(x.ticker)).filter(Boolean));
+ const marketTickers=new Set(rows(feed?.rows).slice(0,120).map(x=>validTicker(x.ticker)).filter(Boolean));
  for(const line of rows(base)){
   const ticker=validTicker(line.ticker);if(ticker)combined.set(ticker,{
    ...line,ticker,ideaTracked:false,bond:isBondEtf(ticker),marketOnly:false,
@@ -58,7 +58,7 @@ export function expandMarketRows(base,ideas,feed,quoteMap=new Map()){
    entry:old?.entry||"",invalidation:old?.invalidation||""
   });
  }
- for(const raw of rows(feed?.rows).slice(0,100)){
+ for(const raw of rows(feed?.rows).slice(0,120)){
   const ticker=validTicker(raw.ticker);if(!ticker||combined.has(ticker))continue;
   const quote=quoteMap.get(ticker);
   combined.set(ticker,{ticker,name:ticker,held:false,onWatchlist:false,
