@@ -5,6 +5,7 @@ import {parseEntryPlan,entryAlert,rankEntryIdeas,ENTRY_CONTRACT} from "../owner-
 const note="PRIORITY: HIGH | THESIS: Investor-quality cash conversion | ENTRY: Review on a source-dated pullback | INVALIDATION: Free cash flow falls | CATALYST: Quarterly earnings | ZONE BASIS: Provisional 9 Nov close";
 const caseRow={ticker:"GRAB",name:"Research only",watch_low:3,watch_high:3.15,note,currency:"USD"};
 const quote=(n)=>({close:n,currency:"USD",session:"2026-11-09",fiveDay:20.28});
+const now=new Date("2026-11-10T05:00:00.000Z");
 test("parser turns authenticated notes into labelled research claims without guessing a buy",()=>{
  const p=parseEntryPlan(note);
  assert.equal(ENTRY_CONTRACT,"power-stack-provisional-entry-research/1");
@@ -15,16 +16,22 @@ test("parser turns authenticated notes into labelled research claims without gue
  assert.equal(parseEntryPlan("Legacy unstructured note").priority,"UNRANKED");
 });
 test("price alerts distinguish waiting, inside, and below zone; none are orders",()=>{
- assert.equal(entryAlert(caseRow,quote(3.44)).status,"WAIT_RETRACE");
- assert.equal(entryAlert(caseRow,quote(3.05)).status,"IN_ALERT");
- assert.equal(entryAlert(caseRow,quote(2.90)).status,"BELOW_ALERT");
- assert.equal(entryAlert(caseRow,null).status,"PRICE_UNAVAILABLE");
- assert.equal(entryAlert({...caseRow,watch_low:null,watch_high:null},quote(3.44)).status,"CATALYST_GATE");
- assert.match(entryAlert(caseRow,quote(3.05)).detail,/NOT an approved entry/);
+ assert.equal(entryAlert(caseRow,quote(3.44),now).status,"WAIT_RETRACE");
+ assert.equal(entryAlert(caseRow,quote(3.05),now).status,"IN_ALERT");
+ assert.equal(entryAlert(caseRow,quote(2.90),now).status,"BELOW_ALERT");
+ assert.equal(entryAlert(caseRow,null,now).status,"PRICE_UNAVAILABLE");
+ assert.equal(entryAlert({...caseRow,watch_low:null,watch_high:null},quote(3.44),now).status,"CATALYST_GATE");
+ assert.match(entryAlert(caseRow,quote(3.05),now).detail,/NOT an approved entry/);
+});
+test("expired quote and mismatched currency cannot become a verified entry",()=>{
+ assert.equal(entryAlert(caseRow,{...quote(3.05),session:"2026-10-30"},now).status,"PRICE_STALE");
+ assert.equal(entryAlert(caseRow,{...quote(3.05),currency:"MYR"},now).status,"PRICE_MISMATCH");
+ assert.equal(entryAlert(caseRow,{...quote(3.05),session:"2026-11-11"},now).status,"PRICE_STALE");
+ assert.equal(entryAlert(caseRow,quote(3.05),now).status,"IN_ALERT");
 });
 test("high-priority research sorts first, then near-price alerts; no PEG is required",()=>{
  const low={...caseRow,ticker:"LOW",note:note.replace("PRIORITY: HIGH","PRIORITY: WATCH")};
- const ranked=rankEntryIdeas([low,caseRow],new Map([["LOW",quote(3.03)],["GRAB",quote(3.44)]]));
+ const ranked=rankEntryIdeas([low,caseRow],new Map([["LOW",quote(3.03)],["GRAB",quote(3.44)]]),now);
  assert.equal(ranked[0].ticker,"GRAB");
  assert.equal(ranked[1].ticker,"LOW");
 });

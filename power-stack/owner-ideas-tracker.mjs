@@ -81,7 +81,7 @@ export async function initIdeasTracker(db,main,user){
     el("small",row.name||row.ticker));
   left.append(el("span",row.idea_type==="TRADE"?"Trade setup":"Investment idea","psi-type"));
   right.append(iconText(plan.status==="IN_ALERT"?"target":plan.status==="WAIT_RETRACE"?"clock":
-    plan.status==="BELOW_ALERT"?"warning":plan.status==="PRICE_UNAVAILABLE"?"refresh":"calendar",
+    plan.status==="BELOW_ALERT"?"warning":plan.status==="PRICE_UNAVAILABLE"||plan.status==="PRICE_STALE"?"refresh":plan.status==="PRICE_MISMATCH"?"shield":"calendar",
     plan.label,"psi-plan-label"+(plan.status==="BELOW_ALERT"?" psi-plan-missed":"")));
   head.append(left,right);node.append(head);
   const metrics=el("div",null,"psi-metrics");

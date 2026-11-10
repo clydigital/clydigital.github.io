@@ -120,7 +120,7 @@ export async function initDecisionDesk(db,main,user){
     <a href="portfolio.html#bonds">Compare bond ETFs in Market Watch →</a></div>
  </section>
  <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
-  <div class="psd-section-heading"><div><p class="psd-overline">RESEARCH PRIORITIES / 9 NOV CLOSES</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2><p class="psd-coverage-note">Price zones are preliminary alerts, NOT confirmed support or an order. Every entry still needs issuer, macro and broker checks.</p></div>
+  <div class="psd-section-heading"><div><p class="psd-overline">RESEARCH PRIORITIES / SOURCE-DATED CLOSES</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2><p class="psd-coverage-note">Price zones are preliminary alerts, NOT confirmed support or an order. Every entry still needs issuer, macro and broker checks.</p><p id="psd-ideas-asof" class="psd-coverage-note">Checking market feed…</p></div>
    <a href="ideas.html">View all investment ideas →</a></div>
   <div id="psd-ideas-rows" class="psd-ideas-rows"></div>
   <button type="button" id="psd-ideas-expand" class="psd-ideas-expand" hidden>Show all research setups</button>
@@ -234,8 +234,11 @@ export async function initDecisionDesk(db,main,user){
   const ranked=rankEntryIdeas(companyIdeas,state.priceMap);
   const counts={ALIGNED:0,DIVERGENCE:0,WATCH:0,RECHECK:0};
   for(const v of signals)counts[v.status]=(counts[v.status]||0)+1;
-  const statKeys={IN_ALERT:0,WAIT_RETRACE:0,BELOW_ALERT:0,CATALYST_GATE:0,PRICE_UNAVAILABLE:0};
+  const statKeys={IN_ALERT:0,WAIT_RETRACE:0,BELOW_ALERT:0,CATALYST_GATE:0,PRICE_UNAVAILABLE:0,PRICE_STALE:0,PRICE_MISMATCH:0};
   for(const i of ranked)statKeys[i.entryAlert.status]++;
+  $(host,"psd-ideas-asof").textContent=state.marketAsOf
+    ?"Quote feed generated "+stamp(state.marketAsOf)+" · Session dates appear on each idea"
+    :"Quote feed unavailable or overdue; do not act on old alerts";
   const title=$(host,"psd-thesis"),context=$(host,"psd-thesis-context");
   title.textContent=state.ideaError?"Research data unavailable":
     ranked.length+" ideas under review; no automatic buy signals";
@@ -256,7 +259,7 @@ export async function initDecisionDesk(db,main,user){
    [statKeys.IN_ALERT,"In price-alert range","target"],
    [statKeys.WAIT_RETRACE,"Waiting for retrace","clock"],
    [statKeys.BELOW_ALERT,"Below zone — recheck","warning"],
-   [statKeys.PRICE_UNAVAILABLE+statKeys.CATALYST_GATE,"Source/catalyst required","book"]
+   [statKeys.PRICE_UNAVAILABLE+statKeys.PRICE_STALE+statKeys.PRICE_MISMATCH+statKeys.CATALYST_GATE,"Source/catalyst required","book"]
   ]){
    const item=txt("div",null,"psd-summary-metric");
    item.append(psIcon(shape,"psv-stat-icon"),txt("strong",value),txt("span",label));metrics.append(item);
@@ -280,7 +283,7 @@ export async function initDecisionDesk(db,main,user){
    label.append(txt("strong",item.ticker+" · "+(item.name||"Research idea")));
    label.append(txt("small",p.priority==="UNRANKED"?"Unranked research":p.priority+" PRIORITY · "+(item.idea_type==="TRADE"?"Tactical":"Investment")+" research"));
    const flag=iconText(p.status==="IN_ALERT"?"target":p.status==="BELOW_ALERT"?"warning":
-    p.status==="PRICE_UNAVAILABLE"?"refresh":p.status==="WAIT_RETRACE"?"clock":"calendar",
+    p.status==="PRICE_UNAVAILABLE"||p.status==="PRICE_STALE"?"refresh":p.status==="PRICE_MISMATCH"?"shield":p.status==="WAIT_RETRACE"?"clock":"calendar",
     p.label,"psd-setup-status psd-setup-"+p.status.toLowerCase());
    top.append(label,flag);card.append(top);
    const quote=txt("p",null,"psd-setup-quote");
@@ -320,7 +323,7 @@ export async function initDecisionDesk(db,main,user){
   const bond=state.ideaRows.some(x=>x.ticker==="TLT"||x.ticker==="IEF");
   if(bond)tasks.push({n:"03",name:"Wait for the inflation / yield response",
     detail:"Compare US 2Y/10Y/30Y yields and real yields after 10 Nov CPI before preferring TLT over lower-duration IEF/VGIT."});
-  const next=ranked.find(x=>x.entryAlert.priority==="HIGH"&&x.entryAlert.status!=="PRICE_UNAVAILABLE");
+  const next=ranked.find(x=>x.entryAlert.priority==="HIGH"&&["IN_ALERT","WAIT_RETRACE","CATALYST_GATE","BELOW_ALERT"].includes(x.entryAlert.status));
   if(next)tasks.push({n:String(tasks.length+1).padStart(2,"0"),name:"Prepare "+next.ticker+" conditional entry review",
     detail:(next.entryAlert.entry||next.entryAlert.detail).slice(0,260)});
   for(const task of tasks.slice(0,4)){
