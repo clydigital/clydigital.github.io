@@ -4,7 +4,7 @@ import {readFileSync} from "node:fs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 test("client overview prioritizes entry levels, recommendations and risks",()=>{
  const html=read("owner-decision-desk.mjs");
- for(const token of ['Your investment outlook','Ideas & entry levels','Recommended next move','What needs attention','Upcoming decision points',
+ for(const token of ['What to do next','Action queue','Ideas & entry levels','Recommended next move','What needs attention','Upcoming decision points',
   'psd-ideas-rows','psd-thesis','psd-summary-metrics','Review history, portfolio checks & evidence'])
    assert(html.includes(token),token);
  const top=html.indexOf("Ideas & entry levels");
