@@ -142,6 +142,13 @@ export async function initDecisionDesk(db,main,user){
  <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
   <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
+ // The dated creator research is served only after the existing Google owner
+ // gate has fetched the RLS-protected index page. It is not public JS data.
+ const creatorBrief=main.querySelector("#ps-bluebelly-brief");
+ if(creatorBrief){
+  const firstCoverage=host.querySelector(".psd-coverage-panel");
+  if(firstCoverage)firstCoverage.before(creatorBrief);
+ }
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
   ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null};
  function status(s){$(host,"psd-status").textContent=s}
