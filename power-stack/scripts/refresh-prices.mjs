@@ -70,7 +70,7 @@ export function parseStooqCsv(csv,spec,now=new Date(),sourceUrl=""){
 }
 export function validateManifest(input){
  if(input?.contractVersion!=="power-stack-public-symbols/1"||!Array.isArray(input.symbols)
-  ||input.symbols.length<1||input.symbols.length>100)throw Error("Invalid public research universe");
+  ||input.symbols.length<1||input.symbols.length>120)throw Error("Invalid public research universe");
  const seen=new Set();
  return input.symbols.map(x=>{
   if(!x||!/^([A-Z0-9][A-Z0-9.\-]{0,17})$/.test(x.ticker||"")

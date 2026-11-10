@@ -21,11 +21,15 @@ function yahoo(spec,days=["2026-10-26","2026-10-27","2026-10-28","2026-10-29","2
 }
 test("manifest uses a non-owner public research universe and no holdings quantities",()=>{
  const m=JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8"));
- assert.equal(validateManifest(m).length,98);
+ assert.equal(validateManifest(m).length,101);
  assert.ok(!JSON.stringify(m).includes("quantityAsOf"));
  assert.ok(!JSON.stringify(m).includes("owner_user_id"));
  assert.ok(!JSON.stringify(m.symbols).includes("holdings"));
  assert.deepEqual(validateManifest(m).find(x=>x.ticker==="DAYANG"),myr);
+ for (const name of ["CVX","EDV","ZROZ"]) {
+  const spec=validateManifest(m).find(x=>x.ticker===name);
+  assert.deepEqual(spec,{ticker:name,providerSymbol:name,currency:"USD",timeZone:"America/New_York"});
+ }
  assert.throws(()=>validateManifest({...m,symbols:[usd,usd]}),/Duplicate/);
 });
 test("source-dated Yahoo closes distinguish 1D, 3D and 5D completed sessions",()=>{
@@ -212,5 +216,7 @@ test("historical earnings have their own owner-gated archive; current decision s
  assert.match(gate,/ps-legacy-note/);
  assert.match(index,/owner-decision-desk\.css/);
  assert.match(decision,/href="archive\.html"/);
+ assert.match(decision,/main\.querySelector\("#ps-bluebelly-brief"\)/);
+ assert.match(decision,/firstCoverage\.before\(creatorBrief\)/);
  assert.doesNotMatch(decision,/Amazon's AWS sales accelerated 39%/);
 });

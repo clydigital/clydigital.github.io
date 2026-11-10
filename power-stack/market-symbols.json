@@ -162,6 +162,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "CVX",
+      "providerSymbol": "CVX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "DAYANG",
       "providerSymbol": "5141.KL",
       "currency": "MYR",
@@ -176,6 +182,12 @@
     {
       "ticker": "DIA",
       "providerSymbol": "DIA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "EDV",
+      "providerSymbol": "EDV",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
@@ -592,6 +604,12 @@
       "providerSymbol": "6742.KL",
       "currency": "MYR",
       "timeZone": "Asia/Kuala_Lumpur"
+    },
+    {
+      "ticker": "ZROZ",
+      "providerSymbol": "ZROZ",
+      "currency": "USD",
+      "timeZone": "America/New_York"
     }
   ]
 }
