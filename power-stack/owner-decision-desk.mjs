@@ -301,6 +301,7 @@ export async function initDecisionDesk(db,main,user){
    if(!historyByKey.has(row.case_key))historyByKey.set(row.case_key,[]);
    historyByKey.get(row.case_key).push(row);
   }
+  host.querySelector(".psd-grid").hidden=latest.length===0;
   const groups={risk:[],decision:[],watch:[]};
   for(const row of latest)groups[lane(row)].push(row);
   const due=(r)=>r.ticket?.review?.review_by||"9999-12-31";
