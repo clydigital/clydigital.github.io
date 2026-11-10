@@ -10,7 +10,7 @@ test("angular high-contrast design loads before authenticated content on every p
   const html=read(page+".html");
   const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
   const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
-  const angular=html.indexOf('href="owner-angular-contrast.css?v=20261110-coverage1"');
+  const angular=html.indexOf('href="owner-angular-contrast.css?v=20261110-entries2"');
   const auth=html.indexOf('src="auth-gate.mjs?v=20261110-entries2"');
   assert(advisor>0&&pulse>advisor&&angular>pulse&&auth>angular,page+" asset load order");
  }
