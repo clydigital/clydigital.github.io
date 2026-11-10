@@ -31,7 +31,7 @@ export async function loadPriceFeed(fetcher=fetch) {
   if(!response.ok)throw Error("public market quote feed "+response.status);
   const data=await response.json();
   if(data?.contractVersion!=="power-stack-public-prices/1"||!Array.isArray(data.rows)
-    ||data.rows.length>100)return null;
+    ||data.rows.length>120)return null;
   return data;
  } catch {return null;}
 }
@@ -50,7 +50,7 @@ export function approvedQuoteSource(value,id){
 }
 export function quotes(feed,now=new Date()){
  const result=new Map();
- for(const raw of list(feed?.rows,100)){
+ for(const raw of list(feed?.rows,120)){
   const id=ticker(raw.ticker),price=num(raw.close);
   if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate,now)
     ||price===null||price<=0)continue;
