@@ -46,7 +46,7 @@ test("visual hierarchy is source-neutral and separates mobile card stages",()=>{
  assert.doesNotMatch(css,/sb_secret_|service_role|@gmail\.com|brokerQuantity|owner_user_id|portfolio_entries/i);
  for(const filename of ["index.html","ideas.html"]){
   const html=read(filename);
-  assert(html.includes('href="owner-visual-hierarchy.css?v=20261110-icons3"'));
+  assert(html.includes('href="owner-visual-hierarchy.css?v=20261110-checks4"'));
   assert(html.indexOf('owner-angular-contrast.css')<html.indexOf('owner-visual-hierarchy.css'));
  }
 });
