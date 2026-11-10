@@ -88,20 +88,6 @@ export async function initDecisionDesk(db,main,user){
    <p>Prioritised reviews and conditional entry alerts, not a feed of unapproved trades.</p></div>
   <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Investment ideas</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">Portfolio</a></div>
  </section>
- <section class="psd-coverage-panel psd-weekly-review" aria-labelledby="psd-weekly-title">
-  <div class="psd-section-heading"><div><p class="psd-overline">10 NOV 2026 / USER CHARTS / WEEKLY</p><h2 id="psd-weekly-title">Market defensive. Wait for confirmation.</h2>
-  <p class="psd-coverage-note">SPX: 20W EMA 7,605 below 50W EMA 7,641; Stoch RSI ~2.9. Oversold is not a bottom.</p></div></div>
-  <div class="psd-coverage-scroll"><table class="psd-coverage-table" aria-label="Dated weekly chart watchlist, not live prices">
-  <thead><tr><th>Watch</th><th>Status</th><th>One thing to check</th></tr></thead><tbody>
-  <tr><th scope="row">NLR</th><td>Study support</td><td>~$88–91 rising support; Stoch RSI ~5.2. Wait for a weekly reversal. Exact 200W EMA touch unconfirmed.</td></tr>
-  <tr><th scope="row">AMD · NVDA</th><td>Wait</td><td>AMD $440 daily support, then reclaim $516–523; NVDA earnings 17 Nov ET.</td></tr>
-  <tr><th scope="row">SMH · SOXX · TSM · AMAT</th><td>Sector test</td><td>Need chip breadth, higher lows and long-term trend repair; AMAT earnings 12 Nov ET.</td></tr>
-  <tr><th scope="row">NFLX</th><td>Speculative</td><td>Watch ~$57–60 support; stronger only above $69.94–72.</td></tr>
-  <tr><th scope="row">GOOGL · AVGO</th><td>Pause</td><td>GOOGL under 20W/50W bands; AVGO 20W and 50W nearly crossing. Wait for weekly recovery.</td></tr>
-  <tr><th scope="row">CVX · XOM · SHOP</th><td>Conditional</td><td>Oil must stabilise for CVX/XOM. SHOP needs ~$138–142 trendline to hold, then $149–154 reclaim.</td></tr>
-  </tbody></table></div>
-  <p class="psd-coverage-note">Chart levels = owner annotations from 10 Nov TradingView screenshots, not refreshed quotes, verified orders or statistical buy probabilities. Creator and bank opinions are context only. No holdings, scores or orders changed.</p>
- </section>
  <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
  <section class="psd-quick-queue" aria-labelledby="psd-queue-title">
   <div class="psd-section-heading"><div><p class="psd-overline">01 / DO FIRST</p><h2 id="psd-queue-title">Action queue</h2></div>
@@ -163,6 +149,10 @@ export async function initDecisionDesk(db,main,user){
  <footer class="psd-brief-footer"><span>Prices are delayed. A valuation or alignment signal prompts research, not an order.</span>
   <button type="button" id="psd-open-import">Save a decision</button></footer>`;
  main.prepend(host);
+ // Move the owner-RLS-protected chart brief into the first decision position.
+ // No private technical opinion or account-specific content is compiled into this public module.
+ const weekly=main.querySelector("#ps-private-weekly-brief");
+ if(weekly)host.querySelector(".psd-top")?.after(weekly);
  // Distinct section iconography (one icon per section, not decorative repeated badges).
  for(const [selector,shape] of [
   ["#psd-queue-title","compass"],["#psd-ideas-heading","target"],
