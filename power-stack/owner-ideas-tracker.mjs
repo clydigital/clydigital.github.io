@@ -2,6 +2,7 @@ import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 
 const T="power_stack_idea_tracker";
@@ -26,10 +27,11 @@ export async function initIdeasTracker(db,main,user){
   <p>Research what to do next: conditional entry ranges, the thesis, what would invalidate it, and the next catalyst. A price alert is not a buy order.</p></div>
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
+ <div id="psi-opportunity-mount"></div>
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
- <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="HIGH">High-priority research</option><option value="ALERT">Inside alert range</option><option value="WAIT_PRICE">Wait for price</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
+ <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="TRADE">Tracked trades</option><option value="INVESTMENT">Tracked investments</option><option value="HIGH">High-priority research</option><option value="ALERT">Inside alert range</option><option value="WAIT_PRICE">Wait for price</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
  <div class="psv-research-key" role="note">
   <span>Entry bands are research alerts, not approved trades.</span>
   <span class="psv-key-item psv-key-ready">In alert range</span>
@@ -151,6 +153,8 @@ export async function initIdeasTracker(db,main,user){
   const lookup=new Map(signals.map(v=>[v.ticker+"|"+v.idea_type,v.status]));
   const filtered=ranked.filter(row=>(
     filter==="ALL"||
+    filter==="TRADE"&&row.idea_type==="TRADE"||
+    filter==="INVESTMENT"&&row.idea_type==="INVESTMENT"||
     filter==="HIGH"&&row.entryAlert.priority==="HIGH"||
     filter==="ALERT"&&row.entryAlert.status==="IN_ALERT"||
     filter==="WAIT_PRICE"&&row.entryAlert.status==="WAIT_RETRACE"||
@@ -208,6 +212,7 @@ export async function initIdeasTracker(db,main,user){
   state.prices=parsed?.watch||new Map();
   state.feedAt=validAge?feed.generatedAt:null;
   setStatus("Last price update · "+(state.feedAt||"unavailable")+" · Valuation and macro reviewed separately.");
+  renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas"});
   render();
  }
  $("psi-add").addEventListener("click",()=>openEditor());
