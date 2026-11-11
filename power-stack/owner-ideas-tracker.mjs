@@ -212,7 +212,7 @@ export async function initIdeasTracker(db,main,user){
   state.prices=parsed?.watch||new Map();
   state.feedAt=validAge?feed.generatedAt:null;
   setStatus("Last price update · "+(state.feedAt||"unavailable")+" · Valuation and macro reviewed separately.");
-  renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas"});
+  renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas",ownerResearch:state.ideas});
   render();
  }
  $("psi-add").addEventListener("click",()=>openEditor());
