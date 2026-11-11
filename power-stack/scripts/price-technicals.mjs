@@ -83,6 +83,7 @@ export function calculateDailyTechnical(input,{sessionDate=null}={}){
  const recentRsi=rsis.slice(-14).filter(finite);
  const high=Math.max(...recentRsi),low=Math.min(...recentRsi);
  const stoch=recentRsi.length===14?(high===low?50:100*(recentRsi.at(-1)-low)/(high-low)):null;
+ const roundedStoch=round(stoch,1);
  const candleReliable=bars.slice(-21).every(b=>finite(b.high)&&finite(b.low)&&b.high>=b.low&&
   b.high>=b.close&&b.low<=b.close);
  const prior20Bars=bars.slice(-21,-1);
@@ -100,7 +101,7 @@ export function calculateDailyTechnical(input,{sessionDate=null}={}){
   indicatorBasis:"Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
   lookbackSessions:bars.length,
   emaBands:bands,band20Event:event,donchian20:donchian,
-  stochRsi14:round(stoch,1),stochRsiZone:stoch===null?"UNAVAILABLE":
-   stoch>=80?"OVERBOUGHT":stoch<=20?"OVERSOLD":"NEUTRAL",
+  stochRsi14:roundedStoch,stochRsiZone:roundedStoch===null?"UNAVAILABLE":
+   roundedStoch>=80?"OVERBOUGHT":roundedStoch<=20?"OVERSOLD":"NEUTRAL",
   rsi14:round(rsis.at(-1),1),volumeToPrior20:volumeRatio};
 }
