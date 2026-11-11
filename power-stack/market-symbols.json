@@ -156,6 +156,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "CRWV",
+      "providerSymbol": "CRWV",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "CTVA",
       "providerSymbol": "CTVA",
       "currency": "USD",
