@@ -6,10 +6,10 @@
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
-    "tracked": 101,
+    "tracked": 102,
     "fresh": 100,
     "stale": 0,
-    "unavailable": 1
+    "unavailable": 2
   },
   "rows": [
     {
@@ -1301,6 +1301,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRWD?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "CRWV",
+      "providerSymbol": "CRWV",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_REFRESH",
+      "reason": "New neutral symbol; awaiting the existing delayed-price collector"
     },
     {
       "ticker": "CTVA",
