@@ -1,15 +1,15 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-11T23:51:51.898Z",
+  "generatedAt": "2026-11-11T23:55:51.380Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
     "tracked": 102,
-    "fresh": 100,
+    "fresh": 101,
     "stale": 0,
-    "unavailable": 2
+    "unavailable": 1
   },
   "rows": [
     {
@@ -1306,18 +1306,60 @@
       "ticker": "CRWV",
       "providerSymbol": "CRWV",
       "currency": "USD",
-      "status": "UNAVAILABLE",
-      "sessionDate": null,
-      "close": null,
-      "previousClose": null,
-      "changePct": null,
-      "change3dPct": null,
-      "change5dPct": null,
-      "technicals": null,
-      "sourceName": null,
-      "sourceUrl": null,
-      "refreshStatus": "PENDING_REFRESH",
-      "reason": "New neutral symbol; awaiting the existing delayed-price collector"
+      "status": "CLOSED",
+      "sessionDate": "2026-11-11",
+      "close": 60.77,
+      "previousClose": 48.73,
+      "changePct": 24.708,
+      "change3dPct": 30.97,
+      "change5dPct": 25.506,
+      "technicals": {
+        "contractVersion": "power-stack-daily-technicals/1",
+        "status": "OBSERVED",
+        "asOf": "2026-11-11",
+        "timeframe": "1D",
+        "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
+        "lookbackSessions": 409,
+        "emaBands": {
+          "20": {
+            "basis": 57.732,
+            "lower": 51.086,
+            "upper": 64.378,
+            "sdMultiplier": 1,
+            "state": "INSIDE"
+          },
+          "50": {
+            "basis": 69.013,
+            "lower": 53.315,
+            "upper": 84.711,
+            "sdMultiplier": 1,
+            "state": "INSIDE"
+          },
+          "100": {
+            "basis": 78.099,
+            "lower": 70.677,
+            "upper": 85.521,
+            "sdMultiplier": 0.5,
+            "state": "BELOW_LOWER"
+          },
+          "200": {
+            "basis": 85.09,
+            "lower": 80.624,
+            "upper": 89.556,
+            "sdMultiplier": 0.25,
+            "state": "BELOW_LOWER"
+          }
+        },
+        "band20Event": "RECOVERED_LOWER_BAND",
+        "donchian20": "INSIDE_PRIOR_20_RANGE",
+        "stochRsi14": 100,
+        "stochRsiZone": "OVERBOUGHT",
+        "rsi14": 49.7,
+        "volumeToPrior20": 2.18
+      },
+      "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
+      "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRWV?interval=1d&range=2y&includePrePost=false",
+      "refreshStatus": "OK"
     },
     {
       "ticker": "CTVA",
