@@ -238,7 +238,7 @@ export async function initDecisionDesk(db,main,user){
   if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
  }
  function renderIdeaBrief(){
-  renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home"});
+  renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home",ownerResearch:state.ideaRows});
   const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
   const signals=sweepSignals(companyIdeas,state.priceMap);
   const ranked=rankEntryIdeas(companyIdeas,state.priceMap);
