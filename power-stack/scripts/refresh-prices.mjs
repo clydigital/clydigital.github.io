@@ -7,6 +7,7 @@
 import {readFileSync,writeFileSync,mkdirSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import path from "node:path";
+import {calculateDailyTechnical,TECHNICAL_CONTRACT} from "./price-technicals.mjs";
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 export const CONTRACT="power-stack-public-prices/1";
 const HOSTS=["https://query2.finance.yahoo.com","https://query1.finance.yahoo.com"];
@@ -45,6 +46,7 @@ function fromBars(spec,bars,source,now){
   status:recentBusinessSession(last.sessionDate,now)?"CLOSED":"STALE",
   sessionDate:last.sessionDate,close:round(last.close),previousClose:round(sessions.at(-2).close),
   changePct:diff(1),change3dPct:diff(3),change5dPct:diff(5),
+  technicals:calculateDailyTechnical(sessions,{sessionDate:last.sessionDate}),
   sourceName:source.name,sourceUrl:source.url,refreshStatus:"OK"};
 }
 export function parseYahooChart(payload,spec,now=new Date(),sourceUrl=""){
@@ -52,11 +54,12 @@ export function parseYahooChart(payload,spec,now=new Date(),sourceUrl=""){
  if(!data||payload?.chart?.error)throw Error("No chart result");
  if(String(data.meta?.symbol||"").toUpperCase()!==spec.providerSymbol.toUpperCase())throw Error("Provider symbol mismatch");
  if(String(data.meta?.currency||"").toUpperCase()!==spec.currency)throw Error("Provider currency mismatch");
- const stamps=data.timestamp,closes=data.indicators?.quote?.[0]?.close;
+ const stamps=data.timestamp,quote=data.indicators?.quote?.[0]||{},closes=quote.close;
  if(!Array.isArray(stamps)||!Array.isArray(closes))throw Error("Incomplete chart arrays");
  return fromBars(spec,stamps.map((stamp,i)=>({
   sessionDate:Number.isFinite(stamp)?localDay(dayParts(new Date(stamp*1000),spec.timeZone)):"",
-  close:closes[i],
+  close:closes[i],high:quote.high?.[i]??null,low:quote.low?.[i]??null,
+  volume:quote.volume?.[i]??null,
  })),{name:"Yahoo Finance daily chart (unofficial, delayed)",url:sourceUrl},now);
 }
 export function parseStooqCsv(csv,spec,now=new Date(),sourceUrl=""){
@@ -64,7 +67,9 @@ export function parseStooqCsv(csv,spec,now=new Date(),sourceUrl=""){
  const lines=csv.trim().split(/\r?\n/);
  if(!/^Date,Open,High,Low,Close,Volume\s*$/i.test(lines[0]||""))throw Error("Invalid daily CSV columns");
  const bars=lines.slice(1).map(line=>{
-  const parts=line.split(",");return {sessionDate:parts[0],close:Number(parts[4])};
+  const parts=line.split(",");return {sessionDate:parts[0],close:Number(parts[4]),
+    high:parts[2]?Number(parts[2]):null,low:parts[3]?Number(parts[3]):null,
+    volume:parts[5]?Number(parts[5]):null};
  });
  return fromBars(spec,bars,{name:"Stooq historical daily bars (unofficial, delayed)",url:sourceUrl},now);
 }
@@ -108,7 +113,7 @@ export function validateManifest(input){
 function noQuote(spec,reason){
  return {ticker:spec.ticker,providerSymbol:spec.providerSymbol,currency:spec.currency,
   status:"UNAVAILABLE",sessionDate:null,close:null,previousClose:null,
-  changePct:null,change3dPct:null,change5dPct:null,sourceName:null,sourceUrl:null,
+  changePct:null,change3dPct:null,change5dPct:null,technicals:null,sourceName:null,sourceUrl:null,
   refreshStatus:"FETCH_FAILED",reason:reason.slice(0,140)};
 }
 async function getUrl(url,asText=false,fetcher=fetch,timeoutMs=8500){
@@ -156,13 +161,13 @@ export async function fetchSymbol(spec,{now=new Date(),fetcher=fetch}={}){
  }
  const errors=[];
  for(const host of HOSTS){
-  const url=host+"/v8/finance/chart/"+encodeURIComponent(spec.providerSymbol)+"?interval=1d&range=1mo&includePrePost=false";
+  const url=host+"/v8/finance/chart/"+encodeURIComponent(spec.providerSymbol)+"?interval=1d&range=2y&includePrePost=false";
   try{return parseYahooChart(await getUrl(url,false,fetcher),spec,now,url);}
   catch(err){errors.push("Yahoo:"+String(err.message||err).slice(0,50));}
  }
  if(spec.currency==="USD"&&/^[A-Z]{1,5}$/.test(spec.ticker)){
   const d2=now.toISOString().slice(0,10).replaceAll("-","");
-  const d1=new Date(now.getTime()-35*86400000).toISOString().slice(0,10).replaceAll("-","");
+  const d1=new Date(now.getTime()-740*86400000).toISOString().slice(0,10).replaceAll("-","");
   const url="https://stooq.com/q/d/l/?s="+spec.ticker.toLowerCase()+".us&i=d&d1="+d1+"&d2="+d2;
   try{return parseStooqCsv(await getUrl(url,true,fetcher),spec,now,url);}
   catch(err){errors.push("Stooq:"+String(err.message||err).slice(0,50));}
@@ -173,7 +178,8 @@ export function asPriceFeed(specs,quotes,now=new Date()){
  const rows=specs.map((s,i)=>quotes[i]||noQuote(s,"Collector did not return a row"));
  const fresh=rows.filter(r=>r.status==="CLOSED").length,stale=rows.filter(r=>r.status==="STALE").length;
  return {contractVersion:CONTRACT,generatedAt:now.toISOString(),isDelayed:true,
-  description:"Completed equity sessions and aggregated BTC/USD UTC daily samples. Independent from Bluebelly and personal positions. Unmapped derivatives stay unavailable; not executable quotes.",
+  description:"Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
+  technicalContract:TECHNICAL_CONTRACT,
   universeSource:"market-symbols.json",coverage:{tracked:rows.length,fresh,stale,unavailable:rows.length-fresh-stale},
   rows};
 }
@@ -201,6 +207,9 @@ async function main(){
      ||!["CLOSED","STALE","UNAVAILABLE"].includes(row.status)
      ||(spec.marketType==="unresolved"&&row.status!=="UNAVAILABLE"))
      throw Error("Public ticker identity, status or unsupported-mapping mismatch");
+   if(row.technicals && (row.technicals.contractVersion!==TECHNICAL_CONTRACT ||
+     row.technicals.asOf!==row.sessionDate || !["OBSERVED","UNAVAILABLE"].includes(row.technicals.status)))
+      throw Error("Technical as-of, status or contract mismatch for "+spec.ticker);
   }
   console.log("Power Stack public quote tape verified for "+specs.length+" neutral research symbols");return;
  }
