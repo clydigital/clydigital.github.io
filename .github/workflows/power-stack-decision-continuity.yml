@@ -14,6 +14,9 @@ on:
       - 'power-stack/scripts/test-visual-hierarchy.mjs'
       - 'power-stack/scripts/test-entry-plans.mjs'
       - 'power-stack/owner-ideas.css'
+      - 'power-stack/owner-opportunity-terminal.mjs'
+      - 'power-stack/owner-opportunity-terminal.css'
+      - 'power-stack/scripts/test-opportunity-terminal.mjs'
       - 'power-stack/owner-advisor-presentation.mjs'
       - 'power-stack/owner-advisor-theme.css'
       - 'power-stack/owner-fin-pulse.css'
@@ -70,13 +73,14 @@ jobs:
           node --check power-stack/owner-visual-icons.mjs
           node --check power-stack/owner-ideas-core.mjs
           node --check power-stack/owner-ideas-tracker.mjs
+          node --check power-stack/owner-opportunity-terminal.mjs
           node --check power-stack/owner-portfolio-table.mjs
           node --check power-stack/owner-market-views.mjs
           node --check power-stack/owner-portfolio-model.mjs
           node --check power-stack/owner-portfolio.js
           node --check power-stack/owner-advisor-presentation.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs power-stack/scripts/test-opportunity-terminal.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
@@ -86,6 +90,8 @@ jobs:
           test -f power-stack/owner-decision-desk.css
           test -f power-stack/ideas.html
           test -f power-stack/owner-ideas.css
+          test -f power-stack/owner-opportunity-terminal.css
+          test -f power-stack/owner-opportunity-terminal.mjs
           test -f power-stack/owner-fin-pulse.css
           test -f power-stack/owner-angular-contrast.css
           test -f power-stack/owner-visual-hierarchy.css

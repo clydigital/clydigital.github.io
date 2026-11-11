@@ -1,0 +1,47 @@
+/* Owner-gated opportunity navigation. Static presentation; no private data embedded. */
+.pso-shell{margin:18px 0 24px;border:1px solid #375c50;background:linear-gradient(150deg,#142520,#0d161b 75%);border-radius:15px;padding:23px;color:#e6f2ed}
+.pso-shell *{box-sizing:border-box}
+.pso-overline{font-size:10px!important;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#a9dfc5!important;margin:0!important}
+.pso-shell h2{font-size:clamp(23px,3vw,32px);line-height:1.17;letter-spacing:-.04em;margin:7px 0 6px}
+.pso-lead{font-size:12px!important;line-height:1.6;color:#b9cfc5;margin:0 0 17px!important;max-width:750px}
+.pso-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0 23px}
+.pso-path{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:5px;background:#111e1e;border:1px solid #385147;color:#e9f6ef;text-decoration:none;border-radius:10px;padding:15px;cursor:pointer;text-align:left;font:inherit}
+.pso-path:hover,.pso-path:focus-visible{border-color:#a8dcc4;background:#193129}
+.pso-path strong{font-size:14px;font-weight:800}
+.pso-path span{color:#a9c3ba;font-size:11px;line-height:1.45}
+.pso-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.pso-head h3{font-size:17px;margin:0;letter-spacing:-.03em}
+.pso-head>span{font-size:10px;color:#a5b9b0}
+.pso-filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.pso-filter{border:1px solid #486154;background:#142321;border-radius:7px;padding:8px 11px;color:#cbdcd2;cursor:pointer;font-size:11px;font-weight:750}
+.pso-filter[aria-pressed="true"]{background:#a3debf;border-color:#a3debf;color:#102319}
+.pso-filter:focus-visible{outline:2px solid #a3debf;outline-offset:2px}
+.pso-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch}
+.pso-card{min-width:0;background:#0d171b;border:1px solid #304b43;border-radius:10px;padding:15px;display:flex;flex-direction:column;gap:11px}
+.pso-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+.pso-ticker{font-size:20px;line-height:1.1;color:#eff8f2;display:block}
+.pso-company{font-size:10px;color:#aec6bd;display:block;margin-top:4px}
+.pso-direction{font-size:9px;font-weight:850;letter-spacing:.05em;padding:5px 7px;border:1px solid #57735f;border-radius:5px;color:#b8e6ca;white-space:nowrap}
+.pso-direction.pso-short{color:#eed0b9;border-color:#82634e;background:#28211f}
+.pso-meta{display:flex;flex-wrap:wrap;gap:5px}
+.pso-meta span{padding:4px 6px;border-radius:5px;background:#1c2a2a;color:#a8c3b8;font-size:9px}
+.pso-thesis{font-size:12px!important;color:#e0ebe6!important;line-height:1.58!important;margin:0!important}
+.pso-condition{background:#1c2b2a;border-left:2px solid #c4b382;border-radius:4px;padding:10px;display:grid;gap:4px}
+.pso-condition strong{font-size:10px;letter-spacing:.07em;color:#ebd7aa}
+.pso-condition span{font-size:10px;line-height:1.5;color:#c2d0c8}
+.pso-steps{display:grid;gap:9px;margin-top:2px}
+.pso-step{border-top:1px solid #2d403c;padding-top:9px}
+.pso-step strong{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#9bdcb8}
+.pso-step p{font-size:11px!important;line-height:1.6!important;color:#cad9d1!important;margin:4px 0 0!important}
+.pso-details{border-top:1px solid #35453f;margin-top:auto;padding-top:10px}
+.pso-details summary{font-size:11px;color:#aadbbd;cursor:pointer;font-weight:700}
+.pso-details p{font-size:11px!important;color:#becfc6!important;line-height:1.55!important;margin:8px 0!important}
+.pso-details a{font-size:11px;color:#a9e5c3;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+.pso-footer{font-size:10px!important;line-height:1.55!important;color:#b5c5ba!important;border-top:1px solid #374840;padding-top:12px;margin:13px 0 0!important}
+.pso-open{display:inline-block;margin-top:11px;padding:9px 12px;border:1px solid #589072;background:#19362a;border-radius:7px;text-decoration:none;color:#c4ebd0;font-size:11px;font-weight:800}
+.psi-shell .pso-shell{margin:18px 0 22px}
+.psi-shell .pso-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:1050px){.pso-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.pso-paths{grid-template-columns:1fr}.pso-head{align-items:flex-start;flex-direction:column}.pso-cards,.psi-shell .pso-cards{grid-template-columns:1fr}}
+@media(max-width:520px){.pso-shell{padding:14px}.pso-card{padding:13px}}
+@media(prefers-reduced-motion:reduce){.pso-shell *{scroll-behavior:auto}}
