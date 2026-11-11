@@ -48,6 +48,30 @@ export function approvedQuoteSource(value,id){
    ||(url.hostname==="stooq.com"&&url.pathname==="/q/d/l/");
  }catch{return false;}
 }
+/**
+ * Only consume same-session, source-vetted technical *observations*.
+ * Missing OHLC / older versions are unknown, never neutral or buy-ready.
+ */
+export function validatedDailyTechnical(raw,session,close){
+ if(!raw||raw.contractVersion!=="power-stack-daily-technicals/1"||
+   raw.status!=="OBSERVED"||raw.timeframe!=="1D"||raw.asOf!==session)return null;
+ const band=raw.emaBands?.["20"],event=raw.band20Event;
+ const events=new Set(["NONE","RECOVERED_LOWER_BAND","REJECTED_UPPER_BAND","BROKE_LOWER_BAND","BROKE_UPPER_BAND"]);
+ const donchian=new Set(["CLOSE_ABOVE_PRIOR_20_HIGH","CLOSE_BELOW_PRIOR_20_LOW","INSIDE_PRIOR_20_RANGE","UNAVAILABLE_OHLC"]);
+ if(!band||!events.has(event)||!donchian.has(raw.donchian20)||
+   !["ABOVE_UPPER","INSIDE","BELOW_LOWER"].includes(band.state))return null;
+ if([band.basis,band.lower,band.upper,close].some(x=>num(x)===null||x<=0)||
+  band.lower>band.basis||band.basis>band.upper)return null;
+ const k=num(raw.stochRsi14);
+ if(k!==null&&(k<0||k>100))return null;
+ const zone=k===null?"UNAVAILABLE":k>=80?"OVERBOUGHT":k<=20?"OVERSOLD":"NEUTRAL";
+ if(raw.stochRsiZone!==zone)return null;
+ return Object.freeze({asOf:session,band20Event:event,donchian20:raw.donchian20,
+   stochRsi14:k,stochRsiZone:zone,ema20State:band.state,
+   ema20:band.basis,ema20Lower:band.lower,ema20Upper:band.upper,
+   rsi14:num(raw.rsi14),volumeToPrior20:num(raw.volumeToPrior20)});
+}
+
 export function quotes(feed,now=new Date()){
  const result=new Map();
  for(const raw of list(feed?.rows,120)){
@@ -61,6 +85,7 @@ export function quotes(feed,now=new Date()){
   result.set(id,{
    close:price,day:num(raw.changePct),threeDay:num(raw.change3dPct),
    fiveDay:num(raw.change5dPct),session:raw.sessionDate,currency:raw.currency,
+   technical:validatedDailyTechnical(raw.technicals,raw.sessionDate,price),
    basis:id==="BTC"?"BTC UTC daily sample":"Exchange close",
   });
  }
