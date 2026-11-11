@@ -4,7 +4,7 @@ import {calculateDailyTechnical,rsiSeries,TECHNICAL_CONTRACT} from "./price-tech
 import {validatedDailyTechnical,quotes} from "../owner-portfolio-table.mjs";
 import {opportunityState,OPPORTUNITIES,scanMarketOpportunities} from "../owner-opportunity-terminal.mjs";
 function dailyBars(count=300){
- const out=[];let d=new Date("2025-07-01T12:00:00Z");
+ const out=[];let d=new Date("2025-09-18T12:00:00Z");
  for(let i=0;out.length<count;i++,d=new Date(d.getTime()+86400000)){
   if([0,6].includes(d.getUTCDay()))continue;
   const close=100+out.length*.07+Math.sin(out.length/5)*.4;
