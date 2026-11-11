@@ -69,7 +69,7 @@ test("each private page loads the final theme in head before auth script",()=>{
   const html=read(page+".html");
   const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
   const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
-  const auth=html.indexOf('src="auth-gate.mjs?v=20261110-checks4"');
+  const auth=html.indexOf('src="auth-gate.mjs?v=');
   assert(advisor>0&&pulse>advisor&&auth>pulse,page+" theme must precede auth script");
  }
 });
