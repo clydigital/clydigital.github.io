@@ -4,6 +4,7 @@ import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decisio
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
@@ -153,6 +154,10 @@ export async function initDecisionDesk(db,main,user){
  // No private technical opinion or account-specific content is compiled into this public module.
  const weekly=main.querySelector("#ps-private-weekly-brief");
  if(weekly)host.querySelector(".psd-top")?.after(weekly);
+ // A clear route to tactical shorts, investment cases and portfolio decisions.
+ // Cards are conditional research, never owner-saved trade tickets.
+ const opportunityHost=txt("div",null,"psd-opportunity-host");
+ host.querySelector(".psd-top")?.after(opportunityHost);
  // Distinct section iconography (one icon per section, not decorative repeated badges).
  for(const [selector,shape] of [
   ["#psd-queue-title","compass"],["#psd-ideas-heading","target"],
@@ -233,6 +238,7 @@ export async function initDecisionDesk(db,main,user){
   if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
  }
  function renderIdeaBrief(){
+  renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home"});
   const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
   const signals=sweepSignals(companyIdeas,state.priceMap);
   const ranked=rankEntryIdeas(companyIdeas,state.priceMap);
