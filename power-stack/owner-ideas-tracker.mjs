@@ -1,8 +1,8 @@
-import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261112-tech1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 
 const T="power_stack_idea_tracker";
@@ -212,7 +212,7 @@ export async function initIdeasTracker(db,main,user){
   state.prices=parsed?.watch||new Map();
   state.feedAt=validAge?feed.generatedAt:null;
   setStatus("Last price update · "+(state.feedAt||"unavailable")+" · Valuation and macro reviewed separately.");
-  renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas"});
+  renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas",ownerResearch:state.ideas});
   render();
  }
  $("psi-add").addEventListener("click",()=>openEditor());

@@ -36,13 +36,15 @@ test("short ideas expire quickly; old cards never imply a live actionable trade"
 });
 test("the new terminal remains behind the existing owner gate and separates existing saved ideas",()=>{
  const home=read("owner-decision-desk.mjs"),tracker=read("owner-ideas-tracker.mjs"),gate=read("auth-gate.mjs");
- assert(home.includes('renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home"})'));
- assert(tracker.includes('renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas"})'));
+ assert(home.includes('renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home",ownerResearch:state.ideaRows})'));
+ assert(tracker.includes('renderOpportunityTerminal($("psi-opportunity-mount"),state.prices,{mode:"ideas",ownerResearch:state.ideas})'));
  assert(tracker.includes('value="TRADE">Tracked trades'));
  assert(tracker.includes('value="INVESTMENT">Tracked investments'));
  assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('if(PAGE==="index")'));
- for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261112-op1'));
+ for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261112-tech1'));
  const module=read("owner-opportunity-terminal.mjs");
  assert(!/sb_secret_|service_role|@gmail\.com|owner_user_id|brokerQuantity|cash_delta/i.test(module));
  assert(module.includes('No trade tickets or broker orders are created'));
+ assert(module.includes('scanMarketOpportunities(prices)'));
+ assert(module.includes('Bluebelly macro / fundamental admission not verified'));
 });

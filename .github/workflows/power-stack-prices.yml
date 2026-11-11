@@ -5,6 +5,8 @@ on:
       - 'power-stack/market-symbols.json'
       - 'power-stack/market-prices.json'
       - 'power-stack/scripts/refresh-prices.mjs'
+      - 'power-stack/scripts/price-technicals.mjs'
+      - 'power-stack/scripts/test-technicals.mjs'
       - 'power-stack/scripts/test-refresh-prices.mjs'
       - 'power-stack/owner-portfolio-table.mjs'
       - 'power-stack/portfolio.html'
@@ -15,6 +17,8 @@ on:
       - 'power-stack/market-symbols.json'
       - 'power-stack/scripts/test-refresh-prices.mjs'
       - 'power-stack/scripts/refresh-prices.mjs'
+      - 'power-stack/scripts/price-technicals.mjs'
+      - 'power-stack/scripts/test-technicals.mjs'
       - 'power-stack/scripts/test-refresh-prices.mjs'
       - '.github/workflows/power-stack-prices.yml'
   # Completed US close and separate Asian close; GitHub scheduled dispatch can be delayed.
@@ -39,8 +43,9 @@ jobs:
       - name: Validate standalone quote logic and privacy
         run: |
           node --check power-stack/scripts/refresh-prices.mjs
+          node --check power-stack/scripts/price-technicals.mjs
           node --check power-stack/owner-portfolio-table.mjs
-          node --test power-stack/scripts/test-refresh-prices.mjs
+          node --test power-stack/scripts/test-refresh-prices.mjs power-stack/scripts/test-technicals.mjs
           node power-stack/scripts/refresh-prices.mjs --check
   refresh:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

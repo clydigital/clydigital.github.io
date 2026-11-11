@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261111-weekly2");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261112-tech1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261110-checks4");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261112-tech1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();

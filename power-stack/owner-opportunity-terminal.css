@@ -45,3 +45,18 @@
 @media(max-width:800px){.pso-paths{grid-template-columns:1fr}.pso-head{align-items:flex-start;flex-direction:column}.pso-cards,.psi-shell .pso-cards{grid-template-columns:1fr}}
 @media(max-width:520px){.pso-shell{padding:14px}.pso-card{padding:13px}}
 @media(prefers-reduced-motion:reduce){.pso-shell *{scroll-behavior:auto}}
+
+/* Source-qualified daily scan + research gaps; no buy/sell-ready colours. */
+.pso-research-status{border:1px solid #314a46;background:#122123;border-radius:8px;padding:10px}
+.pso-research-status strong{display:block;font-size:10px;color:#a4dbc3;letter-spacing:.05em}
+.pso-research-status p{font-size:10px!important;line-height:1.5!important;color:#b9d2c5!important;margin:6px 0 0!important}
+.pso-radar{margin-top:17px;border-top:1px solid #344841;padding-top:17px}
+.pso-radar h3{font-size:15px;margin:0 0 5px;color:#e1efe8}
+.pso-radar-note{font-size:11px!important;line-height:1.6!important;color:#adc2b8!important;max-width:790px;margin:0 0 12px!important}
+.pso-radar-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pso-radar-item{display:flex;flex-direction:column;gap:5px;background:#101d1e;border:1px solid #314943;border-radius:8px;padding:10px 12px}
+.pso-radar-item strong{font-size:12px;color:#e3f0e8}
+.pso-radar-item span{font-size:10px;color:#b7cabf;line-height:1.45}
+.pso-radar-empty{color:#c7b79c;font-size:11px!important;line-height:1.6!important}
+.pso-macro-link{display:inline-block;margin-top:12px;font-size:11px;color:#aadfbc;text-decoration:underline;text-underline-offset:2px}
+@media(max-width:740px){.pso-radar-list{grid-template-columns:1fr}}

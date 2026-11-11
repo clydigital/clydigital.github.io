@@ -1,10 +1,10 @@
 import {renderFrameworkAppendix,renderEntryComparison} from "./owner-framework-view.mjs";
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
-import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261112-tech1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
@@ -238,7 +238,7 @@ export async function initDecisionDesk(db,main,user){
   if(!bonds.length){const tr=txt("tr"),td=txt("td","No bond funds available in private research.");td.colSpan=6;tr.append(td);bondHost.append(tr);}
  }
  function renderIdeaBrief(){
-  renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home"});
+  renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home",ownerResearch:state.ideaRows});
   const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
   const signals=sweepSignals(companyIdeas,state.priceMap);
   const ranked=rankEntryIdeas(companyIdeas,state.priceMap);
