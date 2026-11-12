@@ -569,6 +569,36 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   node.append(make("strong",null,x.title),make("span",null,x.desc));guide.append(node);
  }
  shell.append(guide);
+ // Dated research lenses are presentation categories, never additional investment scores.
+ // No private holdings, cash, owner notes or broker data in this source.
+ const opportunityLenses=[
+  {name:"Potential Missing Opportunities",tickers:"NVT · MOD · POWL",role:"New to the active shortlist, not necessarily new to the historical watchlist.",test:"NVT: cash conversion and acquisitions; MOD: negative interim FCF; POWL: large-order concentration.",source:"https://www.sec.gov/Archives/edgar/data/1720635/000162828026068391/q32026nvtpressrelease.htm"},
+  {name:"Growth",tickers:"VRT · ANET · MOD",role:"Revenue and orders expanding; profitable conversion matters more than a single growth percentage.",test:"Check forward orders, sustained margins, FCF and expectations already priced in.",source:"https://investors.modine.com/news/news-details/2026/Modine-Reports-Second-Quarter-Fiscal-2027-Results/default.aspx"},
+  {name:"Undervalued / Value",tickers:"ADBE · CI · CVS",role:"Potential discount to sustainable economics, not just a low forward P/E or PEG.",test:"Normalise GAAP versus adjusted earnings, owner cash, debt and competitive/regulatory risk.",source:"https://www.sec.gov/Archives/edgar/data/796343/000079634326000156/adbe-20260828.htm"},
+  {name:"Resilient / Quality",tickers:"ETN · HUBB · BWXT",role:"Businesses with diversified or contracted demand, cash generation and scenario durability.",test:"Stress cash and margins under higher yields, recession and an AI-capex slowdown.",source:"https://www.sec.gov/Archives/edgar/data/48898/000162828026067421/exhibit991_10272026.htm"},
+  {name:"Turnaround / Catalysts",tickers:"FLEX · CVS · NVDA",role:"A spin-off, operating recovery or discrete event may change the valuation.",test:"Verify the real event terms, downside if delayed, and management/cash-flow continuity.",source:"https://investors.flex.com/financials/quarterly-results/default.aspx"},
+  {name:"Income / Defensive",tickers:"SGOV · IEF · CVX",role:"Compare bond carry, duration, cash income and energy hedging rather than assuming all are safe.",test:"Match yields,  duration, FX and inflation regime; TLT is high duration, not a cash substitute.",source:"https://www.ishares.com/us/products/239452/ishares-7-10-year-treasury-bond-etf"},
+  {name:"Speculative / High Upside",tickers:"MU · NVDA · AMD",role:"Wide opportunity range paired with cycle, financing, valuation or event-loss risks.",test:"Demand evidence, earnings normalisation, event vetoes and a verified entry trigger.",source:"https://www.sec.gov/edgar/search/"}
+ ];
+ const lensSection=make("section","pso-lens-section");
+ lensSection.setAttribute("aria-label","Power Stack investment opportunity categories");
+ const lensHeading=make("div","pso-lens-heading");
+ lensHeading.append(make("h3",null,"Opportunity lenses"),make("p",null,"Research categories, not buy signals · 13 Nov 2026 examples"));
+ lensSection.append(lensHeading);
+ const lensGrid=make("div","pso-lens-grid");
+ for(const [i,lens] of opportunityLenses.entries()){
+  const details=make("details","pso-lens-item");
+  if(i===0)details.open=true;
+  const summary=make("summary","pso-lens-summary");
+  summary.append(make("strong",null,lens.name),make("span","pso-lens-tickers",lens.tickers));
+  details.append(summary,make("p","pso-lens-role",lens.role),make("p","pso-lens-test","NEXT TEST · "+lens.test));
+  const link=make("a","pso-lens-source","Original source example");
+  link.href=lens.source;link.target="_blank";link.rel="noopener noreferrer";
+  details.append(link);lensGrid.append(details);
+ }
+ lensSection.append(lensGrid);
+ lensSection.append(make("p","pso-lens-disclaimer","A stock can fit several lenses but receives one primary role and one conditional decision. These names are dated research examples; refresh prices, valuation and evidence before any entry."));
+ shell.append(lensSection);
  const closePanel=make("section","pso-close-panel");
  closePanel.setAttribute("aria-label","Verified recent US closing prices");
  closePanel.append(make("p","pso-close-loading","Verifying recent completed US closing prices…"));
