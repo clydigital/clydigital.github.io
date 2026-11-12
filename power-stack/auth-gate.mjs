@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261112-rad1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261113-ux3");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
