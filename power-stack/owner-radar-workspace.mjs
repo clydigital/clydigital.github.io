@@ -2,7 +2,7 @@
    Authenticated-only DOM insertion. Research judgments never derive from oscillators.
    Bluebelly scenarios are dated conditional editorial hypotheses, not live forecasts.
 */
-import {psIcon} from "./owner-visual-icons.mjs";
+import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
