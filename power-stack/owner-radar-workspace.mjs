@@ -4,6 +4,7 @@
 */
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
+import {renderResearchReview} from "./owner-research-review.mjs";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
@@ -253,6 +254,8 @@ export function installRadarWorkspace(main,getState){
  }
  const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
  radarToggle.prepend(psIcon("compass","psr-nav-icon"));
+ const reviewStrip=add(workspace,node("section","psr-review-strip"));
+ reviewStrip.setAttribute("aria-label","Research-to-decision evidence freshness and outstanding reviews");
  const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
  snapshot.setAttribute("aria-label","Tracked US equities and ETFs: source-dated daily direction");
  const snapshotHead=add(snapshot,node("div","psr-snapshot-head"));
@@ -350,7 +353,7 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
- workspace.prepend(quick,snapshot,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(quick,reviewStrip,snapshot,section,...(featured?[featured]:[]),matrixDrawer);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
@@ -391,6 +394,17 @@ export function installRadarWorkspace(main,getState){
  });
  selA.addEventListener("change",renderMatrix);
  selB.addEventListener("change",renderMatrix);
+ function renderEvidenceHealth(){
+  const s=getState()||{};
+  renderResearchReview(reviewStrip,{
+   pages:s.pageRows,pagesError:s.pagesError,
+   ideas:s.dataReady?s.ideaRows:null,ideaError:s.ideaError||!s.dataReady,
+   priceAsOf:s.marketAsOf,qualifyingQuotes:s.priceMap?.size||0,
+   snapshotAsOf:s.snapshotDate,
+   decisionCount:s.dataReady?s.totalRows:null,
+   ledgerCount:s.dataReady?s.ledgerCount:null
+  });
+ }
  function renderThemes(){
   const state=getState(),tickers=allTracked(state);
   themeGrid.replaceChildren();
@@ -532,11 +546,11 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();
+ renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();
  loadBluebellyStockCoverage().then(report=>{
   if(!bridge.isConnected)return;
   bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
    " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
  });
- return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot()},openWorkspace};
+ return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth()},openWorkspace};
 }
