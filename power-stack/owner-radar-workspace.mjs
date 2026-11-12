@@ -104,8 +104,8 @@ const IMPACT=Object.freeze({
 });
 const SCENARIO_BY_ID=new Map(SCENARIOS.map(s=>[s.id,s]));
 const TICKER_THEMES=new Map(MARKET_THEMES.flatMap(theme=>theme.tickers.map(id=>[id,theme.id])));
-const RADAR_WATCH=["NVDA","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX","ADBE","CI","CVS","JBL"];
-const POINTS=[[21,32],[68,21],[81,46],[62,67],[34,75],[14,57],[47,24],[74,81],[42,51],[88,28]];
+export const RADAR_WATCH=["NVDA","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX","ADBE","CI","CVS","JBL"];
+export const POINTS=[[21,32],[68,21],[81,46],[62,67],[34,75],[14,57],[47,24],[74,81],[42,51],[88,28],[11,34],[56,91],[94,64],[28,10]];
 function node(tag,cls,value){
  const element=document.createElement(tag);
  if(cls)element.className=cls;
