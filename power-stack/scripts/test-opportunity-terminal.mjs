@@ -169,8 +169,11 @@ test("12 Nov close overlay is source-qualified and never reuses previous-day tec
  assert(file.includes("mergerMount.replaceChildren(renderMergerWatch(cardPrices))"));
  assert(file.includes("node.dataset.kind=item.kind;node.dataset.direction=item.direction;"));
  const source=JSON.parse(read("market-prices.json"));
- assert.equal(source.rows.find(x=>x.ticker==="SPCX").sessionDate,"2026-11-11",
-  "full-market technical producer must remain independently dated until the complete OHLC refresh");
+ const official=source.rows.find(x=>x.ticker==="SPCX");
+ assert(official?.sessionDate);
+ assert.equal(official.technicals?.asOf,official.sessionDate,
+  "full-market technical date must follow the OHLC producer, never the close overlay");
+ assert(!raw.rows[0].technicals,"close overlay may not carry historical technical fields");
 });
 test("readability layer loads last and keeps high contrast, larger fonts and mobile grid fallback",()=>{
  for(const name of ["index","ideas"]){
