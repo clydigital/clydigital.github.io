@@ -183,6 +183,82 @@ export function stressValuation(spec){
   return {label,epsUSD:Math.round(earnings*100)/100,peMultiple:pe,impliedUSD:Math.round(implied*100)/100,changePct:Math.round((implied/spec.referenceCloseUSD-1)*1000)/10};
  }).filter(Boolean);
 }
+/** Public dated event facts only; no model-approved deal terms or execution. */
+export const TSLA_SPACEX_EVENT=Object.freeze({
+ id:"tesla-spacex-merger",reviewed:"2026-11-13",
+ status:"SPECIAL_COMMITTEES_AND_NEGOTIATIONS_NO_SIGNED_AGREEMENT",
+ dealStructure:"NOT_DISCLOSED",cashConsideration:null,negotiatedExchangeRatio:null,dealProbability:null,closingDate:null,
+ parties:["TSLA","SPCX"],announcementWindow:"REPORTED_POSSIBLE_DECEMBER_NOT_CONFIRMED",
+ filingFacts:[
+  "Tesla 2026 Q3 10-Q confirms an independent special committee; no assurance of a deal.",
+  "Tesla invested $2.00bn for less than 1% SpaceX ownership and sold $626m of Megapack products to SpaceX in 9M 2026.",
+  "9M 2026 cash operations less capex: Tesla $14.90bn−$13.01bn=+$1.89bn; SpaceX $13.097bn−$48.069bn=−$34.972bn."
+ ],
+ processRisks:[
+  "Musk-affiliated companies: independent negotiation, fairness, voting rights and approval risk.",
+  "A high-premium stock deal can dilute existing SPCX shareholders; zero-premium terms may fail the Tesla shareholder vote.",
+  "SpaceX IPO liquidity does not prove that 2026 compute and infrastructure expenditure is self-funding.",
+  "Existing Tesla SpaceX stake and Megapack related-party sales must be eliminated on consolidation."
+ ],
+ filings:[
+  {label:"Tesla 2026 Q3 filing",url:"https://www.sec.gov/Archives/edgar/data/1318605/000162828026066775/tsla-20260930.htm"},
+  {label:"SpaceX 2026 Q3 filing",url:"https://www.sec.gov/Archives/edgar/data/1181412/000162828026066880/spcx-20260930.htm"},
+  {label:"12 Nov Reuters — Bloomberg talk progress",url:"https://www.reuters.com/legal/transactional/spacex-tesla-merger-talks-progress-bloomberg-news-reports-2026-11-12/"}
+ ]
+});
+/** Illustrative parity/premium tender exchange ratio only if both vetted daily quotes share a session. */
+export function illustrativeSpaceXRatio(tslaQuote,spcxQuote){
+ const a=tslaQuote,b=spcxQuote;
+ if(!a||!b||!Number.isFinite(a.close)||!Number.isFinite(b.close)||a.close<=0||b.close<=0||
+   !/^20\\d{2}-\\d{2}-\\d{2}$/.test(String(a.session||""))||a.session!==b.session||
+   a.currency!=="USD"||b.currency!=="USD")return null;
+ const parity=a.close/b.close;
+ return {session:a.session,teslaClose:a.close,spaceXClose:b.close,
+  cases:[0,0.2,0.35].map(premium=>({
+   assumedPremiumPct:Math.round(premium*100),
+   illustrativeSPCXSharesPerTSLAShare:Math.round(parity*(1+premium)*1000)/1000,
+   hypotheticalTeslaOfferValueUSD:Math.round(a.close*(1+premium)*100)/100
+  })),
+  caution:"No merger terms have been announced. Share classes, cash consideration, fractional shares, deal repricing and closing risk are unmodeled; scenarios are NOT a trading spread or payoff."};
+}
+function renderMergerWatch(prices){
+ const e=TSLA_SPACEX_EVENT,section=make("section","pso-merger-watch");
+ section.id="ps-tsla-spacex-watch";section.setAttribute("aria-label","Tesla SpaceX merger research");
+ section.append(make("p","pso-overline","SPECIAL SITUATION · NO AGREEMENT"));
+ section.append(make("h3",null,"Tesla × SpaceX — terms, not rumours, decide the trade"));
+ section.append(make("p","pso-merger-lead",
+  "13 Nov watch: independent Tesla special committee documented; 12 Nov Bloomberg/Reuters reports talks progressing and a possible December announcement. No final consideration, share exchange ratio, premium, vote or completion date is confirmed."));
+ const ratios=illustrativeSpaceXRatio(prices?.get("TSLA"),prices?.get("SPCX"));
+ const status=make("p","pso-merger-quote",ratios?
+  "Historical matching cash-equity closes · "+ratios.session+" · TSLA $"+ratios.teslaClose.toFixed(2)+
+   " / SPCX $"+ratios.spaceXClose.toFixed(2)+". Neither is a live deal quotation.":
+  "Both qualified, matching completed-session TSLA and SPCX equity quotes are required; no implied terms displayed.");
+ section.append(status);
+ if(ratios){
+  const examples=make("div","pso-merger-ratios");
+  for(const c of ratios.cases){
+   const x=make("div","pso-merger-ratio");
+   x.append(make("strong",null,c.assumedPremiumPct+"% hypothetical Tesla premium"));
+   x.append(make("span",null,c.illustrativeSPCXSharesPerTSLAShare.toFixed(3)+" SPCX shares / TSLA share"));
+   x.append(make("small",null,"$"+c.hypotheticalTeslaOfferValueUSD.toFixed(2)+" historic offer equivalent"));
+   examples.append(x);
+  }
+  section.append(examples);
+ }
+ section.append(make("p","pso-merger-caution",
+  "Illustrative all-stock ratios only, not negotiated terms, arbitrage signals or probability-weighted upside. SpaceX Class B voting rights mean economic exchange value is NOT voting-control equivalence."));
+ const details=make("details","pso-details");
+ details.append(make("summary",null,"Source evidence, cash-burn risk and first rejection"));
+ for(const q of e.filingFacts)details.append(make("p",null,"Filed: "+q));
+ for(const q of e.processRisks)details.append(make("p",null,"Risk: "+q));
+ details.append(make("p",null,"Next proof: both special committees' definitive terms; exchange ratio/price; signed agreement; Tesla holder vote standard; fairness and Musk voting-control impact; cash budget / capex."));
+ for(const q of e.filings){
+  const a=make("a",null,q.label);a.href=q.url;a.target="_blank";a.rel="noopener noreferrer";
+  details.append(a,make("span",null," · "));
+ }
+ section.append(details);
+ return section;
+}
 const make=(tag,cls,value)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;};
 function validDate(d){return /^20\d{2}-\d{2}-\d{2}$/.test(String(d||""))?Date.parse(d+"T00:00:00Z"):NaN;}
 export function opportunityState(item,quote,now=new Date(),research=null){
@@ -366,6 +442,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   node.append(make("strong",null,x.title),make("span",null,x.desc));guide.append(node);
  }
  shell.append(guide);
+ shell.append(renderMergerWatch(prices));
  const head=make("div","pso-head");head.append(make("h3",null,home?"Ideas to investigate":"Research candidates"));
  const about=make("span",null,"Theses reviewed "+OPPORTUNITY_REVIEW_DATE+" · Latest qualified daily bars only");head.append(about);shell.append(head);
  const filters=make("div","pso-filters");filters.setAttribute("role","group");filters.setAttribute("aria-label","Opportunity type");
