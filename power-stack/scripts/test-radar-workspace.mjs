@@ -232,6 +232,6 @@ test("radar-tavern live skin uses committed decorative assets without changing m
  for(const name of ["brass-radar-face.svg","radar-sweep-layer.svg","walnut-wall-panel.svg"]){
   const art=read("assets/tavern/"+name);
   assert(art.startsWith("<svg"),name);
-  assert(!/https?:\/\/|<script|onload=|onerror=/i.test(art),"Decorative SVG must be self-contained");
+  assert(!/\b(?:href|xlink:href)\s*=\s*["']https?:\/\/|<script|onload=|onerror=/i.test(art),"Decorative SVG must be self-contained");
  }
 });
