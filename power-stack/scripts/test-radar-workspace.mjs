@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {
  RADAR_CONTRACT,RESEARCH_ASOF,MARKET_THEMES,SCENARIOS,
- stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses
+ stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses,summarizeRegionalCloses,THEME_ICON_NAMES
 } from "../owner-radar-workspace.mjs";
+import {validateBluebellyStockCoverage} from "../owner-bluebelly-stocks.mjs";
 const root=new URL("../",import.meta.url);
 const read=file=>readFileSync(new URL(file,root),"utf8");
 const now=new Date("2026-11-12T12:00:00Z");
@@ -132,3 +133,67 @@ test("simple homepage defaults to direct overview and preserves optional radar a
  assert(css.includes("prefers-reduced-motion:reduce"));
 });
 
+
+test("Europe theme tracks 12 exact EUR/DKK listings without stealing a US ADR",()=>{
+ const eu=MARKET_THEMES.find(x=>x.id==="europe");
+ assert.equal(eu?.tickers.length,12);
+ for(const t of ["ASML.AS","ADYEN.AS","SAP.DE","IFX.DE","AIR.PA","TTE.PA","MC.PA","SU.PA","NOVO-B.CO"])
+  assert(eu.tickers.includes(t),t);
+ assert(!eu.tickers.includes("ASML"));
+ assert.equal(THEME_ICON_NAMES.europe,"globe");
+ assert.equal(THEME_ICON_NAMES.ai,"cpu");
+ for(const name of MARKET_THEMES.map(x=>x.id))assert(THEME_ICON_NAMES[name],name);
+ for(const sc of SCENARIOS)assert.equal(sc.impact.europe,"unknown","Never fabricate macro pressure for unresearched EU sector");
+});
+test("regional data charts compare only same-session share changes and keep EUR/DKK separate from US",()=>{
+ const map=new Map([
+  ["ASML.AS",{close:1030,day:3.1,currency:"EUR",basis:"Exchange close",session:"2026-11-12"}],
+  ["NOVO-B.CO",{close:350,day:-1.5,currency:"DKK",basis:"Exchange close",session:"2026-11-12"}],
+  ["SAP.DE",{close:220,day:1,currency:"EUR",basis:"Exchange close",session:"2026-11-11"}],
+  ["SPCX",{close:139.94,day:0.136,currency:"USD",basis:"Exchange close",session:"2026-11-12"}],
+  ["TSLA",{close:397.45,day:1.69,currency:"USD",basis:"Exchange close",session:"2026-11-12"}],
+  ["BTC",{close:99999,day:30,currency:"USD",basis:"BTC UTC daily sample",session:"2026-11-12"}],
+ ]);
+ const us=summarizeRegionalCloses(map,"US"),eu=summarizeRegionalCloses(map,"EU");
+ assert.deepEqual([us.observed,us.up,us.down,us.flat],[2,2,0,0]);
+ assert.deepEqual([eu.observed,eu.up,eu.down,eu.flat],[2,1,1,0]);
+ assert.deepEqual(eu.leaders.map(x=>x.ticker),["ASML.AS","NOVO-B.CO"]);
+ assert.equal(us.leaders[0].ticker,"TSLA");
+ assert.equal(summarizeRegionalCloses(new Map(),"EU").session,null);
+ const js=read("owner-radar-workspace.mjs");
+ assert(js.includes('loadBluebellyStockCoverage().then'));
+ assert(js.includes("renderSnapshot()"));
+ assert(js.includes("psr-regional-data"));
+ assert(js.includes("psr-movers-panel"));
+});
+
+test("Bluebelly cross-site stock feed accepts only fixed 25 US + 12 EU source-dated research identities",()=>{
+ const us=["NVDA","AMD","AAPL","MSFT","AMZN","GOOGL","META","TSLA","AVGO","MU","ORCL","CRWV","SPCX",
+  "ADBE","CI","CVS","CF","XOM","CVX","GRAB","BWXT","OKLO","SMR","PWR","ENPH"];
+ const euro=["ASML.AS","ADYEN.AS","SAP.DE","SIE.DE","RHM.DE","IFX.DE","AIR.PA","TTE.PA","MC.PA","SU.PA","OR.PA","NOVO-B.CO"];
+ const rows=[...us,...euro].map((ticker,i)=>{
+  const region=i<25?"US":"EU",ext=ticker.split(".")[1];
+  const currency=region==="US"?"USD":ext==="CO"?"DKK":"EUR";
+  const timeZone=region==="US"?"America/New_York":ext==="CO"?"Europe/Copenhagen":
+   ext==="DE"?"Europe/Berlin":ext==="PA"?"Europe/Paris":"Europe/Amsterdam";
+  return {ticker,company:ticker,region,currency,timeZone,
+   status:"MONITORED_UNAVAILABLE",price:null,changePct:null,asOf:null,sourceUrl:null};
+ });
+ const ready={...rows[0],status:"SOURCE_DATED",asOf:"2026-11-12",price:160,
+  changePct:1.3,sourceUrl:"https://www.nasdaq.com/market-activity/stocks/nvda/historical"};
+ rows[0]=ready;
+ const doc={contractVersion:"bluebelly-equity-coverage/1",source:"Bluebelly public market monitor",
+  coverage:{tracked:37,US:25,EU:12,sourceDated:1,unavailable:36},rows};
+ const now=new Date("2026-11-13T03:00:00Z");
+ const v=validateBluebellyStockCoverage(doc,now);
+ assert(v);
+ assert.equal(v.US.dated,1);
+ assert.equal(v.EU.tracked,12);
+ assert.equal(v.rows.find(x=>x.ticker==="NVDA").price,160);
+ assert.equal(validateBluebellyStockCoverage({...doc,rows:rows.map(x=>x.ticker==="ASML.AS"?{...x,currency:"USD"}:x)},now),null);
+ assert.equal(validateBluebellyStockCoverage({...doc,rows:[...rows,{...rows[0]}]},now),null);
+ assert.equal(validateBluebellyStockCoverage({...doc,rows:rows.map(x=>x.ticker==="NVDA"?{...x,sourceUrl:"https://evil.invalid/foo"}:x)},now),null);
+ assert.equal(validateBluebellyStockCoverage(doc,new Date("2026-12-01T03:00:00Z")),null);
+ const js=read("owner-bluebelly-stocks.mjs");
+ assert(!/brokerQuantity|service_role|sb_secret_|owner_user_id|\.insert\(|\.update\(/i.test(js));
+});

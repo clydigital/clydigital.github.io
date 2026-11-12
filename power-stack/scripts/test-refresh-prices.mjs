@@ -21,8 +21,20 @@ function yahoo(spec,days=["2026-10-26","2026-10-27","2026-10-28","2026-10-29","2
 }
 test("manifest uses a non-owner public research universe and no holdings quantities",()=>{
  const m=JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8"));
- assert.equal(validateManifest(m).length,107);
+ assert.equal(validateManifest(m).length,119);
  assert.deepEqual(validateManifest(m).find(x=>x.ticker==="SPCX"),{ticker:"SPCX",providerSymbol:"SPCX",currency:"USD",timeZone:"America/New_York"});
+ const eu=[
+  ["ASML.AS","EUR","Europe/Amsterdam"],["ADYEN.AS","EUR","Europe/Amsterdam"],
+  ["SAP.DE","EUR","Europe/Berlin"],["SIE.DE","EUR","Europe/Berlin"],
+  ["RHM.DE","EUR","Europe/Berlin"],["IFX.DE","EUR","Europe/Berlin"],
+  ["AIR.PA","EUR","Europe/Paris"],["TTE.PA","EUR","Europe/Paris"],
+  ["MC.PA","EUR","Europe/Paris"],["SU.PA","EUR","Europe/Paris"],
+  ["OR.PA","EUR","Europe/Paris"],["NOVO-B.CO","DKK","Europe/Copenhagen"]
+ ];
+ for(const [ticker,currency,timeZone] of eu)
+  assert.deepEqual(validateManifest(m).find(x=>x.ticker===ticker),{ticker,providerSymbol:ticker,currency,timeZone});
+ assert.throws(()=>validateManifest({...m,symbols:m.symbols.map(x=>x.ticker==="SAP.DE"?{...x,currency:"USD"}:x)}),/Unreviewed provider-market mapping/);
+ assert.throws(()=>validateManifest({...m,symbols:m.symbols.map(x=>x.ticker==="ASML.AS"?{...x,providerSymbol:"ASML"}:x)}),/Unreviewed provider-market mapping/);
  for(const name of ["ADBE","CI","CVS","JBL"])assert.deepEqual(validateManifest(m).find(x=>x.ticker===name),{ticker:name,providerSymbol:name,currency:"USD",timeZone:"America/New_York"});
  assert.ok(!JSON.stringify(m).includes("quantityAsOf"));
  assert.ok(!JSON.stringify(m).includes("owner_user_id"));
@@ -222,4 +234,22 @@ test("historical earnings have their own owner-gated archive; current decision s
  assert.match(decision,/main\.querySelector\("#ps-bluebelly-brief"\)/);
  assert.match(decision,/section\.append\(creatorBrief\)/);
  assert.doesNotMatch(decision,/Amazon's AWS sales accelerated 39%/);
+});
+
+test("European close readings require local currency, exact exchange identity and completed session",()=>{
+ const spec={ticker:"SAP.DE",providerSymbol:"SAP.DE",currency:"EUR",timeZone:"Europe/Berlin"};
+ const days=["2026-11-09","2026-11-10","2026-11-11","2026-11-12","2026-11-13"];
+ const make=currency=>({chart:{result:[{meta:{symbol:"SAP.DE",currency},
+  timestamp:days.map(d=>Date.parse(d+"T14:00:00Z")/1000),
+  indicators:{quote:[{close:[90,93,95,96,97]}]}}],error:null}});
+ const early=new Date("2026-11-13T14:05:00Z"); // Berlin 15:05 - not a completed local session
+ const out=parseYahooChart(make("EUR"),spec,early,"https://query1.finance.yahoo.com/v8/finance/chart/SAP.DE");
+ assert.equal(out.sessionDate,"2026-11-12");
+ assert.equal(out.close,96);
+ assert.equal(out.currency,"EUR");
+ assert.equal(out.status,"CLOSED");
+ assert.throws(()=>parseYahooChart(make("USD"),spec,early),/Provider currency mismatch/);
+ const source=JSON.parse(readFileSync(path.join(ROOT,"market-prices.json"),"utf8"));
+ assert.equal(source.rows.length,119);
+ assert.equal(source.rows.find(x=>x.ticker==="SAP.DE").currency,"EUR");
 });

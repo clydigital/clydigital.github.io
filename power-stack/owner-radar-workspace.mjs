@@ -2,11 +2,14 @@
    Authenticated-only DOM insertion. Research judgments never derive from oscillators.
    Bluebelly scenarios are dated conditional editorial hypotheses, not live forecasts.
 */
+import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
+import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
  {id:"ai",name:"AI & Semiconductors",symbol:"◈",description:"AI demand, chips, models and financing",tickers:["NVDA","AMD","AVGO","TSM","MU","INTC","SMH","SOXX","CRWV","CRDO","SNDK","AEM","DELL","FLEX","META","MSFT","GOOGL","AMZN","CRM","ADBE","CRWD","PLTR","JBL","IGV","VGT","XLK","VYX"]},
  {id:"equities",name:"Equity Breadth",symbol:"▥",description:"Major indexes, sectors and market participation",tickers:["SPY","QQQ","RSP","DIA","IWM","ARKK","XLF","XLI","XLB","XLC","XLP","XLRE","XLU","XLV","XLY","XBI","CI","CVS","TTWO"]},
+ {id:"europe",name:"Europe Stocks",symbol:"✦",description:"Local EUR/DKK listed shares · Xetra, Paris, Amsterdam, Copenhagen",tickers:["ASML.AS","ADYEN.AS","SAP.DE","SIE.DE","RHM.DE","IFX.DE","AIR.PA","TTE.PA","MC.PA","SU.PA","OR.PA","NOVO-B.CO"]},
  {id:"energy",name:"Oil & Gas",symbol:"≈",description:"Crude, energy producers and supply risk",tickers:["XOM","CVX","BKR","SLB","LNG","DAYANG","HIBISCS","XLE"]},
  {id:"shipping",name:"Refining & Shipping",symbol:"≋",description:"Fuel bottlenecks, tanker flows and margins",tickers:["MPC","PSX","VLO","STNG","MISC"]},
  {id:"bonds",name:"Rates & Credit",symbol:"≡",description:"Treasuries, duration and financing",tickers:["TLT","EDV","ZROZ","IEF","VGIT","SGOV","HYG","LQD"]},
@@ -17,73 +20,78 @@ export const MARKET_THEMES=Object.freeze([
  {id:"consumer",name:"Consumer & Industrials",symbol:"▤",description:"Consumer demand, mobility and industrials",tickers:["GRAB","TSLA","SPCX","AAPL","SYM","MNHLDG","FCFS","6742UW"]},
  {id:"crypto",name:"Crypto & High Beta",symbol:"◎",description:"Digital assets and high-beta exposures",tickers:["BTC","COIN","MSTR"]}
 ]);
+export const THEME_ICON_NAMES=Object.freeze({
+ ai:"cpu",equities:"bars",europe:"globe",energy:"fuel",shipping:"ship",
+ bonds:"landmark",metals:"gem",power:"orbit",china:"building",agri:"sprout",
+ consumer:"truck",crypto:"coins",
+});
 export const SCENARIOS=Object.freeze([
  {id:"oil-escalation",name:"Hormuz disruption worsens",family:"oil",kind:"Supply shock",
   premise:"Physical traffic disruption and insured-delivery costs worsen; crude and product pressure persist.",
   test:"Verify UKMTO incidents, complete vessel transits, Brent, distillate cracks, inventories and insurance.",
   falsifier:"Sustained safe commercial transit and narrowing delivered-product premiums.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"down",equities:"down",energy:"up",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down"}},
+  impact:{ai:"down",equities:"down",energy:"up",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
  {id:"oil-reopening",name:"Hormuz routes normalise",family:"oil",kind:"Supply relief",
   premise:"Sustained safe shipping and fuel availability improve; war premia and freight costs ease.",
   test:"Require repeated complete vessel transits, fewer incidents, insured access and product restocking.",
   falsifier:"Renewed strikes, missing traffic evidence or persistent diesel/LNG tightness.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"up",equities:"up",energy:"down",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"mixed"}},
+  impact:{ai:"up",equities:"up",energy:"down",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"mixed",europe:"unknown"}},
  {id:"fuel-scarcity",name:"Diesel stays tight, crude eases",family:"fuels",kind:"Product divergence",
   premise:"Crude falls while diesel/refining availability remains constrained.",
   test:"Compare matched diesel cracks, refinery utilisation, distillate inventories and freight rates.",
   falsifier:"Product stocks rebuild and crack spreads narrow alongside crude.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"mixed",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"mixed"}},
+  impact:{ai:"mixed",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"mixed",europe:"unknown"}},
  {id:"hot-inflation",name:"Hot CPI / Treasury yields rise",family:"rates",kind:"Rate shock",
   premise:"Persistent inflation pushes real yields and expected funding costs higher.",
   test:"Confirm in BLS releases, matched 2Y/10Y/30Y nominal and real yields and credit spreads.",
   falsifier:"Cooling core inflation and lower real yields persist across matched sessions.",
   source:"https://bluebelly-desk.vercel.app/regime-watch",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"down",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"down",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
  {id:"rates-relief",name:"Inflation eases / yields decline",family:"rates",kind:"Funding relief",
   premise:"Inflation moderates without an earnings collapse and real yields retreat.",
   test:"Confirm CPI/PCE composition, TIPS yields, Fed path, credit and issuer revisions.",
   falsifier:"Renewed energy inflation or higher long real yields undermines relief.",
   source:"https://bluebelly-desk.vercel.app/regime-watch",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"up",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"up"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"up",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown"}},
  {id:"equity-stress",name:"Equities fall / credit tightens",family:"equities",kind:"Risk-off",
   premise:"Index selling broadens beyond megacaps and credit-market financing conditions deteriorate.",
   test:"Compare SPY/RSP breadth, HY and IG spreads, issuance, earnings revisions and bank provisions.",
   falsifier:"Breadth recovers, refinancing remains accessible and credit spreads stabilise.",
   source:"https://bluebelly-desk.vercel.app/crash-opportunity",
-  impact:{ai:"down",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"down",consumer:"down",crypto:"down"}},
+  impact:{ai:"down",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"down",consumer:"down",crypto:"down",europe:"unknown"}},
  {id:"equity-recovery",name:"Broader equity recovery",family:"equities",kind:"Breadth improvement",
   premise:"Equal-weight participation, earnings and credit conditions improve together.",
   test:"Use matched SPY/RSP returns, advance/decline breadth, sector participation and HY spreads.",
   falsifier:"Rally narrows, earnings guidance deteriorates or spreads widen materially.",
   source:"https://bluebelly-desk.vercel.app/crash-opportunity",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"up",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"up",consumer:"up",crypto:"up"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"up",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"up",consumer:"up",crypto:"up",europe:"unknown"}},
  {id:"ai-financing",name:"AI funding / cash-flow squeeze",family:"ai",kind:"Capital pressure",
   premise:"Debt service, leases and infrastructure capex outrun realised customer cash conversion.",
   test:"Compare original issuer filings, cash receipts, debt costs, utilisation and capex commitments.",
   falsifier:"Cash receipts, interest coverage and paid utilisation improve sustainably.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/ai",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"down",china:"mixed",agri:"mixed",consumer:"mixed",crypto:"down"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"down",china:"mixed",agri:"mixed",consumer:"mixed",crypto:"down",europe:"unknown"}},
  {id:"ai-monetisation",name:"AI adoption converts to cash",family:"ai",kind:"Earnings confirmation",
   premise:"Paid utilisation, cloud margins and free cash conversion validate the AI investment cycle.",
   test:"Verify revenue quality, cash receipts, returns on invested capital and capital discipline.",
   falsifier:"Utilisation disappoints or recurring capex and debt service overwhelm collections.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/ai",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"mixed",agri:"mixed",consumer:"up",crypto:"up"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"mixed",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown"}},
  {id:"yen-unwind",name:"Yen carry unwind accelerates",family:"fx",kind:"Funding / FX",
   premise:"Yen strength is accompanied by verified deleveraging and dollar-funding spillovers.",
   test:"Match USDJPY, JGB-US rate spreads, cross-yen breadth and actual basis/funding stress.",
   falsifier:"Funding stays orderly and carry crosses stabilise despite yen strength.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/yen",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"mixed",consumer:"down",crypto:"down"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
  {id:"housing-credit",name:"Housing-led credit downturn",family:"housing",kind:"Household stress",
   premise:"Housing weakness broadens into delinquencies, lender losses and household consumption.",
   test:"Mortgage rates, new-home starts, delinquency transitions, bank provisions and HY spreads.",
   falsifier:"Affordability and housing activity recover without loan-quality deterioration.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/housing",
-  impact:{ai:"mixed",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"down"}}
+  impact:{ai:"mixed",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"down",europe:"unknown"}}
 ]);
 const IMPACT=Object.freeze({
  up:{symbol:"↑",label:"Tailwind",css:"up"},
@@ -184,6 +192,20 @@ export function summarizeTrackedCloses(priceMap){
  return {session:session||null,observed:rows.length,up,down,flat,
   missingOrDifferentSession:all.length-rows.length};
 }
+export function summarizeRegionalCloses(map,region="US"){
+ const eu=new Set(MARKET_THEMES.find(t=>t.id==="europe")?.tickers||[]);
+ const all=map instanceof Map?[...map.entries()]:[];
+ const valid=all.filter(([id,q])=>Number.isFinite(q?.close)&&q.close>0&&Number.isFinite(q?.day)&&
+ q.basis==="Exchange close"&&/^20\d{2}-\d{2}-\d{2}$/.test(q.session||"")&&
+ (region==="EU"?eu.has(id)&&["EUR","DKK"].includes(q.currency):
+  q.currency==="USD"&&!eu.has(id)&&id!=="BTC"));
+ const session=valid.reduce((last,[,q])=>q.session>last?q.session:last,"");
+ const list=valid.filter(([,q])=>q.session===session).map(([ticker,q])=>({ticker,changePct:q.day}))
+ .sort((a,b)=>b.changePct-a.changePct);
+ const up=list.filter(x=>x.changePct>0).length,down=list.filter(x=>x.changePct<0).length;
+ return {session:session||null,observed:list.length,up,down,flat:list.length-up-down,
+ leaders:list.slice(0,3),laggards:[...list].reverse().slice(0,3)};
+}
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
@@ -227,8 +249,10 @@ export function installRadarWorkspace(main,getState){
   ["Market watch & comparisons","portfolio.html#watchlist","market"],
   ["My portfolio","portfolio.html","portfolio"]]){
   const a=add(nav,node("a","psr-simple-link psr-simple-"+kind,label));a.href=url;
+  a.prepend(psIcon(kind==="ideas"?"target":kind==="market"?"chart":"wallet","psr-nav-icon"));
  }
  const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
+ radarToggle.prepend(psIcon("compass","psr-nav-icon"));
  const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
  snapshot.setAttribute("aria-label","Tracked US equities and ETFs: source-dated daily direction");
  const snapshotHead=add(snapshot,node("div","psr-snapshot-head"));
@@ -243,6 +267,26 @@ export function installRadarWorkspace(main,getState){
  const flatBar=add(snapshotBar,node("span","psr-breadth-flat"));
  const snapshotLegend=add(snapshot,node("div","psr-breadth-legend"));
  const note=add(snapshot,node("p","psr-snapshot-note","US-listed, USD-denominated tracked securities only—not S&P 500 breadth. Other markets, Bitcoin and earlier/missing sessions are excluded; bars show direction, not magnitude."));
+ const regionRows=add(snapshot,node("div","psr-regional-data"));regionRows.setAttribute("aria-label","Regional source-dated movement");
+ const regionWidgets=[];
+ for(const [region,title,icon] of [["US","US shares and ETFs","bars"],["EU","European local shares","globe"]]){
+  const card=add(regionRows,node("section","psr-region-card"));
+  const h=add(card,node("div","psr-region-title"));h.append(psIcon(icon),node("strong",null,title));
+  const status=add(card,node("small","psr-region-status","Checking dated observations"));
+  const bar=add(card,node("div","psr-region-track"));bar.setAttribute("role","img");
+  const rises=add(bar,node("span","psr-region-up"));
+  const falls=add(bar,node("span","psr-region-down"));
+  const flats=add(bar,node("span","psr-region-flat"));
+  regionWidgets.push({region,status,bar,rises,falls,flats});
+ }
+ const moverPanel=add(snapshot,node("details","psr-movers-panel"));
+ const moverSummary=add(moverPanel,node("summary",null,"Daily movers · chart"));
+ moverSummary.prepend(psIcon("activity"));const moverList=add(moverPanel,node("div","psr-movers-list"));
+ const bridge=add(snapshot,node("div","psr-bb-bridge"));
+ bridge.append(psIcon("network"),node("strong",null,"Bluebelly source coverage"));
+ const bridgeStatus=add(bridge,node("span",null,"Checking source availability…"));
+ const bridgeLink=add(bridge,node("a",null,"Markets research"));bridgeLink.href="https://bluebelly-desk.vercel.app/markets";
+ bridgeLink.target="_blank";bridgeLink.rel="noopener noreferrer";
  const section=node("section","psr-thematic");
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
@@ -353,7 +397,7 @@ export function installRadarWorkspace(main,getState){
   for(const theme of (showAllThemes?MARKET_THEMES:MARKET_THEMES.slice(0,6))){
    const button=add(themeGrid,node("button","psr-theme"));
    button.type="button";button.dataset.theme=theme.id;button.setAttribute("aria-pressed",String(selectedTheme===theme.id));
-   button.append(node("span","psr-theme-symbol",theme.symbol),node("strong",null,theme.name),
+   button.append(psIcon(THEME_ICON_NAMES[theme.id]||"globe","psr-theme-icon"),node("strong",null,theme.name),
      node("small",null,theme.description),
      node("span","psr-theme-count",tickers.filter(id=>themeFor(id)===theme.id).length+" tracked"));
   }
@@ -363,7 +407,7 @@ export function installRadarWorkspace(main,getState){
   themeMore.setAttribute("aria-expanded",String(showAllThemes));
   if(extra.length&&showAllThemes){
    const button=add(themeGrid,node("button","psr-theme"));button.type="button";button.dataset.theme="other";button.setAttribute("aria-pressed",String(selectedTheme==="other"));
-   button.append(node("span","psr-theme-symbol","□"),node("strong",null,"Other Markets"),node("small",null,"Unclassified symbols; no inferred theme"),node("span","psr-theme-count",extra.length+" tracked"));
+   button.append(psIcon("layers","psr-theme-icon"),node("strong",null,"Other Markets"),node("small",null,"Unclassified symbols; no inferred theme"),node("span","psr-theme-count",extra.length+" tracked"));
   }
  }
  function renderGrid(){
@@ -408,6 +452,26 @@ export function installRadarWorkspace(main,getState){
   for(const [tag,count,label] of [["up",stats.up,"Rising"],["down",stats.down,"Falling"],["flat",stats.flat,"Unchanged"]]){
    const item=add(snapshotLegend,node("span","psr-legend-item psr-legend-"+tag));
    item.append(node("strong",null,String(count)),document.createTextNode(" "+label));
+  }
+  for(const widget of regionWidgets){
+   const r=summarizeRegionalCloses(getState()?.priceMap,widget.region);
+   widget.status.textContent=r.observed?r.observed+" observed · "+r.session+" · "+r.up+" up / "+r.down+" down":"No matching current exchange closes";
+   for(const [el,n] of [[widget.rises,r.up],[widget.falls,r.down],[widget.flats,r.flat]])
+    el.style.width=(r.observed?100*n/r.observed:0).toFixed(2)+"%";
+   widget.bar.setAttribute("aria-label",widget.region+": "+r.up+" rising, "+r.down+" falling, "+r.flat+" unchanged on "+(r.session||"no common session"));
+  }
+  moverList.replaceChildren();
+  const us=summarizeRegionalCloses(getState()?.priceMap,"US");
+  const movers=[...us.leaders,...us.laggards];const seen=new Set();
+  const unique=movers.filter(x=>{if(seen.has(x.ticker))return false;seen.add(x.ticker);return true;});
+  const maximum=Math.max(.01,...unique.map(x=>Math.abs(x.changePct)));
+  if(!unique.length)moverList.append(node("p",null,"No comparable source-qualified US movers."));
+  for(const x of unique){
+   const item=add(moverList,node("div","psr-mover-row"));item.dataset.tone=x.changePct>0?"up":x.changePct<0?"down":"flat";
+   item.append(node("strong",null,x.ticker));
+   const track=add(item,node("div","psr-mover-bar"));const fill=add(track,node("span"));
+   fill.style.width=(100*Math.abs(x.changePct)/maximum).toFixed(1)+"%";
+   item.append(node("span",null,(x.changePct>0?"+":"")+x.changePct.toFixed(2)+"%"));
   }
  }
  function renderRadar(){
@@ -469,5 +533,10 @@ export function installRadarWorkspace(main,getState){
   }
  }
  renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();
+ loadBluebellyStockCoverage().then(report=>{
+  if(!bridge.isConnected)return;
+  bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
+   " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
+ });
  return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot()},openWorkspace};
 }

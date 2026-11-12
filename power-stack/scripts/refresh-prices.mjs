@@ -98,12 +98,16 @@ export function validateManifest(input){
   }
   if(x.marketType!==undefined
    ||!/^([A-Z0-9][A-Z0-9.\-]{0,24})$/.test(x.providerSymbol||"")
-   ||!["USD","MYR","HKD","CNY"].includes(x.currency)
-   ||!["America/New_York","Asia/Kuala_Lumpur","Asia/Hong_Kong","Asia/Shanghai"].includes(x.timeZone))
+   ||!["USD","MYR","HKD","CNY","EUR","DKK"].includes(x.currency)
+   ||!["America/New_York","Asia/Kuala_Lumpur","Asia/Hong_Kong","Asia/Shanghai","Europe/Amsterdam","Europe/Berlin","Europe/Paris","Europe/Copenhagen"].includes(x.timeZone))
     throw Error("Invalid public research ticker mapping");
   const expected=x.providerSymbol.endsWith(".KL")?["MYR","Asia/Kuala_Lumpur"]
    :x.providerSymbol.endsWith(".HK")?["HKD","Asia/Hong_Kong"]
    :x.providerSymbol.endsWith(".SS")||x.providerSymbol.endsWith(".SZ")?["CNY","Asia/Shanghai"]
+   :x.providerSymbol.endsWith(".AS")?["EUR","Europe/Amsterdam"]
+   :x.providerSymbol.endsWith(".DE")?["EUR","Europe/Berlin"]
+   :x.providerSymbol.endsWith(".PA")?["EUR","Europe/Paris"]
+   :x.providerSymbol.endsWith(".CO")?["DKK","Europe/Copenhagen"]
    :["USD","America/New_York"];
   if(x.currency!==expected[0]||x.timeZone!==expected[1])
     throw Error("Unreviewed provider-market mapping for "+x.ticker);

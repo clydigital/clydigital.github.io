@@ -1,6 +1,6 @@
 {
   "contractVersion": "power-stack-public-symbols/1",
-  "description": "Neutral previously public issuer/ETF research universe; NOT derived from owner portfolio, holdings, ranking or watchlist. No private membership, quantities or cost basis. Includes explicit unsupported-series gates and 24/7 Bitcoin USD observations.",
+  "description": "Independent public research instruments with exchange-aware USD/EUR/DKK/MYR/HKD/CNY close tracking; EU identifiers align with Bluebelly curated Europe coverage. Quotes remain separately sourced, never owner portfolio or brokerage data.",
   "symbols": [
     {
       "ticker": "1164.HK",
@@ -65,10 +65,22 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "ADYEN.AS",
+      "providerSymbol": "ADYEN.AS",
+      "currency": "EUR",
+      "timeZone": "Europe/Amsterdam"
+    },
+    {
       "ticker": "AEM",
       "providerSymbol": "AEM",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "AIR.PA",
+      "providerSymbol": "AIR.PA",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris"
     },
     {
       "ticker": "AMD",
@@ -87,6 +99,12 @@
       "providerSymbol": "ARKK",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "ASML.AS",
+      "providerSymbol": "ASML.AS",
+      "currency": "EUR",
+      "timeZone": "Europe/Amsterdam"
     },
     {
       "ticker": "AVGO",
@@ -294,6 +312,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "IFX.DE",
+      "providerSymbol": "IFX.DE",
+      "currency": "EUR",
+      "timeZone": "Europe/Berlin"
+    },
+    {
       "ticker": "IGV",
       "providerSymbol": "IGV",
       "currency": "USD",
@@ -334,6 +358,12 @@
       "providerSymbol": "LQD",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "MC.PA",
+      "providerSymbol": "MC.PA",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris"
     },
     {
       "ticker": "META",
@@ -378,6 +408,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "NOVO-B.CO",
+      "providerSymbol": "NOVO-B.CO",
+      "currency": "DKK",
+      "timeZone": "Europe/Copenhagen"
+    },
+    {
       "ticker": "NTR",
       "providerSymbol": "NTR",
       "currency": "USD",
@@ -394,6 +430,12 @@
       "providerSymbol": "NVT",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "OR.PA",
+      "providerSymbol": "OR.PA",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris"
     },
     {
       "ticker": "PLTR",
@@ -420,16 +462,34 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "RHM.DE",
+      "providerSymbol": "RHM.DE",
+      "currency": "EUR",
+      "timeZone": "Europe/Berlin"
+    },
+    {
       "ticker": "RSP",
       "providerSymbol": "RSP",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "SAP.DE",
+      "providerSymbol": "SAP.DE",
+      "currency": "EUR",
+      "timeZone": "Europe/Berlin"
+    },
+    {
       "ticker": "SGOV",
       "providerSymbol": "SGOV",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "SIE.DE",
+      "providerSymbol": "SIE.DE",
+      "currency": "EUR",
+      "timeZone": "Europe/Berlin"
     },
     {
       "ticker": "SLB",
@@ -480,6 +540,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "SU.PA",
+      "providerSymbol": "SU.PA",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris"
+    },
+    {
       "ticker": "SYM",
       "providerSymbol": "SYM",
       "currency": "USD",
@@ -508,6 +574,12 @@
       "providerSymbol": "TSM",
       "currency": "USD",
       "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "TTE.PA",
+      "providerSymbol": "TTE.PA",
+      "currency": "EUR",
+      "timeZone": "Europe/Paris"
     },
     {
       "ticker": "TTWO",

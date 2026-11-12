@@ -2,14 +2,14 @@
   "contractVersion": "power-stack-public-prices/1",
   "generatedAt": "2026-11-12T21:31:56.577Z",
   "isDelayed": true,
-  "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
+  "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes. 12 EU local shares are pending independently sourced exchange-currency validation; lack of data is not a zero move.",
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
-    "tracked": 107,
+    "tracked": 119,
     "fresh": 106,
     "stale": 0,
-    "unavailable": 1
+    "unavailable": 13
   },
   "rows": [
     {
@@ -453,6 +453,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "ADYEN.AS",
+      "providerSymbol": "ADYEN.AS",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "AEM",
       "providerSymbol": "AEM",
       "currency": "USD",
@@ -510,6 +527,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AEM?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "AIR.PA",
+      "providerSymbol": "AIR.PA",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "AMD",
@@ -687,6 +721,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ARKK?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "ASML.AS",
+      "providerSymbol": "ASML.AS",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "AVGO",
@@ -2660,6 +2711,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "IFX.DE",
+      "providerSymbol": "IFX.DE",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "IGV",
       "providerSymbol": "IGV",
       "currency": "USD",
@@ -3071,6 +3139,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/LQD?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "MC.PA",
+      "providerSymbol": "MC.PA",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "META",
@@ -3486,6 +3571,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "NOVO-B.CO",
+      "providerSymbol": "NOVO-B.CO",
+      "currency": "DKK",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "NTR",
       "providerSymbol": "NTR",
       "currency": "USD",
@@ -3661,6 +3763,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/NVT?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "OR.PA",
+      "providerSymbol": "OR.PA",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "PLTR",
@@ -3899,6 +4018,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "RHM.DE",
+      "providerSymbol": "RHM.DE",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "RSP",
       "providerSymbol": "RSP",
       "currency": "USD",
@@ -3958,6 +4094,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "SAP.DE",
+      "providerSymbol": "SAP.DE",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "SGOV",
       "providerSymbol": "SGOV",
       "currency": "USD",
@@ -4015,6 +4168,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SGOV?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "SIE.DE",
+      "providerSymbol": "SIE.DE",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "SLB",
@@ -4453,6 +4623,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "SU.PA",
+      "providerSymbol": "SU.PA",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
+    },
+    {
       "ticker": "SYM",
       "providerSymbol": "SYM",
       "currency": "USD",
@@ -4746,6 +4933,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TSM?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "TTE.PA",
+      "providerSymbol": "TTE.PA",
+      "currency": "EUR",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_SOURCE_REFRESH",
+      "reason": "New EU listing. Historical currency-validated completed session not yet retrieved."
     },
     {
       "ticker": "TTWO",
