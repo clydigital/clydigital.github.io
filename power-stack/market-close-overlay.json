@@ -1,0 +1,115 @@
+{
+  "contractVersion": "power-stack-independent-close-overlay/1",
+  "session": "2026-11-12",
+  "market": "US equities and ETFs regular session",
+  "marketCloseTimestampUTC": "2026-11-12T21:00:00.000Z",
+  "source": "Finnhub quote connector",
+  "sourceDocumentation": "https://finnhub.io/docs/api/quote",
+  "purpose": "Dated priority-watch closing prices. Independent full-universe daily bar feed remains separate and owns 1D technicals.",
+  "rows": [
+    {
+      "ticker": "TSLA",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 397.45,
+      "previousClose": 390.84,
+      "changePct": 1.691,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SPCX",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 139.94,
+      "previousClose": 139.75,
+      "changePct": 0.136,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SPY",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 757.12,
+      "previousClose": 759.81,
+      "changePct": -0.354,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "QQQ",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 688.17,
+      "previousClose": 690.38,
+      "changePct": -0.32,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "NVDA",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 166.19,
+      "previousClose": 173.73,
+      "changePct": -4.34,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "ADBE",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 238.54,
+      "previousClose": 237.6,
+      "changePct": 0.396,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "CF",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 124.92,
+      "previousClose": 123.24,
+      "changePct": 1.363,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "CVS",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 89.79,
+      "previousClose": 89.52,
+      "changePct": 0.302,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "CI",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 296.27,
+      "previousClose": 301.45,
+      "changePct": -1.718,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    }
+  ],
+  "coverage": {
+    "verified": 9
+  },
+  "NOT_FOR_INFERRED_4H_OR_DAILY_TECHNICAL_SIGNAL": true,
+  "NO_OWNER_POSITIONS_OR_ACCOUNT_DATA": true
+}
