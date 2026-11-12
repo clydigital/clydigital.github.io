@@ -63,3 +63,11 @@
 
 .pso-oscillator-panel{border-top:1px dashed #334e45;margin-top:15px;padding-top:15px}
 .pso-oscillator-panel h3{font-size:13px;color:#bed3c7;margin:0 0 10px}
+
+/* Issuer filings and model-only downside lenses; private gate controls visibility. */
+.pso-cash{border-color:#4f6b64!important;background:#112323}
+.pso-cash summary{font-weight:800;color:#bbebd2}
+.pso-cash p{color:#bbd2cb;line-height:1.65;overflow-wrap:anywhere}
+.pso-cash .pso-stress-heading{font-size:10px;font-weight:850;letter-spacing:.045em;color:#c4e9d7;margin-top:12px}
+.pso-cash .pso-stress-line{border-left:2px solid #51786d;padding-left:9px;font-variant-numeric:tabular-nums;color:#e7f2e9}
+.pso-cash .pso-stress-disclaimer{font-size:10px;color:#b5c6c0;font-style:italic}
