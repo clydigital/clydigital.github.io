@@ -441,6 +441,7 @@ export function visibleOpportunities(mode="ALL"){
 function card(item,prices,ownerResearch=[]){
  const research=ownerResearch.find(x=>x?.ticker===item.ticker)||null;
  const state=opportunityState(item,prices?.get(item.ticker),new Date(),research),node=make("article","pso-card");
+ node.dataset.kind=item.kind;node.dataset.direction=item.direction;
  const head=make("div","pso-card-head");
  const intro=make("div");intro.append(make("strong","pso-ticker",item.ticker),make("span","pso-company",item.name));
  const direction=make("span","pso-direction pso-"+item.direction.toLowerCase(),item.direction==="SHORT"?"SHORT WATCH":"LONG WATCH");
@@ -498,12 +499,59 @@ function card(item,prices,ownerResearch=[]){
  }
  return node;
 }
+/** Separate verified close tape: never pass an old EMA reading as a new-session indicator. */
+export function validatePriorityCloses(data,now=new Date()){
+ if(data?.contractVersion!=="power-stack-independent-close-overlay/1"||
+  data?.source!=="Finnhub quote connector"||data?.session?.length!==10||
+  !Array.isArray(data.rows)||data.rows.length<2||data.rows.length>120)return null;
+ const mark=Date.parse(data.session+"T21:00:00Z");
+ const age=now.getTime()-mark;
+ if(!Number.isFinite(mark)||!Number.isFinite(age)||age<0||age>6*86400000||
+  data.marketCloseTimestampUTC!==data.session+"T21:00:00.000Z")return null;
+ const rows=[],seen=new Set();
+ for(const q of data.rows){
+  if(!q||!/^[A-Z0-9.]{1,10}$/.test(q.ticker||"")||seen.has(q.ticker)||
+    q.session!==data.session||q.currency!=="USD"||q.provider!==data.source||
+    q.closeTimestampUTC!==data.marketCloseTimestampUTC||
+    !Number.isFinite(q.close)||q.close<=0||
+    !Number.isFinite(q.previousClose)||q.previousClose<=0||
+    !Number.isFinite(q.changePct)||q.technicalStatus!=="NOT_RECALCULATED_IN_THIS_OVERLAY"||
+    Math.abs(100*(q.close/q.previousClose-1)-q.changePct)>.02)return null;
+  seen.add(q.ticker);rows.push(q);
+ }
+ return {session:data.session,rows};
+}
+function renderClosePanel(target,tape){
+ const header=make("div","pso-close-head");
+ header.append(make("strong",null,"US market closes · "+tape.session),
+  make("span",null,"Finnhub verified · 4:00 p.m. New York · USD"));
+ const note=make("p","pso-close-notice",
+  "Independent completed-session prices, not live quotes or trading signals. Daily EMA / Stoch RSI readings remain on their own validated historical session.");
+ const prominent=["SPCX","TSLA","NVDA","QQQ","SPY","ADBE","CF","CVS","CI","SMH","TLT","HYG"];
+ const map=new Map(tape.rows.map(x=>[x.ticker,x]));
+ const main=make("div","pso-close-grid");
+ function insertQuote(node,q){
+  const card=make("div","pso-close-item");
+  card.dataset.direction=q.changePct>0?"up":q.changePct<0?"down":"flat";
+  card.append(make("strong","pso-close-symbol",q.ticker));
+  card.append(make("span","pso-close-price","$"+q.close.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})));
+  card.append(make("span","pso-close-change",(q.changePct>0?"+":"")+q.changePct.toFixed(2)+"%"));
+  node.append(card);
+ }
+ for(const symbol of prominent){const q=map.get(symbol);if(q)insertQuote(main,q);}
+ const more=make("details","pso-close-more");
+ more.append(make("summary",null,"See all "+tape.rows.length+" verified priority closes"));
+ const rest=make("div","pso-close-grid pso-close-grid-more");
+ for(const q of tape.rows)if(!prominent.includes(q.ticker))insertQuote(rest,q);
+ more.append(rest);
+ target.replaceChildren(header,note,main,more);
+}
 export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  if(!target)return;
  const home=options.mode==="home",initial=home?"ALL":
    location.hash==="#shorts"?"SHORT":location.hash==="#trades"?"TRADE":
    location.hash==="#investments"?"INVESTMENT":"ALL";
- let chosen=initial;
+ let chosen=initial,cardPrices=prices;
  const shell=make("section","pso-shell");
  shell.id="ps-opportunities";shell.setAttribute("aria-label","Guided trade and investment ideas");
  const eyebrow=make("p","pso-overline","OPPORTUNITY TERMINAL · RESEARCH ONLY");
@@ -521,7 +569,12 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   node.append(make("strong",null,x.title),make("span",null,x.desc));guide.append(node);
  }
  shell.append(guide);
- shell.append(renderMergerWatch(prices));
+ const closePanel=make("section","pso-close-panel");
+ closePanel.setAttribute("aria-label","Verified recent US closing prices");
+ closePanel.append(make("p","pso-close-loading","Verifying recent completed US closing prices…"));
+ shell.append(closePanel);
+ const mergerMount=make("div","pso-merger-mount");
+ mergerMount.append(renderMergerWatch(prices));shell.append(mergerMount);
  const head=make("div","pso-head");head.append(make("h3",null,home?"Ideas to investigate":"Research candidates"));
  const about=make("span",null,"Theses reviewed "+OPPORTUNITY_REVIEW_DATE+" · Latest qualified daily bars only");head.append(about);shell.append(head);
  const filters=make("div","pso-filters");filters.setAttribute("role","group");filters.setAttribute("aria-label","Opportunity type");
@@ -539,7 +592,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   for(const button of filters.querySelectorAll("button"))button.setAttribute("aria-pressed",String(button.dataset.filter===chosen));
   cards.replaceChildren();
   const selected=home?OPPORTUNITIES.filter(x=>["crwv-short","smh-short","cf-long"].includes(x.id)):visibleOpportunities(chosen);
-  for(const item of selected)cards.append(card(item,prices,options.ownerResearch||[]));
+  for(const item of selected)cards.append(card(item,cardPrices,options.ownerResearch||[]));
  }
  const radar=make("section","pso-radar");
  radar.append(make("h3",null,"Market discovery · completed daily bars"));
@@ -580,4 +633,26 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   }
  }
  select(chosen);renderScan();target.replaceChildren(shell);
+ // The owner gate mounts the terminal first. This secondary source has no account, order or positions data.
+ fetch("./market-close-overlay.json",{cache:"no-store"}).then(response=>{
+  if(!response.ok)throw Error("Close overlay unavailable");
+  return response.json();
+ }).then(input=>{
+  if(!shell.isConnected)return;
+  const verified=validatePriorityCloses(input);
+  if(!verified)throw Error("Overlay stale or failed source contract");
+  renderClosePanel(closePanel,verified);
+  const updated=new Map(prices);
+  for(const q of verified.rows){
+   const prev=prices.get(q.ticker);
+   if(prev?.session&&prev.session>q.session)continue;
+   updated.set(q.ticker,{...prev,close:q.close,day:q.changePct,session:q.session,
+    currency:q.currency,technical:null,basis:"Finnhub regular-session close · separate technical lineage"});
+  }
+  cardPrices=updated;select(chosen);
+  mergerMount.replaceChildren(renderMergerWatch(cardPrices));
+ }).catch(()=>{
+  if(shell.isConnected)closePanel.replaceChildren(make("p","pso-close-unavailable",
+    "Most recent independent close overlay unavailable; earlier source-dated daily bars remain visible below."));
+ });
 }

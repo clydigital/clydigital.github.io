@@ -1,0 +1,164 @@
+/* Power Stack | 13 Nov 2026. Visual hierarchy / type-scale only.
+   Light-on-dark CP/ocean identity, explicit source labels, no buy/sell meaning from hues.
+   This stylesheet is last in owner-only home + Ideas pages. No account data. */
+:root{--ps-ux-paper:#f4fbff;--ps-ux-copy:#d7e7f0;--ps-ux-muted:#bed0df;--ps-ux-outline:#5683a0;--ps-ux-lime:#8de5c6;--ps-ux-amber:#f3c88a;--ps-ux-violet:#bfb4fa;--ps-ux-coral:#f4aeb4}
+body.ps-fin-pulse .pso-shell{
+ background:linear-gradient(145deg,#112d46 0%,#0c233a 44%,#101b34 100%)!important;
+ border:1px solid #5786a1!important;border-radius:17px!important;
+ box-shadow:0 16px 50px rgba(0,9,26,.20);padding:clamp(18px,2.3vw,29px)!important;
+ color:var(--ps-ux-paper)!important
+}
+body.ps-fin-pulse .pso-shell h2{font-size:clamp(28px,3.3vw,39px)!important;line-height:1.16!important}
+body.ps-fin-pulse .pso-overline{font-size:12px!important;letter-spacing:.11em!important;color:#b7e7fc!important}
+body.ps-fin-pulse .pso-lead{font-size:16px!important;line-height:1.68!important;color:#d7e8f2!important;max-width:95ch!important}
+body.ps-fin-pulse .pso-paths{gap:13px!important;margin:21px 0 25px!important}
+body.ps-fin-pulse .pso-path{min-height:106px!important;gap:9px!important;padding:18px!important;border-radius:12px!important;border:1px solid #5d7b9a!important;border-top:4px solid #f0bf83!important;background:linear-gradient(135deg,#283b4e,#192a40)!important}
+body.ps-fin-pulse .pso-path:nth-child(2){border-top-color:#7cddc2!important;background:linear-gradient(135deg,#153a3b,#162b40)!important}
+body.ps-fin-pulse .pso-path:nth-child(3){border-top-color:#b6adf7!important;background:linear-gradient(135deg,#302d50,#1b2742)!important}
+body.ps-fin-pulse .pso-path strong{font-size:18px!important;color:#fff!important;line-height:1.3!important}
+body.ps-fin-pulse .pso-path span{font-size:14px!important;color:#d5e5ef!important;line-height:1.5!important}
+body.ps-fin-pulse .pso-path:is(:hover,:focus-visible){border-color:#c6eaff!important;filter:brightness(1.10)}
+body.ps-fin-pulse .pso-head{margin:19px 0 15px!important}
+body.ps-fin-pulse .pso-head h3{font-size:24px!important;color:#fff!important}
+body.ps-fin-pulse .pso-head>span{font-size:13px!important;color:#c4ddec!important}
+body.ps-fin-pulse .pso-filters{gap:10px!important;margin-bottom:17px!important}
+body.ps-fin-pulse .pso-filter{font-size:14px!important;padding:12px 17px!important;min-height:44px!important;background:#163650!important;border-color:#6184a3!important;color:#e3f4ff!important}
+body.ps-fin-pulse .pso-filter[aria-pressed="true"]{background:#d2f2ff!important;color:#092c40!important;border-color:#d2f2ff!important}
+body.ps-fin-pulse .pso-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+body.ps-fin-pulse .pso-card{background:#102b41!important;border:1px solid #456f8a!important;border-left:5px solid #6cb8e1!important;border-radius:12px!important;padding:19px!important;gap:13px!important}
+body.ps-fin-pulse .pso-card[data-kind="TRADE"]{border-left-color:var(--ps-ux-amber)!important;background:linear-gradient(135deg,#2b303b,#192c3e)!important}
+body.ps-fin-pulse .pso-card[data-kind="INVESTMENT"]{border-left-color:var(--ps-ux-lime)!important;background:linear-gradient(135deg,#183a40,#152a41)!important}
+body.ps-fin-pulse .pso-card[data-direction="SHORT"] .pso-direction{background:#472d32!important;border-color:#d18a8c!important;color:#ffe1e1!important}
+body.ps-fin-pulse .pso-card[data-direction="LONG"] .pso-direction{background:#173f40!important;border-color:#7fe1c9!important;color:#e3fcf3!important}
+body.ps-fin-pulse .pso-ticker{font-size:27px!important;line-height:1.2!important;color:#fff!important}
+body.ps-fin-pulse .pso-company{font-size:14px!important;color:#d5e9f4!important;margin-top:5px!important}
+body.ps-fin-pulse .pso-direction{font-size:12px!important;padding:7px 10px!important;letter-spacing:.035em!important}
+body.ps-fin-pulse .pso-meta span{font-size:12px!important;padding:6px 9px!important;background:#27435a!important;color:#edf5fd!important}
+body.ps-fin-pulse .pso-thesis{font-size:16px!important;line-height:1.68!important;color:#f0f7fc!important}
+body.ps-fin-pulse .pso-condition{padding:15px!important;border-left:4px solid var(--ps-ux-amber)!important;background:#2c3440!important;gap:8px!important}
+body.ps-fin-pulse .pso-condition strong{font-size:13px!important;color:#ffdeaa!important}
+body.ps-fin-pulse .pso-condition span{font-size:15px!important;color:#f2f6fa!important;line-height:1.6!important}
+body.ps-fin-pulse .pso-step{border-color:#45677d!important;padding-top:12px!important}
+body.ps-fin-pulse .pso-step strong{font-size:12px!important;color:#a5e2f4!important}
+body.ps-fin-pulse .pso-step p{font-size:15px!important;line-height:1.65!important;color:#e7f2f9!important}
+body.ps-fin-pulse .pso-details{border-color:#567688!important;padding-top:13px!important}
+body.ps-fin-pulse .pso-details summary{font-size:15px!important;color:#b8edda!important;line-height:1.45!important;min-height:32px!important}
+body.ps-fin-pulse .pso-details p{font-size:14px!important;line-height:1.68!important;color:#d7e5ec!important}
+body.ps-fin-pulse .pso-details a{font-size:14px!important;color:#a5e5ff!important}
+body.ps-fin-pulse .pso-research-status{background:#182f48!important;border-color:#557d97!important;padding:13px!important}
+body.ps-fin-pulse .pso-research-status strong{font-size:12px!important;color:#a9e8ff!important}
+body.ps-fin-pulse .pso-research-status p{font-size:14px!important;line-height:1.65!important;color:#d9e7f0!important}
+body.ps-fin-pulse .pso-stress-heading,body.ps-fin-pulse .pso-cash .pso-stress-heading{font-size:12px!important}
+body.ps-fin-pulse .pso-stress-line{border-color:#79c9b6!important;font-size:14px!important}
+body.ps-fin-pulse .pso-stress-disclaimer,body.ps-fin-pulse .pso-cash .pso-stress-disclaimer{font-size:13px!important}
+body.ps-fin-pulse .pso-merger-watch{
+ background:linear-gradient(140deg,#29294b,#202a4b 60%,#182c44)!important;
+ border:1px solid #9087c6!important;border-left:5px solid var(--ps-ux-violet)!important;
+ border-radius:13px!important;padding:23px!important;margin-top:18px!important
+}
+body.ps-fin-pulse .pso-merger-watch h3{font-size:clamp(23px,2.6vw,31px)!important;color:#fff!important}
+body.ps-fin-pulse .pso-merger-lead{font-size:16px!important;line-height:1.7!important;color:#e4e6ff!important}
+body.ps-fin-pulse .pso-merger-quote{font-size:14px!important;color:#c8e9ef!important;border-color:#6a719c!important}
+body.ps-fin-pulse .pso-merger-ratios{gap:11px!important}
+body.ps-fin-pulse .pso-merger-ratio{background:#242c50!important;border-color:#737eb7!important;padding:16px!important}
+body.ps-fin-pulse .pso-merger-ratio strong{font-size:13px!important;color:#dedcff!important}
+body.ps-fin-pulse .pso-merger-ratio span{font-size:19px!important;color:#fff!important}
+body.ps-fin-pulse .pso-merger-ratio small{font-size:13px!important;color:#d7dfec!important}
+body.ps-fin-pulse .pso-merger-caution{font-size:13px!important;line-height:1.6!important;color:#e0dfef!important}
+body.ps-fin-pulse .pso-spcx-research{background:#183840!important;border:1px solid #4b9a90!important;padding:15px!important}
+body.ps-fin-pulse .pso-spcx-research summary{font-size:17px!important;color:#b7fae8!important}
+body.ps-fin-pulse .pso-spcx-research p{font-size:15px!important;color:#e6f6f5!important}
+body.ps-fin-pulse .pso-spcx-creators{background:#173a42!important;border-color:#418d93!important;padding:15px!important}
+body.ps-fin-pulse .pso-spcx-creators strong{font-size:15px!important;color:#e2fffa!important}
+body.ps-fin-pulse .pso-spcx-creators p{font-size:14px!important;color:#e5f2f6!important}
+body.ps-fin-pulse .pso-spcx-creators a{font-size:14px!important;color:#a9eaff!important}
+body.ps-fin-pulse .pso-radar{border-color:#5689a5!important}
+body.ps-fin-pulse .pso-radar h3,body.ps-fin-pulse .pso-oscillator-panel h3{font-size:22px!important}
+body.ps-fin-pulse .pso-radar-note{font-size:15px!important;line-height:1.65!important;color:#d3e9f5!important}
+body.ps-fin-pulse .pso-radar-item{padding:16px!important;border-color:#5785a0!important}
+body.ps-fin-pulse .pso-radar-item strong{font-size:17px!important}
+body.ps-fin-pulse .pso-radar-item span{font-size:14px!important;line-height:1.6!important}
+body.ps-fin-pulse .pso-footer{font-size:14px!important;color:#cedfeb!important}
+body.ps-fin-pulse .pso-open{font-size:15px!important;padding:12px 18px!important}
+/* Separately sourced 12-Nov close overlay: green/red communicate observed sign only. */
+body.ps-fin-pulse .pso-close-panel{border:1px solid #638eaa;background:#142d45;border-radius:13px;padding:18px 19px;margin:12px 0 22px}
+body.ps-fin-pulse .pso-close-head{display:flex;gap:9px 22px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+body.ps-fin-pulse .pso-close-head strong{font-size:21px;color:#f8fdff}
+body.ps-fin-pulse .pso-close-head span{font-size:13px;color:#baddec}
+body.ps-fin-pulse .pso-close-notice{font-size:13px!important;line-height:1.55!important;color:#c9dce7!important;margin:10px 0 14px!important}
+body.ps-fin-pulse .pso-close-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+body.ps-fin-pulse .pso-close-item{min-width:0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 11px;padding:12px 13px;border:1px solid #4b718b;border-radius:9px;background:#0b2239}
+body.ps-fin-pulse .pso-close-symbol{font-size:16px;letter-spacing:.035em;color:#b6daf4}
+body.ps-fin-pulse .pso-close-price{font-size:21px;color:#fff;font-weight:850;font-variant-numeric:tabular-nums}
+body.ps-fin-pulse .pso-close-change{font-size:15px;font-weight:850;font-variant-numeric:tabular-nums;width:100%}
+body.ps-fin-pulse .pso-close-item[data-direction="up"] .pso-close-change{color:#8ef1c2}
+body.ps-fin-pulse .pso-close-item[data-direction="down"] .pso-close-change{color:#ffadb5}
+body.ps-fin-pulse .pso-close-item[data-direction="flat"] .pso-close-change{color:#d5e5ef}
+body.ps-fin-pulse .pso-close-more{margin-top:13px;border-top:1px solid #4d6e84;padding-top:11px}
+body.ps-fin-pulse .pso-close-more summary{cursor:pointer;font-size:14px;color:#bce6fa;font-weight:780;padding:6px 0}
+body.ps-fin-pulse .pso-close-grid-more{margin-top:12px}
+body.ps-fin-pulse .pso-close-loading,body.ps-fin-pulse .pso-close-unavailable{font-size:15px;color:#d4e4f0;line-height:1.6}
+/* Top Stock Picks and owner decision sections need an actual readable text floor. */
+body.ps-fin-pulse .ps-picks .ps-pick{padding:20px!important;border-color:#5a83a1!important;background:#14324a!important}
+body.ps-fin-pulse .ps-picks .ps-pick-label{font-size:13px!important}
+body.ps-fin-pulse .ps-picks .ps-pick-bias{font-size:13px!important}
+body.ps-fin-pulse .ps-picks .ps-pick-summary{font-size:16px!important;line-height:1.68!important;color:#eef7fb!important}
+body.ps-fin-pulse .ps-picks .ps-pick-stats span{font-size:14px!important}
+body.ps-fin-pulse .ps-picks .ps-pick-stats strong{font-size:17px!important}
+body.ps-fin-pulse .ps-picks .ps-pick-subhead{font-size:12px!important}
+body.ps-fin-pulse .ps-picks .ps-scenario strong{font-size:18px!important}
+body.ps-fin-pulse .ps-picks .ps-scenario small{font-size:11px!important}
+body.ps-fin-pulse .ps-picks .ps-pick-test{font-size:15px!important;line-height:1.6!important}
+body.ps-fin-pulse .ps-picks .ps-picks-meta,body.ps-fin-pulse .ps-picks .ps-pick-source{font-size:13px!important}
+body.ps-fin-pulse .ps-picks .ps-picks-foot,body.ps-fin-pulse .ps-picks .ps-picks-veto p{font-size:14px!important}
+body.ps-fin-pulse .ps-picks .ps-picks-veto{border-left-width:5px!important}
+/* Main desk + Ideas tracker: enlarge dense captions without destroying table semantics. */
+body.ps-fin-pulse .psd-root .psd-top p:not(.psd-overline){font-size:16px!important;line-height:1.6!important}
+body.ps-fin-pulse .psd-root .psd-card h3{font-size:20px!important}
+body.ps-fin-pulse .psd-root .psd-detail-row p,body.ps-fin-pulse .psd-root .psd-setup-thesis{font-size:15px!important;line-height:1.65!important}
+body.ps-fin-pulse .psd-root .psd-setup-next p{font-size:15px!important}
+body.ps-fin-pulse .psd-root .psd-lane h2{font-size:21px!important}
+body.ps-fin-pulse .psd-root .psd-queue-item p{font-size:14px!important}
+body.ps-fin-pulse .psd-root .psd-queue-item strong{font-size:16px!important}
+body.ps-fin-pulse .psi-shell .psi-feed{font-size:14px!important}
+body.ps-fin-pulse .psi-shell .psi-why,body.ps-fin-pulse .psi-shell .psi-entry-plan p{font-size:16px!important;line-height:1.65!important}
+body.ps-fin-pulse .psi-shell .psi-metric small{font-size:13px!important}
+body.ps-fin-pulse .psi-shell .psi-tools label{font-size:14px!important}
+body.ps-fin-pulse .psv-plan-line p{font-size:15px!important;line-height:1.65!important}
+body.ps-fin-pulse .psv-plan-caption{font-size:12px!important}
+body.ps-fin-pulse .ps-advisor-nav>a:not(.brand){font-size:14px!important;line-height:1.4!important}
+/* Table columns remain sortable, with horizontal scroll retained on narrow screens. */
+body.ps-fin-pulse .ps-table th,body.ps-fin-pulse .psd-coverage-table th{font-size:12px!important}
+body.ps-fin-pulse .ps-table td,body.ps-fin-pulse .psd-coverage-table td{font-size:14px!important}
+body.ps-fin-pulse .psd-coverage-table td strong{font-size:16px!important}
+body.ps-fin-pulse .psd-coverage-table td small{font-size:12px!important}
+@media(max-width:1000px){
+ body.ps-fin-pulse .pso-cards{grid-template-columns:1fr!important}
+ body.ps-fin-pulse .pso-close-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body.ps-fin-pulse .pso-paths{grid-template-columns:1fr!important}
+}
+@media(max-width:680px){
+ body.ps-fin-pulse .pso-shell{padding:16px!important}
+ body.ps-fin-pulse .pso-close-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body.ps-fin-pulse .pso-close-head strong{font-size:19px}
+ body.ps-fin-pulse .pso-close-item{padding:10px}
+ body.ps-fin-pulse .pso-close-price{font-size:19px}
+ body.ps-fin-pulse .pso-merger-watch{padding:17px!important}
+ body.ps-fin-pulse .pso-merger-ratios{grid-template-columns:1fr!important}
+ body.ps-fin-pulse .ps-picks .ps-pick{padding:17px!important}
+ body.ps-fin-pulse .ps-picks .ps-scenario{padding:9px 2px!important}
+ body.ps-fin-pulse .ps-picks .ps-scenario small{font-size:10px!important}
+ body.ps-fin-pulse .ps-advisor-nav>a:not(.brand){font-size:13px!important}
+}
+@media(max-width:370px){
+ body.ps-fin-pulse .pso-close-grid{grid-template-columns:1fr}
+ body.ps-fin-pulse .pso-card-head{flex-wrap:wrap}
+ body.ps-fin-pulse .pso-ticker{font-size:24px!important}
+}
+@media(prefers-contrast:more){
+ body.ps-fin-pulse :is(.pso-card,.pso-path,.pso-close-item,.pso-merger-watch){border-width:2px!important}
+ body.ps-fin-pulse .pso-step p{color:#fff!important}
+}
+@media(forced-colors:active){
+ body.ps-fin-pulse :is(.pso-close-item,.pso-path,.pso-merger-watch,.pso-card){border:2px solid CanvasText!important}
+}
