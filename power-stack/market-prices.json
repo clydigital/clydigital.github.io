@@ -1,6 +1,6 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-12T07:26:16.702Z",
+  "generatedAt": "2026-11-12T18:57:14.575Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
@@ -135,55 +135,55 @@
       "providerSymbol": "3191.HK",
       "currency": "HKD",
       "status": "CLOSED",
-      "sessionDate": "2026-11-10",
-      "close": 63.4,
-      "previousClose": 63,
-      "changePct": 0.635,
-      "change3dPct": -2.611,
-      "change5dPct": 8.376,
+      "sessionDate": "2026-11-11",
+      "close": 64.9,
+      "previousClose": 63.4,
+      "changePct": 2.366,
+      "change3dPct": 1.66,
+      "change5dPct": 1.311,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-10",
+        "asOf": "2026-11-11",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 491,
+        "lookbackSessions": 492,
         "emaBands": {
           "20": {
-            "basis": 66.147,
-            "lower": 62.773,
-            "upper": 69.521,
+            "basis": 66.028,
+            "lower": 63.127,
+            "upper": 68.93,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 73.216,
-            "lower": 64.596,
-            "upper": 81.837,
+            "basis": 72.89,
+            "lower": 64.338,
+            "upper": 81.442,
             "sdMultiplier": 1,
-            "state": "BELOW_LOWER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 77.83,
-            "lower": 70.188,
-            "upper": 85.472,
+            "basis": 77.574,
+            "lower": 69.916,
+            "upper": 85.232,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 75.439,
-            "lower": 71.268,
-            "upper": 79.61,
+            "basis": 75.334,
+            "lower": 71.168,
+            "upper": 79.5,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 88.1,
+        "stochRsi14": 100,
         "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 38.4,
-        "volumeToPrior20": 0.72
+        "rsi14": 42.7,
+        "volumeToPrior20": 0.49
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/3191.HK?interval=1d&range=2y&includePrePost=false",
