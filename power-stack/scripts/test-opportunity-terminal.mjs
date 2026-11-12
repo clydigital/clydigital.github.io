@@ -213,7 +213,9 @@ test("Ideas reduce noise: cards reveal four at once, merger and screeners open o
   ideas=read("owner-ideas-tracker.mjs"),css=read("owner-calm-layout.css");
  assert(terminal.includes('const mergerDrawer=make("details","pso-major-drawer pso-deal-drawer")'));
  assert(terminal.includes('const scannerDrawer=make("details","pso-major-drawer pso-scanner-drawer")'));
- assert(terminal.includes('const visible=home||expanded?selected:selected.slice(0,4)'));
+ assert(terminal.includes('selected.filter(x=>x.kind==="TRADE").slice(0,2)'));
+ assert(terminal.includes('selected.filter(x=>x.kind==="INVESTMENT").slice(0,2)'));
+ assert(terminal.includes('const visible=home||expanded?selected:preview'));
  assert(terminal.includes('showMore.setAttribute("aria-expanded",String(expanded))'));
  assert(terminal.includes('const prominent=["SPCX","TSLA","NVDA","QQQ","TLT","ADBE"]'));
  assert(ideas.includes('id="psi-tracked-drawer"'));
