@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {
  RADAR_CONTRACT,RESEARCH_ASOF,MARKET_THEMES,SCENARIOS,
- stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses,summarizeRegionalCloses,THEME_ICON_NAMES
+ stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses,summarizeRegionalCloses,THEME_ICON_NAMES,RADAR_WATCH,POINTS
 } from "../owner-radar-workspace.mjs";
 import {validateBluebellyStockCoverage} from "../owner-bluebelly-stocks.mjs";
 const root=new URL("../",import.meta.url);
@@ -17,6 +17,16 @@ function owner(action,mod={}){
    review:{review_by:mod.review_by||"2026-11-19",risk_override:mod.risk_override||false}
   }};
 }
+test("all research radar markers have safe and distinct coordinates",()=>{
+ assert.equal(RADAR_WATCH.length,POINTS.length,"Every radar stock requires a position");
+ assert.equal(new Set(RADAR_WATCH).size,RADAR_WATCH.length);
+ assert.equal(new Set(POINTS.map(x=>x.join(","))).size,POINTS.length);
+ for(const p of POINTS){
+  assert.equal(p.length,2);
+  assert(p.every(x=>Number.isFinite(x)&&x>=8&&x<=95),"Marker must fit radar");
+ }
+});
+
 test("radar contracts link the entire defined market universe once and preserve market theme separation",()=>{
  assert.equal(RADAR_CONTRACT,"power-stack-radar-workspace/1");
  const manifest=JSON.parse(read("market-symbols.json"));
