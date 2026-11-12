@@ -1,0 +1,49 @@
+/* Private decision terminal: presentation only. The material lives in owner-only Supabase HTML.
+   Do not add public ticker/ownership data or client-side investment decisions here. */
+.ps-picks{margin:20px 0 28px;padding:clamp(17px,2.8vw,30px);background:linear-gradient(130deg,#102420 0%,#10191b 50%,#0b1418 100%);border:1px solid #3d6052;border-radius:18px;color:#edf6f3}
+.ps-picks *{box-sizing:border-box}
+.ps-picks .ps-picks-eyebrow{margin:0 0 7px;color:#a5e3c8;font-size:11px;letter-spacing:.13em;font-weight:850;text-transform:uppercase}
+.ps-picks h2{margin:0;color:#f4fff7;line-height:1.11;letter-spacing:-.035em;font-size:clamp(24px,3.1vw,36px)}
+.ps-picks h3{margin:0;color:#f2faf9;font-size:20px;line-height:1.2}
+.ps-picks .ps-picks-lead{font-size:14px;line-height:1.7;color:#c3d8d1;max-width:95ch;margin:11px 0 0}
+.ps-picks .ps-picks-intro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 22px;align-items:start;border-bottom:1px solid #34524c;padding-bottom:16px}
+.ps-picks .ps-picks-meta{font-size:11px;line-height:1.55;color:#b8ccc6}
+.ps-picks .ps-picks-decision{margin:15px 0;padding:12px 14px;border:1px solid #3b6154;background:#142921;border-radius:10px;color:#ecfff4;line-height:1.6}
+.ps-picks .ps-picks-decision strong{color:#a6e4c0}
+.ps-picks .ps-picks-legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px;font-size:11px;line-height:1.4;color:#cbddda}
+.ps-picks .ps-picks-legend span{border-radius:7px;padding:5px 9px;border:1px solid #3c514e}
+.ps-picks .ps-picks-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ps-picks .ps-pick{min-width:0;--ps-accent:#a9d8bd;border:1px solid #35554f;border-top:4px solid var(--ps-accent);border-radius:12px;background:#111f22;padding:17px 18px}
+.ps-picks .ps-pick[data-tone="quality"]{--ps-accent:#74d9ba}
+.ps-picks .ps-pick[data-tone="defensive"]{--ps-accent:#8bcadf}
+.ps-picks .ps-pick[data-tone="energy"]{--ps-accent:#e9ba7f}
+.ps-picks .ps-pick[data-tone="growth"]{--ps-accent:#93aefe}
+.ps-picks .ps-pick[data-tone="infrastructure"]{--ps-accent:#d1a9ef}
+.ps-picks .ps-pick[data-tone="speculative"]{--ps-accent:#f4a4af}
+.ps-picks .ps-pick-header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:start}
+.ps-picks .ps-pick-label{font-size:10px;letter-spacing:.12em;color:var(--ps-accent);text-transform:uppercase;font-weight:900;margin:0 0 6px}
+.ps-picks .ps-pick-bias{display:inline-block;border:1px solid var(--ps-accent);border-radius:6px;padding:5px 8px;color:var(--ps-accent);font-size:10px;line-height:1.2;font-weight:900;letter-spacing:.035em}
+.ps-picks .ps-pick-summary{color:#d0e1df;font-size:12px;line-height:1.65;margin:12px 0}
+.ps-picks .ps-pick-stats{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0}
+.ps-picks .ps-pick-stats span{font-size:11px;border:1px solid #31514c;background:#142d2b;padding:7px 9px;border-radius:8px;color:#ddece7}
+.ps-picks .ps-pick-stats strong{display:block;color:#fff;font-weight:900;font-size:12px}
+.ps-picks .ps-pick-subhead{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:#acc7c3;font-weight:800;margin:14px 0 7px}
+.ps-picks .ps-scenarios{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.ps-picks .ps-scenario{border-radius:7px;min-width:0;padding:7px 4px;text-align:center;border:1px solid transparent;line-height:1.2}
+.ps-picks .ps-scenario strong{font:900 13px/1.1 system-ui;display:block}
+.ps-picks .ps-scenario small{font-size:9px;line-height:1.1;display:block;margin-top:3px;font-weight:750}
+.ps-picks .ps-scenario[data-grade="P"]{background:#163d31;border-color:#30775c;color:#b3f0cb}
+.ps-picks .ps-scenario[data-grade="U"]{background:#3a3020;border-color:#77603b;color:#f1d59e}
+.ps-picks .ps-scenario[data-grade="N"]{background:#3a242c;border-color:#89505c;color:#ffc3cb}
+.ps-picks .ps-pick-test{border-top:1px solid #334945;padding-top:10px;margin:11px 0 0;font-size:11px;line-height:1.58;color:#d6e3df}
+.ps-picks .ps-pick-test strong{color:#f1faf6}
+.ps-picks .ps-pick-source{font-size:11px;margin:10px 0 0}
+.ps-picks a{color:#acf1cd;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.ps-picks .ps-picks-veto{margin-top:12px;border:1px solid #995762;border-left:4px solid #fa9dab;background:#291d24;border-radius:10px;padding:14px 17px}
+.ps-picks .ps-picks-veto h3{color:#ffdce3;font-size:16px}
+.ps-picks .ps-picks-veto p{font-size:12px;line-height:1.65;color:#f0d3d9;margin:7px 0}
+.ps-picks .ps-picks-foot{border-top:1px solid #34524c;padding-top:12px;margin-top:14px;color:#bbd0cb;font-size:11px;line-height:1.65}
+.ps-picks a:focus-visible{outline:2px solid #a6e4c0;outline-offset:3px}
+@media(max-width:840px){.ps-picks .ps-picks-grid{grid-template-columns:1fr}}
+@media(max-width:500px){.ps-picks{padding:16px}.ps-picks .ps-pick{padding:14px}.ps-picks .ps-scenario{padding:7px 2px}.ps-picks .ps-scenario small{font-size:8px}.ps-picks .ps-pick-header{gap:8px}}
+@media(forced-colors:active){.ps-picks .ps-pick,.ps-picks .ps-scenario,.ps-picks .ps-picks-veto{border:1px solid CanvasText}.ps-picks .ps-scenario{color:CanvasText}}
