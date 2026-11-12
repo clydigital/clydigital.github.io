@@ -3,6 +3,7 @@
    Bluebelly scenarios are dated conditional editorial hypotheses, not live forecasts.
 */
 import {psIcon} from "./owner-visual-icons.mjs";
+import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
@@ -190,6 +191,20 @@ export function summarizeTrackedCloses(priceMap){
  const up=rows.filter(q=>q.day>0).length,down=rows.filter(q=>q.day<0).length,flat=rows.length-up-down;
  return {session:session||null,observed:rows.length,up,down,flat,
   missingOrDifferentSession:all.length-rows.length};
+}
+export function summarizeRegionalCloses(map,region="US"){
+ const eu=new Set(MARKET_THEMES.find(t=>t.id==="europe")?.tickers||[]);
+ const all=map instanceof Map?[...map.entries()]:[];
+ const valid=all.filter(([id,q])=>Number.isFinite(q?.close)&&q.close>0&&Number.isFinite(q?.day)&&
+ q.basis==="Exchange close"&&/^20\d{2}-\d{2}-\d{2}$/.test(q.session||"")&&
+ (region==="EU"?eu.has(id)&&["EUR","DKK"].includes(q.currency):
+  q.currency==="USD"&&!eu.has(id)&&id!=="BTC"));
+ const session=valid.reduce((last,[,q])=>q.session>last?q.session:last,"");
+ const list=valid.filter(([,q])=>q.session===session).map(([ticker,q])=>({ticker,changePct:q.day}))
+ .sort((a,b)=>b.changePct-a.changePct);
+ const up=list.filter(x=>x.changePct>0).length,down=list.filter(x=>x.changePct<0).length;
+ return {session:session||null,observed:list.length,up,down,flat:list.length-up-down,
+ leaders:list.slice(0,3),laggards:[...list].reverse().slice(0,3)};
 }
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
