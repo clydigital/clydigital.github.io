@@ -59,11 +59,13 @@ test("the new terminal remains behind the existing owner gate and separates exis
 test("cash-flow profiles use filing periods, do not invent missing capex, and show no issuer FCF for Cigna",()=>{
  const rows=CASH_QUALITY_PROFILES;
  assert.deepEqual(Object.keys(rows).sort(),["ADBE","CF","CI","CVS"].sort());
- assert.equal(rows.ADBE.reportedFCFBN,Number((rows.ADBE.cfoBN-rows.ADBE.capexBN).toFixed(3)));
- assert.equal(rows.ADBE.economicFCFProxyBN,Number((rows.ADBE.reportedFCFBN-rows.ADBE.sbcBN).toFixed(3)));
- assert.equal(rows.CVS.reportedFCFBN,Number((rows.CVS.cfoBN-rows.CVS.capexBN).toFixed(3)));
+ assert.equal(rows.ADBE.cashFCFBN,Number((rows.ADBE.cfoBN-rows.ADBE.capexBN).toFixed(3)));
+ assert.equal(rows.ADBE.economicFCFProxyBN,Number((rows.ADBE.cashFCFBN-rows.ADBE.sbcBN).toFixed(3)));
+ assert.equal(rows.CVS.cashFCFBN,Number((rows.CVS.cfoBN-rows.CVS.capexBN).toFixed(3)));
  assert.equal(rows.CI.capexBN,null);
- assert.equal(rows.CI.reportedFCFBN,null);
+ assert.equal(rows.CI.cashFCFBN,null);
+ assert.equal(rows.CI.fcfDefinition,"NOT_VERIFIED");
+ assert.equal(rows.CF.fcfDefinition,"ISSUER_DEFINED_TTM_INCLUDES_JV");
  assert.equal(rows.CF.stress,undefined);
  for(const [ticker,x] of Object.entries(rows)){
   assert.match(x.filing,/^https:\/\//,ticker);
