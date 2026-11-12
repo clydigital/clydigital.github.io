@@ -104,14 +104,16 @@ test("Top Stock Picks and full tables remain owner-gated but start collapsed",()
 });
 test("market snapshot uses latest matching completed-session signs and counts missing separately",()=>{
  const cases=new Map([
-  ["A",{close:120,day:1.2,session:"2026-11-12"}],
-  ["B",{close:85,day:-1.3,session:"2026-11-12"}],
-  ["C",{close:15,day:0,session:"2026-11-12"}],
-  ["D",{close:77,day:3.4,session:"2026-11-11"}],
-  ["E",{close:null,day:null,session:null}]
+  ["A",{close:120,day:1.2,session:"2026-11-12",currency:"USD",basis:"Exchange close"}],
+  ["B",{close:85,day:-1.3,session:"2026-11-12",currency:"USD",basis:"Exchange close"}],
+  ["C",{close:15,day:0,session:"2026-11-12",currency:"USD",basis:"Exchange close"}],
+  ["D",{close:77,day:3.4,session:"2026-11-11",currency:"USD",basis:"Exchange close"}],
+  ["E",{close:null,day:null,session:null}],
+  ["F",{close:35,day:2,session:"2026-11-13",currency:"HKD",basis:"Exchange close"}],
+  ["G",{close:90000,day:1,session:"2026-11-13",currency:"USD",basis:"BTC UTC daily sample"}]
  ]);
  const out=summarizeTrackedCloses(cases);
- assert.deepEqual(out,{session:"2026-11-12",observed:3,up:1,down:1,flat:1,missingOrDifferentSession:2});
+ assert.deepEqual(out,{session:"2026-11-12",observed:3,up:1,down:1,flat:1,missingOrDifferentSession:4});
  assert.deepEqual(summarizeTrackedCloses(new Map()),{session:null,observed:0,up:0,down:0,flat:0,missingOrDifferentSession:0});
  assert.equal(summarizeTrackedCloses(null).observed,0);
 });
