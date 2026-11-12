@@ -210,7 +210,7 @@ export const TSLA_SPACEX_EVENT=Object.freeze({
 export function illustrativeSpaceXRatio(tslaQuote,spcxQuote){
  const a=tslaQuote,b=spcxQuote;
  if(!a||!b||!Number.isFinite(a.close)||!Number.isFinite(b.close)||a.close<=0||b.close<=0||
-   !/^20\\d{2}-\\d{2}-\\d{2}$/.test(String(a.session||""))||a.session!==b.session||
+   !/^20\d{2}-\d{2}-\d{2}$/.test(String(a.session||""))||a.session!==b.session||
    a.currency!=="USD"||b.currency!=="USD")return null;
  const parity=a.close/b.close;
  return {session:a.session,teslaClose:a.close,spaceXClose:b.close,
