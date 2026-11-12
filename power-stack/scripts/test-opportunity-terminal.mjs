@@ -193,3 +193,17 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
  const schedule=read("../.github/workflows/power-stack-prices.yml");
  assert(schedule.includes("cron: '35 22 * * 1-5'"));
 });
+
+test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
+ const gate=read("auth-gate.mjs");
+ const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
+ assert(gate.includes('owner-decision-desk.mjs?v=20261113-ux3'));
+ assert(gate.includes('owner-ideas-tracker.mjs?v=20261113-ux3'));
+ assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-ux3'));
+ assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-ux3'));
+ for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
+   const html=read(page+".html");
+   assert(html.includes('src="auth-gate.mjs?v=20261113-ux3"'),page);
+ }
+ for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
+});
