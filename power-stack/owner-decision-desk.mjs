@@ -193,7 +193,8 @@ export async function initDecisionDesk(db,main,user){
  }
 
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
-  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null,showAllIdeas:false};
+  ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null,showAllIdeas:false,
+  pageRows:null,pagesError:true,feedCoverage:null,dataReady:false};
  // Radar is the authenticated first screen; existing owner research is retained
  // below the theme grid and scenario matrix in an expandable detail drawer.
  const radarUI=installRadarWorkspace(main,()=>state);
@@ -423,13 +424,15 @@ export async function initDecisionDesk(db,main,user){
    ". "+reconciliation.explanation+" Cash and order sizing remain blocked until verified.";
  }
  async function refresh(){
-  const [saved,snapshot,ledger,ideas,feed]=await Promise.all([
+  const [saved,snapshot,ledger,ideas,feed,pages]=await Promise.all([
    db.from("power_stack_decision_revisions").select("entry_id,case_key,ticket,fingerprint,created_at",{count:"exact"}).order("created_at",{ascending:false}).limit(200),
    db.from("power_stack_owner_snapshots").select("snapshot_as_of,snapshot,legacy_source_retired").eq("owner_user_id",user.id).limit(1).maybeSingle(),
    db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id),
-   db.from("power_stack_idea_tracker").select("ticker,name,idea_type,peg,peg_as_of,peg_basis,peg_source_url,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,currency,note")
+   db.from("power_stack_idea_tracker").select("ticker,name,idea_type,peg,peg_as_of,peg_basis,peg_source_url,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,currency,note,updated_at")
     .eq("owner_user_id",user.id).order("updated_at",{ascending:false}).limit(100),
-   loadPriceFeed()
+   loadPriceFeed(),
+   db.from("power_stack_private_pages").select("page_key,updated_at")
+    .eq("owner_user_id",user.id).in("page_key",["index","research","sectors","portfolio","decisions"])
   ]);
   if(saved.error)throw Error("Owner decision history unavailable: "+saved.error.message);
   if(snapshot.error||!snapshot.data?.legacy_source_retired)throw Error("Owner portfolio access not verified");
@@ -438,10 +441,13 @@ export async function initDecisionDesk(db,main,user){
   state.ledgerCount=ledger.error?null:ledger.count;
   state.ledgerError=Boolean(ledger.error);
   state.ideaError=Boolean(ideas.error);state.ideaRows=ideas.error?[]:(ideas.data||[]);
+  state.pagesError=Boolean(pages.error);state.pageRows=pages.error?null:(pages.data||[]);
   const generated=Date.parse(feed?.generatedAt||"");
   const freshFeed=Number.isFinite(generated)&&Date.now()>=generated&&Date.now()-generated<=72*3600000;
   state.priceMap=freshFeed?quotes(feed).watch:new Map();
   state.marketAsOf=freshFeed?feed.generatedAt:null;
+  state.feedCoverage=freshFeed?feed.coverage:null;
+  state.dataReady=true;
   draw();$(host,"psd-status").hidden=true;
  }
  $(host,"psd-ideas-expand").addEventListener("click",()=>{state.showAllIdeas=!state.showAllIdeas;renderIdeaBrief();});
