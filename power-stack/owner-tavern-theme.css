@@ -56,7 +56,7 @@ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
     rgba(4,20,23,.96) 0%,rgba(4,24,26,.87) 38%,
     rgba(7,28,27,.38) 73%,rgba(7,21,22,.52) 100%),
    linear-gradient(0deg,rgba(5,20,23,.84),transparent 48%),
-   url("./assets/tavern/tavern-room-clean.svg") 50% 40% /cover no-repeat,
+   url("./assets/tavern/tavern-room-clean.webp") 50% 40% /cover no-repeat,
    #102925!important;
  border:1px solid #a77b47!important;border-radius:13px!important;
  box-shadow:inset 0 0 0 1px rgba(244,192,105,.12),0 15px 34px rgba(0,0,0,.25)!important;
@@ -178,7 +178,7 @@ html[data-private-page="index"] body.ps-fin-pulse .psr-workspace>.psr-legacy{
    The green blips are still real DOM elements driven by the existing tracked universe. */
 html[data-private-page="index"] body.psr-landing-active.ps-fin-pulse .psr-landing{
  background:linear-gradient(90deg,rgba(3,19,22,.91),rgba(6,21,23,.70)),
- url("./assets/tavern/tavern-room-clean.svg") center 40% /cover no-repeat,
+ url("./assets/tavern/tavern-room-clean.webp") center 40% /cover no-repeat,
  linear-gradient(130deg,#061c20,#18231e)!important;
 }
 html[data-private-page="index"] body.ps-fin-pulse .psr-water{opacity:.22!important}
@@ -218,7 +218,7 @@ html[data-private-page="index"] body.ps-fin-pulse .psr-landing-footer{color:#d5c
  html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
   min-height:0!important;padding:22px 18px!important;
   background:linear-gradient(90deg,rgba(5,22,24,.96),rgba(7,30,30,.87)),
-    url("./assets/tavern/tavern-room-clean.svg") center/cover no-repeat,#132b29!important;
+    url("./assets/tavern/tavern-room-clean.webp") center/cover no-repeat,#132b29!important;
  }
  html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header h1{font-size:36px!important}
  html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar){min-height:53px!important}
