@@ -210,7 +210,9 @@ test("historical earnings have their own owner-gated archive; current decision s
  const gate=readFileSync(path.join(ROOT,"auth-gate.mjs"),"utf8");
  const decision=readFileSync(path.join(ROOT,"owner-decision-desk.mjs"),"utf8");
  assert.match(archive,/data-private-page="archive"/);
- assert.match(archive,/auth-gate\.mjs\?v=20261110-checks4/);
+ const version=/auth-gate\\.mjs\\?v=[0-9]{8}[a-z0-9-]*/;
+ assert.match(archive,version);assert.match(index,version);
+ assert.equal(archive.match(version)?.[0],index.match(version)?.[0],"Archive and current desk must load the same owner gate");
  assert.match(gate,/\["index","research","sectors","decisions","portfolio","archive","ideas"\]/);
  assert.match(gate,/ps-legacy-note/);
  assert.match(index,/owner-decision-desk\.css/);
