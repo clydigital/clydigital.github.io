@@ -23,7 +23,7 @@ on:
       - '.github/workflows/power-stack-prices.yml'
   # Completed US close and separate Asian close; GitHub scheduled dispatch can be delayed.
   schedule:
-    - cron: '20 0 * * 2-6'
+    - cron: '35 22 * * 1-5' # After 17:00 New York even during EST; ~06:35 MYT next day.
     - cron: '20 11 * * 1-5'
   workflow_dispatch:
 permissions:
