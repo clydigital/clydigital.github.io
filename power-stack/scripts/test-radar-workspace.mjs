@@ -67,9 +67,10 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
- assert(html.includes('owner-radar-workspace.css?v=20261112-rad1'));
+ assert(html.includes('owner-radar-workspace.css?v=20261113-picks2'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
+ assert(radar.includes("VIEW TOP STOCK PICKS")&&radar.includes("picksEntry.addEventListener"));
  assert(radar.includes("threeDay")&&radar.includes("fiveDay")&&radar.includes("sourceDate"));
  assert(radar.includes("psr-legacy")&&radar.includes("originals"));
  assert(css.includes("psr-clockwise")&&css.includes("prefers-reduced-motion:reduce"));
@@ -82,4 +83,19 @@ test("main research cards do not display EMA band position or automatic technica
  assert(!full.includes('DAILY 20 EMA ±1SD'));
  assert(!full.includes('state.status),make("span"'));
  assert(full.includes('WATCH — RESEARCH ONLY'));
+});
+
+test("owner-only Top Stock Picks appear first in the normal workspace instead of collapsed advanced research",()=>{
+ const radar=read("owner-radar-workspace.mjs");
+ const gate=read("auth-gate.mjs");
+ const html=read("index.html");
+ const css=read("top-stock-picks.css");
+ assert.match(radar,/node\.id==="ps-top-stock-picks-20261113"/);
+ assert.match(radar,/if\(original!==topPicks\)legacy\.append\(original\)/);
+ assert.match(radar,/if\(topPicks\)workspace\.insertBefore\(topPicks,section\)/);
+ assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('const {data,error}=await db.from("power_stack_private_pages")'));
+ assert(html.includes("top-stock-picks.css?v=20261113-a1"));
+ assert(css.includes('.ps-picks .ps-picks-grid'));
+ assert(css.includes('@media(max-width:500px)'));
+ assert(!radar.includes("cash_delta"));
 });

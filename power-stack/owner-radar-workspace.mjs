@@ -175,6 +175,9 @@ function styledDelta(el,v){el.className="psr-num"+(Number.isFinite(v)?v>0?" psr-
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
+ // Keep the private, source-dated stock picks visible in the normal workspace.
+ // They are fetched only after owner authentication; do not copy them into static assets.
+ const topPicks=originals.find(node=>node.nodeType===1&&node.id==="ps-top-stock-picks-20261113")||null;
  const landing=node("section","psr-landing");
  landing.id="psr-landing";
  landing.setAttribute("aria-label","Power Stack market radar landing");
@@ -199,6 +202,8 @@ export function installRadarWorkspace(main,getState){
  helper.append(node("p","psr-quiet","Clockwise beam and markers show watchlist discovery, not price forecasts or trading triggers."));
  const enter=add(helper,node("button","psr-enter","ENTER THE RADAR  →"));
  enter.type="button";
+ const picksEntry=add(helper,node("button","psr-enter psr-enter-picks","VIEW TOP STOCK PICKS"));
+ picksEntry.type="button";
  const landingFooter=add(landing,node("p","psr-landing-footer","Markets move. Evidence matters. Research only · delayed price observations."));
  const workspace=node("div","psr-workspace");workspace.id="workspace";workspace.hidden=true;
  const section=node("section","psr-thematic");
@@ -246,11 +251,12 @@ export function installRadarWorkspace(main,getState){
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
- for(const original of originals)legacy.append(original);
+ for(const original of originals){if(original!==topPicks)legacy.append(original);}
  workspace.prepend(section,matrix);
+ if(topPicks)workspace.insertBefore(topPicks,section);
  main.replaceChildren(landing,workspace);
  document.body.classList.add("psr-landing-active");
- if(location.hash==="#workspace"||location.hash==="#scenario-matrix"||location.hash==="#advanced-research"){
+ if(location.hash==="#workspace"||location.hash==="#scenario-matrix"||location.hash==="#advanced-research"||location.hash==="#ps-top-stock-picks-20261113"){
   openWorkspace(location.hash);
  }
  let selectedTheme="all",sorting="ticker";
@@ -259,11 +265,13 @@ export function installRadarWorkspace(main,getState){
   document.body.classList.remove("psr-landing-active");
   if(target==="#advanced-research")legacy.open=true;
   if(target==="#scenario-matrix")matrix.scrollIntoView({block:"start"});
+  else if(target==="#ps-top-stock-picks-20261113"&&topPicks)topPicks.scrollIntoView({block:"start"});
   else if(target==="#advanced-research")legacy.scrollIntoView({block:"start"});
   else workspace.scrollIntoView({block:"start"});
   if(location.hash!==target)history.replaceState(null,"",target);
  }
  enter.addEventListener("click",()=>openWorkspace());
+ picksEntry.addEventListener("click",()=>openWorkspace("#ps-top-stock-picks-20261113"));
  reset.addEventListener("click",()=>{selectedTheme="all";renderGrid();});
  search.addEventListener("input",()=>renderGrid());
  headings.addEventListener("click",e=>{
