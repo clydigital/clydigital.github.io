@@ -175,7 +175,8 @@ function styledDelta(el,v){el.className="psr-num"+(Number.isFinite(v)?v>0?" psr-
 /** Observed sign distribution within the user's research universe, not broad-market breadth. */
 export function summarizeTrackedCloses(priceMap){
  const all=priceMap instanceof Map?[...priceMap.values()]:[];
- const eligible=all.filter(q=>q&&Number.isFinite(q.close)&&q.close>0&&Number.isFinite(q.day)&&
+ const eligible=all.filter(q=>q&&q.currency==="USD"&&q.basis==="Exchange close"&&
+  Number.isFinite(q.close)&&q.close>0&&Number.isFinite(q.day)&&
   /^20\d{2}-\d{2}-\d{2}$/.test(String(q.session||"")));
  const session=eligible.reduce((last,q)=>q.session>last?q.session:last,"");
  const rows=eligible.filter(q=>q.session===session);
@@ -229,11 +230,11 @@ export function installRadarWorkspace(main,getState){
  }
  const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
  const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
- snapshot.setAttribute("aria-label","Tracked instruments: source-dated daily direction");
+ snapshot.setAttribute("aria-label","Tracked US equities and ETFs: source-dated daily direction");
  const snapshotHead=add(snapshot,node("div","psr-snapshot-head"));
  snapshotHead.append(node("div",null),node("div",null));
  snapshotHead.children[0].append(node("p","psr-simple-eyebrow","PRICE DIRECTION / OBSERVED"),
-  node("h2",null,"Watchlist pulse"));
+  node("h2",null,"US watchlist pulse"));
  const snapshotDate=add(snapshotHead.children[1],node("span","psr-snapshot-date","Checking completed daily sessions…"));
  const snapshotTotal=add(snapshot,node("div","psr-snapshot-total"));
  const snapshotBar=add(snapshot,node("div","psr-breadth-bar"));snapshotBar.setAttribute("role","img");
@@ -241,7 +242,7 @@ export function installRadarWorkspace(main,getState){
  const downBar=add(snapshotBar,node("span","psr-breadth-down"));
  const flatBar=add(snapshotBar,node("span","psr-breadth-flat"));
  const snapshotLegend=add(snapshot,node("div","psr-breadth-legend"));
- const note=add(snapshot,node("p","psr-snapshot-note","This is the tracked research universe, not S&P 500 market breadth. Missing prices and stale sessions are excluded; the bars show direction only, not magnitude."));
+ const note=add(snapshot,node("p","psr-snapshot-note","US-listed, USD-denominated tracked securities only—not S&P 500 breadth. Other markets, Bitcoin and earlier/missing sessions are excluded; bars show direction, not magnitude."));
  const section=node("section","psr-thematic");
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
@@ -396,7 +397,7 @@ export function installRadarWorkspace(main,getState){
  function renderSnapshot(){
   const stats=summarizeTrackedCloses(getState()?.priceMap);
   snapshotDate.textContent=stats.session?"Daily session "+stats.session:"No dated daily close";
-  snapshotTotal.textContent=stats.observed?stats.observed+" matched completed-session observations":"No comparable session data yet";
+  snapshotTotal.textContent=stats.observed?stats.observed+" US-listed names in the latest completed session":"No comparable session data yet";
   for(const [node,count] of [[upBar,stats.up],[downBar,stats.down],[flatBar,stats.flat]]){
    node.style.width=(stats.observed?100*count/stats.observed:0).toFixed(2)+"%";
   }
