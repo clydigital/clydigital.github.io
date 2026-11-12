@@ -441,6 +441,7 @@ export function visibleOpportunities(mode="ALL"){
 function card(item,prices,ownerResearch=[]){
  const research=ownerResearch.find(x=>x?.ticker===item.ticker)||null;
  const state=opportunityState(item,prices?.get(item.ticker),new Date(),research),node=make("article","pso-card");
+ node.dataset.kind=item.kind;node.dataset.direction=item.direction;
  const head=make("div","pso-card-head");
  const intro=make("div");intro.append(make("strong","pso-ticker",item.ticker),make("span","pso-company",item.name));
  const direction=make("span","pso-direction pso-"+item.direction.toLowerCase(),item.direction==="SHORT"?"SHORT WATCH":"LONG WATCH");
@@ -520,7 +521,7 @@ export function validatePriorityCloses(data,now=new Date()){
  }
  return {session:data.session,rows};
 }
-function renderClosePanel(target,tape,rawPrices){
+function renderClosePanel(target,tape){
  const header=make("div","pso-close-head");
  header.append(make("strong",null,"US market closes · "+tape.session),
   make("span",null,"Finnhub verified · 4:00 p.m. New York · USD"));
@@ -640,7 +641,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   if(!shell.isConnected)return;
   const verified=validatePriorityCloses(input);
   if(!verified)throw Error("Overlay stale or failed source contract");
-  renderClosePanel(closePanel,verified,prices);
+  renderClosePanel(closePanel,verified);
   const updated=new Map(prices);
   for(const q of verified.rows){
    const prev=prices.get(q.ticker);
