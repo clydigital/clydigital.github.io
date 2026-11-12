@@ -59,6 +59,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "ADBE",
+      "providerSymbol": "ADBE",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "AEM",
       "providerSymbol": "AEM",
       "currency": "USD",
@@ -132,6 +138,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "CI",
+      "providerSymbol": "CI",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "COIN",
       "providerSymbol": "COIN",
       "currency": "USD",
@@ -164,6 +176,12 @@
     {
       "ticker": "CTVA",
       "providerSymbol": "CTVA",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "CVS",
+      "providerSymbol": "CVS",
       "currency": "USD",
       "timeZone": "America/New_York"
     },
@@ -290,6 +308,12 @@
     {
       "ticker": "IWM",
       "providerSymbol": "IWM",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
+      "ticker": "JBL",
+      "providerSymbol": "JBL",
       "currency": "USD",
       "timeZone": "America/New_York"
     },

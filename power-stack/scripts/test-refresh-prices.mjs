@@ -21,7 +21,8 @@ function yahoo(spec,days=["2026-10-26","2026-10-27","2026-10-28","2026-10-29","2
 }
 test("manifest uses a non-owner public research universe and no holdings quantities",()=>{
  const m=JSON.parse(readFileSync(path.join(ROOT,"market-symbols.json"),"utf8"));
- assert.equal(validateManifest(m).length,102);
+ assert.equal(validateManifest(m).length,106);
+ for(const name of ["ADBE","CI","CVS","JBL"])assert.deepEqual(validateManifest(m).find(x=>x.ticker===name),{ticker:name,providerSymbol:name,currency:"USD",timeZone:"America/New_York"});
  assert.ok(!JSON.stringify(m).includes("quantityAsOf"));
  assert.ok(!JSON.stringify(m).includes("owner_user_id"));
  assert.ok(!JSON.stringify(m.symbols).includes("holdings"));

@@ -12,6 +12,13 @@ test("opportunities are explicit research candidates, not orders or fabricated p
  assert(visibleOpportunities("TRADE").every(x=>x.kind==="TRADE"));
  assert(OPPORTUNITIES.some(x=>x.ticker==="TLT"&&x.direction==="SHORT"));
  assert(OPPORTUNITIES.some(x=>x.ticker==="TLT"&&x.direction==="LONG"));
+ for(const name of ["ADBE","CI","CVS","FLEX","JBL"]){
+  const rows=OPPORTUNITIES.filter(x=>x.ticker===name&&x.direction==="LONG");
+  assert.equal(rows.length,1,"one source-attributed long candidate for "+name);
+  assert(rows[0].valuationNote.includes("11 Nov")||rows[0].valuationNote.includes("11 Nov close"),"dated issuer comparison "+name);
+  assert(rows[0].source.startsWith("https://"));
+  assert(!/BUY NOW|ORDER READY/i.test(rows[0].thesis+" "+rows[0].trigger));
+ }
  for(const x of OPPORTUNITIES){
   for(const k of ["ticker","thesis","trigger","invalidation","risk","catalyst","reviewed","source"])assert(x[k],x.id+"/"+k);
   assert(x.source.startsWith("https://"));

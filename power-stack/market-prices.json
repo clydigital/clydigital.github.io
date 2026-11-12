@@ -1,15 +1,15 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-12T18:57:14.575Z",
+  "generatedAt": "2026-11-12T19:43:18.602Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
-    "tracked": 102,
+    "tracked": 106,
     "fresh": 101,
     "stale": 0,
-    "unavailable": 1
+    "unavailable": 5
   },
   "rows": [
     {
@@ -392,6 +392,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AAPL?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "ADBE",
+      "providerSymbol": "ADBE",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
+      "reason": "New ticker; completed-session source not yet queried by approved workflow"
     },
     {
       "ticker": "AEM",
@@ -1067,6 +1084,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "CI",
+      "providerSymbol": "CI",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
+      "reason": "New ticker; completed-session source not yet queried by approved workflow"
+    },
+    {
       "ticker": "COIN",
       "providerSymbol": "COIN",
       "currency": "USD",
@@ -1419,6 +1453,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CTVA?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "CVS",
+      "providerSymbol": "CVS",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
+      "reason": "New ticker; completed-session source not yet queried by approved workflow"
     },
     {
       "ticker": "CVX",
@@ -2658,6 +2709,23 @@
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/IWM?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
+    },
+    {
+      "ticker": "JBL",
+      "providerSymbol": "JBL",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
+      "reason": "New ticker; completed-session source not yet queried by approved workflow"
     },
     {
       "ticker": "LEU",
@@ -5845,5 +5913,16 @@
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ZROZ?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
     }
-  ]
+  ],
+  "previousTapeGeneratedAt": "2026-11-12T18:57:14.575Z",
+  "catalogueExpansion": {
+    "updatedAt": "2026-11-12T19:43:18.602Z",
+    "pendingSymbols": [
+      "ADBE",
+      "CI",
+      "CVS",
+      "JBL"
+    ],
+    "policy": "New symbols have explicit UNAVAILABLE placeholders only. No price, EMA, volume or trading signal is inferred before the completed-session refresh."
+  }
 }
