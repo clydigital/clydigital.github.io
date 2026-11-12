@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState} from "../owner-opportunity-terminal.mjs";
+import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation} from "../owner-opportunity-terminal.mjs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 const now=new Date("2026-11-12T02:00:00Z");
 test("opportunities are explicit research candidates, not orders or fabricated price triggers",()=>{
@@ -54,4 +54,36 @@ test("the new terminal remains behind the existing owner gate and separates exis
  assert(module.includes('No trade tickets or broker orders are created'));
  assert(module.includes('scanMarketOpportunities(prices)'));
  assert(module.includes('Fresh macro / fundamental admission not verified'));
+});
+
+test("cash-flow profiles use filing periods, do not invent missing capex, and show no issuer FCF for Cigna",()=>{
+ const rows=CASH_QUALITY_PROFILES;
+ assert.deepEqual(Object.keys(rows).sort(),["ADBE","CF","CI","CVS"].sort());
+ assert.equal(rows.ADBE.reportedFCFBN,Number((rows.ADBE.cfoBN-rows.ADBE.capexBN).toFixed(3)));
+ assert.equal(rows.ADBE.economicFCFProxyBN,Number((rows.ADBE.reportedFCFBN-rows.ADBE.sbcBN).toFixed(3)));
+ assert.equal(rows.CVS.reportedFCFBN,Number((rows.CVS.cfoBN-rows.CVS.capexBN).toFixed(3)));
+ assert.equal(rows.CI.capexBN,null);
+ assert.equal(rows.CI.reportedFCFBN,null);
+ assert.equal(rows.CF.stress,undefined);
+ for(const [ticker,x] of Object.entries(rows)){
+  assert.match(x.filing,/^https:\/\//,ticker);
+  assert(x.reject.length>30,ticker);
+  assert(!Object.hasOwn(x,"positionQuantity"));
+ }
+});
+test("static bear/baseline/bull stresses are fully transparent, dated and never an entry rule",()=>{
+ const expected={ADBE:[156.64,244.75,349.99],CI:[220.32,306,403.92],CVS:[52.48,90.2,117.26]};
+ for(const [ticker,prices] of Object.entries(expected)){
+  const item=CASH_QUALITY_PROFILES[ticker],spec=item.stress;
+  assert.equal(spec.referenceSession,"2026-11-11");
+  const rows=stressValuation(spec);
+  assert.deepEqual(rows.map(v=>v.impliedUSD),prices);
+  assert(rows[0].changePct<0);
+  assert(rows.every(x=>x.peMultiple>0));
+  assert(spec.cases.every(x=>!x.some(v=>typeof v==="string"&&/probability|order|buy now/i.test(v))));
+ }
+ assert.deepEqual(stressValuation({referenceCloseUSD:0,baseEPS:12,cases:[["A",1,10],["B",1,11],["C",1,12]]}),[]);
+ const module=read("owner-opportunity-terminal.mjs");
+ assert(module.includes("not consensus, probabilities, fair values, trade targets or a live quote"));
+ assert(module.includes("CASH_QUALITY_PROFILES[item.ticker]"));
 });
