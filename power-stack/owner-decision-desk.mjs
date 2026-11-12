@@ -4,9 +4,10 @@ import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decisio
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261112-hyb1";
+import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261112-rad1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
+import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261112-rad1";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -193,6 +194,9 @@ export async function initDecisionDesk(db,main,user){
 
  const state={rows:[],snapshot:null,snapshotDate:null,totalRows:0,ledgerCount:null,ledgerError:true,
   ideaRows:[],priceMap:new Map(),ideaError:false,marketAsOf:null,showAllIdeas:false};
+ // Radar is the authenticated first screen; existing owner research is retained
+ // below the theme grid and scenario matrix in an expandable detail drawer.
+ const radarUI=installRadarWorkspace(main,()=>state);
  function status(s){$(host,"psd-status").textContent=s}
  function renderCoverage(){
   const numeric=(v,d=2)=>Number(v).toLocaleString("en-GB",{maximumFractionDigits:d});
@@ -366,6 +370,7 @@ export async function initDecisionDesk(db,main,user){
  function draw(){
   renderCoverage();
   renderIdeaBrief();
+  radarUI.render();
   const latest=latestByCase(state.rows),historyByKey=new Map();
   for(const row of state.rows){
    if(!historyByKey.has(row.case_key))historyByKey.set(row.case_key,[]);
@@ -487,5 +492,6 @@ export async function initDecisionDesk(db,main,user){
   renderEmpty($(host,"psd-book-rows"),"Decision history unavailable");
   status(String(err.message||err).slice(0,250));
   $(host,"psd-open-import").disabled=true;
+  radarUI.render();
  }
 }
