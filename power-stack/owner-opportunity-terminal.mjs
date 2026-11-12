@@ -7,31 +7,31 @@ export const OPPORTUNITIES=Object.freeze([
  {id:"crwv-short",ticker:"CRWV",name:"CoreWeave",kind:"TRADE",direction:"SHORT",
   horizon:"2–4 weeks",reviewed:"2026-11-12",
   thesis:"Large AI demand does not yet prove that financing and cash collection are self-sustaining.",
-  trigger:"Wait for a daily loss of the 20 EMA (1SD) band, followed by a failed 4H retest. Recheck cash receipts and credit conditions before considering a short.",
-  invalidation:"Do not pursue if price reclaims and holds its daily trend band, or audited customer cash receipts materially improve.",
+  trigger:"Consider bearish risk only if verified cash receipts and financing conditions weaken while the market rejects a rebound.",
+  invalidation:"Materially improving cash conversion and cheaper refinancing undermine the bearish case.",
   risk:"Borrow availability, hard-to-borrow fees, earnings gaps and violent squeezes. A naked short has unbounded theoretical loss.",
   catalyst:"Next independently reported cash-flow, prepayment and interest-expense evidence.",
   source:"https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm"},
  {id:"smh-short",ticker:"SMH",name:"Semiconductor ETF",kind:"TRADE",direction:"SHORT",
   horizon:"3–15 sessions",reviewed:"2026-11-12",
   thesis:"A concentrated semiconductor rebound can fail even when headline indices stay firm; the 11 Nov bounce itself is a counterargument to immediate bearishness.",
-  trigger:"Only reconsider after the 4H 20/50 EMA support bands fail and a retest is rejected; check SOXX, RSP breadth and Treasury yields on matched sessions.",
-  invalidation:"A daily reclaim with sustained semi and equal-weight breadth confirmation invalidates the bearish setup.",
+  trigger:"Reassess if chip leadership, market breadth and forward earnings deteriorate together across comparable sessions.",
+  invalidation:"Sustained chip leadership and improving broad-market participation undermine the bearish thesis.",
   risk:"Strong AI earnings or a squeeze can reverse a short abruptly; a single overbought oscillator is insufficient.",
   catalyst:"Follow-through after the 11 Nov recovery and upcoming semiconductor earnings.",
   source:"https://apnews.com/article/027cd5f4583d1a11c1795150bf065afb"},
  {id:"tlt-short",ticker:"TLT",name:"20+ Year Treasury ETF",kind:"TRADE",direction:"SHORT",
   horizon:"1–3 weeks",reviewed:"2026-11-12",
   thesis:"Hotter-than-expected CPI leaves a tactical bear case for long-duration bonds if actual long yields continue rising.",
-  trigger:"Wait for a fresh open-session 20Y/30Y Treasury yield increase and a TLT daily lower-band break with failed 4H retest. Do not infer this from the 11 Nov cash-bond holiday.",
-  invalidation:"Sustained lower real and nominal long yields, or a TLT daily band reclaim, defeats the short-duration thesis.",
+  trigger:"Investigate only after confirming an open-session rise in long cash Treasury yields and real rates.",
+  invalidation:"Sustained declines in real and nominal long yields undermine the short-duration thesis.",
   risk:"Flight-to-quality can squeeze bond shorts. Borrow, carry and distributions alter ETF short economics.",
   catalyst:"Next matched Treasury cash-session closes, real yields and credit spread readings.",
   source:"https://home.treasury.gov/resource-center/data-chart-center/interest-rates"},
  {id:"cf-long",ticker:"CF",name:"CF Industries",kind:"INVESTMENT",direction:"LONG",
   horizon:"6–18 months",reviewed:"2026-11-12",
   thesis:"Fertiliser cash generation offers an alternative to an AI-led portfolio, but trailing cash yields require cycle normalisation.",
-  trigger:"Recheck normalised free cash flow, North American gas costs and nitrogen prices. Identify a valuation margin of safety and a confirmed daily/weekly support retest.",
+  trigger:"Review normalised free cash flow, gas costs, nitrogen prices and current valuation margin of safety.",
   invalidation:"Lower nitrogen spreads, sustained gas input pressure or weaker adjusted free cash flow weaken the valuation case.",
   risk:"A cyclical stock is not automatically cheap because a backward-looking yield looks high.",
   catalyst:"Next issuer results, nitrogen pricing and gas spreads.",
@@ -39,15 +39,15 @@ export const OPPORTUNITIES=Object.freeze([
  {id:"tlt-long",ticker:"TLT",name:"20+ Year Treasury ETF",kind:"INVESTMENT",direction:"LONG",
   horizon:"3–12 months",reviewed:"2026-11-12",
   thesis:"Long duration offers upside if inflation and long real yields genuinely decline; it is not an automatic buy after one hot CPI surprise.",
-  trigger:"Require sustained lower matched cash Treasury long yields and TLT's daily trend-band recovery; compare intermediate alternatives IEF and VGIT before sizing.",
-  invalidation:"Further long-yield increases, sticky inflation or a renewed daily price-band failure invalidate the entry.",
+  trigger:"Review inflation, matched long real yields, Treasury prices and intermediate-duration alternatives IEF/VGIT.",
+  invalidation:"Further long-yield increases and persistent inflation undermine the duration thesis.",
   risk:"High duration creates outsized capital losses when long yields rise, even with a sizeable distribution yield.",
   catalyst:"Fresh CPI and long-real-yield observations, plus the next Treasury cash sessions.",
   source:"https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf"},
  {id:"googl-long",ticker:"GOOGL",name:"Alphabet",kind:"INVESTMENT",direction:"LONG",
   horizon:"6–24 months",reviewed:"2026-11-12",
   thesis:"Search and Cloud economics support long-run growth, but AI capex consumes cash and the share price must justify expected earnings.",
-  trigger:"Compare refreshed forward estimates with cash capex and operating cash flow. Wait for an attractive valuation and confirmed higher-timeframe support.",
+  trigger:"Review refreshed forward earnings, cash capex, free cash flow and the price paid for growth.",
   invalidation:"Weakening Cloud margins, sustained lower FCF conversion, or materially adverse estimate revisions challenge the thesis.",
   risk:"A strong business can still be an expensive investment when capital spending and expectations are high.",
   catalyst:"Next issuer earnings, capex guidance, FCF and EPS estimate revisions.",
@@ -165,49 +165,16 @@ function card(item,prices,ownerResearch=[]){
  node.append(meta);
  const thesis=make("p","pso-thesis",item.thesis);node.append(thesis);
  const status=make("div","pso-condition");
- status.append(make("strong",null,state.status),make("span",null,state.price!==null?
+ status.append(make("strong",null,!state.current?"REVIEW EXPIRED":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
   "Last eligible delayed close: "+state.currency+" "+state.price.toLocaleString("en-GB",{maximumFractionDigits:3})+" · "+state.session:
   "No eligible current price/confirmation; verify the market feed and chart"));
  node.append(status);
  const evidence=make("div","pso-research-status");
- evidence.append(make("strong",null,state.technical?"Daily scanner · "+state.technical.asOf:
-   "Daily scanner · awaiting qualified OHLC"));
- if(state.technical){
-  const parts=[
-    "EMA20: "+state.technical.ema20State.replaceAll("_"," ").toLowerCase(),
-    "Donchian: "+state.technical.donchian20.replaceAll("_"," ").toLowerCase(),
-    "Stoch RSI: "+(state.technical.stochRsi14===null?"N/A":state.technical.stochRsi14)
-  ];
-  evidence.append(make("p",null,parts.join(" · ")));
-  evidence.append(make("p",null,state.signal?.grade==="DAILY_TRIGGER"?
-   "Daily observation: "+state.signal.label+". Entry still requires 4H, source and risk checks.":
-   (state.signal?.grade==="AGAINST"?"Counter-signal: ":"Daily entry not confirmed: ")+(state.signal?.label||"")));
- }
+ evidence.append(make("strong",null,"Research context · "+item.reviewed));
  evidence.append(make("p",null,state.researchFresh?
-   "Saved macro research · "+state.researchState+" · "+state.researchAsOf+". "+state.researchReason:
-   "Bluebelly macro / fundamental admission not verified for this setup; check current evidence."));
+  "Saved macro research · "+state.researchState+" · "+state.researchAsOf+". "+state.researchReason:
+  "Fresh macro / fundamental admission not verified; consult Bluebelly and original sources."));
  node.append(evidence);
- // A categorical daily EMA20 indicator. Three states only: no synthetic chart or score.
- if(state.technical?.ema20State&&["BELOW_LOWER","INSIDE","ABOVE_UPPER"].includes(state.technical.ema20State)){
-  const labels=[["BELOW_LOWER","Below lower"],["INSIDE","Inside band"],["ABOVE_UPPER","Above upper"]];
-  const band=make("section","pso-band");
-  band.setAttribute("aria-label","Source-dated daily EMA20 band position");
-  const top=make("div","pso-band-top");
-  top.append(make("span",null,"DAILY 20 EMA ±1SD"),make("strong",null,
-   labels.find(([key])=>key===state.technical.ema20State)?.[1]||"Unavailable"));
-  band.append(top);
-  const lanes=make("div","pso-band-lanes");
-  for(const [key,label] of labels){
-   const seg=make("span","pso-band-lane");
-   seg.dataset.active=String(state.technical.ema20State===key);
-   seg.title=label;lanes.append(seg);
-  }
-  band.append(lanes);
-  const axis=make("div","pso-band-axis");
-  for(const [,label] of labels)axis.append(make("span",null,label));
-  band.append(axis,make("p","pso-band-note","Position category · "+state.technical.asOf+" close · not an intraday chart"));
-  node.append(band);
- }
  const steps=make("div","pso-steps");
  for(const [label,value] of [["Entry test",item.trigger],["No-go / cover",item.invalidation]]){
   const box=make("div","pso-step");box.append(make("strong",null,label),make("p",null,value));steps.append(box);
@@ -228,7 +195,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  shell.id="ps-opportunities";shell.setAttribute("aria-label","Guided trade and investment ideas");
  const eyebrow=make("p","pso-overline","OPPORTUNITY TERMINAL · RESEARCH ONLY");
  const h=make("h2",null,home?"Find your next opportunity":"Find a trade or investment");
- const lead=make("p","pso-lead","Choose a horizon first. A good thesis is not a valid entry until its chart, source, risk and catalyst checks pass.");
+ const lead=make("p","pso-lead","Choose a horizon, review the research, then check sources, valuation, risks and catalysts. No automated buy or sell calls.");
  shell.append(eyebrow,h,lead);
  const guide=make("div","pso-paths");
  for(const x of [
