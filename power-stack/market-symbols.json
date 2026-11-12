@@ -462,6 +462,12 @@
       "timeZone": "America/New_York"
     },
     {
+      "ticker": "SPCX",
+      "providerSymbol": "SPCX",
+      "currency": "USD",
+      "timeZone": "America/New_York"
+    },
+    {
       "ticker": "SPY",
       "providerSymbol": "SPY",
       "currency": "USD",
