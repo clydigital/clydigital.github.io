@@ -601,7 +601,11 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   for(const button of filters.querySelectorAll("button"))button.setAttribute("aria-pressed",String(button.dataset.filter===chosen));
   cards.replaceChildren();
   const selected=home?OPPORTUNITIES.filter(x=>["crwv-short","smh-short","cf-long"].includes(x.id)):visibleOpportunities(chosen);
-  const visible=home||expanded?selected:selected.slice(0,4);
+  const preview=chosen==="ALL"
+   ?[...selected.filter(x=>x.kind==="TRADE").slice(0,2),
+     ...selected.filter(x=>x.kind==="INVESTMENT").slice(0,2)]
+   :selected.slice(0,4);
+  const visible=home||expanded?selected:preview;
   for(const item of visible)cards.append(card(item,cardPrices,options.ownerResearch||[]));
   if(!home){
    showMore.hidden=selected.length<=4;
