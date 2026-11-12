@@ -2,7 +2,7 @@ import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261112-tech2";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261112-hyb1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 
 const T="power_stack_idea_tracker";
@@ -23,8 +23,8 @@ export async function initIdeasTracker(db,main,user){
  main.className="psi-shell";
  main.innerHTML=`
  <div class="psi-hero">
-  <div><p class="eyebrow">POWER STACK / OPPORTUNITIES</p><h1>Investment ideas</h1>
-  <p>Research what to do next: conditional entry ranges, the thesis, what would invalidate it, and the next catalyst. A price alert is not a buy order.</p></div>
+  <div><p class="eyebrow">POWER STACK / RESEARCH RADAR</p><h1>Find your next opportunity</h1>
+  <p>Tactical setups and longer-term investment theses, clearly separated. Explore the evidence, conditions and invalidation before acting; a price alert is not a buy order.</p></div>
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
  <div id="psi-opportunity-mount"></div>

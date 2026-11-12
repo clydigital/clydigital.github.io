@@ -4,7 +4,7 @@ import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decisio
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261112-tech2";
+import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261112-hyb1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
 const $=(root,id)=>root.querySelector("#"+id);
@@ -84,10 +84,11 @@ export async function initDecisionDesk(db,main,user){
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
  <section class="psd-top" aria-label="Investment brief">
-  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / PRIVATE INVESTMENT BRIEF</p>
-   <h1>What to do next</h1>
-   <p>Prioritised reviews and conditional entry alerts, not a feed of unapproved trades.</p></div>
-  <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Investment ideas</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">Portfolio</a></div>
+  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / What to do next</p>
+   <h1>Spot the opportunity.<span>Know the risk.</span></h1>
+   <p>Market structure, macro research and investment decisions — clear enough to act on, detailed enough to scrutinise. Research only; no automatic trade approval.</p></div>
+  <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Explore opportunities</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">My portfolio</a></div>
+  <div class="psh-orbit-wrap" aria-hidden="true"><div class="psh-orbit"><div class="psh-orbit-core">MARKET<small>RADAR</small></div></div><div class="psh-orbit-tags"><span>EQUITIES</span><span>RATES</span><span>ENERGY</span></div><small class="psh-orbit-caption">Illustrative compass · not a market score</small></div>
  </section>
  <p id="psd-status" role="status" class="psd-status">Reviewing the latest saved decisions…</p>
  <section class="psd-quick-queue" aria-labelledby="psd-queue-title">
@@ -158,6 +159,7 @@ export async function initDecisionDesk(db,main,user){
  // Cards are conditional research, never owner-saved trade tickets.
  const opportunityHost=txt("div",null,"psd-opportunity-host");
  host.querySelector(".psd-top")?.after(opportunityHost);
+ const overviewStrip=txt("section",null,"psh-overview");overviewStrip.id="psh-overview";overviewStrip.setAttribute("aria-label","Source-dated market scanner coverage");opportunityHost.before(overviewStrip);
  // Distinct section iconography (one icon per section, not decorative repeated badges).
  for(const [selector,shape] of [
   ["#psd-queue-title","compass"],["#psd-ideas-heading","target"],
@@ -239,6 +241,22 @@ export async function initDecisionDesk(db,main,user){
  }
  function renderIdeaBrief(){
   renderOpportunityTerminal(opportunityHost,state.priceMap,{mode:"home",ownerResearch:state.ideaRows});
+  // Use only the vetted, fresh completed-session feed. Never substitute mockup values.
+  const overview=$(host,"psh-overview");overview.replaceChildren();
+  const valid=Boolean(state.marketAsOf);
+  const observed=valid?[...state.priceMap.values()].filter(q=>q?.technical?.asOf===q?.session).length:0;
+  const daily=valid?scanMarketOpportunities(state.priceMap):[];
+  const extremes=valid?scanOscillatorExtremes(state.priceMap):[];
+  const overviewData=[
+   ["coverage","Delayed quotes",valid?state.priceMap.size:"—","Source-qualified · "+(valid?stamp(state.marketAsOf):"Unavailable / stale")],
+   ["technicals","Daily technicals",valid?observed:"—","Completed bars · not intraday"],
+   ["triggers","Daily price triggers",valid?daily.length:"—","Discovery only · 4H not verified"],
+   ["momentum","Oscillator extremes",valid?extremes.length:"—","Stoch RSI context · not entry signals"]
+  ];
+  for(const [key,label,value,note] of overviewData){
+   const tile=txt("div",null,"psh-stat");tile.dataset.key=key;
+   tile.append(txt("small",label),txt("strong",value),txt("p",note));overview.append(tile);
+  }
   const companyIdeas=state.ideaRows.filter(item=>!isBondEtf(item.ticker));
   const signals=sweepSignals(companyIdeas,state.priceMap);
   const ranked=rankEntryIdeas(companyIdeas,state.priceMap);

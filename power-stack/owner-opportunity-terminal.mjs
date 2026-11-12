@@ -187,6 +187,27 @@ function card(item,prices,ownerResearch=[]){
    "Saved macro research · "+state.researchState+" · "+state.researchAsOf+". "+state.researchReason:
    "Bluebelly macro / fundamental admission not verified for this setup; check current evidence."));
  node.append(evidence);
+ // A categorical daily EMA20 indicator. Three states only: no synthetic chart or score.
+ if(state.technical?.ema20State&&["BELOW_LOWER","INSIDE","ABOVE_UPPER"].includes(state.technical.ema20State)){
+  const labels=[["BELOW_LOWER","Below lower"],["INSIDE","Inside band"],["ABOVE_UPPER","Above upper"]];
+  const band=make("section","pso-band");
+  band.setAttribute("aria-label","Source-dated daily EMA20 band position");
+  const top=make("div","pso-band-top");
+  top.append(make("span",null,"DAILY 20 EMA ±1SD"),make("strong",null,
+   labels.find(([key])=>key===state.technical.ema20State)?.[1]||"Unavailable"));
+  band.append(top);
+  const lanes=make("div","pso-band-lanes");
+  for(const [key,label] of labels){
+   const seg=make("span","pso-band-lane");
+   seg.dataset.active=String(state.technical.ema20State===key);
+   seg.title=label;lanes.append(seg);
+  }
+  band.append(lanes);
+  const axis=make("div","pso-band-axis");
+  for(const [,label] of labels)axis.append(make("span",null,label));
+  band.append(axis,make("p","pso-band-note","Position category · "+state.technical.asOf+" close · not an intraday chart"));
+  node.append(band);
+ }
  const steps=make("div","pso-steps");
  for(const [label,value] of [["Entry test",item.trigger],["No-go / cover",item.invalidation]]){
   const box=make("div","pso-step");box.append(make("strong",null,label),make("p",null,value));steps.append(box);
