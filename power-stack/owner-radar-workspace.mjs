@@ -267,6 +267,26 @@ export function installRadarWorkspace(main,getState){
  const flatBar=add(snapshotBar,node("span","psr-breadth-flat"));
  const snapshotLegend=add(snapshot,node("div","psr-breadth-legend"));
  const note=add(snapshot,node("p","psr-snapshot-note","US-listed, USD-denominated tracked securities only—not S&P 500 breadth. Other markets, Bitcoin and earlier/missing sessions are excluded; bars show direction, not magnitude."));
+ const regionRows=add(snapshot,node("div","psr-regional-data"));regionRows.setAttribute("aria-label","Regional source-dated movement");
+ const regionWidgets=[];
+ for(const [region,title,icon] of [["US","US shares and ETFs","bars"],["EU","European local shares","globe"]]){
+  const card=add(regionRows,node("section","psr-region-card"));
+  const h=add(card,node("div","psr-region-title"));h.append(psIcon(icon),node("strong",null,title));
+  const status=add(card,node("small","psr-region-status","Checking dated observations"));
+  const bar=add(card,node("div","psr-region-track"));bar.setAttribute("role","img");
+  const rises=add(bar,node("span","psr-region-up"));
+  const falls=add(bar,node("span","psr-region-down"));
+  const flats=add(bar,node("span","psr-region-flat"));
+  regionWidgets.push({region,status,bar,rises,falls,flats});
+ }
+ const moverPanel=add(snapshot,node("details","psr-movers-panel"));
+ const moverSummary=add(moverPanel,node("summary",null,"Daily movers · chart"));
+ moverSummary.prepend(psIcon("activity"));const moverList=add(moverPanel,node("div","psr-movers-list"));
+ const bridge=add(snapshot,node("div","psr-bb-bridge"));
+ bridge.append(psIcon("network"),node("strong",null,"Bluebelly source coverage"));
+ const bridgeStatus=add(bridge,node("span",null,"Checking source availability…"));
+ const bridgeLink=add(bridge,node("a",null,"Markets research"));bridgeLink.href="https://bluebelly-desk.vercel.app/markets";
+ bridgeLink.target="_blank";bridgeLink.rel="noopener noreferrer";
  const section=node("section","psr-thematic");
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
