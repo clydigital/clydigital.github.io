@@ -65,7 +65,8 @@ export const CASH_QUALITY_PROFILES=Object.freeze({
   "cfoBN": 7.646,
   "capexBN": 0.18,
   "sbcBN": 1.582,
-  "reportedFCFBN": 7.466,
+  "cashFCFBN": 7.466,
+ "fcfDefinition": "ANALYST_SIMPLE_CFO_MINUS_CAPEX",
   "economicFCFProxyBN": 5.884,
   "quality": "Operating cash flow less property/equipment purchases; SBC subtraction is a conservative analyst proxy, not GAAP nor issuer FCF. Semrush $1.56bn acquisition cash was excluded from simple FCF.",
   "reject": "Check paid AI ARR, renewal pricing, repurchase efficiency vs dilution, FY27 guide and multi-quarter cash durability.",
@@ -99,7 +100,8 @@ export const CASH_QUALITY_PROFILES=Object.freeze({
   "cfoBN": 3.281,
   "capexBN": null,
   "sbcBN": null,
-  "reportedFCFBN": null,
+  "cashFCFBN": null,
+ "fcfDefinition": "NOT_VERIFIED",
   "quality": "CFO declined from $3.452bn in 9M FY25; 9M adjusted income $6.216bn, CFO/adjusted-income proxy ≈53% BEFORE capex. Cash outflows in PBM payables and receivables make timing significant; capex not sourced in this pass.",
   "reject": "Reconcile receivables, PBM pharmacy payables, actual capex and adjusted earnings to distributable cash; PBM rule sensitivity.",
   "filing": "https://www.sec.gov/Archives/edgar/data/1739940/000173994026000071/ci-20260930.htm",
@@ -132,7 +134,8 @@ export const CASH_QUALITY_PROFILES=Object.freeze({
   "cfoBN": 15.318,
   "capexBN": 2.357,
   "sbcBN": 0.61,
-  "reportedFCFBN": 12.961,
+  "cashFCFBN": 12.961,
+ "fcfDefinition": "ANALYST_SIMPLE_CFO_MINUS_CAPEX",
   "quality": "Simple CFO minus capex, not all distributable to parent. 9M CFO $15.318bn versus $7.249bn prior year includes timing of receipts/payments and favorable benefit trend; net operating-assets/liabilities +$3.556bn vs -$0.453bn prior year. FY26 guided capex $3.1bn–$3.3bn.",
   "reject": "Stress 2027 plan pricing, MBR, cash at restricted insurance entities, reserve developments and debt; refuse to annualize 9M CFO.",
   "filing": "https://www.sec.gov/Archives/edgar/data/64803/000006480326000108/cvs-20260930.htm",
@@ -165,7 +168,8 @@ export const CASH_QUALITY_PROFILES=Object.freeze({
   "cfoBN": 3.08,
   "capexBN": null,
   "sbcBN": null,
-  "reportedFCFBN": 2.03,
+  "cashFCFBN": 2.03,
+ "fcfDefinition": "ISSUER_DEFINED_TTM_INCLUDES_JV",
   "quality": "Issuer-defined FCF includes Blue Point One JV cash flows. $170m litigation settlement boosts 9M earnings. TTM FCF must be stressed across nitrogen spreads, gas input, new JV capex and share count; not comparable to cash flow of healthcare issuers.",
   "reject": "Normalize 2027 nitrogen-price/gas conditions, strip one-off settlement and adjust JV construction flows before estimating margin of safety.",
   "filing": "https://www.cfindustries.com/newsroom/2026/cf-9m-2026-earnings"
@@ -316,10 +320,10 @@ function card(item,prices,ownerResearch=[]){
  if(cash){
   const block=make("details","pso-details pso-cash");
   block.append(make("summary",null,"Cash-flow quality & downside sensitivity (dated)"));
-  const fcf=cash.reportedFCFBN===null?"Unverified from this source pass":
-   "$"+cash.reportedFCFBN.toFixed(3)+"bn";
+  const fcf=cash.cashFCFBN===null?"Unverified from this source pass":
+   "$"+cash.cashFCFBN.toFixed(3)+"bn";
   block.append(make("p",null,cash.period+" · operating cash $"+cash.cfoBN.toFixed(3)+
-   "bn · simple/issuer FCF: "+fcf+". "+cash.quality));
+   "bn · "+cash.fcfDefinition+" cash-flow measure: "+fcf+". "+cash.quality));
   block.append(make("p",null,"First rejection: "+cash.reject));
   if(cash.stress){
    const x=cash.stress;
