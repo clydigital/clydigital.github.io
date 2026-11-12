@@ -86,3 +86,12 @@
 .pso-merger-watch .pso-details p{font-size:11px;line-height:1.65;color:#c0d1da}
 .pso-merger-watch .pso-details a{color:#a9e2d9;font-size:11px}
 @media(max-width:660px){.pso-merger-watch{padding:13px}.pso-merger-ratios{grid-template-columns:1fr}}
+
+/* Standalone SpaceX source-gated owner-cash view and provenance-tagged creators. */
+.pso-spcx-research{border-color:#3b6b66!important;margin-top:12px!important}
+.pso-spcx-research summary{color:#aaf3d2!important;font-size:12px!important;font-weight:800}
+.pso-spcx-research p{overflow-wrap:anywhere;font-size:11px!important;line-height:1.65!important;color:#c7dce1!important}
+.pso-spcx-creators{margin:13px 0 5px;padding:11px;border:1px solid #345e66;border-radius:8px;background:#142529}
+.pso-spcx-creators strong{font-size:11px;letter-spacing:.02em;color:#d2f2e7}
+.pso-spcx-creators p{font-size:10px!important;line-height:1.55!important;color:#c0d0d2!important;margin:9px 0 3px!important}
+.pso-spcx-creators a{display:inline-block;font-size:10px;margin-bottom:7px;color:#acd9e1;text-decoration:underline;text-underline-offset:2px}
