@@ -453,6 +453,26 @@ export function installRadarWorkspace(main,getState){
    const item=add(snapshotLegend,node("span","psr-legend-item psr-legend-"+tag));
    item.append(node("strong",null,String(count)),document.createTextNode(" "+label));
   }
+  for(const widget of regionWidgets){
+   const r=summarizeRegionalCloses(getState()?.priceMap,widget.region);
+   widget.status.textContent=r.observed?r.observed+" observed · "+r.session+" · "+r.up+" up / "+r.down+" down":"No matching current exchange closes";
+   for(const [el,n] of [[widget.rises,r.up],[widget.falls,r.down],[widget.flats,r.flat]])
+    el.style.width=(r.observed?100*n/r.observed:0).toFixed(2)+"%";
+   widget.bar.setAttribute("aria-label",widget.region+": "+r.up+" rising, "+r.down+" falling, "+r.flat+" unchanged on "+(r.session||"no common session"));
+  }
+  moverList.replaceChildren();
+  const us=summarizeRegionalCloses(getState()?.priceMap,"US");
+  const movers=[...us.leaders,...us.laggards];const seen=new Set();
+  const unique=movers.filter(x=>{if(seen.has(x.ticker))return false;seen.add(x.ticker);return true;});
+  const maximum=Math.max(.01,...unique.map(x=>Math.abs(x.changePct)));
+  if(!unique.length)moverList.append(node("p",null,"No comparable source-qualified US movers."));
+  for(const x of unique){
+   const item=add(moverList,node("div","psr-mover-row"));item.dataset.tone=x.changePct>0?"up":x.changePct<0?"down":"flat";
+   item.append(node("strong",null,x.ticker));
+   const track=add(item,node("div","psr-mover-bar"));const fill=add(track,node("span"));
+   fill.style.width=(100*Math.abs(x.changePct)/maximum).toFixed(1)+"%";
+   item.append(node("span",null,(x.changePct>0?"+":"")+x.changePct.toFixed(2)+"%"));
+  }
  }
  function renderRadar(){
   const state=getState();
@@ -513,5 +533,10 @@ export function installRadarWorkspace(main,getState){
   }
  }
  renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();
+ loadBluebellyStockCoverage().then(report=>{
+  if(!bridge.isConnected)return;
+  bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
+   " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
+ });
  return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot()},openWorkspace};
 }
