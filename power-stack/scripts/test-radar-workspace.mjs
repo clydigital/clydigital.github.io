@@ -83,3 +83,18 @@ test("main research cards do not display EMA band position or automatic technica
  assert(!full.includes('state.status),make("span"'));
  assert(full.includes('WATCH — RESEARCH ONLY'));
 });
+
+test("owner-only Top Stock Picks appear first in the normal workspace instead of collapsed advanced research",()=>{
+ const radar=read("owner-radar-workspace.mjs");
+ const gate=read("auth-gate.mjs");
+ const html=read("index.html");
+ const css=read("top-stock-picks.css");
+ assert.match(radar,/node\.id==="ps-top-stock-picks-20261113"/);
+ assert.match(radar,/if\(original!==topPicks\)legacy\.append\(original\)/);
+ assert.match(radar,/if\(topPicks\)workspace\.insertBefore\(topPicks,section\)/);
+ assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('const {data,error}=await db.from("power_stack_private_pages")'));
+ assert(html.includes("top-stock-picks.css?v=20261113-a1"));
+ assert(css.includes('.ps-picks .ps-picks-grid'));
+ assert(css.includes('@media(max-width:500px)'));
+ assert(!radar.includes("cash_delta"));
+});
