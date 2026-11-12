@@ -84,7 +84,7 @@ export async function initDecisionDesk(db,main,user){
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
  <section class="psd-top" aria-label="Investment brief">
-  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / PRIVATE INVESTMENT BRIEF</p>
+  <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / What to do next</p>
    <h1>Spot the opportunity.<span>Know the risk.</span></h1>
    <p>Market structure, macro research and investment decisions — clear enough to act on, detailed enough to scrutinise. Research only; no automatic trade approval.</p></div>
   <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Explore opportunities</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">My portfolio</a></div>
