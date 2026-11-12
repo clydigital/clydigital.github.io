@@ -8,7 +8,7 @@
  --psr-positive:#91ddc7;--psr-negative:#f0a5b0;--psr-amber:#efd399;
 }
 .psr-landing[hidden],.psr-workspace[hidden]{display:none!important}
-body.psr-landing-active.ps-fin-pulse{background:#041524!important}
+body.psr-landing-active.ps-fin-pulse{background:#041524!important;padding-left:0!important}
 body.psr-landing-active.ps-fin-pulse #site-header.site-header{display:none!important}
 body.psr-landing-active.ps-fin-pulse :is(main.wrap,main.shell,main.psi-shell,main#private-main){
  max-width:none!important;width:100%!important;margin:0!important;padding:0!important;
