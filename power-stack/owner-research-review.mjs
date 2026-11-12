@@ -12,7 +12,7 @@ const validSource=value=>{
  try{const u=new URL(value);return u.protocol==="https:"&&!u.username&&!u.password;}catch{return false;}
 };
 const dated=(value,maxDays,now)=>{
- const d=dateAge(typeof value==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(value)?value+"T23:59:59Z":value,now);
+ const d=dateAge(typeof value==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(value)?value+"T00:00:00Z":value,now);
  return d!==null&&d<=maxDays;
 };
 const displayDay=value=>typeof value==="string"&&/^\d{4}-\d{2}-\d{2}/.test(value)?value.slice(0,10):"unknown";
