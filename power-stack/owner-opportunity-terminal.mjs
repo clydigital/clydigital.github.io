@@ -72,7 +72,9 @@ export function opportunityState(item,quote,now=new Date(),research=null){
   ["SUPPORTIVE","MIXED","ADVERSE"].includes(research?.macro_state)&&
   typeof research?.macro_source_url==="string"&&/^https:\/\//.test(research.macro_source_url);
  return {status:!current?"REVIEW EXPIRED":!priceValid?"VERIFY MARKET DATA":
-   signal?.grade==="DAILY_TRIGGER"?"DAILY WATCH — CHECK 4H":"WAIT FOR CONFIRMATION",
+   signal?.grade==="DAILY_TRIGGER"?"DAILY WATCH — CHECK 4H":
+   signal?.grade==="AGAINST"?"COUNTER-SIGNAL — WAIT":
+   signal?.grade==="EXTENDED"?"EXTENDED — WAIT FOR RETEST":"WAIT FOR CONFIRMATION",
    current,price:priceValid?quote.close:null,
    currency:priceValid?String(quote.currency||"USD"):"",
    session:priceValid?quote.session:null,
@@ -96,6 +98,18 @@ export function directionalDailySignal(direction,t){
  if(t.donchian20===donchian)return {grade:"DAILY_TRIGGER",
   label:long?"Closed above prior 20-session high":"Closed below prior 20-session low",
   observation:"Donchian 20, daily close"};
+ const against=long?new Set(["REJECTED_UPPER_BAND","BROKE_LOWER_BAND"]):
+  new Set(["RECOVERED_LOWER_BAND","BROKE_UPPER_BAND"]);
+ const contraDonchian=long?"CLOSE_BELOW_PRIOR_20_LOW":"CLOSE_ABOVE_PRIOR_20_HIGH";
+ if(against.has(t.band20Event)||t.donchian20===contraDonchian)
+  return {grade:"AGAINST",label:long?"Bearish daily price move opposes long entry":"Bullish daily price move opposes short entry",
+   observation:"Daily counter-signal; confirm before any opposite-side setup"};
+ if(long&&t.ema20State==="ABOVE_UPPER")
+  return {grade:"EXTENDED",label:"Above upper EMA20 band — wait for a retest",
+   observation:"Overextension is not a trend reversal"};
+ if(t.stochRsiZone===(long?"OVERBOUGHT":"OVERSOLD"))
+  return {grade:"CAUTION",label:"Stoch RSI "+t.stochRsiZone.toLowerCase()+" — unfavorable for chasing",
+   observation:"Oscillator only; not a price entry"};
  if(t.stochRsiZone===(long?"OVERSOLD":"OVERBOUGHT"))
   return {grade:"OSCILLATOR_ONLY",label:"Stoch RSI "+t.stochRsiZone.toLowerCase(),
    observation:"Oscillator extreme; NOT a reversal trigger"};
@@ -112,16 +126,26 @@ export function scanMarketOpportunities(prices,now=new Date()){
   if(age<0||age>7*86400000)continue;
   const t=quote.technical;
   const bull=directionalDailySignal("LONG",t),bear=directionalDailySignal("SHORT",t);
-  // Only first-order daily price observations or oscillator extremes are shown.
-  const gradeBull=bull?.grade==="DAILY_TRIGGER"?0:bull?.grade==="OSCILLATOR_ONLY"?1:2;
-  const gradeBear=bear?.grade==="DAILY_TRIGGER"?0:bear?.grade==="OSCILLATOR_ONLY"?1:2;
-  const pick=gradeBull<=gradeBear?{direction:"LONG",signal:bull,grade:gradeBull}:
-   {direction:"SHORT",signal:bear,grade:gradeBear};
-  if(pick.grade>=2)continue;
+  // Oscillator extremes alone must never promote a directional candidate.
+  const pick=bull?.grade==="DAILY_TRIGGER"?{direction:"LONG",signal:bull,grade:0}:
+    bear?.grade==="DAILY_TRIGGER"?{direction:"SHORT",signal:bear,grade:0}:null;
+  if(!pick)continue;
   found.push({ticker,direction:pick.direction,signal:pick.signal,grade:pick.grade,
    session:quote.session,close:quote.close,currency:quote.currency||"USD",technical:t});
  }
  return found.sort((a,b)=>a.grade-b.grade||b.session.localeCompare(a.session)||a.ticker.localeCompare(b.ticker));
+}
+export function scanOscillatorExtremes(prices,now=new Date()){
+ if(!(prices instanceof Map))return [];
+ const rows=[];
+ for(const [ticker,q] of prices){
+  const date=validDate(q?.session),age=Date.parse(now.toISOString().slice(0,10)+"T00:00:00Z")-date;
+  const t=q?.technical;
+  if(ticker==="BTC"||!t||t.asOf!==q.session||!Number.isFinite(age)||age<0||age>7*86400000)continue;
+  if(!["OVERBOUGHT","OVERSOLD"].includes(t.stochRsiZone)||typeof t.stochRsi14!=="number")continue;
+  rows.push({ticker,zone:t.stochRsiZone,k:t.stochRsi14,asOf:q.session});
+ }
+ return rows.sort((a,b)=>a.zone.localeCompare(b.zone)||a.k-b.k||a.ticker.localeCompare(b.ticker));
 }
 export function visibleOpportunities(mode="ALL"){
  return OPPORTUNITIES.filter(x=>mode==="ALL"||
@@ -157,7 +181,7 @@ function card(item,prices,ownerResearch=[]){
   evidence.append(make("p",null,parts.join(" · ")));
   evidence.append(make("p",null,state.signal?.grade==="DAILY_TRIGGER"?
    "Daily observation: "+state.signal.label+". Entry still requires 4H, source and risk checks.":
-   "No directional daily trigger. "+(state.signal?.label||"")));
+   (state.signal?.grade==="AGAINST"?"Counter-signal: ":"Daily entry not confirmed: ")+(state.signal?.label||"")));
  }
  evidence.append(make("p",null,state.researchFresh?
    "Saved macro research · "+state.researchState+" · "+state.researchAsOf+". "+state.researchReason:
@@ -219,8 +243,14 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  radar.append(make("h3",null,"Market discovery · completed daily bars"));
  const radarNote=make("p","pso-radar-note","Candidate discovery, not a trade recommendation. A single daily trigger does not verify a 4H retest, the Bluebelly regime, borrow or valuation.");
  radar.append(radarNote);
+ radar.append(make("p","pso-radar-note","Stochastic RSI extremes are shown separately as momentum context, never as directional trading candidates."));
  const scan=make("div","pso-radar-list");
  radar.append(scan);
+ const oscillators=make("section","pso-oscillator-panel");
+ oscillators.append(make("h3",null,"Stochastic RSI extremes · not trade triggers"));
+ const oscillatorRows=make("div","pso-radar-list");
+ oscillators.append(oscillatorRows);
+ radar.append(oscillators);
  const macroLink=make("a","pso-macro-link","Cross-check the latest Bluebelly market context");
  macroLink.href="https://bluebelly-desk.vercel.app/markets";
  macroLink.target="_blank";macroLink.rel="noopener noreferrer";radar.append(macroLink);
@@ -228,14 +258,23 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  function renderScan(){
   scan.replaceChildren();
   const market=scanMarketOpportunities(prices);
-  if(!market.length){scan.append(make("p","pso-radar-empty",
-   "No source-qualified, fresh daily indicator observations yet. The existing price refresh must complete with at least 250 sessions before this scan can populate."));return;}
+  if(!market.length)scan.append(make("p","pso-radar-empty",
+   "No source-qualified daily price triggers. The completed-session feed may still contain oscillator extremes."));
   for(const item of market.slice(0,8)){
    const line=make("div","pso-radar-item");
    line.append(make("strong",null,item.ticker+" · "+item.direction+" watch"));
    line.append(make("span",null,item.signal.label+" · "+item.session+
     " · "+item.currency+" "+item.close.toLocaleString("en-GB",{maximumFractionDigits:3})));
    scan.append(line);
+  }
+  oscillatorRows.replaceChildren();
+  const extremes=scanOscillatorExtremes(prices).slice(0,8);
+  if(!extremes.length)oscillatorRows.append(make("p","pso-radar-empty","No current source-qualified oscillator extremes."));
+  for(const item of extremes){
+   const line=make("div","pso-radar-item");
+   line.append(make("strong",null,item.ticker+" · "+item.zone.toLowerCase()));
+   line.append(make("span",null,"Stoch RSI "+item.k+" · "+item.asOf+" · Context only; verify direction and risk"));
+   oscillatorRows.append(line);
   }
  }
  select(chosen);renderScan();target.replaceChildren(shell);
