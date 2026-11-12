@@ -70,6 +70,7 @@ test("authenticated entry keeps existing private research and uses no modelled t
  assert(html.includes('owner-radar-workspace.css?v=20261112-rad1'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
+ assert(radar.includes("VIEW TOP STOCK PICKS")&&radar.includes("picksEntry.addEventListener"));
  assert(radar.includes("threeDay")&&radar.includes("fiveDay")&&radar.includes("sourceDate"));
  assert(radar.includes("psr-legacy")&&radar.includes("originals"));
  assert(css.includes("psr-clockwise")&&css.includes("prefers-reduced-motion:reduce"));
