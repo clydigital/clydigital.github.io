@@ -527,7 +527,7 @@ function renderClosePanel(target,tape){
   make("span",null,"Finnhub verified · 4:00 p.m. New York · USD"));
  const note=make("p","pso-close-notice",
   "Independent completed-session prices, not live quotes or trading signals. Daily EMA / Stoch RSI readings remain on their own validated historical session.");
- const prominent=["SPCX","TSLA","NVDA","QQQ","SPY","ADBE","CF","CVS","CI","SMH","TLT","HYG"];
+ const prominent=["SPCX","TSLA","NVDA","QQQ","TLT","ADBE"];
  const map=new Map(tape.rows.map(x=>[x.ticker,x]));
  const main=make("div","pso-close-grid");
  function insertQuote(node,q){
@@ -551,7 +551,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  const home=options.mode==="home",initial=home?"ALL":
    location.hash==="#shorts"?"SHORT":location.hash==="#trades"?"TRADE":
    location.hash==="#investments"?"INVESTMENT":"ALL";
- let chosen=initial,cardPrices=prices;
+ let chosen=initial,cardPrices=prices,expanded=false;
  const shell=make("section","pso-shell");
  shell.id="ps-opportunities";shell.setAttribute("aria-label","Guided trade and investment ideas");
  const eyebrow=make("p","pso-overline","OPPORTUNITY TERMINAL · RESEARCH ONLY");
@@ -573,8 +573,13 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  closePanel.setAttribute("aria-label","Verified recent US closing prices");
  closePanel.append(make("p","pso-close-loading","Verifying recent completed US closing prices…"));
  shell.append(closePanel);
+ const mergerDrawer=make("details","pso-major-drawer pso-deal-drawer");
+ const mergerSummary=make("summary","pso-major-summary");
+ mergerSummary.append(make("strong",null,"Special situation · Tesla × SpaceX"),
+  make("span",null,"No signed agreement · price-ratio scenarios and due diligence"));
+ mergerDrawer.append(mergerSummary);
  const mergerMount=make("div","pso-merger-mount");
- mergerMount.append(renderMergerWatch(prices));shell.append(mergerMount);
+ mergerMount.append(renderMergerWatch(prices));mergerDrawer.append(mergerMount);shell.append(mergerDrawer);
  const head=make("div","pso-head");head.append(make("h3",null,home?"Ideas to investigate":"Research candidates"));
  const about=make("span",null,"Theses reviewed "+OPPORTUNITY_REVIEW_DATE+" · Latest qualified daily bars only");head.append(about);shell.append(head);
  const filters=make("div","pso-filters");filters.setAttribute("role","group");filters.setAttribute("aria-label","Opportunity type");
@@ -584,16 +589,31 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  }
  if(!home)shell.append(filters);
  const cards=make("div","pso-cards");shell.append(cards);
+ const showMore=make("button","pso-show-more","Show more research candidates");
+ showMore.type="button";showMore.addEventListener("click",()=>{expanded=!expanded;select(chosen);});
+ if(!home)shell.append(showMore);
  const footer=make("p","pso-footer","Every setup is WAIT / RECHECK until a fresh chart, invalidation, source and (for shorts) borrow/locate are verified. No trade tickets or broker orders are created.");
  shell.append(footer);
  if(home){const link=make("a","pso-open","See all short and long research candidates");link.href="ideas.html#shorts";shell.append(link);}
  function select(id){
+  if(chosen!==(id||"ALL"))expanded=false;
   chosen=id||"ALL";
   for(const button of filters.querySelectorAll("button"))button.setAttribute("aria-pressed",String(button.dataset.filter===chosen));
   cards.replaceChildren();
   const selected=home?OPPORTUNITIES.filter(x=>["crwv-short","smh-short","cf-long"].includes(x.id)):visibleOpportunities(chosen);
-  for(const item of selected)cards.append(card(item,cardPrices,options.ownerResearch||[]));
+  const visible=home||expanded?selected:selected.slice(0,4);
+  for(const item of visible)cards.append(card(item,cardPrices,options.ownerResearch||[]));
+  if(!home){
+   showMore.hidden=selected.length<=4;
+   showMore.textContent=expanded?"Show fewer candidates":"Show "+(selected.length-4)+" more research candidates";
+   showMore.setAttribute("aria-expanded",String(expanded));
+  }
  }
+ const scannerDrawer=make("details","pso-major-drawer pso-scanner-drawer");
+ const scannerSummary=make("summary","pso-major-summary");
+ scannerSummary.append(make("strong",null,"Open technical screeners"),
+  make("span",null,"Daily Donchian signals, Stochastic RSI and original market context"));
+ scannerDrawer.append(scannerSummary);
  const radar=make("section","pso-radar");
  radar.append(make("h3",null,"Market discovery · completed daily bars"));
  const radarNote=make("p","pso-radar-note","Candidate discovery, not a trade recommendation. A single daily trigger does not verify a 4H retest, the Bluebelly regime, borrow or valuation.");
@@ -609,7 +629,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  const macroLink=make("a","pso-macro-link","Cross-check the latest Bluebelly market context");
  macroLink.href="https://bluebelly-desk.vercel.app/markets";
  macroLink.target="_blank";macroLink.rel="noopener noreferrer";radar.append(macroLink);
- shell.append(radar);
+ scannerDrawer.append(radar);shell.append(scannerDrawer);
  function renderScan(){
   scan.replaceChildren();
   const market=scanMarketOpportunities(prices);
