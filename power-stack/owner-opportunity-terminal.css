@@ -71,3 +71,18 @@
 .pso-cash .pso-stress-heading{font-size:10px;font-weight:850;letter-spacing:.045em;color:#c4e9d7;margin-top:12px}
 .pso-cash .pso-stress-line{border-left:2px solid #51786d;padding-left:9px;font-variant-numeric:tabular-nums;color:#e7f2e9}
 .pso-cash .pso-stress-disclaimer{font-size:10px;color:#b5c6c0;font-style:italic}
+
+/* Auth-gated Tesla / SpaceX event. Historic ratios are not executable arbitrage. */
+.pso-merger-watch{margin:17px 0 23px;padding:18px;border:1px solid #577182;border-radius:13px;background:linear-gradient(145deg,#172732,#101d23);color:#e9f3f7}
+.pso-merger-watch h3{font-size:clamp(19px,2.5vw,24px);line-height:1.2;letter-spacing:-.025em;color:#edf9fc;margin:6px 0 9px}
+.pso-merger-lead{font-size:12px!important;line-height:1.6!important;color:#c1d9e3!important}
+.pso-merger-quote{font-size:11px!important;color:#abded2!important;border-top:1px solid #36525b;padding-top:11px;margin-top:12px!important}
+.pso-merger-ratios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.pso-merger-ratio{display:flex;flex-direction:column;gap:4px;border:1px solid #385966;background:#10232b;padding:11px;border-radius:8px}
+.pso-merger-ratio strong{font-size:11px;color:#ccf0e6}
+.pso-merger-ratio span{font-size:13px;font-weight:800;color:#f0fafc;font-variant-numeric:tabular-nums}
+.pso-merger-ratio small{font-size:10px;color:#aebec9}
+.pso-merger-caution{font-size:10px!important;line-height:1.65!important;color:#c0ced1!important;margin:9px 0!important}
+.pso-merger-watch .pso-details p{font-size:11px;line-height:1.65;color:#c0d1da}
+.pso-merger-watch .pso-details a{color:#a9e2d9;font-size:11px}
+@media(max-width:660px){.pso-merger-watch{padding:13px}.pso-merger-ratios{grid-template-columns:1fr}}
