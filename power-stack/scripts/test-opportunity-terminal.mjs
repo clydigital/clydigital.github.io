@@ -41,7 +41,7 @@ test("the new terminal remains behind the existing owner gate and separates exis
  assert(tracker.includes('value="TRADE">Tracked trades'));
  assert(tracker.includes('value="INVESTMENT">Tracked investments'));
  assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('if(PAGE==="index")'));
- for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261112-tech1'));
+ for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261112-tech2'));
  const module=read("owner-opportunity-terminal.mjs");
  assert(!/sb_secret_|service_role|@gmail\.com|owner_user_id|brokerQuantity|cash_delta/i.test(module));
  assert(module.includes('No trade tickets or broker orders are created'));
