@@ -176,7 +176,7 @@ function styledDelta(el,v){el.className="psr-num"+(Number.isFinite(v)?v>0?" psr-
 export function summarizeTrackedCloses(priceMap){
  const all=priceMap instanceof Map?[...priceMap.values()]:[];
  const eligible=all.filter(q=>q&&Number.isFinite(q.close)&&q.close>0&&Number.isFinite(q.day)&&
-  /^20\\d{2}-\\d{2}-\\d{2}$/.test(String(q.session||"")));
+  /^20\d{2}-\d{2}-\d{2}$/.test(String(q.session||"")));
  const session=eligible.reduce((last,q)=>q.session>last?q.session:last,"");
  const rows=eligible.filter(q=>q.session===session);
  const up=rows.filter(q=>q.day>0).length,down=rows.filter(q=>q.day<0).length,flat=rows.length-up-down;
