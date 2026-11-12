@@ -6,10 +6,10 @@
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
-    "tracked": 106,
+    "tracked": 107,
     "fresh": 105,
     "stale": 0,
-    "unavailable": 1
+    "unavailable": 2
   },
   "rows": [
     {
@@ -4312,6 +4312,23 @@
       "refreshStatus": "OK"
     },
     {
+      "ticker": "SPCX",
+      "providerSymbol": "SPCX",
+      "currency": "USD",
+      "status": "UNAVAILABLE",
+      "sessionDate": null,
+      "close": null,
+      "previousClose": null,
+      "changePct": null,
+      "change3dPct": null,
+      "change5dPct": null,
+      "technicals": null,
+      "sourceName": null,
+      "sourceUrl": null,
+      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
+      "reason": "New publicly listed SpaceX SPCX ticker; original 106-symbol snapshot does not yet contain a completed-session chart"
+    },
+    {
       "ticker": "SPY",
       "providerSymbol": "SPY",
       "currency": "USD",
@@ -6081,5 +6098,12 @@
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ZROZ?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
     }
-  ]
+  ],
+  "catalogueExpansion": {
+    "effectiveResearchDate": "2026-11-13 MYT",
+    "pendingSymbols": [
+      "SPCX"
+    ],
+    "policy": "Explicit no-price record; old 106 observations unchanged until independent completed-session source refresh."
+  }
 }

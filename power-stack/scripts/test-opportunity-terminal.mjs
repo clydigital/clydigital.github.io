@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation} from "../owner-opportunity-terminal.mjs";
+import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio} from "../owner-opportunity-terminal.mjs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 const now=new Date("2026-11-12T02:00:00Z");
 test("opportunities are explicit research candidates, not orders or fabricated price triggers",()=>{
@@ -88,4 +88,31 @@ test("static bear/baseline/bull stresses are fully transparent, dated and never 
  const module=read("owner-opportunity-terminal.mjs");
  assert(module.includes("not consensus, probabilities, fair values, trade targets or a live quote"));
  assert(module.includes("CASH_QUALITY_PROFILES[item.ticker]"));
+});
+
+test("Tesla SpaceX watch is verified company event, with no signed terms or invented probability",()=>{
+ const e=TSLA_SPACEX_EVENT;
+ assert.equal(e.status,"SPECIAL_COMMITTEES_AND_NEGOTIATIONS_NO_SIGNED_AGREEMENT");
+ assert.equal(e.negotiatedExchangeRatio,null);assert.equal(e.dealProbability,null);
+ assert.equal(e.closingDate,null);assert.equal(e.cashConsideration,null);
+ assert.deepEqual(e.parties,["TSLA","SPCX"]);
+ assert(e.filings.some(x=>x.url.includes("tsla-20260930.htm")));
+ assert(e.filings.some(x=>x.url.includes("spcx-20260930.htm")));
+ assert(!Object.hasOwn(e,"orderSignal"));assert(!Object.hasOwn(e,"brokerQuantity"));
+ const module=read("owner-opportunity-terminal.mjs");
+ assert(module.includes("renderMergerWatch(prices)"));
+ assert(!module.includes("DEAL CONFIRMED"));
+});
+test("unnegotiated all-stock ratio examples require same-date USD closed prices",()=>{
+ const a={close:390.84,session:"2026-11-11",currency:"USD"},b={close:139.75,session:"2026-11-11",currency:"USD"};
+ const v=illustrativeSpaceXRatio(a,b);
+ assert.equal(v.session,"2026-11-11");
+ assert.deepEqual(v.cases.map(x=>x.assumedPremiumPct),[0,20,35]);
+ assert.deepEqual(v.cases.map(x=>x.illustrativeSPCXSharesPerTSLAShare),[2.797,3.356,3.776]);
+ assert.deepEqual(v.cases.map(x=>x.hypotheticalTeslaOfferValueUSD),[390.84,469.01,527.63]);
+ assert.equal(illustrativeSpaceXRatio({...a,session:"2026-11-12"},b),null);
+ assert.equal(illustrativeSpaceXRatio({...a,currency:"MYR"},b),null);
+ assert.equal(illustrativeSpaceXRatio({...a,close:null},b),null);
+ assert.equal(illustrativeSpaceXRatio(a,null),null);
+ assert.equal(illustrativeSpaceXRatio({...a,session:"2026-12-99"},b),null);
 });
