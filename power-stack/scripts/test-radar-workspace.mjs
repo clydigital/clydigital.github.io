@@ -128,7 +128,7 @@ test("simple homepage defaults to direct overview and preserves optional radar a
  assert(radar.includes('tableDrawer.open=true;tableDrawer.scrollIntoView'));
  assert(radar.includes('showAllThemes?MARKET_THEMES:MARKET_THEMES.slice(0,6)'));
  assert(radar.includes('summaryTrackedCloses')===false);
- assert(html.includes("owner-calm-layout.css?v=20261113-calm1"));
+ assert(html.includes("owner-calm-layout.css?v=20261113-rh1"));
  assert(css.includes(".psr-breadth-bar")&&css.includes(".psr-scenario-drawer"));
  assert(css.includes("prefers-reduced-motion:reduce"));
 });
