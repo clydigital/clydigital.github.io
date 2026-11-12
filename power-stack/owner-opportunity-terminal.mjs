@@ -234,6 +234,12 @@ export const SPCX_STANDALONE=Object.freeze({
   {who:"Wall Street Truth Bombs / Mark Malek",date:"6 Jul",proof:"ORIGINAL VIDEO METADATA/DESCRIPTION ONLY",
    view:"Warns that index inclusion may occur after institutional front-running and raises starting-valuation risk; not a fresh merger claim.",
    source:"https://www.youtube.com/watch?v=CTrO20eqXQQ"},
+  {who:"Stock Moe",date:"9 Nov",proof:"EXTERNAL discovery · third-party excerpt · not enrolled in creator sweep",
+   view:"Conditional 2031 $690 bull thesis but near-term bearish chart; discussing December 8 lockup is not proof of 800m shares sold.",
+   source:"https://www.tuberank.app/video/11b9938c-448d-4bbc-b424-b75ef2bc5ce4"},
+  {who:"Stocks with Josh",date:"7 Nov",proof:"EXTERNAL discovery · third-party summary only",
+   view:"Conditional ~$113 short-horizon technical downside; not a fair-value model and not 200 EMA history.",
+   source:"https://stocktuber.com/stocks/spcx"},
   {who:"FX Evolution / TraderNick / Traders Reality",date:"9–11 Nov",proof:"MACRO-ONLY CONTEXT, not SPCX video confirmation",
    view:"Disagree about the tech rebound and interest-rate absorption; none provides a newly verified SpaceX entry or deal ratio.",
    source:"https://app.notion.com/p/416519b67a94812daf00d0afceda1fee"}
@@ -315,7 +321,7 @@ function renderMergerWatch(prices){
  const lease=make("a",null,"Original GPU lease 8-K");lease.href=standalone.leaseSource;lease.target="_blank";lease.rel="noopener noreferrer";
  analysis.append(lease);
  const creators=make("div","pso-spcx-creators");
- creators.append(make("strong",null,"Tracked creator views · NOT market evidence"));
+ creators.append(make("strong",null,"Creator counterviews · tracked vs external labeled · NOT verified market data"));
  for(const c of standalone.creatorViews){
   const p=make("p",null,c.who+" · "+c.date+" · "+c.proof+": "+c.view);
   const a=make("a",null,"Source");a.href=c.source;a.target="_blank";a.rel="noopener noreferrer";
@@ -323,6 +329,11 @@ function renderMergerWatch(prices){
  }
  creators.append(make("p",null,
   "StockedUp: no verifiable direct recent SPCX thesis in this pass. No new transcript credits or creator consumed-video ledger changes; do not treat silence as bearish sentiment."));
+ creators.append(make("p",null,
+  "IPO lockup: 8 Dec nominal 180-day deadline is an eligibility review, not a forced sell. Public forecasts differ materially on remaining tradable shares after staggered releases."));
+ const ipo=make("a",null,"Original SpaceX IPO staggered lockup terms");ipo.href="https://www.sec.gov/Archives/edgar/data/1181412/000162828026040610/spacexfwp.htm";
+ ipo.target="_blank";ipo.rel="noopener noreferrer";creators.append(ipo);
+
  analysis.append(creators);
  section.append(analysis);
  return section;
