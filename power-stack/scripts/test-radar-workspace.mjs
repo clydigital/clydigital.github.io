@@ -67,7 +67,7 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
- assert(html.includes('owner-radar-workspace.css?v=20261112-rad1'));
+ assert(html.includes('owner-radar-workspace.css?v=20261113-picks2'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
  assert(radar.includes("VIEW TOP STOCK PICKS")&&radar.includes("picksEntry.addEventListener"));
