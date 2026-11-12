@@ -4,10 +4,10 @@ import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decisio
 import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261113-ux3";
+import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261113-calm1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
-import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261113-picks2";
+import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261113-calm1";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);

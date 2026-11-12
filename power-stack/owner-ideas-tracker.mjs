@@ -2,7 +2,7 @@ import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261113-ux3";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261113-calm1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs";
 
 const T="power_stack_idea_tracker";
@@ -28,6 +28,9 @@ export async function initIdeasTracker(db,main,user){
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
  <div id="psi-opportunity-mount"></div>
+ <details id="psi-tracked-drawer" class="psi-tracked-drawer">
+  <summary class="psi-tracked-summary"><span>My tracked research ideas</span><small id="psi-tracked-count">Expand for saved ideas, PEG comparisons and entry ranges</small></summary>
+  <div class="psi-tracked-body">
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
@@ -39,6 +42,8 @@ export async function initIdeasTracker(db,main,user){
   <span class="psv-key-item psv-key-risk">Below range — recheck</span>
  </div>
  <div id="psi-cards" class="psi-cards" aria-live="polite"></div>
+  </div>
+ </details>
  <section id="psi-editor" class="psi-editor" hidden>
   <div class="psi-editor-top"><h2 id="psi-editor-title">Track investment idea</h2><button type="button" class="psi-secondary" id="psi-cancel">Cancel</button></div>
   <form id="psi-form"><div class="psi-form-grid">
@@ -73,6 +78,7 @@ export async function initIdeasTracker(db,main,user){
   const label=main.querySelector(".psi-tools "+selector);if(label)label.prepend(psIcon(shape));
  }
  const state={ideas:[],prices:new Map(),feedAt:null,editing:null};
+ const trackedDrawer=$("psi-tracked-drawer");
  const form=$("psi-form");
  const setStatus=s=>{$("psi-feed").textContent=s;};
  const quote=id=>state.prices.get(id);
@@ -134,6 +140,8 @@ export async function initIdeasTracker(db,main,user){
   return node;
  }
  function render(){
+  $("psi-tracked-count").textContent=state.ideas.length+
+   " saved research ideas · expand for ticker filters, price zones, PEG and detailed decisions";
   const signals=sweepSignals(state.ideas,state.prices),
     counts=Object.fromEntries(["ALIGNED","DIVERGENCE","WATCH","RECHECK"].map(k=>[k,signals.filter(x=>x.status===k).length])),
     ranked=rankEntryIdeas(state.ideas,state.prices);
@@ -219,9 +227,11 @@ export async function initIdeasTracker(db,main,user){
  $("psi-cancel").addEventListener("click",()=>{$("psi-editor").hidden=true;state.editing=null;});
  $("psi-search").addEventListener("input",render);
  $("psi-filter").addEventListener("change",render);
- if(location.hash==="#bonds")$("psi-filter").value="BONDS";
+ if(location.hash==="#bonds"){$("psi-filter").value="BONDS";trackedDrawer.open=true;}
+ if(location.hash==="#tracked")trackedDrawer.open=true;
  window.addEventListener("hashchange",()=>{
-  if(location.hash==="#bonds"){$("psi-filter").value="BONDS";render();}
+  if(location.hash==="#bonds"){$("psi-filter").value="BONDS";trackedDrawer.open=true;render();}
+  if(location.hash==="#tracked")trackedDrawer.open=true;
  });
  form.addEventListener("submit",async event=>{
   event.preventDefault();const btn=$("psi-save"),notice=$("psi-form-status");btn.disabled=true;notice.textContent="Saving…";

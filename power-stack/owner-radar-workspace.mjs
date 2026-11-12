@@ -172,6 +172,18 @@ function sortBy(a,b,key){
  return bv-av||a.ticker.localeCompare(b.ticker);
 }
 function styledDelta(el,v){el.className="psr-num"+(Number.isFinite(v)?v>0?" psr-num-up":v<0?" psr-num-down":"":"")}
+/** Observed sign distribution within the user's research universe, not broad-market breadth. */
+export function summarizeTrackedCloses(priceMap){
+ const all=priceMap instanceof Map?[...priceMap.values()]:[];
+ const eligible=all.filter(q=>q&&q.currency==="USD"&&q.basis==="Exchange close"&&
+  Number.isFinite(q.close)&&q.close>0&&Number.isFinite(q.day)&&
+  /^20\d{2}-\d{2}-\d{2}$/.test(String(q.session||"")));
+ const session=eligible.reduce((last,q)=>q.session>last?q.session:last,"");
+ const rows=eligible.filter(q=>q.session===session);
+ const up=rows.filter(q=>q.day>0).length,down=rows.filter(q=>q.day<0).length,flat=rows.length-up-down;
+ return {session:session||null,observed:rows.length,up,down,flat,
+  missingOrDifferentSession:all.length-rows.length};
+}
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
@@ -206,19 +218,49 @@ export function installRadarWorkspace(main,getState){
  picksEntry.type="button";
  const landingFooter=add(landing,node("p","psr-landing-footer","Markets move. Evidence matters. Research only · delayed price observations."));
  const workspace=node("div","psr-workspace");workspace.id="workspace";workspace.hidden=true;
+ const quick=add(workspace,node("section","psr-simple-header"));quick.setAttribute("aria-label","Power Stack quick navigation");
+ quick.append(node("p","psr-simple-eyebrow","POWER STACK  /  RESEARCH DESK"),
+  node("h1",null,"Your market, at a glance."),
+  node("p","psr-simple-lead","Start with the evidence. Expand a market, investment thesis or scenario only when needed."));
+ const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
+ for(const [label,url,kind] of [["Explore trade & investment ideas","ideas.html","ideas"],
+  ["Market watch & comparisons","portfolio.html#watchlist","market"],
+  ["My portfolio","portfolio.html","portfolio"]]){
+  const a=add(nav,node("a","psr-simple-link psr-simple-"+kind,label));a.href=url;
+ }
+ const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
+ const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
+ snapshot.setAttribute("aria-label","Tracked US equities and ETFs: source-dated daily direction");
+ const snapshotHead=add(snapshot,node("div","psr-snapshot-head"));
+ snapshotHead.append(node("div",null),node("div",null));
+ snapshotHead.children[0].append(node("p","psr-simple-eyebrow","PRICE DIRECTION / OBSERVED"),
+  node("h2",null,"US watchlist pulse"));
+ const snapshotDate=add(snapshotHead.children[1],node("span","psr-snapshot-date","Checking completed daily sessions…"));
+ const snapshotTotal=add(snapshot,node("div","psr-snapshot-total"));
+ const snapshotBar=add(snapshot,node("div","psr-breadth-bar"));snapshotBar.setAttribute("role","img");
+ const upBar=add(snapshotBar,node("span","psr-breadth-up"));
+ const downBar=add(snapshotBar,node("span","psr-breadth-down"));
+ const flatBar=add(snapshotBar,node("span","psr-breadth-flat"));
+ const snapshotLegend=add(snapshot,node("div","psr-breadth-legend"));
+ const note=add(snapshot,node("p","psr-snapshot-note","US-listed, USD-denominated tracked securities only—not S&P 500 breadth. Other markets, Bitcoin and earlier/missing sessions are excluded; bars show direction, not magnitude."));
  const section=node("section","psr-thematic");
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
- bar.append(node("p","psr-eyebrow","01 / STOCK GRID"),node("h2",null,"Market themes"));
+ bar.append(node("p","psr-eyebrow","EXPLORE / THEMES"),node("h2",null,"Market themes"));
  bar.append(node("p",null,"Stock assessments come only from current owner-reviewed decisions. Price changes are from the delayed feed; missing readings stay blank."));
  const themeGrid=add(section,node("div","psr-theme-grid"));
- const filterBar=add(section,node("div","psr-grid-controls"));
+ const themeMore=add(section,node("button","psr-more-themes","Show more market themes"));themeMore.type="button";
+ const tableDrawer=add(section,node("details","psr-collapse psr-stock-table-drawer"));tableDrawer.id="market-table";
+ const tableSummary=add(tableDrawer,node("summary","psr-collapse-summary"));
+ tableSummary.append(node("span","psr-collapse-heading","All stocks & ETFs · compare and sort"),
+  node("span","psr-collapse-caption","Full 1D / 3D / 5D table, sector filters and ticker search"));
+ const filterBar=add(tableDrawer,node("div","psr-grid-controls"));
  const filterTitle=add(filterBar,node("div","psr-filter-title"));
  filterTitle.append(node("h3",null,"All tracked stocks & ETFs"),node("p","psr-table-asof","Delayed feed not yet available"));
  const actions=add(filterBar,node("div","psr-grid-actions"));
  const search=add(actions,node("input","psr-search"));search.type="search";search.placeholder="Search ticker";search.setAttribute("aria-label","Search by ticker");
  const reset=add(actions,node("button","psr-reset","All themes"));reset.type="button";
- const tableScroll=add(section,node("div","psr-table-scroll"));
+ const tableScroll=add(tableDrawer,node("div","psr-table-scroll"));
  const table=add(tableScroll,node("table","psr-table"));
  table.setAttribute("aria-label","Theme-filtered stocks, current owner review and source-dated price changes");
  const thead=add(table,node("thead"));
@@ -227,8 +269,12 @@ export function installRadarWorkspace(main,getState){
   const th=add(headings,node("th"));const btn=add(th,node("button",null,label));btn.type="button";btn.dataset.sort=k;btn.setAttribute("aria-label","Sort by "+label);
  }
  const tbody=add(table,node("tbody"));
- const caption=add(section,node("p","psr-disclaimer","WATCH means research is required, not buy. Consider Buy/Sell requires a dated owner-reviewed decision and is never an executable order."));
- const matrix=node("section","psr-scenario");matrix.id="scenario-matrix";matrix.setAttribute("aria-label","Bluebelly-informed scenario impact matrix");
+ const caption=add(tableDrawer,node("p","psr-disclaimer","WATCH means research is required, not buy. Consider Buy/Sell requires a dated owner-reviewed decision and is never an executable order."));
+ const matrixDrawer=node("details","psr-collapse psr-scenario-drawer");matrixDrawer.id="scenario-panel";
+ const matrixDrawerSummary=add(matrixDrawer,node("summary","psr-collapse-summary"));
+ matrixDrawerSummary.append(node("span","psr-collapse-heading","Scenario Matrix · what changes if…"),
+  node("span","psr-collapse-caption","Compare two macro shocks and conditional effects on eight themes"));
+ const matrix=add(matrixDrawer,node("section","psr-scenario"));matrix.id="scenario-matrix";matrix.setAttribute("aria-label","Bluebelly-informed scenario impact matrix");
  const matrixHead=add(matrix,node("div","psr-hero-strip"));
  matrixHead.append(node("p","psr-eyebrow","02 / WHAT IF?"),node("h2",null,"Scenario Matrix"));
  matrixHead.append(node("p",null,"Choose two conditions to explore their potential effects across market themes. This is qualitative research, not calibrated probabilities."));
@@ -247,32 +293,48 @@ export function installRadarWorkspace(main,getState){
  mat.setAttribute("aria-label","Conditional directional pressure by market theme and scenario");
  const matHead=add(mat,node("thead")),matHeadRow=add(matHead,node("tr")),matBody=add(mat,node("tbody"));
  const matrixBottom=add(matrix,node("p","psr-disclaimer","Arrows describe plausible first-order effects; NOT observed stock returns, probabilities, allocation advice or automatic trading signals. Opposing drivers and heterogeneous stocks can invalidate a theme-level direction."));
+ const featured=topPicks?node("details","psr-collapse psr-featured-drawer"):null;
+ if(featured){
+  featured.id="featured-picks";
+  const summary=add(featured,node("summary","psr-collapse-summary"));
+  summary.append(node("span","psr-collapse-heading","Featured investment research & valuation"),
+   node("span","psr-collapse-caption","Owner-only picks, source-backed scenarios, risks and original evidence"));
+  featured.append(topPicks);
+ }
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
- workspace.prepend(section,matrix);
- if(topPicks)workspace.insertBefore(topPicks,section);
+ workspace.prepend(quick,snapshot,section,...(featured?[featured]:[]),matrixDrawer);
  main.replaceChildren(landing,workspace);
- document.body.classList.add("psr-landing-active");
- if(location.hash==="#workspace"||location.hash==="#scenario-matrix"||location.hash==="#advanced-research"||location.hash==="#ps-top-stock-picks-20261113"){
-  openWorkspace(location.hash);
+ // The research overview is the default; the decorative radar remains optional.
+ if(location.hash==="#radar"){
+  landing.hidden=false;workspace.hidden=true;document.body.classList.add("psr-landing-active");
+ }else{
+  landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
- let selectedTheme="all",sorting="ticker";
+ let selectedTheme="all",sorting="ticker",showAllThemes=false;
+ if(["#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
   if(target==="#advanced-research")legacy.open=true;
-  if(target==="#scenario-matrix")matrix.scrollIntoView({block:"start"});
-  else if(target==="#ps-top-stock-picks-20261113"&&topPicks)topPicks.scrollIntoView({block:"start"});
+  if(target==="#scenario-matrix"){matrixDrawer.open=true;matrixDrawer.scrollIntoView({block:"start"});}
+  else if(target==="#ps-top-stock-picks-20261113"&&featured){featured.open=true;featured.scrollIntoView({block:"start"});}
+  else if(target==="#market-table"){tableDrawer.open=true;tableDrawer.scrollIntoView({block:"start"});}
   else if(target==="#advanced-research")legacy.scrollIntoView({block:"start"});
   else workspace.scrollIntoView({block:"start"});
   if(location.hash!==target)history.replaceState(null,"",target);
  }
  enter.addEventListener("click",()=>openWorkspace());
+ radarToggle.addEventListener("click",()=>{
+  landing.hidden=false;workspace.hidden=true;document.body.classList.add("psr-landing-active");
+  history.replaceState(null,"","#radar");landing.scrollIntoView({block:"start"});
+ });
  picksEntry.addEventListener("click",()=>openWorkspace("#ps-top-stock-picks-20261113"));
- reset.addEventListener("click",()=>{selectedTheme="all";renderGrid();});
+ reset.addEventListener("click",()=>{selectedTheme="all";search.value="";renderThemes();renderGrid();});
+ themeMore.addEventListener("click",()=>{showAllThemes=!showAllThemes;renderThemes();});
  search.addEventListener("input",()=>renderGrid());
  headings.addEventListener("click",e=>{
   const key=e.target.closest("button[data-sort]")?.dataset.sort;
@@ -281,14 +343,14 @@ export function installRadarWorkspace(main,getState){
  themeGrid.addEventListener("click",e=>{
   const btn=e.target.closest("button[data-theme]");if(!btn)return;
   selectedTheme=btn.dataset.theme;renderThemes();renderGrid();
-  tableScroll.scrollIntoView({block:"nearest"});
+  tableDrawer.open=true;tableDrawer.scrollIntoView({block:"nearest"});
  });
  selA.addEventListener("change",renderMatrix);
  selB.addEventListener("change",renderMatrix);
  function renderThemes(){
   const state=getState(),tickers=allTracked(state);
   themeGrid.replaceChildren();
-  for(const theme of MARKET_THEMES){
+  for(const theme of (showAllThemes?MARKET_THEMES:MARKET_THEMES.slice(0,6))){
    const button=add(themeGrid,node("button","psr-theme"));
    button.type="button";button.dataset.theme=theme.id;button.setAttribute("aria-pressed",String(selectedTheme===theme.id));
    button.append(node("span","psr-theme-symbol",theme.symbol),node("strong",null,theme.name),
@@ -296,7 +358,10 @@ export function installRadarWorkspace(main,getState){
      node("span","psr-theme-count",tickers.filter(id=>themeFor(id)===theme.id).length+" tracked"));
   }
   const extra=tickers.filter(id=>themeFor(id)==="other");
-  if(extra.length){
+  themeMore.hidden=MARKET_THEMES.length<=6&&extra.length===0;
+  themeMore.textContent=showAllThemes?"Show fewer market themes":"Show all "+(MARKET_THEMES.length+(extra.length?1:0))+" themes";
+  themeMore.setAttribute("aria-expanded",String(showAllThemes));
+  if(extra.length&&showAllThemes){
    const button=add(themeGrid,node("button","psr-theme"));button.type="button";button.dataset.theme="other";button.setAttribute("aria-pressed",String(selectedTheme==="other"));
    button.append(node("span","psr-theme-symbol","□"),node("strong",null,"Other Markets"),node("small",null,"Unclassified symbols; no inferred theme"),node("span","psr-theme-count",extra.length+" tracked"));
   }
@@ -329,6 +394,22 @@ export function installRadarWorkspace(main,getState){
   }
   if(!rows.length){const tr=add(tbody,node("tr"));const td=add(tr,node("td",null,"No matching symbols."));td.colSpan=6;}
  }
+ function renderSnapshot(){
+  const stats=summarizeTrackedCloses(getState()?.priceMap);
+  snapshotDate.textContent=stats.session?"Daily session "+stats.session:"No dated daily close";
+  snapshotTotal.textContent=stats.observed?stats.observed+" US-listed names in the latest completed session":"No comparable session data yet";
+  for(const [node,count] of [[upBar,stats.up],[downBar,stats.down],[flatBar,stats.flat]]){
+   node.style.width=(stats.observed?100*count/stats.observed:0).toFixed(2)+"%";
+  }
+  snapshotBar.setAttribute("aria-label",stats.observed?
+   stats.up+" rising, "+stats.down+" falling, "+stats.flat+" unchanged out of "+stats.observed+" tracked symbols":
+   "No verified comparable session observations");
+  snapshotLegend.replaceChildren();
+  for(const [tag,count,label] of [["up",stats.up,"Rising"],["down",stats.down,"Falling"],["flat",stats.flat,"Unchanged"]]){
+   const item=add(snapshotLegend,node("span","psr-legend-item psr-legend-"+tag));
+   item.append(node("strong",null,String(count)),document.createTextNode(" "+label));
+  }
+ }
  function renderRadar(){
   const state=getState();
   blips.replaceChildren();
@@ -347,7 +428,7 @@ export function installRadarWorkspace(main,getState){
    button.title=ticker+" · "+decision.status+" · "+quoteValue(state?.priceMap?.get(ticker));
    button.setAttribute("aria-label","Explore "+ticker+"; "+decision.status);
    button.append(node("span","psr-blip-dot"),node("span","psr-blip-label",ticker));
-   button.addEventListener("click",()=>{selectedTheme=themeFor(ticker);search.value=ticker;renderThemes();renderGrid();openWorkspace("#workspace")});
+   button.addEventListener("click",()=>{selectedTheme=themeFor(ticker);showAllThemes=true;search.value=ticker;renderThemes();renderGrid();openWorkspace("#market-table")});
   });
   radarStatus.textContent=recent
    ?statuses.buy+" consider buy · "+statuses.sell+" consider sell · "+statuses.watch+" watch · Dated "+state.marketAsOf.slice(0,10)
@@ -387,6 +468,6 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();
- return {render(){renderThemes();renderGrid();renderRadar()},openWorkspace};
+ renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();
+ return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot()},openWorkspace};
 }
