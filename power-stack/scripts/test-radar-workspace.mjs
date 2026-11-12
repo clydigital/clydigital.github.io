@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {
  RADAR_CONTRACT,RESEARCH_ASOF,MARKET_THEMES,SCENARIOS,
- stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses
+ stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses,summarizeRegionalCloses,THEME_ICON_NAMES
 } from "../owner-radar-workspace.mjs";
 const root=new URL("../",import.meta.url);
 const read=file=>readFileSync(new URL(file,root),"utf8");
@@ -132,3 +132,36 @@ test("simple homepage defaults to direct overview and preserves optional radar a
  assert(css.includes("prefers-reduced-motion:reduce"));
 });
 
+
+test("Europe theme tracks 12 exact EUR/DKK listings without stealing a US ADR",()=>{
+ const eu=MARKET_THEMES.find(x=>x.id==="europe");
+ assert.equal(eu?.tickers.length,12);
+ for(const t of ["ASML.AS","ADYEN.AS","SAP.DE","IFX.DE","AIR.PA","TTE.PA","MC.PA","SU.PA","NOVO-B.CO"])
+  assert(eu.tickers.includes(t),t);
+ assert(!eu.tickers.includes("ASML"));
+ assert.equal(THEME_ICON_NAMES.europe,"globe");
+ assert.equal(THEME_ICON_NAMES.ai,"cpu");
+ for(const name of MARKET_THEMES.map(x=>x.id))assert(THEME_ICON_NAMES[name],name);
+ for(const sc of SCENARIOS)assert.equal(sc.impact.europe,"unknown","Never fabricate macro pressure for unresearched EU sector");
+});
+test("regional data charts compare only same-session share changes and keep EUR/DKK separate from US",()=>{
+ const map=new Map([
+  ["ASML.AS",{close:1030,day:3.1,currency:"EUR",basis:"Exchange close",session:"2026-11-12"}],
+  ["NOVO-B.CO",{close:350,day:-1.5,currency:"DKK",basis:"Exchange close",session:"2026-11-12"}],
+  ["SAP.DE",{close:220,day:1,currency:"EUR",basis:"Exchange close",session:"2026-11-11"}],
+  ["SPCX",{close:139.94,day:0.136,currency:"USD",basis:"Exchange close",session:"2026-11-12"}],
+  ["TSLA",{close:397.45,day:1.69,currency:"USD",basis:"Exchange close",session:"2026-11-12"}],
+  ["BTC",{close:99999,day:30,currency:"USD",basis:"BTC UTC daily sample",session:"2026-11-12"}],
+ ]);
+ const us=summarizeRegionalCloses(map,"US"),eu=summarizeRegionalCloses(map,"EU");
+ assert.deepEqual([us.observed,us.up,us.down,us.flat],[2,2,0,0]);
+ assert.deepEqual([eu.observed,eu.up,eu.down,eu.flat],[2,1,1,0]);
+ assert.deepEqual(eu.leaders.map(x=>x.ticker),["ASML.AS","NOVO-B.CO"]);
+ assert.equal(us.leaders[0].ticker,"TSLA");
+ assert.equal(summarizeRegionalCloses(new Map(),"EU").session,null);
+ const js=read("owner-radar-workspace.mjs");
+ assert(js.includes('loadBluebellyStockCoverage().then'));
+ assert(js.includes("renderSnapshot()"));
+ assert(js.includes("psr-regional-data"));
+ assert(js.includes("psr-movers-panel"));
+});
