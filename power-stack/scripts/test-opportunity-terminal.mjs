@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio,SPCX_STANDALONE,spcxOwnerCashHurdle} from "../owner-opportunity-terminal.mjs";
+import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio,SPCX_STANDALONE,spcxOwnerCashHurdle,validatePriorityCloses} from "../owner-opportunity-terminal.mjs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 const now=new Date("2026-11-12T02:00:00Z");
 test("opportunities are explicit research candidates, not orders or fabricated price triggers",()=>{
@@ -146,4 +146,47 @@ test("creator commentary is source attributed, no fabricated source completion o
  assert(s.includes("8 Dec nominal 180-day deadline is an eligibility review"));
  assert(s.includes("No new transcript credits or creator consumed-video ledger changes"));
  assert(s.includes("NEED_250_COMPLETED_SESSIONS")===false);
+});
+
+test("12 Nov close overlay is source-qualified and never reuses previous-day technical indicators",()=>{
+ const raw=JSON.parse(read("market-close-overlay.json"));
+ const v=validatePriorityCloses(raw,new Date("2026-11-13T00:00:00Z"));
+ assert.equal(v?.session,"2026-11-12");
+ assert(v.rows.length>=25);
+ assert.equal(v.rows.find(x=>x.ticker==="SPCX")?.close,139.94);
+ assert.equal(v.rows.find(x=>x.ticker==="TSLA")?.close,397.45);
+ assert.equal(v.rows.find(x=>x.ticker==="NVDA")?.close,166.19);
+ assert.equal(v.rows.find(x=>x.ticker==="ADBE")?.close,238.54);
+ assert(v.rows.every(x=>x.currency==="USD"&&x.technicalStatus==="NOT_RECALCULATED_IN_THIS_OVERLAY"));
+ assert.equal(validatePriorityCloses({...raw,session:"2026-11-11"},new Date("2026-11-13T00:00:00Z")),null);
+ assert.equal(validatePriorityCloses({...raw,source:"not vetted"},new Date("2026-11-13T00:00:00Z")),null);
+ assert.equal(validatePriorityCloses(raw,new Date("2026-11-20T00:00:00Z")),null);
+ assert.equal(validatePriorityCloses({...raw,rows:[{...raw.rows[0],close:0},...raw.rows.slice(1)]},new Date("2026-11-13T00:00:00Z")),null);
+ assert(!JSON.stringify(raw).match(/owner_user_id|holdingAmount|brokerQuantity|access_token|refresh_token/i));
+ const file=read("owner-opportunity-terminal.mjs");
+ assert(file.includes('fetch("./market-close-overlay.json",{cache:"no-store"})'));
+ assert(file.includes('technical:null,basis:"Finnhub regular-session close'));
+ assert(file.includes("mergerMount.replaceChildren(renderMergerWatch(cardPrices))"));
+ assert(file.includes("node.dataset.kind=item.kind;node.dataset.direction=item.direction;"));
+ const source=JSON.parse(read("market-prices.json"));
+ assert.equal(source.rows.find(x=>x.ticker==="SPCX").sessionDate,"2026-11-11",
+  "full-market technical producer must remain independently dated until the complete OHLC refresh");
+});
+test("readability layer loads last and keeps high contrast, larger fonts and mobile grid fallback",()=>{
+ for(const name of ["index","ideas"]){
+  const html=read(name+".html");
+  assert(html.includes('owner-legibility-contrast.css?v=20261113-c1'));
+  assert(html.indexOf("owner-legibility-contrast.css")>html.indexOf("owner-hybrid-ocean.css"));
+ }
+ const css=read("owner-legibility-contrast.css");
+ assert(css.includes('pso-card[data-kind="TRADE"]'));
+ assert(css.includes('pso-card[data-kind="INVESTMENT"]'));
+ assert(css.includes("pso-merger-watch"));
+ assert(css.includes("pso-spcx-creators"));
+ assert(css.includes("pso-close-grid"));
+ assert(css.includes("grid-template-columns:repeat(2,minmax(0,1fr))"));
+ assert(css.includes("prefers-contrast:more"));
+ assert(css.includes("forced-colors:active"));
+ const schedule=read("../.github/workflows/power-stack-prices.yml");
+ assert(schedule.includes("cron: '35 22 * * 1-5'"));
 });
