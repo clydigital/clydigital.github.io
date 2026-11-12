@@ -1,15 +1,15 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-12T19:44:33.247Z",
+  "generatedAt": "2026-11-12T20:53:34.435Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
   "universeSource": "market-symbols.json",
   "coverage": {
     "tracked": 107,
-    "fresh": 105,
+    "fresh": 106,
     "stale": 0,
-    "unavailable": 2
+    "unavailable": 1
   },
   "rows": [
     {
@@ -4315,18 +4315,24 @@
       "ticker": "SPCX",
       "providerSymbol": "SPCX",
       "currency": "USD",
-      "status": "UNAVAILABLE",
-      "sessionDate": null,
-      "close": null,
-      "previousClose": null,
-      "changePct": null,
-      "change3dPct": null,
-      "change5dPct": null,
-      "technicals": null,
-      "sourceName": null,
-      "sourceUrl": null,
-      "refreshStatus": "PENDING_NEXT_SOURCE_FETCH",
-      "reason": "New publicly listed SpaceX SPCX ticker; original 106-symbol snapshot does not yet contain a completed-session chart"
+      "status": "CLOSED",
+      "sessionDate": "2026-11-11",
+      "close": 139.75,
+      "previousClose": 143.09,
+      "changePct": -2.334,
+      "change3dPct": 4.081,
+      "change5dPct": 2.818,
+      "technicals": {
+        "contractVersion": "power-stack-daily-technicals/1",
+        "status": "UNAVAILABLE",
+        "asOf": "2026-11-11",
+        "timeframe": "1D",
+        "reason": "NEED_250_COMPLETED_SESSIONS",
+        "indicatorBasis": "Completed daily unadjusted OHLC; not 4H, intraday, broker or split-adjusted"
+      },
+      "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
+      "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SPCX?interval=1d&range=2y&includePrePost=false",
+      "refreshStatus": "OK"
     },
     {
       "ticker": "SPY",
@@ -6098,12 +6104,5 @@
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ZROZ?interval=1d&range=2y&includePrePost=false",
       "refreshStatus": "OK"
     }
-  ],
-  "catalogueExpansion": {
-    "effectiveResearchDate": "2026-11-13 MYT",
-    "pendingSymbols": [
-      "SPCX"
-    ],
-    "policy": "Explicit no-price record; old 106 observations unchanged until independent completed-session source refresh."
-  }
+  ]
 }
