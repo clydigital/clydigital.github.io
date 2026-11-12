@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {calculateDailyTechnical,rsiSeries,TECHNICAL_CONTRACT} from "./price-technicals.mjs";
 import {validatedDailyTechnical,quotes} from "../owner-portfolio-table.mjs";
-import {opportunityState,OPPORTUNITIES,scanMarketOpportunities} from "../owner-opportunity-terminal.mjs";
+import {opportunityState,OPPORTUNITIES,scanMarketOpportunities,scanOscillatorExtremes} from "../owner-opportunity-terminal.mjs";
 function dailyBars(count=300){
  const out=[];let d=new Date("2025-09-18T12:00:00Z");
  for(let i=0;out.length<count;i++,d=new Date(d.getTime()+86400000)){
@@ -88,4 +88,29 @@ test("technical radar is discovery-only; saved thesis and 4H/borrow never become
 test("RSI is 14-period Wilder and cannot use fewer than 15 closes",()=>{
  assert.deepEqual(rsiSeries(Array(14).fill(1)),[]);
  assert.equal(rsiSeries(Array(20).fill(1)).at(-1),50);
+});
+
+test("countertrend daily recovery blocks a short even when Stoch RSI is overbought",()=>{
+ const short=OPPORTUNITIES.find(x=>x.id==="crwv-short");
+ const quote={close:60,session:"2026-11-11",currency:"USD",technical:{
+  asOf:"2026-11-11",band20Event:"RECOVERED_LOWER_BAND",
+  donchian20:"INSIDE_PRIOR_20_RANGE",stochRsiZone:"OVERBOUGHT",
+  stochRsi14:100,ema20State:"INSIDE"}};
+ const now=new Date("2026-11-12T03:00:00Z");
+ assert.equal(opportunityState(short,quote,now).status,"COUNTER-SIGNAL — WAIT");
+ assert.equal(scanMarketOpportunities(new Map([["CRWV",quote]]),now)[0].direction,"LONG");
+});
+test("oscillator extremes appear in a neutral screen, never create shorts by themselves",()=>{
+ const now=new Date("2026-11-12T03:00:00Z"),map=new Map([
+  ["CF",{close:120,session:"2026-11-11",technical:{asOf:"2026-11-11",
+   band20Event:"NONE",donchian20:"INSIDE_PRIOR_20_RANGE",stochRsiZone:"OVERBOUGHT",
+   stochRsi14:93,ema20State:"ABOVE_UPPER"}}],
+  ["TLT",{close:81,session:"2026-11-11",technical:{asOf:"2026-11-11",
+   band20Event:"NONE",donchian20:"INSIDE_PRIOR_20_RANGE",stochRsiZone:"OVERSOLD",
+   stochRsi14:2.5,ema20State:"INSIDE"}}]
+ ]);
+ assert.equal(scanMarketOpportunities(map,now).length,0);
+ assert.equal(scanOscillatorExtremes(map,now).length,2);
+ assert.equal(opportunityState(OPPORTUNITIES.find(x=>x.id==="cf-long"),map.get("CF"),now).status,
+  "EXTENDED — WAIT FOR RETEST");
 });
