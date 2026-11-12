@@ -8,67 +8,56 @@
   "purpose": "Dated priority-watch closing prices. Independent full-universe daily bar feed remains separate and owns 1D technicals.",
   "rows": [
     {
-      "ticker": "TSLA",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 397.45,
-      "previousClose": 390.84,
-      "changePct": 1.691,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "SPCX",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 139.94,
-      "previousClose": 139.75,
-      "changePct": 0.136,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "SPY",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 757.12,
-      "previousClose": 759.81,
-      "changePct": -0.354,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "QQQ",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 688.17,
-      "previousClose": 690.38,
-      "changePct": -0.32,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "NVDA",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 166.19,
-      "previousClose": 173.73,
-      "changePct": -4.34,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
       "ticker": "ADBE",
       "currency": "USD",
       "session": "2026-11-12",
       "close": 238.54,
       "previousClose": 237.6,
       "changePct": 0.396,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "AMD",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 585.3,
+      "previousClose": 552.9,
+      "changePct": 5.86,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "AMZN",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 267.44,
+      "previousClose": 266.17,
+      "changePct": 0.477,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "AVGO",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 364.36,
+      "previousClose": 345.22,
+      "changePct": 5.544,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "BWXT",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 123.99,
+      "previousClose": 125.68,
+      "changePct": -1.345,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
@@ -85,17 +74,6 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "CVS",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 89.79,
-      "previousClose": 89.52,
-      "changePct": 0.302,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
       "ticker": "CI",
       "currency": "USD",
       "session": "2026-11-12",
@@ -107,78 +85,56 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "TLT",
+      "ticker": "CRWV",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 79.72,
-      "previousClose": 80.92,
-      "changePct": -1.483,
+      "close": 56.6,
+      "previousClose": 60.77,
+      "changePct": -6.862,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "IEF",
+      "ticker": "CVS",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 90.21,
-      "previousClose": 90.94,
-      "changePct": -0.803,
+      "close": 89.79,
+      "previousClose": 89.52,
+      "changePct": 0.302,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "HYG",
+      "ticker": "CVX",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 76.98,
-      "previousClose": 77.35,
-      "changePct": -0.478,
+      "close": 216.35,
+      "previousClose": 213.28,
+      "changePct": 1.439,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "SMH",
+      "ticker": "FLEX",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 501.73,
-      "previousClose": 506.96,
-      "changePct": -1.032,
+      "close": 78.12,
+      "previousClose": 78.97,
+      "changePct": -1.076,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "SOXX",
+      "ticker": "GEV",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 154.99,
-      "previousClose": 155.4,
-      "changePct": -0.264,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "RSP",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 220.72,
-      "previousClose": 222.65,
-      "changePct": -0.867,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "IWM",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 278.44,
-      "previousClose": 283.09,
-      "changePct": -1.643,
+      "close": 818.49,
+      "previousClose": 808.24,
+      "changePct": 1.268,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
@@ -206,34 +162,67 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
+      "ticker": "GRAB",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 3.24,
+      "previousClose": 3.33,
+      "changePct": -2.703,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "HYG",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 76.98,
+      "previousClose": 77.35,
+      "changePct": -0.478,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "IEF",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 90.21,
+      "previousClose": 90.94,
+      "changePct": -0.803,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "IWM",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 278.44,
+      "previousClose": 283.09,
+      "changePct": -1.643,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "JBL",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 259.96,
+      "previousClose": 258.89,
+      "changePct": 0.413,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
       "ticker": "MSFT",
       "currency": "USD",
       "session": "2026-11-12",
       "close": 523,
       "previousClose": 521.125,
       "changePct": 0.36,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "AMZN",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 267.44,
-      "previousClose": 266.17,
-      "changePct": 0.477,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
-      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
-    },
-    {
-      "ticker": "AMD",
-      "currency": "USD",
-      "session": "2026-11-12",
-      "close": 585.3,
-      "previousClose": 552.9,
-      "changePct": 5.86,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
@@ -250,36 +239,121 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "AVGO",
+      "ticker": "NVDA",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 364.36,
-      "previousClose": 345.22,
-      "changePct": 5.544,
+      "close": 166.19,
+      "previousClose": 173.73,
+      "changePct": -4.34,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
-      "ticker": "CRWV",
+      "ticker": "QQQ",
       "currency": "USD",
       "session": "2026-11-12",
-      "close": 56.6,
-      "previousClose": 60.77,
-      "changePct": -6.862,
+      "close": 688.17,
+      "previousClose": 690.38,
+      "changePct": -0.32,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "RSP",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 220.72,
+      "previousClose": 222.65,
+      "changePct": -0.867,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SMH",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 501.73,
+      "previousClose": 506.96,
+      "changePct": -1.032,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SOXX",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 154.99,
+      "previousClose": 155.4,
+      "changePct": -0.264,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SPCX",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 139.94,
+      "previousClose": 139.75,
+      "changePct": 0.136,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "SPY",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 757.12,
+      "previousClose": 759.81,
+      "changePct": -0.354,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "TLT",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 79.72,
+      "previousClose": 80.92,
+      "changePct": -1.483,
+      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
+      "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "TSLA",
+      "currency": "USD",
+      "session": "2026-11-12",
+      "close": 397.45,
+      "previousClose": 390.84,
+      "changePct": 1.691,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     }
   ],
   "coverage": {
-    "verified": 24
+    "verified": 30
   },
   "NOT_FOR_INFERRED_4H_OR_DAILY_TECHNICAL_SIGNAL": true,
   "NO_OWNER_POSITIONS_OR_ACCOUNT_DATA": true,
   "unavailableBatch": [
     {
       "ticker": "META",
+      "stamp": null
+    },
+    {
+      "ticker": "XOM",
+      "stamp": null
+    },
+    {
+      "ticker": "ETN",
       "stamp": null
     }
   ]
