@@ -14,7 +14,7 @@ export const MARKET_THEMES=Object.freeze([
  {id:"power",name:"Power & Nuclear",symbol:"✧",description:"Electricity, grid supply and nuclear investment",tickers:["BWXT","CCJ","CEG","LEU","SMR","PWR","ETN","NVT","GEV","VST","TENAGA","YTLPOWR","1164.HK","1816.HK"]},
  {id:"china",name:"China & Asia Tech",symbol:"▣",description:"China compute, manufacturing and Hong Kong",tickers:["688825","9988.HK","3191.HK","3308.HK","6809.HK"]},
  {id:"agri",name:"Fertilisers & Agriculture",symbol:"✳",description:"Nutrients, food supply and natural resources",tickers:["CF","NTR","CTVA","BG","VMI"]},
- {id:"consumer",name:"Consumer & Industrials",symbol:"▤",description:"Consumer demand, mobility and industrials",tickers:["GRAB","TSLA","AAPL","SYM","MNHLDG","FCFS","6742UW"]},
+ {id:"consumer",name:"Consumer & Industrials",symbol:"▤",description:"Consumer demand, mobility and industrials",tickers:["GRAB","TSLA","SPCX","AAPL","SYM","MNHLDG","FCFS","6742UW"]},
  {id:"crypto",name:"Crypto & High Beta",symbol:"◎",description:"Digital assets and high-beta exposures",tickers:["BTC","COIN","MSTR"]}
 ]);
 export const SCENARIOS=Object.freeze([
