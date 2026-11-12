@@ -197,13 +197,13 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
 test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
  const gate=read("auth-gate.mjs");
  const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
- assert(gate.includes('owner-decision-desk.mjs?v=20261113-calm1'));
- assert(gate.includes('owner-ideas-tracker.mjs?v=20261113-calm1'));
+ assert(gate.includes('owner-decision-desk.mjs?v=20261113-fg1'));
+ assert(gate.includes('owner-ideas-tracker.mjs?v=20261113-fg1'));
  assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-calm1'));
  assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-calm1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v=20261113-calm1"'),page);
+   assert(html.includes('src="auth-gate.mjs?v=20261113-fg1"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
@@ -231,4 +231,26 @@ test("Ideas reduce noise: cards reveal four at once, merger and screeners open o
  assert(css.includes('.pso-show-more'));
  assert(css.includes('.psi-tracked-drawer'));
  assert(css.includes('@media(max-width:640px)'));
+});
+
+test("Figtree UI, icons and regional market bridge have font CSP and accessible source visual styling",()=>{
+ const icons=read("owner-visual-icons.mjs"),styles=read("owner-figtree-visuals.css");
+ const bridge=read("owner-bluebelly-stocks.mjs");
+ for(const name of ["globe","cpu","fuel","ship","orbit","sprout","building","gem","truck","coins","activity","bars","network"])
+  assert(icons.includes(" "+name+":[["),name);
+ assert(styles.includes('font-family:"Figtree"'));
+ assert(styles.includes(".psr-regional-data"));
+ assert(styles.includes(".psr-mover-row"));
+ assert(styles.includes("prefers-reduced-motion:reduce"));
+ assert(bridge.includes("bluebelly-equity-coverage/1"));
+ assert(bridge.includes("https://bluebelly-desk.vercel.app/api/markets/stocks"));
+ for(const page of ["index","ideas","research","sectors","decisions","portfolio","archive"]){
+  const html=read(page+".html");
+  assert(html.includes("owner-figtree-visuals.css?v=20261113-fg1"),page);
+  assert(html.includes("fonts.googleapis.com/css2?family=Figtree"),page);
+  assert(html.includes("font-src 'self' https://fonts.gstatic.com"),page);
+  assert(html.includes('src="auth-gate.mjs?v=20261113-fg1"'),page);
+ }
+ for(const page of ["index","ideas"])
+  assert(read(page+".html").includes("connect-src 'self' https://qdtlrfgxpsnxajiptrno.supabase.co https://bluebelly-desk.vercel.app"));
 });
