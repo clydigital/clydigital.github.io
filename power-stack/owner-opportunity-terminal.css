@@ -60,3 +60,6 @@
 .pso-radar-empty{color:#c7b79c;font-size:11px!important;line-height:1.6!important}
 .pso-macro-link{display:inline-block;margin-top:12px;font-size:11px;color:#aadfbc;text-decoration:underline;text-underline-offset:2px}
 @media(max-width:740px){.pso-radar-list{grid-template-columns:1fr}}
+
+.pso-oscillator-panel{border-top:1px dashed #334e45;margin-top:15px;padding-top:15px}
+.pso-oscillator-panel h3{font-size:13px;color:#bed3c7;margin:0 0 10px}
