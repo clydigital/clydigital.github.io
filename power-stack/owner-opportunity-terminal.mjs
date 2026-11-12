@@ -41,6 +41,15 @@ export const OPPORTUNITIES=Object.freeze([
  {id:"cvs-long",ticker:"CVS",name:"CVS Health",horizon:"6–18 months",thesis:"Q3 health benefit ratio improved to 91.3% from 92.8%; issuer raised FY26 adjusted EPS guidance to at least $8.20.",valuationNote:"$89.52 (11 Nov close) / issuer FY26 adjusted EPS minimum $8.20 ≤ 10.9x if delivered; adjusted, not GAAP.",trigger:"Verify Aetna pricing and 2027 MBR, debt-adjusted FCF and a true 1D trend/retest.",invalidation:"Claims costs or bad insurance pricing erase margin recovery.",risk:"Prior 2025 GAAP had large goodwill impairment; do not mistake base effects for organic EPS growth.",catalyst:"Next Aetna medical cost, member and 2027 guidance updates.",source:"https://investors.cvshealth.com/news/news-details/2026/CVS-HEALTH-CORPORATION-REPORTS-THIRD-QUARTER-2026-RESULTS-AND-RAISES-FULL-YEAR-2026-GUIDANCE/default.aspx",kind:"INVESTMENT",direction:"LONG",reviewed:"2026-11-13"},
  {id:"flex-long",ticker:"FLEX",name:"Flex",horizon:"6–18 months",thesis:"FY27 Q2 revenue +25% to $8.5bn; quarterly operating cash $501m versus free cash flow $261m; Cloud & Power separation pending.",valuationNote:"$78.97 (11 Nov close) / FY27 pre-spin issuer adjusted EPS midpoint $5.00 ≈ 15.8x, not vendor's other-horizon ~12.5x.",trigger:"Model post-spin earnings, acquisition funding and FCF, plus daily 50/200 EMA recovery; do not chase oscillator extremes.",invalidation:"Separation terms, customer concentration or weaker cash generation undermine the growth valuation.",risk:"Fiscal 2027 guidance expressly excludes planned spin-off effects.",catalyst:"Spin filings and next operating margin/FCF update.",source:"https://investors.flex.com/news/news-details/2026/FLEX-REPORTS-SECOND-QUARTER-FISCAL-2027-RESULTS/default.aspx",kind:"INVESTMENT",direction:"LONG",reviewed:"2026-11-13"},
  {id:"jbl-long",ticker:"JBL",name:"Jabil",horizon:"6–18 months",thesis:"FY26 revenue grew 21% to $36bn with more than $1.5bn in adjusted free cash flow.",valuationNote:"$258.89 (11 Nov close) / FY26 historical core EPS $13.09 ≈ 19.8x; NOT a forward FY27 multiple.",trigger:"Reconcile adjusted-to-GAAP FCF, customer orders and fiscal 2027 EPS guidance; compare against Flex post-spin.",invalidation:"Higher customer concentration and weaker conversion make manufacturing earnings cyclical.",risk:"FY26 results were preliminary/unaudited; no fully sourced FY27 multiple yet.",catalyst:"Fiscal Q1 FY27 results, forecast and cash generation.",source:"https://investors.jabil.com/news/news-details/2026/Jabil-Posts-Fourth-Quarter-and-Fiscal-Year-2026-Results/default.aspx",kind:"INVESTMENT",direction:"LONG",reviewed:"2026-11-13"},
+ {id:"spcx-long",ticker:"SPCX",name:"SpaceX Class A",kind:"INVESTMENT",direction:"LONG",
+  horizon:"6–24 months",reviewed:"2026-11-13",
+  thesis:"Starlink delivers 84.8% of group Q3 operating income while SpaceX SI leads group revenue and capital demand. A strong platform is not an inexpensive share: ~$1.90tn equity value versus $32.04bn vendor TTM sales.",
+  valuationNote:"$139.75 (11 Nov close); ~$1.90tn vendor market cap / ~$32.04bn TTM revenue ≈ 59.3x trailing sales; 9M CFO $13.097bn minus capex $48.069bn = −$34.972bn simple cash after capex. Not current quote or a fair-value model.",
+  trigger:"Require source-verified 2027 paid compute cash, normalized SI capital returns and Starlink cash margin, executed-versus-committed GPU lease terms and a meaningful entry-value cushion; a creator's $132 reference is not approval.",
+  invalidation:"GPU utilisation/collections and AI cash margins undershoot while capex or finance leases compound; Starlink subscriber increases offset by structurally worse ARPU and terminal economics.",
+  risk:"SpaceX GPU commitment letter (~$40bn) was not an executed lease in the original Oct 26 filing. AI segment acquisitions inflate growth comparisons; insufficient IPO history for validated EMA200 band. Merger remains unagreed.",
+  catalyst:"Definitive GPU lease closing, Q4 and 2027 SI cash collections/Starlink margins, signed Tesla deal terms if any.",
+  source:"https://www.sec.gov/Archives/edgar/data/1181412/000162828026066880/spcx-20260930.htm"},
  {id:"tlt-long",ticker:"TLT",name:"20+ Year Treasury ETF",kind:"INVESTMENT",direction:"LONG",
   horizon:"3–12 months",reviewed:"2026-11-12",
   thesis:"Long duration offers upside if inflation and long real yields genuinely decline; it is not an automatic buy after one hot CPI surprise.",
@@ -206,6 +215,45 @@ export const TSLA_SPACEX_EVENT=Object.freeze({
   {label:"12 Nov Reuters — Bloomberg talk progress",url:"https://www.reuters.com/legal/transactional/spacex-tesla-merger-talks-progress-bloomberg-news-reports-2026-11-12/"}
  ]
 });
+/** Independent SpaceX investment valuation and attributed creator views; never trade triggers. */
+export const SPCX_STANDALONE=Object.freeze({
+ reviewed:"2026-11-13",quoteSession:"2026-11-11",historicalCloseUSD:139.75,
+ equityMarketCapTrillionUSD:1.90,ttmRevenueBN:32.04,q3RevenueBN:14.575,
+ q3IncomeBN:2.791,connectivityQ3OperatingIncomeBN:2.367,
+ nineMonthCfoBN:13.097,nineMonthCapexBN:48.069,
+ leaseStatus:"BINDING_COMMITMENT_LETTER_NOT_EXECUTED_FULL_DRAW",
+ issuer:"https://www.sec.gov/Archives/edgar/data/1181412/000162828026066880/spcx-20260930.htm",
+ leaseSource:"https://www.sec.gov/Archives/edgar/data/1181412/000110465926118614/tm2628247d1_8k.htm",
+ creatorViews:[
+  {who:"Meet Kevin",date:"9 Nov",proof:"THIRD-PARTY EXCERPT — no full native transcript",
+   view:"Bullish on SPCX and describes roughly $132 as an attractive entry; not an issuer valuation or Power Stack entry approval.",
+   source:"https://www.tuberank.app/prediction/6b3b0e23-1b03-449f-b84f-51cf6ec809e5"},
+  {who:"Meet Kevin",date:"4 Nov",proof:"THIRD-PARTY EXCERPT — conditional",
+   view:"Favors a possible Tesla premium over SpaceX standalone only IF a merger occurs; no binding premium exists.",
+   source:"https://www.tuberank.app/video/9853037a-b495-4f90-b073-aafe6cb1e4be"},
+  {who:"Wall Street Truth Bombs / Mark Malek",date:"6 Jul",proof:"ORIGINAL VIDEO METADATA/DESCRIPTION ONLY",
+   view:"Warns that index inclusion may occur after institutional front-running and raises starting-valuation risk; not a fresh merger claim.",
+   source:"https://www.youtube.com/watch?v=CTrO20eqXQQ"},
+  {who:"Stock Moe",date:"9 Nov",proof:"EXTERNAL discovery · third-party excerpt · not enrolled in creator sweep",
+   view:"Conditional 2031 $690 bull thesis but near-term bearish chart; discussing December 8 lockup is not proof of 800m shares sold.",
+   source:"https://www.tuberank.app/video/11b9938c-448d-4bbc-b424-b75ef2bc5ce4"},
+  {who:"Stocks with Josh",date:"7 Nov",proof:"EXTERNAL discovery · third-party summary only",
+   view:"Conditional ~$113 short-horizon technical downside; not a fair-value model and not 200 EMA history.",
+   source:"https://stocktuber.com/stocks/spcx"},
+  {who:"FX Evolution / TraderNick / Traders Reality",date:"9–11 Nov",proof:"MACRO-ONLY CONTEXT, not SPCX video confirmation",
+   view:"Disagree about the tech rebound and interest-rate absorption; none provides a newly verified SpaceX entry or deal ratio.",
+   source:"https://app.notion.com/p/416519b67a94812daf00d0afceda1fee"}
+ ]
+});
+export function spcxOwnerCashHurdle(data=SPCX_STANDALONE){
+ if(!(data.equityMarketCapTrillionUSD>0)||!(data.ttmRevenueBN>0)||!(data.q3RevenueBN>0)||!(data.q3IncomeBN>0))return null;
+ return {trailingEquitySales:Math.round(data.equityMarketCapTrillionUSD*100000/data.ttmRevenueBN)/100,
+  q3AnnualizedEquitySales:Math.round(data.equityMarketCapTrillionUSD*100000/(data.q3RevenueBN*4))/100,
+  connectivityOperatingIncomeSharePct:Math.round(10000*data.connectivityQ3OperatingIncomeBN/data.q3IncomeBN)/100,
+  required3PctAnnualOwnerFCFBN:Math.round(data.equityMarketCapTrillionUSD*1000*.03*100)/100,
+  required5PctAnnualOwnerFCFBN:Math.round(data.equityMarketCapTrillionUSD*1000*.05*100)/100,
+  nineMonthSimpleFCFBN:Math.round((data.nineMonthCfoBN-data.nineMonthCapexBN)*1000)/1000};
+}
 /** Illustrative parity/premium tender exchange ratio only if both vetted daily quotes share a session. */
 export function illustrativeSpaceXRatio(tslaQuote,spcxQuote){
  const a=tslaQuote,b=spcxQuote;
@@ -257,6 +305,37 @@ function renderMergerWatch(prices){
   details.append(a,make("span",null," · "));
  }
  section.append(details);
+ const standalone=SPCX_STANDALONE,calc=spcxOwnerCashHurdle(),analysis=make("details","pso-details pso-spcx-research");
+ analysis.append(make("summary",null,"SPCX standalone: why Starlink earnings are not yet free cash"));
+ analysis.append(make("p",null,
+  "Q3 Starlink/Connectivity supplies "+calc.connectivityOperatingIncomeSharePct.toFixed(1)+"% of SpaceX operating income; AI/Super Intelligence led revenue but remains capital intensive."));
+ analysis.append(make("p",null,
+  "$"+standalone.historicalCloseUSD.toFixed(2)+" at "+standalone.quoteSession+
+  " · ~"+calc.trailingEquitySales.toFixed(1)+"x vendor trailing revenue · "+calc.q3AnnualizedEquitySales.toFixed(1)+"x Q3 annualised sales (NOT a forecast)."));
+ analysis.append(make("p",null,
+  "To earn an illustrative 5% annual equity-owner FCF yield at ~$1.90tn equity value would require +$"+
+  calc.required5PctAnnualOwnerFCFBN.toFixed(0)+"bn cash/year, versus 9M 2026 CFO less capex −$"+
+  Math.abs(calc.nineMonthSimpleFCFBN).toFixed(3)+"bn. This is a valuation hurdle, not issuer guidance."));
+ analysis.append(make("p",null,
+  "October's ~$40bn GPU finance lease is a binding commitment letter to enter a future lease; original 8-K does not prove an executed, fully drawn lease."));
+ const lease=make("a",null,"Original GPU lease 8-K");lease.href=standalone.leaseSource;lease.target="_blank";lease.rel="noopener noreferrer";
+ analysis.append(lease);
+ const creators=make("div","pso-spcx-creators");
+ creators.append(make("strong",null,"Creator counterviews · tracked vs external labeled · NOT verified market data"));
+ for(const c of standalone.creatorViews){
+  const p=make("p",null,c.who+" · "+c.date+" · "+c.proof+": "+c.view);
+  const a=make("a",null,"Source");a.href=c.source;a.target="_blank";a.rel="noopener noreferrer";
+  creators.append(p,a);
+ }
+ creators.append(make("p",null,
+  "StockedUp: no verifiable direct recent SPCX thesis in this pass. No new transcript credits or creator consumed-video ledger changes; do not treat silence as bearish sentiment."));
+ creators.append(make("p",null,
+  "IPO lockup: 8 Dec nominal 180-day deadline is an eligibility review, not a forced sell. Public forecasts differ materially on remaining tradable shares after staggered releases."));
+ const ipo=make("a",null,"Original SpaceX IPO staggered lockup terms");ipo.href="https://www.sec.gov/Archives/edgar/data/1181412/000162828026040610/spacexfwp.htm";
+ ipo.target="_blank";ipo.rel="noopener noreferrer";creators.append(ipo);
+
+ analysis.append(creators);
+ section.append(analysis);
  return section;
 }
 const make=(tag,cls,value)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;};

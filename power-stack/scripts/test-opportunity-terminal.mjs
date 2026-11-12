@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio} from "../owner-opportunity-terminal.mjs";
+import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio,SPCX_STANDALONE,spcxOwnerCashHurdle} from "../owner-opportunity-terminal.mjs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 const now=new Date("2026-11-12T02:00:00Z");
 test("opportunities are explicit research candidates, not orders or fabricated price triggers",()=>{
@@ -115,4 +115,35 @@ test("unnegotiated all-stock ratio examples require same-date USD closed prices"
  assert.equal(illustrativeSpaceXRatio({...a,close:null},b),null);
  assert.equal(illustrativeSpaceXRatio(a,null),null);
  assert.equal(illustrativeSpaceXRatio({...a,session:"2026-12-99"},b),null);
+});
+
+test("SPCX standalone valuations show cash hurdle not buy triggers",()=>{
+ const x=SPCX_STANDALONE,calc=spcxOwnerCashHurdle();
+ assert.equal(x.quoteSession,"2026-11-11");
+ assert.equal(x.historicalCloseUSD,139.75);
+ assert.equal(calc.trailingEquitySales,59.3);
+ assert.equal(calc.q3AnnualizedEquitySales,32.59);
+ assert.equal(calc.connectivityOperatingIncomeSharePct,84.81);
+ assert.equal(calc.nineMonthSimpleFCFBN,-34.972);
+ assert.equal(calc.required5PctAnnualOwnerFCFBN,95);
+ const row=OPPORTUNITIES.find(o=>o.id==="spcx-long");
+ assert.equal(row?.ticker,"SPCX");
+ assert.equal(row?.kind,"INVESTMENT");
+ assert(!/buy now|order ready|trade ready/i.test(row.thesis+" "+row.trigger+" "+row.valuationNote));
+ assert(row.source.startsWith("https://www.sec.gov/"));
+ assert.equal(spcxOwnerCashHurdle({...x,equityMarketCapTrillionUSD:0}),null);
+});
+test("creator commentary is source attributed, no fabricated source completion or automatic merger terms",()=>{
+ const views=SPCX_STANDALONE.creatorViews;
+ assert(views.some(v=>v.who==="Meet Kevin"&&v.view.includes("$132")));
+ assert(views.some(v=>v.who.includes("Wall Street Truth Bombs")&&v.proof.includes("DESCRIPTION ONLY")));
+ assert(views.some(v=>v.who==="Stock Moe"&&v.proof.includes("EXTERNAL")));
+ assert(views.some(v=>v.who==="Stocks with Josh"&&v.proof.includes("third-party")));
+ assert(views.every(v=>/^https:\/\//.test(v.source)));
+ assert(views.every(v=>!v.view.includes("MERGER SIGNED")));
+ assert(views.every(v=>!v.view.includes("automatic buy")));
+ const s=read("owner-opportunity-terminal.mjs");
+ assert(s.includes("8 Dec nominal 180-day deadline is an eligibility review"));
+ assert(s.includes("No new transcript credits or creator consumed-video ledger changes"));
+ assert(s.includes("NEED_250_COMPLETED_SESSIONS")===false);
 });
