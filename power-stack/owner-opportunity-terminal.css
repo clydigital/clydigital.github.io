@@ -95,3 +95,21 @@
 .pso-spcx-creators strong{font-size:11px;letter-spacing:.02em;color:#d2f2e7}
 .pso-spcx-creators p{font-size:10px!important;line-height:1.55!important;color:#c0d0d2!important;margin:9px 0 3px!important}
 .pso-spcx-creators a{display:inline-block;font-size:10px;margin-bottom:7px;color:#acd9e1;text-decoration:underline;text-underline-offset:2px}
+
+/* 13 Nov 2026 — compact research lenses; no new score engine, no buy badges. */
+.pso-lens-section{margin:16px 0 20px;padding:15px;border:1px solid #32564c;background:#0e1b1b;border-radius:12px}
+.pso-lens-heading{display:flex;align-items:baseline;gap:8px 20px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.pso-lens-heading h3{margin:0;font-size:16px;color:#f1f6ef}
+.pso-lens-heading p{margin:0;font-size:11px;color:#a9c2b9}
+.pso-lens-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.pso-lens-item{min-width:0;background:#152522;border:1px solid #355149;border-radius:9px;padding:10px 12px;line-height:1.42}
+.pso-lens-item[open]{background:#1b302a;border-color:#5c8b76}
+.pso-lens-summary{cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.pso-lens-summary strong{font-size:12px;line-height:1.25;color:#f2f6f2}
+.pso-lens-tickers{font-size:11px;color:#a6d6c3}
+.pso-lens-role,.pso-lens-test{font-size:11px!important;color:#c4d7cc!important;line-height:1.5!important;margin:9px 0 0!important}
+.pso-lens-test{color:#f0d7ab!important}
+.pso-lens-source{display:inline-block;margin-top:8px;font-size:11px;color:#a9d9f3}
+.pso-lens-disclaimer{margin:11px 0 0!important;font-size:11px!important;color:#b5c6bd!important}
+@media(max-width:960px){.pso-lens-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.pso-lens-section{padding:12px}.pso-lens-grid{grid-template-columns:1fr}.pso-lens-item{padding:9px 11px}}
