@@ -58,6 +58,127 @@ export const OPPORTUNITIES=Object.freeze([
   catalyst:"Next issuer earnings, capex guidance, FCF and EPS estimate revisions.",
   source:"https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm"}
 ]);
+/** Dated issuer/public filing facts, never personal positions or trade readiness. */
+export const CASH_QUALITY_PROFILES=Object.freeze({
+ "ADBE": {
+  "period": "9M FY26",
+  "cfoBN": 7.646,
+  "capexBN": 0.18,
+  "sbcBN": 1.582,
+  "reportedFCFBN": 7.466,
+  "economicFCFProxyBN": 5.884,
+  "quality": "Operating cash flow less property/equipment purchases; SBC subtraction is a conservative analyst proxy, not GAAP nor issuer FCF. Semrush $1.56bn acquisition cash was excluded from simple FCF.",
+  "reject": "Check paid AI ARR, renewal pricing, repurchase efficiency vs dilution, FY27 guide and multi-quarter cash durability.",
+  "filing": "https://www.sec.gov/Archives/edgar/data/796343/000079634326000156/adbe-20260828.htm",
+  "stress": {
+   "referenceCloseUSD": 237.6,
+   "referenceSession": "2026-11-11",
+   "baseEPS": 24.475,
+   "basis": "FY26 issuer non-GAAP EPS midpoint",
+   "cases": [
+    [
+     "Bear",
+     0.8,
+     8
+    ],
+    [
+     "Unchanged EPS",
+     1,
+     10
+    ],
+    [
+     "Bull",
+     1.1,
+     13
+    ]
+   ]
+  }
+ },
+ "CI": {
+  "period": "9M FY26",
+  "cfoBN": 3.281,
+  "capexBN": null,
+  "sbcBN": null,
+  "reportedFCFBN": null,
+  "quality": "CFO declined from $3.452bn in 9M FY25; 9M adjusted income $6.216bn, CFO/adjusted-income proxy ≈53% BEFORE capex. Cash outflows in PBM payables and receivables make timing significant; capex not sourced in this pass.",
+  "reject": "Reconcile receivables, PBM pharmacy payables, actual capex and adjusted earnings to distributable cash; PBM rule sensitivity.",
+  "filing": "https://www.sec.gov/Archives/edgar/data/1739940/000173994026000071/ci-20260930.htm",
+  "stress": {
+   "referenceCloseUSD": 301.45,
+   "referenceSession": "2026-11-11",
+   "baseEPS": 30.6,
+   "basis": "FY26 issuer adjusted EPS minimum",
+   "cases": [
+    [
+     "Bear",
+     0.9,
+     8
+    ],
+    [
+     "Guidance floor",
+     1,
+     10
+    ],
+    [
+     "Bull",
+     1.1,
+     12
+    ]
+   ]
+  }
+ },
+ "CVS": {
+  "period": "9M FY26",
+  "cfoBN": 15.318,
+  "capexBN": 2.357,
+  "sbcBN": 0.61,
+  "reportedFCFBN": 12.961,
+  "quality": "Simple CFO minus capex, not all distributable to parent. 9M CFO $15.318bn versus $7.249bn prior year includes timing of receipts/payments and favorable benefit trend; net operating-assets/liabilities +$3.556bn vs -$0.453bn prior year. FY26 guided capex $3.1bn–$3.3bn.",
+  "reject": "Stress 2027 plan pricing, MBR, cash at restricted insurance entities, reserve developments and debt; refuse to annualize 9M CFO.",
+  "filing": "https://www.sec.gov/Archives/edgar/data/64803/000006480326000108/cvs-20260930.htm",
+  "stress": {
+   "referenceCloseUSD": 89.52,
+   "referenceSession": "2026-11-11",
+   "baseEPS": 8.2,
+   "basis": "FY26 issuer adjusted EPS minimum",
+   "cases": [
+    [
+     "Bear",
+     0.8,
+     8
+    ],
+    [
+     "Guidance floor",
+     1,
+     11
+    ],
+    [
+     "Bull",
+     1.1,
+     13
+    ]
+   ]
+  }
+ },
+ "CF": {
+  "period": "TTM Sep FY26",
+  "cfoBN": 3.08,
+  "capexBN": null,
+  "sbcBN": null,
+  "reportedFCFBN": 2.03,
+  "quality": "Issuer-defined FCF includes Blue Point One JV cash flows. $170m litigation settlement boosts 9M earnings. TTM FCF must be stressed across nitrogen spreads, gas input, new JV capex and share count; not comparable to cash flow of healthcare issuers.",
+  "reject": "Normalize 2027 nitrogen-price/gas conditions, strip one-off settlement and adjust JV construction flows before estimating margin of safety.",
+  "filing": "https://www.cfindustries.com/newsroom/2026/cf-9m-2026-earnings"
+ }
+});
+export function stressValuation(spec){
+ if(!spec||!Number.isFinite(spec.referenceCloseUSD)||spec.referenceCloseUSD<=0||!Number.isFinite(spec.baseEPS)||spec.baseEPS<=0||!Array.isArray(spec.cases)||spec.cases.length!==3)return [];
+ return spec.cases.map(([label,haircut,pe])=>{
+  if(typeof label!=="string"||!Number.isFinite(haircut)||haircut<=0||!Number.isFinite(pe)||pe<=0)return null;
+  const earnings=spec.baseEPS*haircut,implied=earnings*pe;
+  return {label,epsUSD:Math.round(earnings*100)/100,peMultiple:pe,impliedUSD:Math.round(implied*100)/100,changePct:Math.round((implied/spec.referenceCloseUSD-1)*1000)/10};
+ }).filter(Boolean);
+}
 const make=(tag,cls,value)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;};
 function validDate(d){return /^20\d{2}-\d{2}-\d{2}$/.test(String(d||""))?Date.parse(d+"T00:00:00Z"):NaN;}
 export function opportunityState(item,quote,now=new Date(),research=null){
@@ -190,7 +311,33 @@ function card(item,prices,ownerResearch=[]){
  const detail=make("details","pso-details"),summary=make("summary",null,"Risk, catalyst & original source");
  detail.append(summary,make("p",null,"Risk: "+item.risk),make("p",null,"Next: "+item.catalyst));
  const a=make("a",null,"Original evidence");a.href=item.source;a.target="_blank";a.rel="noopener noreferrer";
- detail.append(a);node.append(detail);return node;
+ detail.append(a);node.append(detail);
+ const cash=CASH_QUALITY_PROFILES[item.ticker];
+ if(cash){
+  const block=make("details","pso-details pso-cash");
+  block.append(make("summary",null,"Cash-flow quality & downside sensitivity (dated)"));
+  const fcf=cash.reportedFCFBN===null?"Unverified from this source pass":
+   "$"+cash.reportedFCFBN.toFixed(3)+"bn";
+  block.append(make("p",null,cash.period+" · operating cash $"+cash.cfoBN.toFixed(3)+
+   "bn · simple/issuer FCF: "+fcf+". "+cash.quality));
+  block.append(make("p",null,"First rejection: "+cash.reject));
+  if(cash.stress){
+   const x=cash.stress;
+   block.append(make("p","pso-stress-heading",
+    "STATIC "+x.referenceSession+" · $"+x.referenceCloseUSD.toFixed(2)+" reference · "+x.basis));
+   for(const line of stressValuation(x)){
+    block.append(make("p","pso-stress-line",line.label+
+     ": $"+line.epsUSD.toFixed(2)+" EPS × "+line.peMultiple+" P/E = $"+
+     line.impliedUSD.toFixed(2)+" ("+(line.changePct>0?"+":"")+line.changePct.toFixed(1)+"%)"));
+   }
+   block.append(make("p","pso-stress-disclaimer",
+    "Assumed EPS haircuts/multiples, not consensus, probabilities, fair values, trade targets or a live quote. Adjusted EPS is not GAAP, FCF or an actionable 4H entry."));
+  }
+  const original=make("a",null,"Original SEC 10-Q / issuer release");
+  original.href=cash.filing;original.target="_blank";original.rel="noopener noreferrer";
+  block.append(original);node.append(block);
+ }
+ return node;
 }
 export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  if(!target)return;
