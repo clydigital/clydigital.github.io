@@ -175,6 +175,9 @@ function styledDelta(el,v){el.className="psr-num"+(Number.isFinite(v)?v>0?" psr-
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
+ // Keep the private, source-dated stock picks visible in the normal workspace.
+ // They are fetched only after owner authentication; do not copy them into static assets.
+ const topPicks=originals.find(node=>node.nodeType===1&&node.id==="ps-top-stock-picks-20261113")||null;
  const landing=node("section","psr-landing");
  landing.id="psr-landing";
  landing.setAttribute("aria-label","Power Stack market radar landing");
@@ -246,8 +249,9 @@ export function installRadarWorkspace(main,getState){
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
- for(const original of originals)legacy.append(original);
+ for(const original of originals){if(original!==topPicks)legacy.append(original);}
  workspace.prepend(section,matrix);
+ if(topPicks)workspace.insertBefore(topPicks,section);
  main.replaceChildren(landing,workspace);
  document.body.classList.add("psr-landing-active");
  if(location.hash==="#workspace"||location.hash==="#scenario-matrix"||location.hash==="#advanced-research"){
