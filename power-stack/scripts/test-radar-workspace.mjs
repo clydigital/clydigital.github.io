@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {
  RADAR_CONTRACT,RESEARCH_ASOF,MARKET_THEMES,SCENARIOS,
- stockAssessment,combineImpacts,scenarioPair
+ stockAssessment,combineImpacts,scenarioPair,summarizeTrackedCloses
 } from "../owner-radar-workspace.mjs";
 const root=new URL("../",import.meta.url);
 const read=file=>readFileSync(new URL(file,root),"utf8");
@@ -85,17 +85,48 @@ test("main research cards do not display EMA band position or automatic technica
  assert(full.includes('WATCH — RESEARCH ONLY'));
 });
 
-test("owner-only Top Stock Picks appear first in the normal workspace instead of collapsed advanced research",()=>{
- const radar=read("owner-radar-workspace.mjs");
- const gate=read("auth-gate.mjs");
- const html=read("index.html");
- const css=read("top-stock-picks.css");
+test("Top Stock Picks and full tables remain owner-gated but start collapsed",()=>{
+ const radar=read("owner-radar-workspace.mjs"),gate=read("auth-gate.mjs"),
+  html=read("index.html"),css=read("top-stock-picks.css");
  assert.match(radar,/node\.id==="ps-top-stock-picks-20261113"/);
  assert.match(radar,/if\(original!==topPicks\)legacy\.append\(original\)/);
- assert.match(radar,/if\(topPicks\)workspace\.insertBefore\(topPicks,section\)/);
+ assert(radar.includes('featured.append(topPicks)'));
+ assert(radar.includes('featured.id="featured-picks"'));
+ assert(radar.includes('tableDrawer.id="market-table"'));
+ assert(radar.includes('matrixDrawer.id="scenario-panel"'));
+ assert(radar.includes("tableDrawer.open=true"));
+ assert(radar.includes("matrixDrawer.open=true"));
  assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('const {data,error}=await db.from("power_stack_private_pages")'));
  assert(html.includes("top-stock-picks.css?v=20261113-a1"));
  assert(css.includes('.ps-picks .ps-picks-grid'));
  assert(css.includes('@media(max-width:500px)'));
  assert(!radar.includes("cash_delta"));
 });
+test("market snapshot uses latest matching completed-session signs and counts missing separately",()=>{
+ const cases=new Map([
+  ["A",{close:120,day:1.2,session:"2026-11-12"}],
+  ["B",{close:85,day:-1.3,session:"2026-11-12"}],
+  ["C",{close:15,day:0,session:"2026-11-12"}],
+  ["D",{close:77,day:3.4,session:"2026-11-11"}],
+  ["E",{close:null,day:null,session:null}]
+ ]);
+ const out=summarizeTrackedCloses(cases);
+ assert.deepEqual(out,{session:"2026-11-12",observed:3,up:1,down:1,flat:1,missingOrDifferentSession:2});
+ assert.deepEqual(summarizeTrackedCloses(new Map()),{session:null,observed:0,up:0,down:0,flat:0,missingOrDifferentSession:0});
+ assert.equal(summarizeTrackedCloses(null).observed,0);
+});
+test("simple homepage defaults to direct overview and preserves optional radar and scenario deep links",()=>{
+ const radar=read("owner-radar-workspace.mjs"),html=read("index.html"),css=read("owner-calm-layout.css");
+ assert(radar.includes('node("h1",null,"Your market, at a glance.")'));
+ assert(radar.includes('if(location.hash==="#radar")'));
+ assert(radar.includes('landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active")'));
+ assert(radar.includes('if(target==="#scenario-matrix"){matrixDrawer.open=true;'));
+ assert(radar.includes('if(target==="#market-table"){tableDrawer.open=true;'));
+ assert(radar.includes('tableDrawer.open=true;tableDrawer.scrollIntoView'));
+ assert(radar.includes('showAllThemes?MARKET_THEMES:MARKET_THEMES.slice(0,6)'));
+ assert(radar.includes('summaryTrackedCloses')===false);
+ assert(html.includes("owner-calm-layout.css?v=20261113-calm1"));
+ assert(css.includes(".psr-breadth-bar")&&css.includes(".psr-scenario-drawer"));
+ assert(css.includes("prefers-reduced-motion:reduce"));
+});
+
