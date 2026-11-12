@@ -16,6 +16,9 @@ on:
       - 'power-stack/owner-ideas.css'
       - 'power-stack/owner-opportunity-terminal.mjs'
       - 'power-stack/owner-radar-workspace.mjs'
+      - 'power-stack/owner-research-review.mjs'
+      - 'power-stack/owner-calm-layout.css'
+      - 'power-stack/scripts/test-research-review.mjs'
       - 'power-stack/owner-radar-workspace.css'
       - 'power-stack/scripts/test-radar-workspace.mjs'
       - 'power-stack/scripts/price-technicals.mjs'
@@ -56,6 +59,9 @@ on:
       - 'power-stack/scripts/test-decision-continuity.mjs'
       - 'power-stack/scripts/test-decision-performance.mjs'
       - 'power-stack/owner-radar-workspace.mjs'
+      - 'power-stack/owner-research-review.mjs'
+      - 'power-stack/owner-calm-layout.css'
+      - 'power-stack/scripts/test-research-review.mjs'
       - 'power-stack/owner-radar-workspace.css'
       - 'power-stack/scripts/test-radar-workspace.mjs'
 permissions:
@@ -83,6 +89,7 @@ jobs:
           node --check power-stack/owner-ideas-tracker.mjs
           node --check power-stack/owner-opportunity-terminal.mjs
           node --check power-stack/owner-radar-workspace.mjs
+          node --check power-stack/owner-research-review.mjs
           node --check power-stack/scripts/price-technicals.mjs
           node --check power-stack/owner-portfolio-table.mjs
           node --check power-stack/owner-market-views.mjs
@@ -90,7 +97,7 @@ jobs:
           node --check power-stack/owner-portfolio.js
           node --check power-stack/owner-advisor-presentation.mjs
       - name: Decision reasoning regression
-        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs power-stack/scripts/test-opportunity-terminal.mjs power-stack/scripts/test-technicals.mjs power-stack/scripts/test-radar-workspace.mjs
+        run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs power-stack/scripts/test-opportunity-terminal.mjs power-stack/scripts/test-technicals.mjs power-stack/scripts/test-radar-workspace.mjs power-stack/scripts/test-research-review.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
