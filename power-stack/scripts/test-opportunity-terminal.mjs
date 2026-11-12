@@ -46,5 +46,5 @@ test("the new terminal remains behind the existing owner gate and separates exis
  assert(!/sb_secret_|service_role|@gmail\.com|owner_user_id|brokerQuantity|cash_delta/i.test(module));
  assert(module.includes('No trade tickets or broker orders are created'));
  assert(module.includes('scanMarketOpportunities(prices)'));
- assert(module.includes('Bluebelly macro / fundamental admission not verified'));
+ assert(module.includes('Fresh macro / fundamental admission not verified'));
 });

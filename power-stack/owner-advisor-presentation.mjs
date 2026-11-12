@@ -37,6 +37,8 @@ export function presentClientView(page,main){
   const signout=nav.querySelector("#logout-button");
   const links=[
    ["index.html","Overview","index"],
+   ["index.html#workspace","Market themes","sectors"],
+   ["index.html#scenario-matrix","Scenarios","market"],
    ["portfolio.html#holdings","My holdings","portfolio"],
    ["portfolio.html#watchlist","Market watch","market"],
    ["portfolio.html#bonds","Bond ETFs","bonds"],
