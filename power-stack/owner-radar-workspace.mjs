@@ -5,8 +5,8 @@
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
- {id:"ai",name:"AI & Semiconductors",symbol:"◈",description:"AI demand, chips, models and financing",tickers:["NVDA","AMD","AVGO","TSM","MU","INTC","SMH","SOXX","CRWV","CRDO","SNDK","AEM","DELL","FLEX","META","MSFT","GOOGL","AMZN","CRM","CRWD","PLTR","IGV","VGT","XLK","VYX"]},
- {id:"equities",name:"Equity Breadth",symbol:"▥",description:"Major indexes, sectors and market participation",tickers:["SPY","QQQ","RSP","DIA","IWM","ARKK","XLF","XLI","XLB","XLC","XLP","XLRE","XLU","XLV","XLY","XBI","TTWO"]},
+ {id:"ai",name:"AI & Semiconductors",symbol:"◈",description:"AI demand, chips, models and financing",tickers:["NVDA","AMD","AVGO","TSM","MU","INTC","SMH","SOXX","CRWV","CRDO","SNDK","AEM","DELL","FLEX","META","MSFT","GOOGL","AMZN","CRM","ADBE","CRWD","PLTR","JBL","IGV","VGT","XLK","VYX"]},
+ {id:"equities",name:"Equity Breadth",symbol:"▥",description:"Major indexes, sectors and market participation",tickers:["SPY","QQQ","RSP","DIA","IWM","ARKK","XLF","XLI","XLB","XLC","XLP","XLRE","XLU","XLV","XLY","XBI","CI","CVS","TTWO"]},
  {id:"energy",name:"Oil & Gas",symbol:"≈",description:"Crude, energy producers and supply risk",tickers:["XOM","CVX","BKR","SLB","LNG","DAYANG","HIBISCS","XLE"]},
  {id:"shipping",name:"Refining & Shipping",symbol:"≋",description:"Fuel bottlenecks, tanker flows and margins",tickers:["MPC","PSX","VLO","STNG","MISC"]},
  {id:"bonds",name:"Rates & Credit",symbol:"≡",description:"Treasuries, duration and financing",tickers:["TLT","EDV","ZROZ","IEF","VGIT","SGOV","HYG","LQD"]},
@@ -95,7 +95,7 @@ const IMPACT=Object.freeze({
 });
 const SCENARIO_BY_ID=new Map(SCENARIOS.map(s=>[s.id,s]));
 const TICKER_THEMES=new Map(MARKET_THEMES.flatMap(theme=>theme.tickers.map(id=>[id,theme.id])));
-const RADAR_WATCH=["NVDA","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX"];
+const RADAR_WATCH=["NVDA","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX","ADBE","CI","CVS","JBL"];
 const POINTS=[[21,32],[68,21],[81,46],[62,67],[34,75],[14,57],[47,24],[74,81],[42,51],[88,28]];
 function node(tag,cls,value){
  const element=document.createElement(tag);
