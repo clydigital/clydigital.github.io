@@ -331,3 +331,8 @@ body.ps-fin-pulse .psr-legacy:not([open])>*:not(summary){display:none!important}
  body.ps-fin-pulse .psr-blip{animation:none!important;transition:none!important}
  body.ps-fin-pulse .psr-blip{opacity:1}
 }
+
+/* Secondary landing route remains private and opens reviewed picks in the workspace. */
+.psr-enter-picks{margin-top:8px;background:#102c2b;color:#aeead0;border:1px solid #3a7765}
+.psr-enter-picks:hover{background:#1b403a}
+@media(forced-colors:active){.psr-enter-picks{border:1px solid CanvasText}}
