@@ -78,7 +78,7 @@ export function quotes(feed,now=new Date()){
   const id=ticker(raw.ticker),price=num(raw.close);
   if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate,now)
     ||price===null||price<=0)continue;
-  if(!["USD","HKD","MYR","CNY"].includes(raw.currency))continue;
+  if(!["USD","HKD","MYR","CNY","EUR","DKK"].includes(raw.currency))continue;
   if(id==="BTC"&&(raw.currency!=="USD"||typeof raw.marketBasis!=="string"
     ||!raw.marketBasis.startsWith("BTC/USD daily UTC sample")))continue;
   if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl,id))continue;
