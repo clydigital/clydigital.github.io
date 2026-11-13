@@ -1,3 +1,4 @@
+import {BRIEFING_EDITION,VERIFIED_FINDINGS,findingsForDesk,validateFinding} from "../owner-war-room-findings.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
@@ -286,7 +287,7 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
   const radar=read("owner-radar-workspace.mjs");
   const home=read("index.html"),gate=read("auth-gate.mjs");
   const nav=read("owner-advisor-presentation.mjs");
-  assert(home.includes('owner-war-room.css?v=20261114-matt2'));
+  assert(home.includes('owner-war-room.css?v=20261114-evidence1'));
   assert(home.includes("The War Room · Private Power Stack"));
   assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
   assert(radar.includes('mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF})'));
@@ -297,20 +298,20 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
   assert(nav.includes('["index.html#warroom-team","Analyst desks","research"]'));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);
-  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","What changed?"])
+  for(const critical of ["What the evidence says","THE CALL","WHY IT MATTERS","What would change this view?","Did the investment call change?"])
     assert(war.includes(critical),critical);
   assert(war.includes("No saved decisions verified."));
   assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
 });
 
-test("Matt leads the War Room, analysts have clear orders, and redundant captions stay gone",()=>{
+test("Matt leads an evidence-first War Room without standing instruction cards",()=>{
  const war=read("owner-war-room.mjs"),radar=read("owner-radar-workspace.mjs");
  const ideas=read("owner-ideas-tracker.mjs"),css=read("owner-war-room.css");
  assert(war.includes('id:"matt",name:"Matt"'));
  assert(war.includes('let chosen="matt"'));
  assert(war.includes('psw-matt-portrait')&&css.includes('.psw-matt-portrait'));
- assert(war.includes("MATT_SAYS")&&war.includes("mattLead.textContent"));
- for(const phrase of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND"])
+ assert(war.includes("MATT_SAYS")&&war.includes("psw-matt-lead"));
+ for(const phrase of ["THE CALL","WHAT CHANGED","psw-fact","psw-finding-call","psw-finding-meta"])
    assert(war.includes(phrase),phrase);
  assert(!war.includes("Choose a desk to see its reasoning"));
  assert(!war.includes("The personality is theatrical"));
@@ -318,5 +319,31 @@ test("Matt leads the War Room, analysts have clear orders, and redundant caption
  assert(!radar.includes("Start with the evidence. Expand a market"));
  assert(!radar.includes("Click any ticker to open its source-dated research row"));
  assert(!ideas.includes("Tactical setups and longer-term investment theses, clearly separated"));
- assert(war.includes("Matt and the analysts are editorial voices"));
+ assert(war.includes("Analyst voices are editorial"));
+});
+
+test("all desk results are actual source-dated findings with inference and a call",()=>{
+ assert.equal(BRIEFING_EDITION,"2026-11-14");
+ assert(VERIFIED_FINDINGS.length>=10);
+ assert(VERIFIED_FINDINGS.every(validateFinding));
+ assert.equal(new Set(VERIFIED_FINDINGS.map(x=>x.id)).size,VERIFIED_FINDINGS.length);
+ for(const desk of ["rates","ai","energy","aviation","selection"]){
+   const result=findingsForDesk(desk);
+   assert(result.length>=1,desk+" must have evidence");
+   assert(result.every(x=>x.desk===desk));
+   assert(result.every(x=>x.fact.length>40&&x.why.length>40&&x.call.length>25));
+ }
+ const matt=findingsForDesk("matt");
+ assert(matt.length>=5);
+ assert(matt.some(x=>x.symbol==="NVDA"&&x.posture==="EVENT VETO"));
+ assert(matt.some(x=>x.symbol==="FAA / AIRLINES"));
+ assert(matt.some(x=>x.symbol==="BRENT / CVX"));
+ assert(matt.some(x=>x.symbol==="CPI / PPI"));
+ const war=read("owner-war-room.mjs");
+ assert(war.includes("findingsForDesk(desk.id).filter(validateFinding)"));
+ assert(war.includes("readChanges(state)"));
+ assert(war.includes("THE CALL"));
+ assert(war.includes("What would change this view?"));
+ assert(!war.includes("STANDING RESEARCH MANDATE"));
+ assert(!war.includes("YOUR ORDERS"));
 });
