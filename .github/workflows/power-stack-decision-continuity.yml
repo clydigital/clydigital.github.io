@@ -14,6 +14,7 @@ on:
       - 'power-stack/scripts/test-visual-hierarchy.mjs'
       - 'power-stack/scripts/test-entry-plans.mjs'
       - 'power-stack/owner-ideas.css'
+      - 'power-stack/owner-opportunity-lenses.mjs'
       - 'power-stack/owner-opportunity-terminal.mjs'
       - 'power-stack/owner-radar-workspace.mjs'
       - 'power-stack/owner-research-review.mjs'
@@ -87,6 +88,7 @@ jobs:
           node --check power-stack/owner-visual-icons.mjs
           node --check power-stack/owner-ideas-core.mjs
           node --check power-stack/owner-ideas-tracker.mjs
+          node --check power-stack/owner-opportunity-lenses.mjs
           node --check power-stack/owner-opportunity-terminal.mjs
           node --check power-stack/owner-radar-workspace.mjs
           node --check power-stack/owner-research-review.mjs
@@ -108,7 +110,11 @@ jobs:
           test -f power-stack/ideas.html
           test -f power-stack/owner-ideas.css
           test -f power-stack/owner-opportunity-terminal.css
+          test -f power-stack/owner-opportunity-lenses.mjs
           test -f power-stack/owner-opportunity-terminal.mjs
+          if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com|"owner_user_id":|"cash_delta":' power-stack/owner-opportunity-lenses.mjs; then
+            echo "Sensitive content in public opportunity lenses"; exit 1
+          fi
           test -f power-stack/owner-radar-workspace.mjs
           test -f power-stack/owner-radar-workspace.css
           test -f power-stack/owner-fin-pulse.css
