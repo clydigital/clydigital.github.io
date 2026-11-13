@@ -20,5 +20,5 @@ test("all six other private Power Stack pages load unified tavern design after p
   "@media(forced-colors:active)","outline:2px solid"]){
   assert(css.includes(token),"Missing private page theme/fallback: "+token);
  }
- assert(!/MARKET LIVE|Bullish Signals|fakeQuotes|service_role|sb_secret_|cash_delta|\\.insert\\(|\\.upsert\\(/i.test(css));
+ for(const bad of ["MARKET LIVE","Bullish Signals","fakeQuotes","service_role","sb_secret_","cash_delta",".insert(",".upsert("])assert(!css.includes(bad),"Unexpected CSS content: "+bad);
 });
