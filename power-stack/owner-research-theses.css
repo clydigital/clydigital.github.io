@@ -1,0 +1,63 @@
+/* Power Stack research thesis overlay; authenticated owner page only.
+   Calm graphite/mint hierarchy matching existing Fin Pulse/Hybrid Ocean. */
+.psrt-shell{margin:16px auto 28px;max-width:1200px;border:1px solid #35574d;border-radius:15px;padding:24px;color:#eaf5ee;
+background:linear-gradient(155deg,#13211f 0%,#101c22 65%,#111a20 100%);box-shadow:0 12px 40px rgba(0,0,0,.13)}
+.psrt-shell *{box-sizing:border-box}
+.psrt-head{display:flex;align-items:start;justify-content:space-between;gap:14px 22px;flex-wrap:wrap}
+.psrt-kicker{font-size:10px!important;font-weight:800!important;letter-spacing:.17em!important;color:#a8dec2!important;margin:0 0 6px!important}
+.psrt-head h1{font-size:clamp(23px,2.65vw,31px)!important;letter-spacing:-.04em!important;line-height:1.16!important;color:#f5faf7!important;margin:0 0 9px!important}
+.psrt-lead{max-width:680px;color:#becfc6!important;font-size:13px!important;line-height:1.55!important;margin:0!important}
+.psrt-research-only{border:1px solid #547163;color:#d0e5d7;font-size:10px;font-weight:700;letter-spacing:.03em;padding:6px 9px;border-radius:7px}
+.psrt-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0 12px}
+.psrt-summary-card{padding:14px;border:1px solid #3a594e;background:rgba(24,44,41,.68);border-radius:10px}
+.psrt-summary-card strong{font-size:15px;color:#a5e1c0;font-weight:800}
+.psrt-summary-card p{font-size:12px!important;line-height:1.5!important;color:#e0eae2!important;margin:6px 0 0!important}
+.psrt-method-note{font-size:11px!important;line-height:1.5!important;color:#adbdba!important;margin:8px 0 18px!important}
+.psrt-section-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:18px 0 10px}
+.psrt-section-heading h2{font-size:18px!important;letter-spacing:-.02em!important;margin:0!important;color:#eef7f0!important}
+.psrt-section-heading span{font-size:11px;color:#9fb8ac}
+.psrt-study{margin:10px 0;border:1px solid #35504b;border-radius:11px;overflow:hidden;background:#152321}
+.psrt-study[open]{border-color:#568572;background:#162923}
+.psrt-study-summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 17px;cursor:pointer;color:#e9f4ec}
+.psrt-study-summary::-webkit-details-marker{display:none}
+.psrt-study-summary:focus-visible,.psrt-shell a:focus-visible{outline:2px solid #b1e4ca;outline-offset:-2px}
+.psrt-summary-intro{display:flex;flex-direction:column;gap:4px;min-width:0}
+.psrt-summary-intro strong,.psrt-study-summary>strong{font-size:14px;font-weight:800;color:#edf7ef}
+.psrt-summary-intro span{font-size:12px;color:#baccc1}
+.psrt-expand-label{flex-shrink:0;border:1px solid #44675c;border-radius:6px;padding:4px 8px;color:#add9bd;font-size:10px;white-space:nowrap}
+.psrt-study[open] .psrt-expand-label{color:#eef8ef;background:#274738}
+.psrt-study-body{padding:0 17px 17px}
+.psrt-verdict{font-size:13px!important;line-height:1.54!important;font-weight:700!important;color:#c4e6d2!important;margin:4px 0 13px!important}
+.psrt-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.psrt-fact{border:1px solid #345349;border-radius:9px;padding:13px;background:#101f20;min-width:0}
+.psrt-fact-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.psrt-fact-head strong{font-size:14px;color:#a8dfc0}
+.psrt-fact-head span{font-size:11px;color:#bdcec5}
+.psrt-fact p{font-size:12px!important;line-height:1.55!important;color:#dce8df!important;margin:7px 0 10px!important}
+.psrt-shell a{font-size:11px!important;color:#abdac7!important;text-decoration:underline;text-underline-offset:3px}
+.psrt-reasoning{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px}
+.psrt-explain{border-top:1px solid #3d6254;padding-top:12px}
+.psrt-explain strong{font-size:12px;color:#f2e2bd}
+.psrt-explain p{font-size:12px!important;line-height:1.65!important;color:#d4e0d5!important;margin:6px 0 0!important}
+.psrt-ranking{font-size:11px!important;font-weight:750!important;color:#a9dec3!important;margin:15px 0 0!important}
+.psrt-adjacent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 17px 17px}
+.psrt-adjacent{padding:13px;border:1px solid #345249;border-radius:9px;background:#101f20}
+.psrt-adjacent-top{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.psrt-adjacent-top strong{font-size:14px;color:#b1e1c6}
+.psrt-adjacent-top span{font-size:11px;color:#c5d5cb}
+.psrt-adjacent p{font-size:12px!important;line-height:1.55!important;margin:8px 0!important;color:#d8e6da!important}
+.psrt-adjacent .psrt-adjacent-risk{color:#e7c1a1!important}
+.psrt-adjacent .psrt-adjacent-test{color:#c1e1c9!important}
+.psrt-scenario-list{padding:0 17px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.psrt-scenario{border:1px solid #375349;border-radius:9px;background:#0f1e20;padding:13px;display:flex;flex-direction:column;gap:5px}
+.psrt-scenario strong{font-size:12px;color:#e5f0e8}
+.psrt-scenario span{font-size:11px;color:#a8d9bd}
+.psrt-scenario p{font-size:12px!important;color:#d0dbd3!important;line-height:1.5!important;margin:0!important}
+.psrt-drawer>.psrt-method-note{padding:0 17px 15px;margin:0!important}
+.psrt-method-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 17px 17px}
+.psrt-foot{padding:14px 0 0;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.psrt-foot p{font-size:11px!important;color:#b6c9be!important;margin:0!important}
+@media(max-width:900px){.psrt-facts,.psrt-reasoning{grid-template-columns:1fr}.psrt-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.psrt-summary-card:last-child{grid-column:1/-1}}
+@media(max-width:640px){.psrt-shell{padding:13px}.psrt-summary,.psrt-adjacent-grid,.psrt-scenario-list,.psrt-method-body{grid-template-columns:1fr}.psrt-summary-card:last-child{grid-column:auto}
+.psrt-study-summary{padding:12px}.psrt-study-body,.psrt-adjacent-grid,.psrt-scenario-list,.psrt-method-body{padding-left:12px;padding-right:12px}.psrt-summary-intro span{font-size:11px}.psrt-expand-label{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.psrt-shell *{scroll-behavior:auto}}
