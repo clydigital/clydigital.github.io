@@ -20,6 +20,8 @@ on:
       - 'power-stack/owner-calm-layout.css'
       - 'power-stack/scripts/test-research-review.mjs'
       - 'power-stack/owner-radar-workspace.css'
+      - 'power-stack/owner-tavern-guildhall.css'
+      - 'power-stack/assets/tavern/**'
       - 'power-stack/scripts/test-radar-workspace.mjs'
       - 'power-stack/scripts/price-technicals.mjs'
       - 'power-stack/scripts/test-technicals.mjs'
@@ -63,6 +65,8 @@ on:
       - 'power-stack/owner-calm-layout.css'
       - 'power-stack/scripts/test-research-review.mjs'
       - 'power-stack/owner-radar-workspace.css'
+      - 'power-stack/owner-tavern-guildhall.css'
+      - 'power-stack/assets/tavern/**'
       - 'power-stack/scripts/test-radar-workspace.mjs'
 permissions:
   contents: read
@@ -111,6 +115,8 @@ jobs:
           test -f power-stack/owner-opportunity-terminal.mjs
           test -f power-stack/owner-radar-workspace.mjs
           test -f power-stack/owner-radar-workspace.css
+          test -f power-stack/owner-tavern-guildhall.css
+          test -f power-stack/assets/tavern/tavern-room-guildhall-1400.webp
           test -f power-stack/owner-fin-pulse.css
           test -f power-stack/owner-angular-contrast.css
           test -f power-stack/owner-visual-hierarchy.css
