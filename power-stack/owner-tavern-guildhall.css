@@ -1,0 +1,517 @@
+/* Power Stack / Private Market Tavern — guildhall implementation
+   The 13 Nov approved mockup is design guidance ONLY, not a source of market figures.
+   All counts, prices and alerts remain source-dated owner-authenticated DOM content.
+   Scoped to the private homepage; existing Ideas/Portfolio/Research styles remain intact.
+*/
+html[data-private-page="index"] body.ps-fin-pulse{
+ --guild-wood:#28160f;--guild-wood2:#4c2a16;--guild-malachite:#092c26;
+ --guild-brass:#c7954a;--guild-ivory:#f7e6c8;--guild-glow:#eba64f;
+ --guild-border:#ab7839;
+ background:
+  radial-gradient(ellipse at 83% 0%,rgba(125,78,27,.27),transparent 48%),
+  linear-gradient(90deg,rgba(8,20,19,.90),rgba(11,31,27,.80)),
+  url("./assets/tavern/walnut-wall-panel.svg") center top /430px 250px repeat,
+  #0b1917!important;
+ color:#eedec3!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse::before{
+ content:"";pointer-events:none;position:fixed;inset:0 0 0 254px;z-index:-1;
+ background:
+  radial-gradient(ellipse 35% 35% at 7% 7%,rgba(219,131,50,.16),transparent 76%),
+  radial-gradient(ellipse 42% 25% at 91% 8%,rgba(208,123,42,.18),transparent 80%);
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{
+ background:
+  linear-gradient(90deg,rgba(3,18,17,.82),rgba(5,22,20,.59) 78%,rgba(46,22,8,.4)),
+  url("./assets/tavern/walnut-wall-panel.svg") center top/420px auto repeat-y,#0b231f!important;
+ border-right:5px ridge #785027!important;
+ box-shadow:inset -9px 0 14px rgba(0,0,0,.45),inset 0 0 0 1px rgba(244,183,78,.23),9px 0 30px rgba(0,0,0,.34)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .wrap.nav{
+ padding:27px 15px 25px!important;gap:27px!important;position:relative;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand{
+ position:relative;padding:17px 8px 30px!important;margin:0 -3px!important;
+ justify-content:center;text-align:center;
+ background:linear-gradient(145deg,rgba(4,27,24,.92),rgba(8,39,32,.92));
+ border:3px double rgba(202,148,71,.9);border-radius:15px 15px 5px 5px;
+ box-shadow:inset 0 0 0 2px rgba(0,0,0,.6),inset 0 0 25px rgba(0,0,0,.3),0 8px 14px rgba(0,0,0,.25);
+ font-family:Georgia,"Times New Roman",serif!important;letter-spacing:.055em!important;
+ color:#fff1cd!important;font-size:19px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand::after{
+ content:"PRIVATE MARKET TAVERN";position:absolute;bottom:9px;left:0;right:0;
+ text-align:center;font:700 9px/1.3 Figtree,system-ui,sans-serif;letter-spacing:.17em;
+ color:#dbb777;pointer-events:none;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand small{
+ font-size:0!important;line-height:0!important;margin:0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand .ps-pulse-mark{
+ background:linear-gradient(130deg,#d3ae64,#88581f)!important;color:#fff0cf!important;
+ border:1px solid #f4ce7c;border-radius:4px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-sidebar-label{
+ color:#d6b77d!important;letter-spacing:.19em!important;
+ border-bottom:1px solid rgba(205,154,80,.33);padding-bottom:11px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav{
+ border-left:1px solid rgba(189,122,61,.25);padding-left:4px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a:not(.brand),
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-more>summary{
+ font:650 13px/1.3 Figtree,system-ui,sans-serif!important;
+ color:#e9ddc5!important;border-bottom:1px solid rgba(164,105,54,.2)!important;
+ border-radius:4px!important;padding:13px 12px!important;
+ text-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a:is(:hover,:focus-visible),
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-more>summary:is(:hover,:focus-visible){
+ background:linear-gradient(90deg,rgba(151,91,27,.38),rgba(7,56,37,.45))!important;
+ border:1px solid rgba(237,179,91,.64)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"]{
+ background:linear-gradient(110deg,#6d3916 0%,#19392c 100%)!important;
+ border:1px solid #e8ad5c!important;border-left:4px solid #ffe099!important;
+ color:#fff0d1!important;
+ box-shadow:inset 0 0 8px rgba(255,183,63,.26),0 0 15px rgba(235,159,66,.25)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a svg{color:#dfb66e!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .gate-logout{
+ background:linear-gradient(95deg,#172d26,#172a24)!important;
+ border:1px solid #ab7a41!important;color:#edd4b0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace{
+ max-width:1550px!important;
+ display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(350px,.82fr);
+ column-gap:17px;row-gap:18px;
+ padding:clamp(16px,2.5vw,34px)!important;
+ background:transparent!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace[hidden]{display:none!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace > :not(.psr-snapshot):not(.psr-tavern-house-watch){
+ grid-column:1 / -1;min-width:0;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+ min-height:455px!important;position:relative;isolation:isolate;overflow:hidden;
+ display:grid!important;
+ grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+ grid-template-rows:auto auto auto 1fr auto;
+ column-gap:clamp(15px,3vw,44px);
+ align-content:center;align-items:center;
+ padding:31px clamp(20px,3vw,42px) 24px!important;margin:0!important;
+ background:
+  linear-gradient(90deg,rgba(3,14,15,.87),rgba(5,19,18,.62) 47%,rgba(4,24,18,.27) 72%,rgba(3,17,17,.47)),
+  linear-gradient(0deg,rgba(17,10,6,.65),transparent 33%),
+  url("./assets/tavern/tavern-room-guildhall-1400.webp") center 47%/cover no-repeat,#14231c!important;
+ border:3px ridge #af7743!important;border-radius:15px!important;
+ box-shadow:inset 0 0 0 2px rgba(23,12,5,.88),inset 0 0 48px rgba(0,0,0,.35),
+ 0 13px 25px rgba(0,0,0,.4)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header::before{
+ content:"";position:absolute;inset:6px;z-index:0;pointer-events:none;
+ border:1px solid rgba(240,183,100,.55);border-radius:10px;
+ box-shadow:inset 0 0 22px rgba(224,153,60,.06);
+ background:
+  radial-gradient(ellipse 12% 23% at 50% 0%,rgba(255,180,64,.2),transparent),
+  radial-gradient(ellipse 12% 24% at 93% 0%,rgba(255,180,64,.17),transparent);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header::after{
+ content:"";position:absolute;inset:auto 0 0;height:17px;z-index:2;pointer-events:none;
+ background:linear-gradient(180deg,#5b3118,#d28a3a 25%,#a8652e 45%,#261408 100%);
+ border-top:1px solid #f4c47b;
+ box-shadow:0 -9px 20px rgba(232,121,31,.18);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header > *{z-index:1;position:relative;min-width:0}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header > .psr-simple-eyebrow{
+ grid-column:1;grid-row:1;align-self:end;color:#edc78c!important;margin:5px 0 7px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header > h1{
+ grid-column:1;grid-row:2;
+ font:700 clamp(36px,4vw,57px)/1.05 Georgia,"Times New Roman",serif!important;
+ color:#fff0d5!important;letter-spacing:-.037em!important;
+ max-width:620px;text-shadow:0 2px 15px #000!important;margin:0 0 15px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header > .psr-simple-lead{
+ grid-column:1;grid-row:3;max-width:48ch;
+ font:500 16px/1.6 Figtree,system-ui,sans-serif!important;
+ color:#f1e3d3!important;
+ text-shadow:0 2px 9px #000!important;margin:0 0 14px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-nav{
+ grid-column:1 / -1;grid-row:5;display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:12px!important;max-width:none!important;width:100%;margin-top:9px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar){
+ background:linear-gradient(115deg,rgba(14,46,37,.96),rgba(13,32,29,.98))!important;
+ border:2px ridge #c2914a!important;border-left:5px solid #c9893d!important;
+ color:#ffeac7!important;min-height:62px!important;border-radius:7px!important;
+ box-shadow:inset 0 0 0 1px rgba(238,203,135,.16),0 4px 10px rgba(0,0,0,.35)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar):is(:hover,:focus-visible){
+ background:linear-gradient(115deg,#244a36,#172e2e)!important;
+ box-shadow:inset 0 0 13px rgba(255,185,71,.18),0 4px 18px rgba(234,156,66,.24)!important;
+ transform:translateY(-1px);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-radar{
+ grid-column:1 / -1;min-height:27px!important;padding:3px 0!important;
+ color:#e6bd7f!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-instruments{
+ grid-column:2;grid-row:1/5;display:flex;align-items:center;justify-content:flex-end;gap:12px;
+ padding:10px 0 18px;margin:0;align-self:stretch;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar{
+ --mini-radar-size:clamp(198px,23vw,326px);
+ position:relative;display:block;flex:0 0 var(--mini-radar-size);
+ width:var(--mini-radar-size);height:var(--mini-radar-size);
+ border:0;border-radius:50%;cursor:pointer;isolation:isolate;
+ background:
+  url("./assets/tavern/brass-radar-face.svg") center /contain no-repeat,
+  radial-gradient(circle,#074534,#04241f)!important;
+ box-shadow:0 0 19px 5px rgba(231,143,51,.2),0 0 45px 6px rgba(3,25,19,.75)!important;
+ transition:filter .18s ease,transform .18s ease;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar:is(:hover,:focus-visible){
+ filter:brightness(1.18);transform:scale(1.018);
+ outline:2px solid #efd093;outline-offset:4px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar-sweep{
+ position:absolute;inset:6%;border-radius:50%;pointer-events:none;
+ background:url("./assets/tavern/radar-sweep-layer.svg") center/contain no-repeat;
+ mix-blend-mode:screen;animation:psr-guild-sweep 15s linear infinite;
+}
+@keyframes psr-guild-sweep{to{transform:rotate(360deg)}}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-dots{
+ position:absolute;inset:7%;pointer-events:none;border-radius:50%;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-mini-blip{
+ position:absolute;width:6px;height:6px;border-radius:50%;
+ transform:translate(-50%,-50%);background:#8affd3;
+ box-shadow:0 0 0 4px rgba(67,255,181,.07),0 0 11px 3px rgba(67,255,181,.7);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-mini-blip[data-direction=down]{
+ background:#f5a8a1;box-shadow:0 0 9px rgba(251,131,129,.9);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-mini-blip[data-direction=flat]{
+ background:#e7cc86;box-shadow:0 0 7px rgba(234,190,115,.75);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-mini-blip[data-direction=missing]{
+ background:#83968d;box-shadow:none;opacity:.58;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-hint{
+ position:absolute;bottom:10%;left:50%;transform:translateX(-50%);
+ white-space:nowrap;font:850 9px/1.3 Figtree,sans-serif;letter-spacing:.18em;
+ color:#e3e8cd;text-shadow:0 1px 5px #00150a;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board{
+ flex:1 1 160px;max-width:207px;min-width:145px;
+ padding:17px 14px;align-self:center;
+ border:3px ridge #ad8246;border-radius:8px;
+ background:linear-gradient(135deg,rgba(4,29,24,.96),rgba(11,30,25,.94))!important;
+ box-shadow:inset 0 0 0 2px rgba(13,11,7,.89),0 9px 18px rgba(0,0,0,.42);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board h2{
+ margin:0 0 12px!important;text-align:center;
+ font:700 20px/1.2 Georgia,serif!important;color:#f5da9d!important;
+ border-bottom:1px solid #8e7a45;padding-bottom:8px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-board-eyebrow{
+ text-align:center;color:#d7af70!important;font:800 10px/1.4 Figtree,sans-serif!important;
+ letter-spacing:.12em!important;margin:0 0 4px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-items{
+ display:grid;gap:10px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row{
+ display:flex;justify-content:space-between;gap:9px;
+ color:#d9e7d5;border-bottom:1px solid rgba(177,144,80,.37);
+ padding:0 0 8px;font:600 12px/1.3 Figtree,sans-serif;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row:before{
+ content:"";width:7px;height:7px;border-radius:50%;
+ align-self:center;flex:none;
+ background:#b9ba90;box-shadow:0 0 8px #aaaa8a;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row[data-kind=rising]:before{
+ background:#6cebbb;box-shadow:0 0 9px #3edfac;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row[data-kind=falling]:before{
+ background:#f19595;box-shadow:0 0 9px #f07575;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row strong{
+ margin-left:auto;color:#fff0d0;font-variant-numeric:tabular-nums;font-size:16px;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-stamp{
+ color:#e4caa0!important;font:650 11px/1.45 Figtree,sans-serif!important;
+ margin:13px 0 5px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-foot{
+ color:#bacbc0!important;font:500 10px/1.5 Figtree,sans-serif!important;
+ margin:0!important;
+}
+/* Bar-top review shelf with inset journal cards and a brass label. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip{
+ position:relative;overflow:hidden;
+ background:
+  linear-gradient(100deg,rgba(7,27,23,.94),rgba(13,32,26,.97)),
+  url("./assets/tavern/walnut-wall-panel.svg") center /auto 240px repeat!important;
+ border:4px ridge #955b2f!important;border-radius:10px!important;
+ padding:32px 23px 29px!important;margin:0!important;
+ box-shadow:inset 0 0 0 2px rgba(14,13,9,.93),0 13px 22px rgba(0,0,0,.4)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip:before,
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip:after{
+ content:"";position:absolute;left:0;right:0;pointer-events:none;z-index:0;
+ height:15px;background:linear-gradient(180deg,#4d2712,#cf8a39 42%,#5b3418 74%,#211207);
+ box-shadow:0 0 16px rgba(242,146,45,.21);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip:before{top:0;border-bottom:1px solid #f0b467}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip:after{bottom:0;border-top:1px solid #dfa45b}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip >*{position:relative;z-index:1}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-lead h2{
+ font:700 22px/1.25 Georgia,serif!important;
+ color:#ffe3b7!important;background:url("./assets/tavern/empty-brass-plaque.svg") center/100% 100% no-repeat;
+ padding:11px 23px!important;margin:0 0 8px -7px!important;
+ text-shadow:0 1px 3px #301507;white-space:normal!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-headline{
+ color:#dfceb0!important;max-width:350px;font-size:12px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-tasks{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:13px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task{
+ min-height:135px!important;
+ border:2px ridge #bc8645!important;border-left:5px solid #e2ae62!important;
+ background:linear-gradient(130deg,rgba(19,41,32,.98),rgba(5,24,21,.98))!important;
+ border-radius:7px!important;padding:16px!important;
+ box-shadow:inset 0 0 0 1px rgba(231,196,130,.12),0 6px 9px rgba(0,0,0,.25)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task strong{
+ font:700 16px/1.35 Georgia,serif!important;color:#fff2d3!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task a{
+ font:750 12px/1.35 Figtree,sans-serif!important;color:#ffc778!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-detail{border-color:#8f6e39!important}
+/* Market display board — a framed piece of matte green felt. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot,
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch{
+ min-width:0;margin:0!important;
+ background:
+  linear-gradient(115deg,rgba(4,38,28,.94),rgba(3,25,22,.98)),
+  url("./assets/tavern/walnut-wall-panel.svg") center/auto 240px repeat!important;
+ border:5px ridge #a57038!important;border-radius:12px!important;
+ box-shadow:inset 0 0 0 2px #201306,inset 0 0 0 4px rgba(255,206,125,.19),0 12px 22px rgba(0,0,0,.36)!important;
+ padding:24px 22px!important;
+ color:#e7ead9!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot{
+ grid-column:1;align-self:stretch;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch{
+ grid-column:2;align-self:stretch;display:flex;flex-direction:column;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot h2,
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch h2{
+ text-align:center;font:700 clamp(21px,2vw,28px)/1.28 Georgia,serif!important;
+ color:#ffe4ae!important;
+ margin:0 0 13px!important;
+ padding:9px 13px!important;
+ background:url("./assets/tavern/empty-brass-plaque.svg") center/100% 100% no-repeat;
+ text-shadow:0 1px 3px #3a1c0c;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-head{
+ align-items:center;flex-wrap:wrap;justify-content:center;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-head >:first-child{
+ display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-head >:first-child >.psr-simple-eyebrow{
+ margin:0!important;font-size:10px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-date{
+ color:#f0ca9b!important;font-size:11px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-total{
+ color:#eee0c7!important;font-size:13px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-bar{
+ border:2px solid #bf9654!important;height:19px!important;
+ border-radius:2px!important;background:#081c1b!important;
+ box-shadow:0 0 12px rgba(49,207,149,.07);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-up{background:#50e5a1!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-down{background:#e36b71!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-legend{gap:10px 18px!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-legend-item{color:#ffefdb!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot-note{
+ color:#cfddce!important;font-size:12px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-region-card{
+ border-color:#8d7545!important;background:rgba(5,32,27,.8)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-regional-data{gap:9px!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-note{
+ text-align:center;margin:0 0 6px!important;
+ font:600 12px/1.5 Figtree,system-ui,sans-serif!important;
+ color:#d3d7bd!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-date{
+ text-align:center;color:#f2c487!important;font:700 11px/1.3 Figtree,sans-serif!important;
+ margin:3px 0 17px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table{
+ width:100%;border-collapse:collapse;table-layout:fixed;
+ font:650 12px/1.35 Figtree,system-ui,sans-serif!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table th{
+ color:#e5ce9b;font-size:10px!important;text-transform:uppercase;letter-spacing:.07em;
+ padding:8px 5px 12px;border-bottom:2px solid #ac8651;text-align:left;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table td{
+ padding:11px 5px;border-bottom:1px solid rgba(175,152,102,.3);
+ color:#fff0d5;font-variant-numeric:tabular-nums;
+ overflow-wrap:anywhere;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table th:first-child,
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table td:first-child{width:23%}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table th:nth-child(2),
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table td:nth-child(2){width:32%}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-link{
+ padding:3px 5px!important;min-height:0!important;
+ background:transparent!important;border:0!important;
+ font:800 15px/1.25 Figtree,sans-serif!important;
+ color:#fff6e2!important;text-decoration:underline;text-decoration-color:rgba(215,161,90,.42);
+ cursor:pointer;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-link:is(:hover,:focus-visible){
+ color:#ffc978!important;text-decoration-color:#ffc978;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-theme{
+ color:#d1e0c8!important;font-size:11px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-close{
+ font-size:12px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-change[data-direction=up]{color:#63e9b5!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-watch-change[data-direction=down]{color:#f19b9d!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-footer{
+ margin:auto 0 0!important;padding-top:15px;
+ font:500 11px/1.55 Figtree,sans-serif!important;color:#c0ccbd!important;
+}
+/* Remaining research gets carved rails and privacy-preserving opaque surfaces. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-thematic{
+ grid-column:1/-1;border-top:11px ridge #684221!important;
+ padding-top:17px!important;margin:0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-hero-strip h2{
+ font:700 clamp(25px,3vw,34px)/1.2 Georgia,serif!important;color:#f7dfb2!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme{
+ border:2px ridge #866b45!important;background:linear-gradient(150deg,#123d32,#122924)!important;
+ box-shadow:inset 0 0 0 1px rgba(255,192,96,.07),0 6px 12px rgba(0,0,0,.28)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme strong{color:#fff0d5!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-collapse,
+html[data-private-page="index"] body.ps-fin-pulse .psr-scenario-drawer,
+html[data-private-page="index"] body.ps-fin-pulse .psr-featured-drawer{
+ background:linear-gradient(140deg,#12342e,#17231e)!important;
+ border:2px ridge #9c7542!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-collapse-summary{
+ font:700 16px/1.4 Georgia,serif!important;
+ color:#ffe7c3!important;background:rgba(37,36,25,.32)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-landing{
+ background:
+  linear-gradient(90deg,rgba(2,21,19,.8),rgba(6,20,16,.62)),
+  url("./assets/tavern/tavern-room-guildhall-1400.webp") center center /cover no-repeat,
+  #12211b!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-brand{font-family:Georgia,serif!important;color:#ffeac6!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-radar-side{
+ background:linear-gradient(120deg,rgba(9,40,31,.95),rgba(23,25,19,.97))!important;
+ border:3px ridge #a4773b!important;box-shadow:0 9px 25px rgba(0,0,0,.38)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-enter{
+ background:linear-gradient(100deg,#705027,#285344)!important;
+ border:2px ridge #dfaf69!important;color:#fff1d7!important;
+}
+@media(max-width:1380px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-instruments{gap:9px}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar{
+  --mini-radar-size:clamp(190px,21vw,260px);
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board{min-width:138px;padding:13px 10px}
+}
+@media(max-width:1170px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+  grid-template-columns:minmax(0,1fr) minmax(250px,.77fr);min-height:390px!important;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-instruments{
+  flex-direction:column;gap:4px;padding:0;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar{
+  --mini-radar-size:clamp(165px,19vw,230px);
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board{
+  max-width:240px;min-width:190px;padding:9px 14px;align-self:center;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board h2{font-size:15px;margin-bottom:5px!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-items{gap:3px}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-row{padding:0 0 3px}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-signal-foot{display:none}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-workspace{
+  grid-template-columns:minmax(0,1fr);
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-workspace >*{grid-column:1/-1!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch{
+  grid-column:1!important;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot{grid-column:1!important}
+}
+@media(max-width:740px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+  display:block!important;min-height:0!important;
+  background:
+   linear-gradient(90deg,rgba(3,17,18,.92),rgba(4,20,20,.75)),
+   url("./assets/tavern/tavern-room-guildhall-1400.webp") center /cover no-repeat!important;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header > h1{
+  font-size:clamp(30px,7vw,44px)!important;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-instruments{
+  flex-direction:row;justify-content:center;gap:12px;margin:5px 0 10px;padding:0;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar{
+  --mini-radar-size:clamp(146px,37vw,220px);
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board{min-width:130px;max-width:200px}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-nav{grid-template-columns:1fr!important;gap:7px!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar){min-height:51px!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-tasks{grid-template-columns:1fr!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-task{min-height:102px!important}
+}
+@media(max-width:420px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-instruments{display:block}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar{margin:0 auto 12px}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board{max-width:none}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table th:nth-child(2),
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table td:nth-child(2){display:none}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table th:first-child,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-table td:first-child{width:35%}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar-sweep{animation:none!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-task{transition:none!important;transform:none!important}
+}
+@media(forced-colors:active){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-hero-radar,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-radar-board,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch{border:2px solid CanvasText!important}
+}
