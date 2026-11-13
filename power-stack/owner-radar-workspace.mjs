@@ -254,6 +254,23 @@ export function installRadarWorkspace(main,getState){
  }
  const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
  radarToggle.prepend(psIcon("compass","psr-nav-icon"));
+ // A working visual radar in the hero: it reflects the SAME price/decision state
+ // as the full radar, never decorative or fabricated "live" market signals.
+ const heroInstruments=add(quick,node("div","psr-tavern-hero-instruments"));
+ heroInstruments.setAttribute("aria-label","Radar and source-dated watchlist context");
+ const heroRadar=add(heroInstruments,node("button","psr-tavern-hero-radar"));
+ heroRadar.type="button";heroRadar.setAttribute("aria-label","Open interactive stock radar");
+ add(heroRadar,node("span","psr-tavern-hero-radar-sweep")).setAttribute("aria-hidden","true");
+ const heroRadarDots=add(heroRadar,node("span","psr-tavern-hero-dots"));
+ heroRadarDots.setAttribute("aria-hidden","true");
+ add(heroRadar,node("span","psr-tavern-radar-hint","OPEN RADAR"));
+ const heroIntel=add(heroInstruments,node("section","psr-tavern-radar-board"));
+ heroIntel.append(node("p","psr-tavern-board-eyebrow","SOURCE-DATED / MARKET RADAR"),
+  node("h2",null,"Radar Signals"));
+ const heroSignals=add(heroIntel,node("div","psr-tavern-signal-items"));
+ const heroStamp=add(heroIntel,node("p","psr-tavern-signal-stamp","Checking source dates…"));
+ const heroFoot=add(heroIntel,node("p","psr-tavern-signal-foot",
+  "Tracked securities only. No inferred market-wide sentiment or trading trigger."));
  const reviewStrip=add(workspace,node("section","psr-review-strip"));
  reviewStrip.setAttribute("aria-label","Research-to-decision evidence freshness and outstanding reviews");
  const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
@@ -290,6 +307,28 @@ export function installRadarWorkspace(main,getState){
  const bridgeStatus=add(bridge,node("span",null,"Checking source availability…"));
  const bridgeLink=add(bridge,node("a",null,"Markets research"));bridgeLink.href="https://bluebelly-desk.vercel.app/markets";
  bridgeLink.target="_blank";bridgeLink.rel="noopener noreferrer";
+ // A real, source-dated watchlist board sits beside market breadth, never
+ // a baked-in mockup with invented prices or recommendations.
+ const houseBoard=node("section","psr-tavern-house-watch");
+ houseBoard.setAttribute("aria-label","Tracked research watchlist with latest delayed exchange closes");
+ houseBoard.append(node("p","psr-tavern-board-eyebrow","SOURCE-DATED / HOUSE WATCH"),
+  node("h2",null,"Tonight’s Watchlist"),
+  node("p","psr-tavern-watch-note","Five tracked names · research only, not buy recommendations"));
+ const houseDate=add(houseBoard,node("p","psr-tavern-house-date","Checking completed sessions…"));
+ const houseTable=add(houseBoard,node("table","psr-tavern-house-table"));
+ houseTable.setAttribute("aria-label","Selected monitored securities, last completed-session close and daily change");
+ const houseHead=add(houseTable,node("thead"));
+ const houseHeaders=add(houseHead,node("tr"));
+ for(const h of ["Ticker","Theme","Close","1D"])add(houseHeaders,node("th",null,h));
+ const houseRows=add(houseTable,node("tbody"));
+ houseBoard.append(node("p","psr-tavern-house-footer",
+  "Click any ticker to open its source-dated research row. No orders are placed."));
+ houseTable.addEventListener("click",event=>{
+  const btn=event.target.closest("button[data-watch-ticker]");
+  if(!btn)return;
+  selectedTheme="all";search.value=btn.dataset.watchTicker;
+  renderThemes();renderGrid();openWorkspace("#market-table");
+ });
  const section=node("section","psr-thematic");
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
@@ -353,7 +392,7 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
- workspace.prepend(quick,reviewStrip,snapshot,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(quick,reviewStrip,snapshot,houseBoard,section,...(featured?[featured]:[]),matrixDrawer);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
@@ -379,6 +418,7 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=false;workspace.hidden=true;document.body.classList.add("psr-landing-active");
   history.replaceState(null,"","#radar");landing.scrollIntoView({block:"start"});
  });
+ heroRadar.addEventListener("click",()=>radarToggle.click());
  picksEntry.addEventListener("click",()=>openWorkspace("#ps-top-stock-picks-20261113"));
  reset.addEventListener("click",()=>{selectedTheme="all";search.value="";renderThemes();renderGrid();});
  themeMore.addEventListener("click",()=>{showAllThemes=!showAllThemes;renderThemes();});
@@ -488,6 +528,54 @@ export function installRadarWorkspace(main,getState){
    item.append(node("span",null,(x.changePct>0?"+":"")+x.changePct.toFixed(2)+"%"));
   }
  }
+ function renderTavernHero(){
+  const state=getState();
+  const stats=summarizeTrackedCloses(state?.priceMap);
+  const verified=Boolean(state?.marketAsOf)&&Boolean(stats.session);
+  heroSignals.replaceChildren();
+  for(const [label,count,kind] of [
+   ["Rising",verified?stats.up:null,"rising"],
+   ["Falling",verified?stats.down:null,"falling"],
+   ["Radar names",RADAR_WATCH.length,"tracked"]
+  ]){
+   const item=add(heroSignals,node("div","psr-tavern-signal-row"));
+   item.dataset.kind=kind;
+   item.append(node("span",null,label),node("strong",null,count===null?"—":String(count)));
+  }
+  heroStamp.textContent=verified?
+   "US research universe · completed session "+stats.session:
+   "Source-qualified daily direction unavailable";
+  heroRadarDots.replaceChildren();
+  for(let i=0;i<RADAR_WATCH.length;i++){
+   const ticker=RADAR_WATCH[i],q=state?.priceMap?.get(ticker);
+   const dir=verified&&q?.basis==="Exchange close"&&q.session===stats.session&&Number.isFinite(q.day)?
+    q.day>0?"up":q.day<0?"down":"flat":"missing";
+   const dot=add(heroRadarDots,node("span","psr-tavern-mini-blip"));
+   dot.dataset.direction=dir;
+   dot.style.left=POINTS[i][0]+"%";dot.style.top=POINTS[i][1]+"%";
+  }
+ }
+ function renderHouseWatch(){
+  const state=getState(),stats=summarizeTrackedCloses(state?.priceMap);
+  const session=state?.marketAsOf?stats.session:null;
+  houseDate.textContent=session?"Delayed exchange closes · "+session:"Latest source-qualified session unavailable";
+  houseRows.replaceChildren();
+  for(const ticker of ["NVDA","GOOGL","SMH","TLT","XOM"]){
+   const q=state?.priceMap?.get(ticker);
+   const valid=Boolean(session&&q?.session===session&&q.basis==="Exchange close"&&
+    isValidQuote(q)&&Number.isFinite(q.day));
+   const tr=add(houseRows,node("tr"));
+   const td=add(tr,node("td"));
+   const button=add(td,node("button","psr-tavern-watch-link",ticker));
+   button.type="button";button.dataset.watchTicker=ticker;
+   const theme=MARKET_THEMES.find(t=>t.id===themeFor(ticker));
+   add(tr,node("td","psr-tavern-watch-theme",theme?.name||"Tracked"));
+   add(tr,node("td","psr-tavern-watch-close",valid?quoteValue(q):"—"));
+   const change=add(tr,node("td","psr-tavern-watch-change",valid?formatChange(q.day):"—"));
+   if(valid)change.dataset.direction=q.day>0?"up":q.day<0?"down":"flat";
+   tr.title=valid?"Exchange close "+q.session+" · delayed":"Current comparable close unavailable";
+  }
+ }
  function renderRadar(){
   const state=getState();
   blips.replaceChildren();
@@ -546,11 +634,11 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();
+ renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();
  loadBluebellyStockCoverage().then(report=>{
   if(!bridge.isConnected)return;
   bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
    " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
  });
- return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth()},openWorkspace};
+ return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch()},openWorkspace};
 }
