@@ -4,6 +4,7 @@ import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {dirname,resolve} from "node:path";
 import {REVIEW_FRESHNESS_CONTRACT,summarizeResearchReview} from "../owner-research-review.mjs";
+import {RESEARCH_THESIS_CONTRACT,RESEARCH_THESIS_AS_OF,COMPARISONS,ADJACENT_CASES,SCENARIO_READTHROUGH,validateResearchCases} from "../owner-research-theses.mjs";
 const BASE=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const read=name=>readFileSync(resolve(BASE,name),"utf8");
 const now=new Date("2026-11-13T06:00:00Z");
@@ -89,4 +90,44 @@ test("first screen stays compact and research remains private and non-executable
  assert.match(desk,/state\.pagesError=Boolean\(pages\.error\)/);
  assert.match(module,/review\.queue\.slice\(0,3\)/);
  assert.doesNotMatch(module,/\.insert\(|\.upsert\(|BUY_STARTER|service_role|sb_secret_/);
+});
+
+
+test("research page adds source-dated causal investment analysis after owner authentication",()=>{
+ assert.equal(RESEARCH_THESIS_CONTRACT,"power-stack-research-theses/1");
+ assert.equal(RESEARCH_THESIS_AS_OF,"2026-11-13");
+ assert.equal(COMPARISONS.length,3);
+ assert.equal(ADJACENT_CASES.length,6);
+ assert.equal(SCENARIO_READTHROUGH.length,5);
+ assert(validateResearchCases());
+ const tickers=COMPARISONS.flatMap(c=>c.facts.map(x=>x.ticker));
+ for(const ticker of ["NVT","ETN","HUBB","MOD","VRT","BDX","CI","CVS"])
+   assert(tickers.includes(ticker));
+ for(const name of ["NVT","CVS","VRT","POWL","ADBE","FLEX"])
+   assert(read("owner-research-theses.mjs").includes(name));
+ for(const c of COMPARISONS)assert(c.take&&c.reason&&c.counter&&c.upgrade&&c.asOf==="2026-11-13");
+ const source=read("owner-research-theses.mjs");
+ assert(source.includes("RESEARCH ONLY")&&source.includes("Next evidence required"));
+ assert(!/sb_secret_|service_role|@gmail\\.com|owner_user_id|brokerQuantity|cash_delta/i.test(source));
+ const auth=read("auth-gate.mjs");
+ assert(auth.indexOf('const user=await authenticate()')<auth.indexOf('if(PAGE==="research")'));
+ assert(auth.includes('await import("./owner-research-theses.mjs?v=20261113-research1")'));
+ const html=read("research.html");
+ assert(html.includes("owner-research-theses.css?v=20261113-research1"));
+ assert(html.includes("auth-gate.mjs?v=20261113-research1"));
+ assert(html.includes('data-private-page="research"'));
+ assert(!html.includes("Source-dated investment reasoning"));
+});
+test("research presentation is compact and leaves original private database page untouched",()=>{
+ const source=read("owner-research-theses.mjs");
+ assert(source.includes('main.querySelector(".ps-legacy-note")'));
+ assert(source.includes("legacy.after(section)"));
+ assert(source.includes("details"));
+ assert(source.includes("SCENARIO_READTHROUGH"));
+ assert(source.includes("Next · "));
+ const css=read("owner-research-theses.css");
+ assert(css.includes(".psrt-summary"));
+ assert(css.includes(".psrt-study"));
+ assert(css.includes("@media(max-width:640px)"));
+ assert(css.includes("prefers-reduced-motion"));
 });
