@@ -68,13 +68,13 @@ async function load(){
   message.textContent="Source-dated research library, not a current trade signal. Re-check original evidence, valuation and portfolio fit before deciding. ";
   const link=document.createElement("a");
   link.href="index.html";
-  link.textContent="Open the current Decision Desk";
+  link.textContent="Open the War Room";
   notice.append(message,link);
   content.prepend(notice);
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261113-guildlens1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-warroom1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -116,7 +116,7 @@ async function load(){
  // Both presentation stylesheets are loaded by the HTML <head> before first paint.
  // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-coverage1");
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261114-warroom1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  if(PAGE==="research"){

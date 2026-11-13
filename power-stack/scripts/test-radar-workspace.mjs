@@ -279,3 +279,26 @@ test("Guildhall opportunity lens sits after market boards, before thematic drill
  assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
  assert(radar.includes('for(const original of originals){if(original!==topPicks)legacy.append(original);}'));
 });
+
+
+test("War Room is the owner-gated decision entry point and preserves legacy research",()=>{
+  const war=read("owner-war-room.mjs");
+  const radar=read("owner-radar-workspace.mjs");
+  const home=read("index.html"),gate=read("auth-gate.mjs");
+  const nav=read("owner-advisor-presentation.mjs");
+  assert(home.includes('owner-war-room.css?v=20261114-warroom1'));
+  assert(home.includes("The War Room · Private Power Stack"));
+  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
+  assert(radar.includes('mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF})'));
+  assert(radar.includes('deskTools.id="desk-tools"'));
+  assert(radar.includes('deskTools.open=true'));
+  assert(radar.includes('warRoom.render()'));
+  assert(nav.includes('["index.html","War Room Overview","index"]'));
+  assert(nav.includes('["index.html#warroom-team","Analyst desks","research"]'));
+  for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
+    assert(war.includes(desk),"Missing analyst desk "+desk);
+  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","Latest saved decision reviews"])
+    assert(war.includes(critical),critical);
+  assert(war.includes("No owner-saved decision revisions verified"));
+  assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
+});
