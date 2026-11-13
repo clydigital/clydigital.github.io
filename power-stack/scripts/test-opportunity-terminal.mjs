@@ -225,7 +225,7 @@ test("browser module versions invalidate cached pre-12-Nov quote display and ear
  assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-lens2'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v='+(["index","ideas"].includes(page)?"20261113-lens2":"20261113-fg1")+'"'),page);
+   assert(html.includes('src="auth-gate.mjs?v='+(page==="research"?"20261113-research1":(["index","ideas"].includes(page)?"20261113-lens2":"20261113-fg1"))+'"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
@@ -271,7 +271,7 @@ test("Figtree UI, icons and regional market bridge have font CSP and accessible 
   assert(html.includes("owner-figtree-visuals.css?v=20261113-fg1"),page);
   assert(html.includes("fonts.googleapis.com/css2?family=Figtree"),page);
   assert(html.includes("font-src 'self' https://fonts.gstatic.com"),page);
-  assert(html.includes('src="auth-gate.mjs?v='+(["index","ideas"].includes(page)?"20261113-lens2":"20261113-fg1")+'"'),page);
+  assert(html.includes('src="auth-gate.mjs?v='+(page==="research"?"20261113-research1":(["index","ideas"].includes(page)?"20261113-lens2":"20261113-fg1"))+'"'),page);
  }
  for(const page of ["index","ideas"])
   assert(read(page+".html").includes("connect-src 'self' https://qdtlrfgxpsnxajiptrno.supabase.co https://bluebelly-desk.vercel.app"));
