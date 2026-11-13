@@ -225,7 +225,6 @@ export function installRadarWorkspace(main,getState){
  const intro=add(landing,node("div","psr-intro"));
  intro.append(node("p","psr-eyebrow","MARKET INTELLIGENCE / SOURCE-DATED WATCHES"));
  intro.append(node("h1",null,"See what matters. Before it moves."));
- intro.append(node("p","psr-intro-text","A moving map of what you track. Enter for market themes, price changes and possible scenarios."));
  const radarArea=add(landing,node("div","psr-radar-area"));
  const field=add(radarArea,node("div","psr-field"));
  field.setAttribute("aria-label","Decorative clockwise radar with interactive stock watch markers");
@@ -236,17 +235,15 @@ export function installRadarWorkspace(main,getState){
  const helper=add(radarArea,node("div","psr-radar-side"));
  helper.append(node("p","psr-mini","RADAR SIGNALS"));
  const radarStatus=add(helper,node("p","psr-status","Loading reviewed market data…"));
- helper.append(node("p","psr-quiet","Clockwise beam and markers show watchlist discovery, not price forecasts or trading triggers."));
  const enter=add(helper,node("button","psr-enter","ENTER THE RADAR  →"));
  enter.type="button";
  const picksEntry=add(helper,node("button","psr-enter psr-enter-picks","VIEW TOP STOCK PICKS"));
  picksEntry.type="button";
- const landingFooter=add(landing,node("p","psr-landing-footer","Markets move. Evidence matters. Research only · delayed price observations."));
+ const landingFooter=add(landing,node("p","psr-landing-footer","Delayed observations · not live quotes."));
  const workspace=node("div","psr-workspace");workspace.id="workspace";workspace.hidden=true;
  const quick=add(workspace,node("section","psr-simple-header"));quick.setAttribute("aria-label","Power Stack quick navigation");
- quick.append(node("p","psr-simple-eyebrow","POWER STACK  /  RESEARCH DESK"),
-  node("h1",null,"Your market, at a glance."),
-  node("p","psr-simple-lead","Start with the evidence. Expand a market, investment thesis or scenario only when needed."));
+ quick.append(node("p","psr-simple-eyebrow","FULL MARKET RADAR"),
+  node("h1",null,"Your market, at a glance."));
  const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
  for(const [label,url,kind] of [["Explore trade & investment ideas","ideas.html","ideas"],
   ["Market watch & comparisons","portfolio.html#watchlist","market"],
@@ -271,8 +268,6 @@ export function installRadarWorkspace(main,getState){
   node("h2",null,"Radar Signals"));
  const heroSignals=add(heroIntel,node("div","psr-tavern-signal-items"));
  const heroStamp=add(heroIntel,node("p","psr-tavern-signal-stamp","Checking source dates…"));
- const heroFoot=add(heroIntel,node("p","psr-tavern-signal-foot",
-  "Tracked securities only. No inferred market-wide sentiment or trading trigger."));
  const reviewStrip=add(workspace,node("section","psr-review-strip"));
  reviewStrip.setAttribute("aria-label","Research-to-decision evidence freshness and outstanding reviews");
  const snapshot=add(workspace,node("section","psr-snapshot"));snapshot.id="market-snapshot";
@@ -315,7 +310,7 @@ export function installRadarWorkspace(main,getState){
  houseBoard.setAttribute("aria-label","Tracked research watchlist with latest delayed exchange closes");
  houseBoard.append(node("p","psr-tavern-board-eyebrow","SOURCE-DATED / HOUSE WATCH"),
   node("h2",null,"Tonight’s Watchlist"),
-  node("p","psr-tavern-watch-note","Five tracked names · research only, not buy recommendations"));
+  node("p","psr-tavern-watch-note","Five tracked names"));
  const houseDate=add(houseBoard,node("p","psr-tavern-house-date","Checking completed sessions…"));
  const houseTable=add(houseBoard,node("table","psr-tavern-house-table"));
  houseTable.setAttribute("aria-label","Selected monitored securities, last completed-session close and daily change");
@@ -323,8 +318,6 @@ export function installRadarWorkspace(main,getState){
  const houseHeaders=add(houseHead,node("tr"));
  for(const h of ["Ticker","Theme","Close","1D"])add(houseHeaders,node("th",null,h));
  const houseRows=add(houseTable,node("tbody"));
- houseBoard.append(node("p","psr-tavern-house-footer",
-  "Click any ticker to open its source-dated research row. No orders are placed."));
  houseTable.addEventListener("click",event=>{
   const btn=event.target.closest("button[data-watch-ticker]");
   if(!btn)return;
@@ -335,7 +328,6 @@ export function installRadarWorkspace(main,getState){
  section.setAttribute("aria-label","Market themes and stock observations");
  const bar=add(section,node("div","psr-hero-strip"));
  bar.append(node("p","psr-eyebrow","EXPLORE / THEMES"),node("h2",null,"Market themes"));
- bar.append(node("p",null,"Stock assessments come only from current owner-reviewed decisions. Price changes are from the delayed feed; missing readings stay blank."));
  const themeGrid=add(section,node("div","psr-theme-grid"));
  const themeMore=add(section,node("button","psr-more-themes","Show more market themes"));themeMore.type="button";
  const tableDrawer=add(section,node("details","psr-collapse psr-stock-table-drawer"));tableDrawer.id="market-table";
@@ -357,7 +349,7 @@ export function installRadarWorkspace(main,getState){
   const th=add(headings,node("th"));const btn=add(th,node("button",null,label));btn.type="button";btn.dataset.sort=k;btn.setAttribute("aria-label","Sort by "+label);
  }
  const tbody=add(table,node("tbody"));
- const caption=add(tableDrawer,node("p","psr-disclaimer","WATCH means research is required, not buy. Consider Buy/Sell requires a dated owner-reviewed decision and is never an executable order."));
+ const caption=add(tableDrawer,node("p","psr-disclaimer","WATCH = research. Consider Buy/Sell requires a dated reviewed decision."));
  const matrixDrawer=node("details","psr-collapse psr-scenario-drawer");matrixDrawer.id="scenario-panel";
  const matrixDrawerSummary=add(matrixDrawer,node("summary","psr-collapse-summary"));
  matrixDrawerSummary.append(node("span","psr-collapse-heading","Scenario Matrix · what changes if…"),
@@ -365,7 +357,6 @@ export function installRadarWorkspace(main,getState){
  const matrix=add(matrixDrawer,node("section","psr-scenario"));matrix.id="scenario-matrix";matrix.setAttribute("aria-label","Bluebelly-informed scenario impact matrix");
  const matrixHead=add(matrix,node("div","psr-hero-strip"));
  matrixHead.append(node("p","psr-eyebrow","02 / WHAT IF?"),node("h2",null,"Scenario Matrix"));
- matrixHead.append(node("p",null,"Choose two conditions to explore their potential effects across market themes. This is qualitative research, not calibrated probabilities."));
  const selectors=add(matrix,node("div","psr-scenario-pickers"));
  const selA=add(selectors,node("select","psr-select"));selA.setAttribute("aria-label","First scenario");
  const selB=add(selectors,node("select","psr-select"));selB.setAttribute("aria-label","Second scenario");
@@ -392,14 +383,13 @@ export function installRadarWorkspace(main,getState){
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
- const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
  workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  // WAR ROOM FIRST: Keep all previously authenticated tools in one accessible drawer.
  // No source data or owner decisions are changed; only page hierarchy and narration.
  const deskTools=add(workspace,node("details","psw-tools"));deskTools.id="desk-tools";
- const toolsHeading=add(deskTools,node("summary",null,"Open the full radar, scenario matrix & original decision tools"));
+ const toolsHeading=add(deskTools,node("summary",null,"Market radar, scenarios & decision archive"));
  toolsHeading.setAttribute("aria-label","Expand original market radar and investment decision tools");
  for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child);
  const warRoom=mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF});
