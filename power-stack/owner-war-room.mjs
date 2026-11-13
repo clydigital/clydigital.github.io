@@ -123,7 +123,7 @@ function mountWarRoom(workspace,getState,{asOf}={}){
       event.preventDefault();
       const index=DESKS.findIndex(item=>item.id===chosen);
       chosen=DESKS[(index+(event.key==="ArrowDown"||event.key==="ArrowRight"?1:DESKS.length-1))%DESKS.length].id;
-      renderDesk();$("#psw-tabs",root).querySelector('[data-desk="'+chosen+'"]').focus();
+      renderDesk();$(root,"#psw-tabs").querySelector('[data-desk="'+chosen+'"]').focus();
     });
     tabs.append(button);
   }
