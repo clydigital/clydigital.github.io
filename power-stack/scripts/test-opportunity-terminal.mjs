@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
+import {OPPORTUNITY_LENSES,LENS_CASES,validOpportunityLenses,lensReviewState,LENS_CONTRACT} from "../owner-opportunity-lenses.mjs";
 import {OPPORTUNITIES,OPPORTUNITY_CONTRACT,visibleOpportunities,opportunityState,CASH_QUALITY_PROFILES,stressValuation,TSLA_SPACEX_EVENT,illustrativeSpaceXRatio,SPCX_STANDALONE,spcxOwnerCashHurdle,validatePriorityCloses} from "../owner-opportunity-terminal.mjs";
 const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 const now=new Date("2026-11-12T02:00:00Z");
@@ -56,6 +57,19 @@ test("the new terminal remains behind the existing owner gate and separates exis
  assert(module.includes('Fresh macro / fundamental admission not verified'));
 });
 
+test("Guildhall opportunity lenses remain research-only with safe review expiry",()=>{
+ assert.equal(LENS_CONTRACT,"power-stack-opportunity-lenses/1");
+ assert.equal(OPPORTUNITY_LENSES.length,7);
+ assert.equal(LENS_CASES.length,20);
+ assert(validOpportunityLenses());
+ assert.equal(new Set(LENS_CASES.map(x=>x.ticker)).size,LENS_CASES.length);
+ assert(LENS_CASES.every(x=>x.readiness==="RESEARCH_ONLY"&&x.executionReady===false));
+ assert.equal(lensReviewState(LENS_CASES.find(x=>x.ticker==="POWL"),new Date("2026-11-20T00:00:00Z")),"RECHECK REQUIRED");
+ for(const ticker of ["NVT","POWL","BDX","MOD","VRT"])assert(OPPORTUNITIES.some(x=>x.ticker===ticker));
+ const home=read("owner-radar-workspace.mjs");
+ assert(home.includes('opportunityOverview')&&home.includes("renderOpportunityLensSummary"));
+ assert(read("owner-opportunity-terminal.css").includes(".psl-tabs"));
+});
 test("cash-flow profiles use filing periods, do not invent missing capex, and show no issuer FCF for Cigna",()=>{
  const rows=CASH_QUALITY_PROFILES;
  assert.deepEqual(Object.keys(rows).sort(),["ADBE","CF","CI","CVS"].sort());
