@@ -5,6 +5,7 @@
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
+import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildl1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
@@ -392,7 +393,8 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  const legacyIntro=add(legacy,node("p",null,"All existing research, owner decision records, technical observations and portfolio tools remain available here."));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
- workspace.prepend(quick,reviewStrip,snapshot,houseBoard,section,...(featured?[featured]:[]),matrixDrawer);
+ const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
+ workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
