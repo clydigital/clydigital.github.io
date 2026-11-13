@@ -116,7 +116,7 @@ async function load(){
  // Both presentation stylesheets are loaded by the HTML <head> before first paint.
  // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-coverage1");
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261114-warroom1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  if(PAGE==="research"){
