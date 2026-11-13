@@ -5,6 +5,7 @@
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
+import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-warroom1";
 import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
@@ -395,6 +396,13 @@ export function installRadarWorkspace(main,getState){
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
  workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ // WAR ROOM FIRST: Keep all previously authenticated tools in one accessible drawer.
+ // No source data or owner decisions are changed; only page hierarchy and narration.
+ const deskTools=add(workspace,node("details","psw-tools"));deskTools.id="desk-tools";
+ const toolsHeading=add(deskTools,node("summary",null,"Open the full radar, scenario matrix & original decision tools"));
+ toolsHeading.setAttribute("aria-label","Expand original market radar and investment decision tools");
+ for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child);
+ const warRoom=mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF});
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
@@ -403,12 +411,14 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
- if(["#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
+ if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
+  if(["#desk-tools","#advanced-research","#scenario-matrix","#ps-top-stock-picks-20261113","#market-table"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
-  if(target==="#scenario-matrix"){matrixDrawer.open=true;matrixDrawer.scrollIntoView({block:"start"});}
+  if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
+  else if(target==="#scenario-matrix"){matrixDrawer.open=true;matrixDrawer.scrollIntoView({block:"start"});}
   else if(target==="#ps-top-stock-picks-20261113"&&featured){featured.open=true;featured.scrollIntoView({block:"start"});}
   else if(target==="#market-table"){tableDrawer.open=true;tableDrawer.scrollIntoView({block:"start"});}
   else if(target==="#advanced-research")legacy.scrollIntoView({block:"start"});
@@ -636,11 +646,11 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();
+ renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();
  loadBluebellyStockCoverage().then(report=>{
   if(!bridge.isConnected)return;
   bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
    " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
  });
- return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch()},openWorkspace};
+ return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render()},openWorkspace};
 }
