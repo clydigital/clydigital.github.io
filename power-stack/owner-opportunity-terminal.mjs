@@ -2,8 +2,9 @@
 // Public script contains no account data; authenticated pages render it only after owner access.
 // Candidacy never means a verified EMA trigger, approved short locate or funded broker order.
 export const OPPORTUNITY_CONTRACT="power-stack-guided-opportunities/1";
+import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-lens2";
 export const OPPORTUNITY_REVIEW_DATE="2026-11-13";
-export const OPPORTUNITIES=Object.freeze([
+const LEGACY_OPPORTUNITIES=Object.freeze([
  {id:"crwv-short",ticker:"CRWV",name:"CoreWeave",kind:"TRADE",direction:"SHORT",
   horizon:"2–4 weeks",reviewed:"2026-11-12",
   thesis:"Large AI demand does not yet prove that financing and cash collection are self-sustaining.",
@@ -67,6 +68,15 @@ export const OPPORTUNITIES=Object.freeze([
   catalyst:"Next issuer earnings, capex guidance, FCF and EPS estimate revisions.",
   source:"https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm"}
 ]);
+const ADDITIONAL_OPPORTUNITIES=LENS_CASES.filter(x=>
+ !LEGACY_OPPORTUNITIES.some(existing=>existing.ticker===x.ticker)).map(x=>({
+ id:"lens-"+x.ticker.toLowerCase(),ticker:x.ticker,name:x.name,
+ kind:"INVESTMENT",direction:"LONG",horizon:"6–12 months",reviewed:x.evidenceAsOf,
+ lens:x.lens,thesis:x.why,trigger:x.test,invalidation:x.risk,
+ risk:x.risk,catalyst:"Review by "+x.reviewBy,source:x.source,
+ decisionLabel:x.action,reviewBy:x.reviewBy
+}));
+export const OPPORTUNITIES=Object.freeze([...LEGACY_OPPORTUNITIES,...ADDITIONAL_OPPORTUNITIES]);
 /** Dated issuer/public filing facts, never personal positions or trade readiness. */
 export const CASH_QUALITY_PROFILES=Object.freeze({
  "ADBE": {
@@ -448,10 +458,14 @@ function card(item,prices,ownerResearch=[]){
  head.append(intro,direction);node.append(head);
  const meta=make("div","pso-meta");
  meta.append(make("span",null,item.kind==="TRADE"?"Tactical trade":"Investment"),make("span",null,item.horizon),make("span",null,item.reviewed+" review"));
+ if(item.lens){
+  const name=OPPORTUNITY_LENSES.find(x=>x.id===item.lens)?.label;
+  if(name)meta.append(make("span",null,name));
+ }
  node.append(meta);
  const thesis=make("p","pso-thesis",item.thesis);node.append(thesis);
  const status=make("div","pso-condition");
- status.append(make("strong",null,!state.current?"REVIEW EXPIRED":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
+ status.append(make("strong",null,!state.current?"REVIEW EXPIRED":item.decisionLabel?item.decisionLabel+" · RESEARCH ONLY":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
   "Last eligible delayed close: "+state.currency+" "+state.price.toLocaleString("en-GB",{maximumFractionDigits:3})+" · "+state.session:
   "No eligible current price/confirmation; verify the market feed and chart"));
  node.append(status);
@@ -571,34 +585,9 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
  shell.append(guide);
  // Dated research lenses are presentation categories, never additional investment scores.
  // No private holdings, cash, owner notes or broker data in this source.
- const opportunityLenses=[
-  {name:"Potential Missing Opportunities",tickers:"NVT · MOD · POWL",role:"New to the active shortlist, not necessarily new to the historical watchlist.",test:"NVT: cash conversion and acquisitions; MOD: negative interim FCF; POWL: large-order concentration.",source:"https://www.sec.gov/Archives/edgar/data/1720635/000162828026068391/q32026nvtpressrelease.htm"},
-  {name:"Growth",tickers:"VRT · ANET · MOD",role:"Revenue and orders expanding; profitable conversion matters more than a single growth percentage.",test:"Check forward orders, sustained margins, FCF and expectations already priced in.",source:"https://investors.modine.com/news/news-details/2026/Modine-Reports-Second-Quarter-Fiscal-2027-Results/default.aspx"},
-  {name:"Undervalued / Value",tickers:"ADBE · CI · CVS",role:"Potential discount to sustainable economics, not just a low forward P/E or PEG.",test:"Normalise GAAP versus adjusted earnings, owner cash, debt and competitive/regulatory risk.",source:"https://www.sec.gov/Archives/edgar/data/796343/000079634326000156/adbe-20260828.htm"},
-  {name:"Resilient / Quality",tickers:"ETN · HUBB · BWXT",role:"Businesses with diversified or contracted demand, cash generation and scenario durability.",test:"Stress cash and margins under higher yields, recession and an AI-capex slowdown.",source:"https://www.sec.gov/Archives/edgar/data/48898/000162828026067421/exhibit991_10272026.htm"},
-  {name:"Turnaround / Catalysts",tickers:"FLEX · CVS · NVDA",role:"A spin-off, operating recovery or discrete event may change the valuation.",test:"Verify the real event terms, downside if delayed, and management/cash-flow continuity.",source:"https://investors.flex.com/financials/quarterly-results/default.aspx"},
-  {name:"Income / Defensive",tickers:"SGOV · IEF · CVX",role:"Compare bond carry, duration, cash income and energy hedging rather than assuming all are safe.",test:"Match yields,  duration, FX and inflation regime; TLT is high duration, not a cash substitute.",source:"https://www.ishares.com/us/products/239452/ishares-7-10-year-treasury-bond-etf"},
-  {name:"Speculative / High Upside",tickers:"MU · NVDA · AMD",role:"Wide opportunity range paired with cycle, financing, valuation or event-loss risks.",test:"Demand evidence, earnings normalisation, event vetoes and a verified entry trigger.",source:"https://www.sec.gov/edgar/search/"}
- ];
- const lensSection=make("section","pso-lens-section");
- lensSection.setAttribute("aria-label","Power Stack investment opportunity categories");
- const lensHeading=make("div","pso-lens-heading");
- lensHeading.append(make("h3",null,"Opportunity lenses"),make("p",null,"Research categories, not buy signals · 13 Nov 2026 examples"));
- lensSection.append(lensHeading);
- const lensGrid=make("div","pso-lens-grid");
- for(const [i,lens] of opportunityLenses.entries()){
-  const details=make("details","pso-lens-item");
-  if(i===0)details.open=true;
-  const summary=make("summary","pso-lens-summary");
-  summary.append(make("strong",null,lens.name),make("span","pso-lens-tickers",lens.tickers));
-  details.append(summary,make("p","pso-lens-role",lens.role),make("p","pso-lens-test","NEXT TEST · "+lens.test));
-  const link=make("a","pso-lens-source","Original source example");
-  link.href=lens.source;link.target="_blank";link.rel="noopener noreferrer";
-  details.append(link);lensGrid.append(details);
- }
- lensSection.append(lensGrid);
- lensSection.append(make("p","pso-lens-disclaimer","A stock can fit several lenses but receives one primary role and one conditional decision. These names are dated research examples; refresh prices, valuation and evidence before any entry."));
- shell.append(lensSection);
+ // One common category/data contract powers the front-page overview and full research view.
+ if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}));
+
  const closePanel=make("section","pso-close-panel");
  closePanel.setAttribute("aria-label","Verified recent US closing prices");
  closePanel.append(make("p","pso-close-loading","Verifying recent completed US closing prices…"));
