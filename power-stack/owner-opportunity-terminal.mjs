@@ -465,7 +465,8 @@ function card(item,prices,ownerResearch=[]){
  node.append(meta);
  const thesis=make("p","pso-thesis",item.thesis);node.append(thesis);
  const status=make("div","pso-condition");
- status.append(make("strong",null,!state.current?"REVIEW EXPIRED":item.decisionLabel?item.decisionLabel+" · RESEARCH ONLY":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
+ const needsReview=Boolean(item.reviewBy&&Date.now()>Date.parse(item.reviewBy+"T23:59:59Z"));
+ status.append(make("strong",null,needsReview||!state.current?"RECHECK — SOURCE EXPIRED":item.decisionLabel?item.decisionLabel+" · RESEARCH ONLY":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
   "Last eligible delayed close: "+state.currency+" "+state.price.toLocaleString("en-GB",{maximumFractionDigits:3})+" · "+state.session:
   "No eligible current price/confirmation; verify the market feed and chart"));
  node.append(status);
