@@ -48,7 +48,7 @@ test("the new terminal remains behind the existing owner gate and separates exis
  assert(tracker.includes('value="TRADE">Tracked trades'));
  assert(tracker.includes('value="INVESTMENT">Tracked investments'));
  assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('if(PAGE==="index")'));
- for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261112-tech2'));
+ for(const file of ["index.html","ideas.html"])assert(read(file).includes('owner-opportunity-terminal.css?v=20261113-guildlens1'));
  const module=read("owner-opportunity-terminal.mjs");
  assert(!/sb_secret_|service_role|@gmail\.com|owner_user_id|brokerQuantity|cash_delta/i.test(module));
  assert(module.includes('No trade tickets or broker orders are created'));
@@ -197,13 +197,13 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
 test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
  const gate=read("auth-gate.mjs");
  const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
- assert(gate.includes('owner-decision-desk.mjs?v=20261113-gh3'));
- assert(gate.includes('owner-ideas-tracker.mjs?v=20261113-fg1'));
- assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-calm1'));
- assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-calm1'));
+ assert(gate.includes('owner-decision-desk.mjs?v=20261113-guildlens1'));
+ assert(gate.includes('owner-ideas-tracker.mjs?v=20261113-guildlens1'));
+ assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
+ assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v='+(page==='index'?'20261113-gh3':'20261113-fg1')+'"'),page);
+   assert(html.includes('src="auth-gate.mjs?v='+(["index","ideas"].includes(page)?"20261113-guildlens1":"20261113-fg1")+'"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
@@ -249,7 +249,7 @@ test("Figtree UI, icons and regional market bridge have font CSP and accessible 
   assert(html.includes("owner-figtree-visuals.css?v=20261113-fg1"),page);
   assert(html.includes("fonts.googleapis.com/css2?family=Figtree"),page);
   assert(html.includes("font-src 'self' https://fonts.gstatic.com"),page);
-  assert(html.includes('src="auth-gate.mjs?v='+(page==='index'?'20261113-gh3':'20261113-fg1')+'"'),page);
+  assert(html.includes('src="auth-gate.mjs?v='+(["index","ideas"].includes(page)?"20261113-guildlens1":"20261113-fg1")+'"'),page);
  }
  for(const page of ["index","ideas"])
   assert(read(page+".html").includes("connect-src 'self' https://qdtlrfgxpsnxajiptrno.supabase.co https://bluebelly-desk.vercel.app"));
