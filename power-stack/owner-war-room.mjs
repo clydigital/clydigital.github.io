@@ -197,7 +197,7 @@ function mountWarRoom(workspace,getState,{asOf}={}){
         ideas.append(line);
       }
       panel.append(ideas);
-    }else{
+    }else if(desk.id!=="matt"){
       panel.append(el("p","psw-desk-empty","No matching reviewed ideas."));
     }
   }
