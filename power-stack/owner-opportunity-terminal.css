@@ -95,3 +95,49 @@
 .pso-spcx-creators strong{font-size:11px;letter-spacing:.02em;color:#d2f2e7}
 .pso-spcx-creators p{font-size:10px!important;line-height:1.55!important;color:#c0d0d2!important;margin:9px 0 3px!important}
 .pso-spcx-creators a{display:inline-block;font-size:10px;margin-bottom:7px;color:#acd9e1;text-decoration:underline;text-underline-offset:2px}
+
+/* Source-dated Opportunity Lenses: slim index above the existing research drawers. */
+.psl-shell{margin:18px 0 20px;padding:20px;border-radius:13px;border:4px ridge #b17b41;box-shadow:inset 0 0 0 2px #211509,0 10px 19px rgba(0,0,0,.32);
+ background:linear-gradient(140deg,#0a3025 0%,#10211d 70%,#28190f 100%);color:#fff0d6}
+.psl-shell *{box-sizing:border-box}
+.psl-head{display:flex;align-items:start;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.psl-overline{font-size:10px!important;letter-spacing:.14em;font-weight:850;color:#edbe7c!important;margin:0 0 5px!important}
+.psl-head h2{font-size:clamp(19px,2.5vw,24px);line-height:1.24;letter-spacing:-.035em;margin:0 0 4px;color:#ffe8bb}
+.psl-intro{font-size:12px!important;color:#d9cbb3!important;line-height:1.5!important;margin:0!important}
+.psl-vintage{font-size:10px;line-height:1.4;color:#eed1a5;padding:4px 7px;border-radius:6px;border:1px solid #9c7748}
+.psl-tabs{display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid #806440;padding-bottom:11px;margin-bottom:12px}
+.psl-tab{font:inherit!important;font-size:11px!important;font-weight:650!important;line-height:1.3!important;padding:7px 10px;color:#e6d5b6;background:#182b2a;border:1px solid #8b734b;
+ border-radius:8px;cursor:pointer;text-align:left;white-space:nowrap;transition:background-color .15s ease}
+.psl-tab[aria-selected="true"]{background:#67441e;color:#fff0d3;border-color:#e6b466}
+.psl-tab:focus-visible,.psl-shell a:focus-visible{outline:2px solid #f8c77c;outline-offset:2px}
+.psl-panel-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px 14px;margin-bottom:9px}
+.psl-panel-head h3{color:#ffebc1;font-size:14px;margin:0}
+.psl-panel-head p{font-size:11px!important;color:#e2d3b5!important;margin:0!important}
+.psl-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.psl-item{border:1px solid #957047;background:rgba(9,23,25,.54);border-radius:9px;padding:12px;min-width:0}
+.psl-item-top{display:flex;align-items:start;justify-content:space-between;gap:8px}
+.psl-security{display:flex;gap:6px;flex-wrap:wrap;align-items:baseline;min-width:0}
+.psl-security strong{color:#fff4dc;font-size:14px}
+.psl-security span{color:#ead9ba;font-size:11px;overflow-wrap:anywhere}
+.psl-status{font-size:9px;line-height:1.4;letter-spacing:.04em;color:#f1d6a5;border:1px solid #9b794b;border-radius:5px;padding:3px 6px;white-space:nowrap}
+.psl-thesis{font-size:12px!important;line-height:1.5!important;color:#f4e9d8!important;margin:8px 0 0!important}
+.psl-next{font-size:11px!important;line-height:1.5!important;color:#e4c28b!important;margin:7px 0 0!important}
+.psl-source-row{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;margin-top:11px;border-top:1px solid #785e3d;padding-top:7px}
+.psl-source-row span{font-size:10px;color:#dbc7a2}
+.psl-source-row a,.psl-foot a{color:#f3c47e;text-decoration:underline;text-underline-offset:3px;font-size:11px}
+.psl-foot{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;margin-top:12px}
+.psl-foot p{font-size:11px!important;color:#d2c2a8!important;margin:0!important}
+@media(max-width:930px){.psl-items{grid-template-columns:repeat(2,minmax(0,1fr))}.psl-items .psl-item:last-child:nth-child(odd){grid-column:1/-1}}
+@media(max-width:640px){.psl-shell{padding:13px}.psl-head{gap:8px}.psl-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:8px}
+ .psl-tab{flex:0 0 auto;white-space:nowrap}.psl-items{grid-template-columns:1fr}.psl-items .psl-item:last-child:nth-child(odd){grid-column:auto}
+ .psl-item{padding:11px}.psl-vintage{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.psl-tab{transition:none}}
+
+/* Guildhall design alignment: readable ivory on felt, one brass highlight at a time. */
+.psl-head h2,.psl-panel-head h3{font-family:Georgia,"Times New Roman",serif!important;font-weight:700!important}
+.psl-head h2{color:#ffe7b2!important}
+.psl-shell .psl-overline{color:#e7b36a!important}
+.psl-shell .psl-tab{background:linear-gradient(115deg,#102f29,#192c22)!important;border-color:#927347!important;color:#ead8b8!important}
+.psl-shell .psl-tab[aria-selected="true"]{background:linear-gradient(100deg,#66411c,#174235)!important;border-color:#f0c57b!important;color:#fff3d9!important}
+.psl-item{background:linear-gradient(140deg,rgba(5,40,31,.96),rgba(10,26,23,.94))!important;border:1px solid #86673e!important;box-shadow:inset 0 0 0 1px rgba(209,163,93,.08)}
+.psl-shell .psl-status{border-color:#9c7447;color:#f7dcac}
