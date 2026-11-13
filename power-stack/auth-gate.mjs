@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-matt2");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-evidence1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
