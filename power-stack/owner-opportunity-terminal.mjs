@@ -2,7 +2,7 @@
 // Public script contains no account data; authenticated pages render it only after owner access.
 // Candidacy never means a verified EMA trigger, approved short locate or funded broker order.
 export const OPPORTUNITY_CONTRACT="power-stack-guided-opportunities/1";
-import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-lens2";
+import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
 export const OPPORTUNITY_REVIEW_DATE="2026-11-13";
 const LEGACY_OPPORTUNITIES=Object.freeze([
  {id:"crwv-short",ticker:"CRWV",name:"CoreWeave",kind:"TRADE",direction:"SHORT",
