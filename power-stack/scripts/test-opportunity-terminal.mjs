@@ -211,13 +211,13 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
 test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
  const gate=read("auth-gate.mjs");
  const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
- assert(gate.includes('owner-decision-desk.mjs?v=20261114-matt2'));
+ assert(gate.includes('owner-decision-desk.mjs?v=20261114-evidence1'));
  assert(gate.includes('owner-ideas-tracker.mjs?v=20261114-matt2'));
  assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
  assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v='+(page==="index"||page==="ideas"?"20261114-matt2":page==="research"?"20261113-research1":"20261113-fg1")+'"'),page);
+   assert(html.includes('src="auth-gate.mjs?v='+(page==="index"?"20261114-evidence1":page==="ideas"?"20261114-matt2":page==="research"?"20261113-research1":"20261113-fg1")+'"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
