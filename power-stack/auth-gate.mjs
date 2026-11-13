@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261113-rh1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261113-lens2");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261113-fg1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261113-lens2");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
