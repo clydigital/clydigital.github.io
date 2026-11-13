@@ -207,3 +207,13 @@ test("Bluebelly cross-site stock feed accepts only fixed 25 US + 12 EU source-da
  const js=read("owner-bluebelly-stocks.mjs");
  assert(!/brokerQuantity|service_role|sb_secret_|owner_user_id|\.insert\(|\.update\(/i.test(js));
 });
+
+test("opportunity research appears before the market pulse without expanding advanced research",()=>{
+ const radar=read("owner-radar-workspace.mjs");
+ const terminal=read("owner-opportunity-terminal.mjs");
+ assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
+ assert(radar.includes('workspace.prepend(quick,reviewStrip,opportunityOverview,snapshot,section'));
+ assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
+ assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
+ assert(radar.includes('for(const original of originals){if(original!==topPicks)legacy.append(original);}'));
+});
