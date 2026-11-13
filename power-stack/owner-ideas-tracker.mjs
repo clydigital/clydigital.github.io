@@ -2,7 +2,7 @@ import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
-import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261113-lens1";
+import {renderOpportunityTerminal} from "./owner-opportunity-terminal.mjs?v=20261113-lens2";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 
 const T="power_stack_idea_tracker";
