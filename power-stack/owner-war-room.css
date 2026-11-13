@@ -117,3 +117,43 @@ html[data-private-page="index"] body.ps-fin-pulse .psw-tools{
  .psw-root .psw-hero-actions a{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.psw-root *{scroll-behavior:auto!important}}
+
+
+/* Matt is the visible meeting chair: identity, live source-aware briefing and desk callouts. */
+.psw-root .psw-matt-identity{display:flex;align-items:center;gap:15px}
+.psw-root .psw-matt-identity>div:last-child{display:grid;gap:2px}
+.psw-root .psw-matt-identity strong{font-size:21px;font-weight:900;letter-spacing:.12em;color:#f6ddb0;line-height:1}
+.psw-root .psw-matt-identity small{font-size:10px;font-weight:760;color:#bccbd0;letter-spacing:.13em}
+.psw-root .psw-matt-portrait{
+ position:relative;width:70px;height:70px;flex:0 0 70px;
+ border:2px solid #eed1a1;border-radius:18px;display:grid;place-items:center;overflow:hidden;
+ background:radial-gradient(circle at 25% 10%,#986b39,#432d23 48%,#15252b);
+ box-shadow:0 0 0 4px #344541,0 10px 28px #02060970;
+}
+.psw-root .psw-matt-portrait span{font-family:Georgia,serif;font-style:italic;font-size:49px;font-weight:800;line-height:1;color:#ffe7b9;text-shadow:1px 3px 0 #34251b;z-index:1}
+.psw-root .psw-matt-portrait i{position:absolute;width:88px;height:88px;border:1px solid #e6bb7580;transform:rotate(30deg);pointer-events:none}
+.psw-root .psw-matt-speech{
+ position:relative;margin:0;background:linear-gradient(120deg,#3c3029,#222d2d);
+ padding:clamp(17px,2vw,24px);border:1px solid #956d41;border-left:5px solid #eac189;border-radius:5px 14px 14px 5px;
+}
+.psw-root .psw-matt-speech p{font-size:clamp(15px,1.4vw,19px);line-height:1.55;letter-spacing:.005em;font-weight:790;color:#ffebc6}
+.psw-root .psw-matt-interrupt{margin:0 0 21px;padding:13px 15px;display:flex;gap:12px;align-items:flex-start;border:1px solid #796247;border-radius:10px;background:#342e2a}
+.psw-root .psw-matt-mini{display:grid;place-items:center;flex:0 0 33px;width:33px;height:33px;background:#84603a;color:#fff0d2;border-radius:9px;border:1px solid #ddbc83;font:800 22px/1 Georgia,serif}
+.psw-root .psw-matt-interrupt strong{font-size:9px;letter-spacing:.12em;color:#ebc68a}
+.psw-root .psw-matt-interrupt p{font-size:13px;line-height:1.55;font-weight:700;color:#f0dfc1;margin-top:5px}
+.psw-root .psw-tab[data-desk="matt"]{background:#3b302b;border-color:#a47b4a}
+.psw-root .psw-tab[data-desk="matt"][aria-selected="true"]{background:#62462e;border-color:#f3d29b;box-shadow:inset 4px 0 #f4ce84}
+.psw-root .psw-tab[data-desk="matt"] .psw-tab-icon{display:grid;place-items:center;color:#ffe7be;border:1px solid #9e7849;background:#695034;border-radius:5px;width:24px;height:26px;font:800 16px Georgia,serif}
+.psw-root .psw-situation{gap:13px;align-self:start}
+.psw-root .psw-situation dl{margin-top:2px}
+.psw-root .psw-actions{border-top:1px solid var(--psw-line);padding-top:20px}
+.psw-root .psw-actions .psw-section-heading{margin-bottom:12px}
+.psw-root .psw-actions .psw-links{margin-top:0}
+.psw-root .psw-hero-actions{margin-top:1px}
+.psw-root .psw-team-layout{scroll-margin-top:20px}
+@media(max-width:760px){
+ .psw-root .psw-matt-portrait{height:56px;width:56px;flex-basis:56px;border-radius:14px}
+ .psw-root .psw-matt-portrait span{font-size:39px}
+ .psw-root .psw-matt-identity strong{font-size:19px}
+ .psw-root .psw-hero h1{font-size:clamp(27px,9vw,47px)!important}
+}
