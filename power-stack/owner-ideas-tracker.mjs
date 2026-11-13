@@ -24,19 +24,19 @@ export async function initIdeasTracker(db,main,user){
  main.innerHTML=`
  <div class="psi-hero">
   <div><p class="eyebrow">POWER STACK / RESEARCH RADAR</p><h1>Find your next opportunity</h1>
-  <p>Tactical setups and longer-term investment theses, clearly separated. Explore the evidence, conditions and invalidation before acting; a price alert is not a buy order.</p></div>
+  </div>
   <nav class="psi-shortcuts" aria-label="Investment tools"><a href="index.html">Overview</a><a href="portfolio.html#watchlist">Market watch</a><button type="button" id="psi-add">+ Track idea</button></nav>
  </div>
  <div id="psi-opportunity-mount"></div>
  <details id="psi-tracked-drawer" class="psi-tracked-drawer">
-  <summary class="psi-tracked-summary"><span>My tracked research ideas</span><small id="psi-tracked-count">Expand for saved ideas, PEG comparisons and entry ranges</small></summary>
+  <summary class="psi-tracked-summary"><span>My tracked research ideas</span><small id="psi-tracked-count">Saved ideas · PEG · entry ranges</small></summary>
   <div class="psi-tracked-body">
  <div id="psi-feed" class="psi-feed" role="status">Loading the dated market feed and private ideas…</div>
  <div id="psi-stats" class="psi-stats"></div>
  <section class="psi-tools"><label for="psi-search">Find an idea</label><input id="psi-search" type="search" placeholder="Search ticker or company" autocomplete="off">
  <label for="psi-filter">Category / signal</label><select id="psi-filter"><option value="ALL">All ideas</option><option value="TRADE">Tracked trades</option><option value="INVESTMENT">Tracked investments</option><option value="HIGH">High-priority research</option><option value="ALERT">Inside alert range</option><option value="WAIT_PRICE">Wait for price</option><option value="BONDS">Bond ETFs</option><option value="ALIGNED">Screen matches</option><option value="DIVERGENCE">Divergences</option><option value="WATCH">Watch</option><option value="RECHECK">Recheck</option></select></section>
  <div class="psv-research-key" role="note">
-  <span>Entry bands are research alerts, not approved trades.</span>
+  <span>Alert ranges ≠ trade approvals.</span>
   <span class="psv-key-item psv-key-ready">In alert range</span>
   <span class="psv-key-item psv-key-wait">Wait for retrace</span>
   <span class="psv-key-item psv-key-risk">Below range — recheck</span>

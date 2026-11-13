@@ -7,7 +7,7 @@ import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
 import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261113-guildlens1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
-import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261114-warroom1";
+import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261114-matt2";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -87,7 +87,7 @@ export async function initDecisionDesk(db,main,user){
  <section class="psd-top" aria-label="Investment brief">
   <div class="psd-hero-copy"><p class="psd-overline">POWER STACK / What to do next</p>
    <h1>Spot the opportunity.<span>Know the risk.</span></h1>
-   <p>Market structure, macro research and investment decisions — clear enough to act on, detailed enough to scrutinise. Research only; no automatic trade approval.</p></div>
+   </div>
   <div class="psd-top-actions"><a class="psd-primary-link" href="ideas.html">Explore opportunities</a><a href="portfolio.html#watchlist">Market watch</a><a href="portfolio.html">My portfolio</a></div>
   <div class="psh-orbit-wrap" aria-hidden="true"><div class="psh-orbit"><div class="psh-orbit-core">MARKET<small>RADAR</small></div></div><div class="psh-orbit-tags"><span>EQUITIES</span><span>RATES</span><span>ENERGY</span></div><small class="psh-orbit-caption">Illustrative compass · not a market score</small></div>
  </section>
@@ -123,7 +123,7 @@ export async function initDecisionDesk(db,main,user){
     <a href="portfolio.html#bonds">Compare bond ETFs in Market Watch →</a></div>
  </section>
  <section class="psd-ideas-panel" aria-labelledby="psd-ideas-heading">
-  <div class="psd-section-heading"><div><p class="psd-overline">RESEARCH PRIORITIES / SOURCE-DATED CLOSES</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2><p class="psd-coverage-note">Price zones are preliminary alerts, NOT confirmed support or an order. Every entry still needs issuer, macro and broker checks.</p><p id="psd-ideas-asof" class="psd-coverage-note">Checking market feed…</p></div>
+  <div class="psd-section-heading"><div><p class="psd-overline">RESEARCH PRIORITIES / SOURCE-DATED CLOSES</p><h2 id="psd-ideas-heading">Ideas & entry levels</h2><p class="psd-coverage-note">Entry ranges are unconfirmed; require issuer, macro and broker checks.</p><p id="psd-ideas-asof" class="psd-coverage-note">Checking market feed…</p></div>
    <a href="ideas.html">View all investment ideas →</a></div>
   <div id="psd-ideas-rows" class="psd-ideas-rows"></div>
   <button type="button" id="psd-ideas-expand" class="psd-ideas-expand" hidden>Show all research setups</button>
@@ -144,7 +144,7 @@ export async function initDecisionDesk(db,main,user){
   <section class="psd-book"><div class="psd-book-head"><h2>Past investment decisions</h2><span id="psd-count"></span></div><div id="psd-book-rows"></div></section>
  </details>
  <section id="psd-import-panel" class="psd-import" hidden>
-  <div class="psd-book-head"><div><h2>Save a reviewed recommendation</h2><p>Import a complete, reviewed decision ticket from Power Stack.</p></div><button type="button" id="psd-close-import">Close</button></div>
+  <div class="psd-book-head"><div><h2>Save a reviewed recommendation</h2></div><button type="button" id="psd-close-import">Close</button></div>
   <form id="psd-import-form"><label for="psd-ticket-file">Choose a decision ticket (.json)</label><input id="psd-ticket-file" type="file" accept=".json,application/json">
    <label for="psd-ticket-json">Or paste the ticket</label><textarea id="psd-ticket-json" rows="8" spellcheck="false" required placeholder="Paste a reviewed decision ticket"></textarea>
    <button type="submit" id="psd-save">Save reviewed decision</button></form><p id="psd-import-status" role="status"></p>

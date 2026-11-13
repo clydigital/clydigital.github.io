@@ -286,7 +286,7 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
   const radar=read("owner-radar-workspace.mjs");
   const home=read("index.html"),gate=read("auth-gate.mjs");
   const nav=read("owner-advisor-presentation.mjs");
-  assert(home.includes('owner-war-room.css?v=20261114-warroom1'));
+  assert(home.includes('owner-war-room.css?v=20261114-matt2'));
   assert(home.includes("The War Room · Private Power Stack"));
   assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
   assert(radar.includes('mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF})'));
@@ -297,8 +297,26 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
   assert(nav.includes('["index.html#warroom-team","Analyst desks","research"]'));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);
-  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","Latest saved decision reviews"])
+  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","What changed?"])
     assert(war.includes(critical),critical);
-  assert(war.includes("No owner-saved decision revisions verified"));
+  assert(war.includes("No saved decisions verified."));
   assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
+});
+
+test("Matt leads the War Room, analysts have clear orders, and redundant captions stay gone",()=>{
+ const war=read("owner-war-room.mjs"),radar=read("owner-radar-workspace.mjs");
+ const ideas=read("owner-ideas-tracker.mjs"),css=read("owner-war-room.css");
+ assert(war.includes('id:"matt",name:"Matt"'));
+ assert(war.includes('let chosen="matt"'));
+ assert(war.includes('psw-matt-portrait')&&css.includes('.psw-matt-portrait'));
+ assert(war.includes("MATT_SAYS")&&war.includes("mattLead.textContent"));
+ for(const phrase of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND"])
+   assert(war.includes(phrase),phrase);
+ assert(!war.includes("Choose a desk to see its reasoning"));
+ assert(!war.includes("The personality is theatrical"));
+ assert(!war.includes("Start with the mechanism, not the headline."));
+ assert(!radar.includes("Start with the evidence. Expand a market"));
+ assert(!radar.includes("Click any ticker to open its source-dated research row"));
+ assert(!ideas.includes("Tactical setups and longer-term investment theses, clearly separated"));
+ assert(war.includes("Matt and the analysts are editorial voices"));
 });
