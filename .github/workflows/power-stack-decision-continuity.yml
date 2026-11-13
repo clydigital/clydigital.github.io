@@ -18,6 +18,8 @@ on:
       - 'power-stack/owner-opportunity-terminal.mjs'
       - 'power-stack/owner-radar-workspace.mjs'
       - 'power-stack/owner-research-review.mjs'
+      - 'power-stack/owner-research-theses.mjs'
+      - 'power-stack/owner-research-theses.css'
       - 'power-stack/owner-calm-layout.css'
       - 'power-stack/scripts/test-research-review.mjs'
       - 'power-stack/owner-radar-workspace.css'
@@ -92,6 +94,7 @@ jobs:
           node --check power-stack/owner-opportunity-terminal.mjs
           node --check power-stack/owner-radar-workspace.mjs
           node --check power-stack/owner-research-review.mjs
+          node --check power-stack/owner-research-theses.mjs
           node --check power-stack/scripts/price-technicals.mjs
           node --check power-stack/owner-portfolio-table.mjs
           node --check power-stack/owner-market-views.mjs
@@ -114,6 +117,11 @@ jobs:
           test -f power-stack/owner-opportunity-terminal.mjs
           if grep -El 'sb_secret_|service_role|leeyanghere@gmail.com|"owner_user_id":|"cash_delta":' power-stack/owner-opportunity-lenses.mjs; then
             echo "Sensitive content in public opportunity lenses"; exit 1
+          fi
+          test -f power-stack/owner-research-theses.mjs
+          test -f power-stack/owner-research-theses.css
+          if grep -El 'sb_secret_|service_role|@gmail\\.com|owner_user_id|brokerQuantity|cash_delta' power-stack/owner-research-theses.mjs; then
+            echo "Sensitive material in research presentation"; exit 1
           fi
           test -f power-stack/owner-radar-workspace.mjs
           test -f power-stack/owner-radar-workspace.css
