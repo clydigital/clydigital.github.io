@@ -119,6 +119,18 @@ async function load(){
   const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261110-coverage1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
+ if(PAGE==="research"){
+  // Only augment an authenticated, RLS-retrieved research page. Never load the archive publicly.
+  try{
+   const {mountResearchTheses}=await import("./owner-research-theses.mjs?v=20261113-research1");
+   mountResearchTheses(content);
+  }catch(error){
+   const note=document.createElement("p");note.setAttribute("role","status");
+   note.className="ps-legacy-note";
+   note.textContent="The updated investment reasoning is unavailable; the original private research archive remains accessible.";
+   content.prepend(note);console.error("Research reasoning enhancement unavailable",error);
+  }
+ }
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
