@@ -297,7 +297,7 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
   assert(nav.includes('["index.html#warroom-team","Analyst desks","research"]'));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);
-  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","Latest saved decision reviews"])
+  for(const critical of ["WHY THIS MATTERS","YOUR ORDERS","GO / CONFIRM","NO-GO / CHANGE MY MIND","What changed?"])
     assert(war.includes(critical),critical);
   assert(war.includes("No saved decisions verified."));
   assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
