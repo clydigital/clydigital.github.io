@@ -311,7 +311,7 @@ test("Matt leads an evidence-first War Room without standing instruction cards",
  assert(war.includes('let chosen="matt"'));
  assert(war.includes('psw-matt-portrait')&&css.includes('.psw-matt-portrait'));
  assert(war.includes("MATT_SAYS")&&war.includes("psw-matt-lead"));
- for(const phrase of ["THE CALL","WHAT CHANGED","psw-fact","psw-finding-call","psw-finding-meta"])
+ for(const phrase of ["THE CALL","psw-chief-findings","psw-fact","psw-finding-call","psw-finding-meta"])
    assert(war.includes(phrase),phrase);
  assert(!war.includes("Choose a desk to see its reasoning"));
  assert(!war.includes("The personality is theatrical"));
