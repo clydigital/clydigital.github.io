@@ -271,7 +271,9 @@ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse :is(a
 }
 
 
-/* Guildhall ledger table finish: visual surfaces only. Numerical direction
+/* Guildhall ledger table finish: visual surfaces only.
+   secureMain() replaces #private-main with the authenticated <main> node;
+   selectors therefore target main, not the destroyed gate placeholder. Numerical direction
    colours remain owned by existing source-qualified quote renderers. */
 html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-close-panel{
  background:linear-gradient(125deg,#0a342a,#112924 85%)!important;
@@ -285,31 +287,31 @@ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-
 html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-close-item strong{
  color:#fff1d3!important;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat){
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat){
  background:#112c25!important;border:2px ridge #987648!important;
  border-collapse:separate;border-spacing:0;border-radius:5px;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) th{
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) th{
  background:#214033!important;border-bottom:2px solid #b28c59!important;
  color:#f5d9aa!important;font-weight:750!important;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) tbody tr:nth-child(odd)>td{
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) tbody tr:nth-child(odd)>td{
  background:#0e2b24!important;border-bottom-color:#526447!important;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) tbody tr:nth-child(even)>td{
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) tbody tr:nth-child(even)>td{
  background:#18372d!important;border-bottom-color:#526447!important;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) tbody tr:hover>td{
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) tbody tr:hover>td{
  background:#275043!important;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) td a{
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) td a{
  color:#e4c18c!important;text-decoration-color:#9d783e;
 }
-html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table:not(.psr-mat) td a:is(:hover,:focus-visible){
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table:not(.psr-mat) td a:is(:hover,:focus-visible){
  color:#ffe8b9!important;
 }
 @media(forced-colors:active){
- html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main table{
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main table{
   border:1px solid CanvasText!important;
  }
 }
