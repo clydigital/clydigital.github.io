@@ -269,3 +269,13 @@ test("guildhall homepage matches selected tavern mockup without fabricating its 
  assert.equal(photo.toString("ascii",0,4),"RIFF");
  assert.equal(photo.toString("ascii",8,12),"WEBP");
 });
+
+test("Guildhall opportunity lens sits after market boards, before thematic drill-down",()=>{
+ const radar=read("owner-radar-workspace.mjs");
+ const terminal=read("owner-opportunity-terminal.mjs");
+ assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
+ assert(radar.includes('workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section'));
+ assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
+ assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
+ assert(radar.includes('for(const original of originals){if(original!==topPicks)legacy.append(original);}'));
+});

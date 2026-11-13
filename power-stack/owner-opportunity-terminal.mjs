@@ -2,8 +2,9 @@
 // Public script contains no account data; authenticated pages render it only after owner access.
 // Candidacy never means a verified EMA trigger, approved short locate or funded broker order.
 export const OPPORTUNITY_CONTRACT="power-stack-guided-opportunities/1";
+import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
 export const OPPORTUNITY_REVIEW_DATE="2026-11-13";
-export const OPPORTUNITIES=Object.freeze([
+const LEGACY_OPPORTUNITIES=Object.freeze([
  {id:"crwv-short",ticker:"CRWV",name:"CoreWeave",kind:"TRADE",direction:"SHORT",
   horizon:"2–4 weeks",reviewed:"2026-11-12",
   thesis:"Large AI demand does not yet prove that financing and cash collection are self-sustaining.",
@@ -67,6 +68,15 @@ export const OPPORTUNITIES=Object.freeze([
   catalyst:"Next issuer earnings, capex guidance, FCF and EPS estimate revisions.",
   source:"https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm"}
 ]);
+const ADDITIONAL_OPPORTUNITIES=LENS_CASES.filter(x=>
+ !LEGACY_OPPORTUNITIES.some(existing=>existing.ticker===x.ticker)).map(x=>({
+ id:"lens-"+x.ticker.toLowerCase(),ticker:x.ticker,name:x.name,
+ kind:"INVESTMENT",direction:"LONG",horizon:"6–12 months",reviewed:x.evidenceAsOf,
+ lens:x.lens,thesis:x.why,trigger:x.test,invalidation:x.risk,
+ risk:x.risk,catalyst:"Review by "+x.reviewBy,source:x.source,
+ decisionLabel:x.action,reviewBy:x.reviewBy
+}));
+export const OPPORTUNITIES=Object.freeze([...LEGACY_OPPORTUNITIES,...ADDITIONAL_OPPORTUNITIES]);
 /** Dated issuer/public filing facts, never personal positions or trade readiness. */
 export const CASH_QUALITY_PROFILES=Object.freeze({
  "ADBE": {
@@ -448,10 +458,15 @@ function card(item,prices,ownerResearch=[]){
  head.append(intro,direction);node.append(head);
  const meta=make("div","pso-meta");
  meta.append(make("span",null,item.kind==="TRADE"?"Tactical trade":"Investment"),make("span",null,item.horizon),make("span",null,item.reviewed+" review"));
+ if(item.lens){
+  const name=OPPORTUNITY_LENSES.find(x=>x.id===item.lens)?.label;
+  if(name)meta.append(make("span",null,name));
+ }
  node.append(meta);
  const thesis=make("p","pso-thesis",item.thesis);node.append(thesis);
  const status=make("div","pso-condition");
- status.append(make("strong",null,!state.current?"REVIEW EXPIRED":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
+ const needsReview=Boolean(item.reviewBy&&Date.now()>Date.parse(item.reviewBy+"T23:59:59Z"));
+ status.append(make("strong",null,needsReview||!state.current?"RECHECK — SOURCE EXPIRED":item.decisionLabel?item.decisionLabel+" · RESEARCH ONLY":state.price===null?"WATCH — VERIFY PRICE":"WATCH — RESEARCH ONLY"),make("span",null,state.price!==null?
   "Last eligible delayed close: "+state.currency+" "+state.price.toLocaleString("en-GB",{maximumFractionDigits:3})+" · "+state.session:
   "No eligible current price/confirmation; verify the market feed and chart"));
  node.append(status);
@@ -569,6 +584,11 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
   node.append(make("strong",null,x.title),make("span",null,x.desc));guide.append(node);
  }
  shell.append(guide);
+ // Dated research lenses are presentation categories, never additional investment scores.
+ // No private holdings, cash, owner notes or broker data in this source.
+ // One common category/data contract powers the front-page overview and full research view.
+ if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}));
+
  const closePanel=make("section","pso-close-panel");
  closePanel.setAttribute("aria-label","Verified recent US closing prices");
  closePanel.append(make("p","pso-close-loading","Verifying recent completed US closing prices…"));
