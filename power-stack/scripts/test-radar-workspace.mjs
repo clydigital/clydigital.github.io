@@ -207,3 +207,31 @@ test("Bluebelly cross-site stock feed accepts only fixed 25 US + 12 EU source-da
  const js=read("owner-bluebelly-stocks.mjs");
  assert(!/brokerQuantity|service_role|sb_secret_|owner_user_id|\.insert\(|\.update\(/i.test(js));
 });
+
+
+test("radar-tavern live skin uses committed decorative assets without changing market semantics",()=>{
+ const html=read("index.html"),css=read("owner-tavern-theme.css");
+ assert(html.includes('owner-tavern-theme.css?v=20261113-t1'));
+ assert(html.indexOf("owner-tavern-theme.css")>html.indexOf("owner-figtree-visuals.css"),
+  "Theme must load after existing accessibility and source visualization styles");
+ for(const token of [
+  'html[data-private-page="index"]','body.ps-fin-pulse .psr-simple-header',
+  'body.ps-fin-pulse .psr-review-strip','body.ps-fin-pulse .psr-snapshot',
+  'body.ps-fin-pulse .psr-scope','body.ps-fin-pulse .psr-sweep',
+  'tavern-room-clean.webp','walnut-wall-panel.svg',
+  'brass-radar-face.svg','radar-sweep-layer.svg',
+  '@media(max-width:640px)','@media(prefers-reduced-motion:reduce)',
+  'pointer-events:none','animation:none!important'
+ ])assert(css.includes(token),"Missing tavern skin guardrail: "+token);
+ assert(!/MARKET LIVE|BUY NOW|GUARANTEED|service_role|sb_secret_|cash_delta|\.insert\(|\.upsert\(/i.test(css));
+ const fs=readFileSync;
+ const photo=fs(new URL("../assets/tavern/tavern-room-clean.webp",import.meta.url));
+ assert(photo.length>1000&&photo.length<75000,"Optimized photo must stay lightweight");
+ assert.equal(photo.toString("ascii",0,4),"RIFF");
+ assert.equal(photo.toString("ascii",8,12),"WEBP");
+ for(const name of ["brass-radar-face.svg","radar-sweep-layer.svg","walnut-wall-panel.svg"]){
+  const art=read("assets/tavern/"+name);
+  assert(art.startsWith("<svg"),name);
+  assert(!/\b(?:href|xlink:href)\s*=\s*["']https?:\/\/|<script|onload=|onerror=/i.test(art),"Decorative SVG must be self-contained");
+ }
+});

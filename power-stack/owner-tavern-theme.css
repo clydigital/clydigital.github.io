@@ -1,0 +1,258 @@
+/* Power Stack / Radar × Tavern visual skin — 13 Nov 2026
+   Decorative only. Applies exclusively to the authenticated index route.
+   Data, status, RLS, scenario decisions, cash and trade logic stay untouched.
+   The photo contains no prices or trading labels; all readable content is DOM.
+*/
+html[data-private-page="index"] body.ps-fin-pulse{
+ --tavern-ink:#071c23;--tavern-wood:#28150e;--tavern-emerald:#053629;
+ --tavern-brass:#c99a56;--tavern-amber:#e6a34a;--tavern-paper:#f0e5d4;
+ --tavern-seafoam:#5eeec2;--tavern-panel:rgba(6,27,33,.95);
+ background:radial-gradient(ellipse at 92% 0%,#1b352d 0%,transparent 32%),
+  linear-gradient(145deg,#071923 0%,#101c20 57%,#211711 100%)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{
+ background:linear-gradient(180deg,rgba(5,21,28,.88),rgba(18,19,20,.96)),
+  url("./assets/tavern/walnut-wall-panel.svg") center top /cover no-repeat,
+  #081e24!important;
+ border-right:1px solid #8a6540!important;
+ box-shadow:inset -3px 0 8px rgba(160,105,38,.13),5px 0 28px rgba(0,0,0,.32)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand{
+ color:#fbefdb!important;letter-spacing:-.035em!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand small{color:#ceae85!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .ps-pulse-mark{
+ background:linear-gradient(135deg,#66431f,#bd8b45 55%,#ffdf95)!important;
+ color:#fff7e3!important;box-shadow:0 0 19px rgba(203,153,75,.23)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a:not(.brand),
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-more>summary{
+ color:#cfddd8!important;border:1px solid transparent;transition:background .18s ease,border-color .18s ease,color .18s ease!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a:is(:hover,:focus-visible),
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-more>summary:is(:hover,:focus-visible){
+ background:rgba(138,91,38,.22)!important;color:#fff7e8!important;border-color:#8e673d!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"]{
+ background:linear-gradient(95deg,rgba(139,85,32,.39),rgba(21,65,58,.55))!important;
+ color:#fff2d6!important;box-shadow:inset 4px 0 #e4ad5f,0 0 19px rgba(188,122,50,.10)!important;
+ border:1px solid #ab7740!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"] svg{color:#ffc66e!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .gate-logout{
+ border-color:#785b3f!important;background:#132a2a!important;color:#eadac6!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace{
+ --desk-market:#72d8c4;--desk-invest:#94dfbd;--desk-scenario:#d8bd84;
+ --desk-process:#e8b45c;--desk-risk:#e9a09c;--desk-line:#76684f;
+ background:radial-gradient(ellipse at 63% 0%,rgba(31,87,66,.11),transparent 56%)!important;
+}
+/* The full-color scene exists only as hero/ambience, NEVER below data text without an opaque scrim. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+ position:relative;isolation:isolate;overflow:hidden;
+ display:flex;flex-direction:column;justify-content:flex-end;gap:0;
+ min-height:315px!important;
+ background:linear-gradient(90deg,
+    rgba(4,20,23,.96) 0%,rgba(4,24,26,.87) 38%,
+    rgba(7,28,27,.38) 73%,rgba(7,21,22,.52) 100%),
+   linear-gradient(0deg,rgba(5,20,23,.84),transparent 48%),
+   url("./assets/tavern/tavern-room-clean.webp") 50% 40% /cover no-repeat,
+   #102925!important;
+ border:1px solid #a77b47!important;border-radius:13px!important;
+ box-shadow:inset 0 0 0 1px rgba(244,192,105,.12),0 15px 34px rgba(0,0,0,.25)!important;
+ padding:clamp(20px,3vw,38px)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header:after{
+ content:"";position:absolute;bottom:0;left:0;right:0;height:5px;
+ background:linear-gradient(90deg,#382010,#f1bb6b 19%,#86501f 48%,#d5a25e 82%,#41230f);
+ pointer-events:none;z-index:0;box-shadow:0 -1px 13px rgba(235,155,61,.29);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header>*{position:relative;z-index:1}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header h1{
+ max-width:700px;font-family:Georgia,"Times New Roman",serif!important;
+ letter-spacing:-.033em!important;font-weight:700!important;
+ font-size:clamp(31px,4.3vw,54px)!important;line-height:1.09!important;
+ color:#fff3df!important;text-shadow:0 3px 20px #00130f!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-lead{
+ color:#f0dfc7!important;font-size:15px!important;max-width:52ch!important;
+ text-shadow:0 2px 11px #031819;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-eyebrow{
+ color:#e7be7f!important;letter-spacing:.15em!important;font-size:11px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-nav{
+ max-width:1050px;position:relative;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar){
+ background:linear-gradient(125deg,rgba(18,49,50,.94),rgba(18,31,34,.96))!important;
+ border:1px solid #947446!important;border-left:3px solid #d5a263!important;
+ color:#f9e9cc!important;min-height:60px!important;
+ box-shadow:inset 0 1px rgba(255,216,143,.07),0 7px 16px rgba(0,0,0,.15);
+ transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar):is(:hover,:focus-visible){
+ transform:translateY(-2px);border-color:#f0c37d!important;
+ box-shadow:inset 0 1px rgba(255,216,143,.13),0 9px 19px rgba(0,0,0,.38)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:after{color:#e9bd7a!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-radar{color:#d2b48e!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip{
+ background:linear-gradient(115deg,rgba(7,30,30,.99),rgba(17,40,36,.98))!important;
+ border:1px solid #987a50!important;border-top:3px solid #d7a861!important;
+ box-shadow:inset 0 0 0 1px rgba(219,168,99,.06),0 11px 21px rgba(0,0,0,.17)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-lead h2,
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot h2{
+ font-family:Georgia,"Times New Roman",serif!important;color:#fff1d6!important;
+ letter-spacing:.005em!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-headline{color:#c5d9ce!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task{
+ border:1px solid #786443!important;border-left:3px solid #d5a35d!important;
+ background:linear-gradient(142deg,#182a26,#101f25)!important;
+ box-shadow:inset 0 1px rgba(255,226,160,.055);
+ transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task:is(:hover,:focus-within){
+ transform:translateY(-2px);border-color:#b4935f!important;
+ box-shadow:0 10px 17px rgba(0,0,0,.26)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task strong{color:#fff2df!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task p{color:#c4d7d0!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-task a,
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-additional a{
+ color:#f5ca89!important;text-decoration-color:#a17b45!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-detail{border-top:1px solid #7b674b!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-detail>summary{color:#ead3aa!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-source{
+ background:#122b2a!important;border-color:#736b4c!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot{
+ position:relative;
+ background:linear-gradient(90deg,rgba(4,31,30,.96),rgba(10,36,33,.94))!important;
+ border:1px solid #85734c!important;border-top:3px solid #b38c52!important;
+ box-shadow:inset 0 1px rgba(255,226,160,.055),0 9px 20px rgba(0,0,0,.15);
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-bar{
+ border-color:#8d8966!important;background:#132e2b!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-up{background:#63deae!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-breadth-down{background:#eb9898!important}
+/* Keep real research data and full stock tables on opaque dark surfaces. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme{
+ background:linear-gradient(145deg,#17362f,#152829)!important;
+ border:1px solid #716e50!important;border-top:3px solid #b89052!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme:nth-child(3n + 2){
+ background:linear-gradient(145deg,#1c3936,#192d32)!important;
+ border-top-color:#77c4a1!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme:nth-child(3n + 3){
+ background:linear-gradient(145deg,#2b322e,#1e2a2d)!important;
+ border-top-color:#d5b079!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme strong{color:#fff1d5!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-theme small{color:#d2d9ce!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-thematic>.psr-hero-strip{
+ border-left-color:#cda066!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-hero-strip h2{
+ font-family:Georgia,"Times New Roman",serif!important;color:#fff0dc!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse :is(.psr-collapse,.psi-tracked-drawer,.pso-major-drawer){
+ border-color:#777359!important;background:#102c2c!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-scenario-drawer{
+ border-left-color:#d6ab6e!important;background:#262c29!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-stock-table-drawer{border-left-color:#6ac7ad!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-collapse-summary{
+ color:#f5e6d0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace>.psr-legacy{
+ border-color:#716c50!important;background:#172726!important;
+}
+/* Opt-in radar uses the staged brass vector and a separate sweep layer.
+   The green blips are still real DOM elements driven by the existing tracked universe. */
+html[data-private-page="index"] body.psr-landing-active.ps-fin-pulse .psr-landing{
+ background:linear-gradient(90deg,rgba(3,19,22,.91),rgba(6,21,23,.70)),
+ url("./assets/tavern/tavern-room-clean.webp") center 40% /cover no-repeat,
+ linear-gradient(130deg,#061c20,#18231e)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-water{opacity:.22!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-brand,
+html[data-private-page="index"] body.ps-fin-pulse .psr-intro h1{
+ color:#fff1d6!important;font-family:Georgia,"Times New Roman",serif!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-kicker,
+html[data-private-page="index"] body.ps-fin-pulse .psr-eyebrow{color:#e7bd80!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-intro-text{color:#ebdfc9!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-scope{
+ background:url("./assets/tavern/brass-radar-face.svg") center /contain no-repeat!important;
+ border:0!important;box-shadow:0 14px 60px rgba(0,0,0,.47),0 0 35px rgba(112,210,148,.09)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-scope:before,
+html[data-private-page="index"] body.ps-fin-pulse .psr-scope:after{display:none!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-sweep{
+ background:url("./assets/tavern/radar-sweep-layer.svg") center /contain no-repeat!important;
+ animation:psr-clockwise 15s linear infinite!important;
+ mix-blend-mode:screen!important;pointer-events:none!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-blip-dot{
+ background:#80ffca!important;box-shadow:0 0 15px #59eab0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-enter{
+ border-color:#bc9a61!important;background:linear-gradient(135deg,#2b563f,#1a3630)!important;
+ color:#fff0d6!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-landing-footer{color:#d5c6ac!important}
+@media(max-width:900px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+  min-height:295px!important;
+  background-position:center,center,57% 40%!important;
+ }
+}
+@media(max-width:640px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+  min-height:0!important;padding:22px 18px!important;
+  background:linear-gradient(90deg,rgba(5,22,24,.96),rgba(7,30,30,.87)),
+    url("./assets/tavern/tavern-room-clean.webp") center/cover no-repeat,#132b29!important;
+ }
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header h1{font-size:36px!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link:not(.psr-simple-radar){min-height:53px!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-task{transform:none!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip{padding:15px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-sweep{animation:none!important}
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-task,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-link{
+  transition:none!important;transform:none!important;
+ }
+}
+@media(forced-colors:active){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-strip,
+ html[data-private-page="index"] body.ps-fin-pulse .psr-snapshot{border:2px solid CanvasText!important}
+}
+
+
+/* Engraved signage and thin brass inlays: decorative pseudo-elements only. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-review-lead h2{
+ display:inline-block!important;
+ background:url("./assets/tavern/empty-brass-plaque.svg") center/100% 100% no-repeat;
+ padding:9px 22px!important;margin:0 0 7px -8px!important;
+ min-height:45px;color:#ffead1!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-thematic>.psr-hero-strip:after{
+ content:"";display:block;pointer-events:none;
+ width:100%;height:12px;margin-top:11px;
+ background:url("./assets/tavern/brass-section-rule.svg") center/contain no-repeat;opacity:.7;
+}
+@media(max-width:640px){
+ html[data-private-page="index"] body.ps-fin-pulse .psr-review-lead h2{
+  padding:8px 15px!important;font-size:18px!important;
+ }
+}

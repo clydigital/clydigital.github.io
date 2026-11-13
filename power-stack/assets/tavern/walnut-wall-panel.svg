@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 215" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><linearGradient id="wood" x2=".6" y2="1"><stop stop-color="#0a1b1b"/><stop offset=".47" stop-color="#211b16"/><stop offset="1" stop-color="#102020"/></linearGradient>
+<linearGradient id="rail"><stop stop-color="#3c2417"/><stop offset=".4" stop-color="#85552c"/><stop offset=".57" stop-color="#e0ad65"/><stop offset="1" stop-color="#271a12"/></linearGradient>
+<pattern id="grain" patternUnits="userSpaceOnUse" width="78" height="215"><path d="M8 0C20 27-2 46 15 80S0 139 16 215M35 0C27 48 51 70 34 106S43 175 25 215M65 0C77 49 57 75 71 126S57 190 70 215" fill="none" stroke="#9c6334" stroke-width="1" stroke-opacity=".19"/></pattern></defs>
+<rect width="395" height="215" fill="url(#wood)"/>
+<rect width="395" height="215" fill="url(#grain)"/>
+<rect x="8" y="7" width="379" height="201" rx="3" fill="none" stroke="#80502a" stroke-width="4" opacity=".52"/>
+<path d="M0 15H395M0 199H395" stroke="url(#rail)" stroke-width="11" opacity=".52"/>
+<path d="M124 18V197M269 18V197" stroke="#5a3923" stroke-width="6" opacity=".58"/>
+</svg>
