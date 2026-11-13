@@ -412,6 +412,9 @@ export function installRadarWorkspace(main,getState){
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
  if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
+ window.addEventListener("hashchange",()=>{
+  if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
+ });
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
