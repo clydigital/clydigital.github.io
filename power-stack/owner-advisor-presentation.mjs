@@ -36,7 +36,7 @@ export function presentClientView(page,main){
   const owner=nav.querySelector("#owner-indicator");
   const signout=nav.querySelector("#logout-button");
   const links=[
-   ["index.html","War Room","index"],
+   ["index.html","War Room Overview","index"],
    ["index.html#warroom-team","Analyst desks","research"],
    ["index.html#desk-tools","Full market radar","sectors"],
    ["index.html#scenario-matrix","Scenarios","market"],
