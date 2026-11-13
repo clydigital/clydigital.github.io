@@ -5,7 +5,7 @@
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
-import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-matt2";
+import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-evidence1";
 import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
