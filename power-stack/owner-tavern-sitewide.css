@@ -1,0 +1,271 @@
+/* Power Stack / Sitewide Private Market Tavern
+   Other authenticated routes inherit the visual materials of Guildhall Overview.
+   Stylistic only: never alter source-dated price signs, alerts, saved decisions,
+   positions, forms, filters, source links, tables, order state or RLS.
+   The homepage retains its more elaborate owner-tavern-guildhall.css.
+*/
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse{
+ --ps-bg:#0b1916;--ps-sidebar:#0d201a;--ps-panel:#0d281f;--ps-panel-alt:#183328;
+ --ps-panel-soft:#19372b;--ps-stroke:#85643e;--ps-fg:#f4e6cf;
+ --ps-subtle:#ceccb5;--ps-blue:#c58d46;--ps-blue-bright:#f2c884;
+ --ps-blue-glow:rgba(196,143,67,.13);
+ background:linear-gradient(115deg,rgba(4,20,19,.94),rgba(15,24,20,.86)),
+ url("./assets/tavern/walnut-wall-panel.svg") center top/430px 250px repeat,
+ #081b1a!important;
+ color:#f1e6d3!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header.site-header{
+ background:
+ linear-gradient(90deg,rgba(3,17,16,.88),rgba(8,29,25,.77) 80%,rgba(40,22,12,.46)),
+ url("./assets/tavern/walnut-wall-panel.svg") center top/420px auto repeat-y,#0a1d18!important;
+ border-right:5px ridge #86592b!important;
+ box-shadow:inset -7px 0 15px rgba(0,0,0,.44),0 4px 20px rgba(0,0,0,.35)!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .wrap.nav{
+ gap:27px!important;padding:26px 15px 25px!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .brand{
+ position:relative;display:flex!important;justify-content:center;align-items:center!important;
+ padding:18px 7px 30px!important;margin:0 -3px!important;
+ background:linear-gradient(145deg,#0b2e23,#051d18)!important;
+ border:3px double rgba(212,166,92,.85)!important;
+ border-radius:14px 14px 4px 4px!important;
+ box-shadow:inset 0 0 0 2px #09140f,0 7px 16px rgba(0,0,0,.29)!important;
+ font:700 18px/1.18 Georgia,serif!important;letter-spacing:.045em!important;
+ color:#f7e6c4!important;text-align:center;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .brand::after{
+ content:"PRIVATE MARKET TAVERN";position:absolute;bottom:9px;left:0;right:0;
+ color:#d9b67c;font:750 9px/1.3 Figtree,sans-serif;letter-spacing:.14em;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .brand small{
+ font-size:0!important;margin:0!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .ps-pulse-mark{
+ background:linear-gradient(130deg,#daaf67,#8c602a)!important;
+ border:1px solid #efd39a!important;border-radius:5px!important;
+ color:#ffedc9!important;box-shadow:0 3px 11px rgba(150,87,23,.25)!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-sidebar-label{
+ color:#e1c38f!important;border-bottom:1px solid rgba(221,166,91,.33);
+ padding-bottom:11px;letter-spacing:.16em!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-nav{
+ border-left:1px solid rgba(189,122,61,.24);padding-left:4px;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-nav>a:not(.brand),
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-more>summary{
+ color:#e9dcc1!important;border-bottom:1px solid rgba(188,117,55,.2)!important;
+ font:650 13px/1.32 Figtree,sans-serif!important;
+ border-radius:5px!important;min-height:46px!important;padding:13px 12px!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-nav>a:is(:hover,:focus-visible),
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-more>summary:is(:hover,:focus-visible){
+ background:linear-gradient(95deg,rgba(156,93,29,.38),rgba(9,57,39,.5))!important;
+ border:1px solid #bb8550!important;color:#fff4dc!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"]{
+ background:linear-gradient(110deg,#683e1f,#1a4034)!important;
+ border:1px solid #cf9d5c!important;border-left:4px solid #f2c47e!important;
+ box-shadow:inset 0 0 7px rgba(252,173,73,.16),0 0 14px rgba(227,143,45,.15)!important;
+ color:#fff2da!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .ps-advisor-nav>a svg{
+ color:#dcb16c!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .gate-logout{
+ border:1px solid #a87941!important;background:linear-gradient(100deg,#17372c,#1b2b27)!important;
+ color:#f0dbb8!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #site-header .owner-label{
+ color:#d2b179!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main.wrap,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main.shell,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shell{
+ max-width:1530px!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main :is(h1,h2,h3),
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero h1,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-shell h2{
+ color:#fff0d7!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main :is(h1,h2){
+ font-family:Georgia,"Times New Roman",serif!important;
+ font-weight:700!important;letter-spacing:-.027em!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main :is(.eyebrow,.pso-overline,.psd-overline){
+ color:#e9bc75!important;letter-spacing:.13em!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main a{
+ text-underline-offset:3px;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse main a:is(:hover,:focus-visible){
+ color:#ffe1a4!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero{
+ position:relative;overflow:hidden;isolation:isolate;min-height:247px!important;
+ display:flex;align-items:center;justify-content:space-between;
+ background:
+  linear-gradient(90deg,rgba(2,22,20,.95),rgba(4,24,22,.83) 59%,rgba(6,28,24,.56)),
+  url("./assets/tavern/tavern-room-guildhall-1400.webp") center 43% /cover no-repeat!important;
+ border:4px ridge #a3733e!important;border-radius:14px!important;
+ padding:31px 33px!important;margin-top:10px!important;
+ box-shadow:inset 0 0 0 2px #24140a,inset 0 -11px 13px rgba(0,0,0,.23),
+ 0 11px 22px rgba(0,0,0,.31)!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero:after{
+ content:"";position:absolute;left:0;right:0;bottom:0;height:13px;
+ background:linear-gradient(180deg,#5b2c13,#d39548 35%,#75461d 68%,#311908);
+ border-top:1px solid #d6a363;pointer-events:none;z-index:0;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero>*{position:relative;z-index:1}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero h1{
+ font-size:clamp(33px,3.9vw,59px)!important;line-height:1.13!important;
+ text-shadow:0 3px 14px rgba(0,0,0,.86)!important;max-width:680px!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero>div>p:not(.eyebrow){
+ color:#f1e3cb!important;max-width:70ch;font-size:14px!important;
+ line-height:1.65!important;text-shadow:0 2px 8px #000;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shortcuts a,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shortcuts button{
+ border:2px ridge #c1975c!important;
+ background:linear-gradient(110deg,rgba(10,47,37,.95),rgba(24,45,35,.98))!important;
+ color:#f6e8c9!important;border-radius:7px!important;
+ box-shadow:inset 0 0 0 1px rgba(249,195,97,.11);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shortcuts button:is(:hover,:focus-visible),
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shortcuts a:is(:hover,:focus-visible){
+ border-color:#f4c77d!important;color:#ffe6b3!important;
+}
+/* Opportunity terminal cards: green felt and brass rims, not speculative buy signals. */
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-shell{
+ background:linear-gradient(140deg,#072a23,#0a1e20 78%)!important;
+ border:4px ridge #967041!important;border-radius:12px!important;
+ box-shadow:inset 0 0 0 2px #13251e,0 11px 21px rgba(0,0,0,.28);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-overline{
+ color:#e0b675!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-lead{
+ color:#dfddc6!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-path{
+ border:2px ridge #9c7a4d!important;border-radius:7px!important;
+ background:linear-gradient(140deg,#16352e,#132625)!important;
+ color:#fff0d5!important;box-shadow:inset 0 0 0 1px rgba(231,180,102,.1);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-path:is(:hover,:focus-visible){
+ border-color:#e5b978!important;background:#234438!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-card,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-radar-item{
+ border:1px solid #8d754c!important;border-top:2px solid #b0874e!important;
+ background:#102d29!important;border-radius:7px!important;
+ box-shadow:inset 0 1px 0 rgba(238,196,127,.09);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-card strong,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-card h3{
+ color:#fff1dc!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-condition{
+ background:#25342a!important;border-left-color:#dca45a!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-details summary{
+ color:#f3d29b!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-filters button:not([aria-pressed="true"]){
+ background:#16362c!important;color:#dfd6bd!important;border-color:#9a7c50!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-filter[aria-pressed="true"]{
+ background:#d6bc84!important;color:#13261d!important;border-color:#e5cb94!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-close-grid{
+ border-color:#9d835b!important;background:#0f332d!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-close-card{
+ border-color:#9d835b!important;background:#143227!important;
+}
+/* Research, saving and portfolio surfaces remain opaque, editable and source-first. */
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-tracked-drawer,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-editor{
+ border:3px ridge #9d7544!important;background:linear-gradient(145deg,#0b2a25,#102321)!important;
+ box-shadow:0 9px 20px rgba(0,0,0,.23);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-tracked-summary{
+ color:#ffe2af!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-card{
+ background:#132c28!important;border:1px solid #8c754e!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-tools input,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-tools select,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-editor input,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-editor select{
+ background:#09231e!important;border:1px solid #977a52!important;
+ color:#f8e6d0!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-editor input:focus-visible,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-editor select:focus-visible{
+ outline:2px solid #edbc73!important;outline-offset:2px;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-top{
+ border-bottom:2px solid #a17845!important;padding-bottom:21px!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-top h1{
+ font:700 clamp(34px,3.4vw,49px)/1.12 Georgia,serif!important;
+ color:#fff0d7!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-executive-main,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-summary-metrics,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-lane,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-ideas-panel{
+ background:#112e27!important;border:3px ridge #917448!important;border-radius:11px!important;
+ box-shadow:inset 0 0 0 1px #10221c,0 6px 15px rgba(0,0,0,.24);
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-summary-metric,
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-card{
+ background:#18352a!important;border:1px solid #8e7955!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-top-actions a{
+ background:#193b31!important;border:2px ridge #b38a51!important;
+ color:#fbe9c5!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-top-actions a.psd-primary-link{
+ background:#4b5d38!important;border-color:#c29c59!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psd-root .psd-ticker{
+ color:#f1c27d!important;
+}
+/* A neutral resting surface for dated sector/portfolio research without changing tables. */
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main section:not(.psi-hero):not(.pso-shell):not(.psi-tools):not(.psd-executive){
+ border-color:#87744e;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse #private-main :is(input,select,textarea):focus-visible{
+ outline-color:#f1c67d!important;
+}
+html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse :is(a,button,summary):focus-visible{
+ outline:2px solid #f0cb87!important;outline-offset:3px;
+}
+@media(max-width:850px){
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero{
+  padding:22px!important;min-height:0!important;flex-wrap:wrap;
+ }
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero h1{
+  font-size:clamp(30px,5.5vw,43px)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-card,
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-shortcuts a{
+  animation:none!important;transition:none!important;
+ }
+}
+@media(forced-colors:active){
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-hero,
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .pso-shell,
+ html[data-private-page]:not([data-private-page="index"]) body.ps-fin-pulse .psi-card{
+  border:2px solid CanvasText!important;
+ }
+}
