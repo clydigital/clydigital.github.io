@@ -235,3 +235,37 @@ test("radar-tavern live skin uses committed decorative assets without changing m
   assert(!/\b(?:href|xlink:href)\s*=\s*["']https?:\/\/|<script|onload=|onerror=/i.test(art),"Decorative SVG must be self-contained");
  }
 });
+
+
+test("guildhall homepage matches selected tavern mockup without fabricating its market numbers",()=>{
+ const html=read("index.html"),js=read("owner-radar-workspace.mjs"),skin=read("owner-tavern-guildhall.css");
+ assert(html.includes('owner-tavern-guildhall.css?v=20261113-gh2'));
+ assert(html.indexOf('owner-tavern-guildhall.css')>html.indexOf('owner-tavern-theme.css'));
+ for(const item of ["psr-tavern-hero-instruments","psr-tavern-hero-radar",
+  "psr-tavern-radar-board","psr-tavern-house-watch","psr-tavern-house-table",
+  "psr-tavern-mini-blip","psr-tavern-signal-stamp"]){
+  assert(js.includes(item),"Missing functional dashboard element: "+item);
+  assert(skin.includes(item),"Missing visual treatment: "+item);
+ }
+ assert(js.includes("renderTavernHero();renderHouseWatch()"),
+  "Real source-dated market changes must refresh both tavern modules");
+ assert(js.includes('q?.basis==="Exchange close"&&q.session===stats.session'));
+ assert(js.includes('q?.session===session&&q.basis==="Exchange close"'));
+ assert(js.includes('const stats=summarizeTrackedCloses(state?.priceMap)'));
+ assert(js.includes('button.dataset.watchTicker=ticker'));
+ assert(js.includes('openWorkspace("#market-table")'));
+ for(const token of ['tavern-room-guildhall-1400.webp','brass-radar-face.svg',
+  'radar-sweep-layer.svg','walnut-wall-panel.svg','empty-brass-plaque.svg',
+  '@media(max-width:740px)','@media(prefers-reduced-motion:reduce)',
+  'html[data-private-page="index"]']){
+  assert(skin.includes(token),"Missing themed asset or accessibility rule: "+token);
+ }
+ assert(!/MARKET LIVE|Bullish Signals\s*24|Neutral\s*37|BUY NOW|service_role|sb_secret_|\bcash_delta\b/i.test(skin),
+  "Decorative CSS must never display fabricated live or owner-private data");
+ assert(!/MARKET LIVE|Bullish Signals|const fakeQuotes|const samplePrices/i.test(js),
+  "Market signals must derive from authenticated source-dated data");
+ const photo=readFileSync(new URL("../assets/tavern/tavern-room-guildhall-1400.webp",import.meta.url));
+ assert(photo.length>20000&&photo.length<140000);
+ assert.equal(photo.toString("ascii",0,4),"RIFF");
+ assert.equal(photo.toString("ascii",8,12),"WEBP");
+});
