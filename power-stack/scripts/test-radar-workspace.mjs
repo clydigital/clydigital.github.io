@@ -300,7 +300,7 @@ test("War Room is the owner-gated decision entry point and preserves legacy rese
     assert(war.includes(desk),"Missing analyst desk "+desk);
   for(const critical of ["What the evidence says","THE CALL","WHY IT MATTERS","What would change this view?","Did the investment call change?"])
     assert(war.includes(critical),critical);
-  assert(war.includes("No saved decisions verified."));
+  assert(war.includes("No saved decision revisions verified."));
   assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
 });
 
