@@ -87,7 +87,7 @@ function mountWarRoom(workspace,getState,{asOf}={}){
    '<p class="psw-hero-note">The personality is theatrical. The analysis is source-dated, conditional and review-only. No trade or independent research task is automatically executed.</p>',
    '<div class="psw-hero-actions"><a class="psw-primary" href="#warroom-team">Hear from the desks ↓</a><a href="#warroom-changes">What changed ↓</a><a href="ideas.html">Trade & investment ideas ↗</a></div></div>',
    '<aside class="psw-situation"><p class="psw-eyebrow">INTELLIGENCE CLOCK</p><h2>Before we trade, verify.</h2>',
-   '<dl><div><dt>Market price feed</dt><dd id="psw-price-date">Checking…</dd></div>',
+   '<dl><div><dt>Price feed generated</dt><dd id="psw-price-date">Checking…</dd></div>',
    '<div><dt>Last saved decision</dt><dd id="psw-decision-date">Checking…</dd></div>',
    '<div><dt>Scenario methodology</dt><dd id="psw-research-date">Checking…</dd></div></dl>',
    '<p class="psw-caveat">A dated observation is not a live trade signal. Missing evidence stays missing.</p></aside></div>',
@@ -101,7 +101,7 @@ function mountWarRoom(workspace,getState,{asOf}={}){
    '<section class="psw-team" id="warroom-team" aria-labelledby="psw-team-h"><div class="psw-section-heading"><div><p class="psw-eyebrow">03 / THE ANALYSTS</p><h2 id="psw-team-h">The team gives you the rundown.</h2></div></div>',
    '<p class="psw-section-lead">Choose a desk to see its reasoning, standing instructions, confirmation and no-go conditions. Desk names are presentation roles, not independent agents.</p>',
    '<div class="psw-team-layout"><div id="psw-tabs" class="psw-tabs" role="tablist" aria-label="Choose analyst desk"></div><article id="psw-analyst-panel" class="psw-analyst-panel" role="tabpanel" tabindex="0"></article></div></section>',
-   '<section class="psw-orders" aria-labelledby="psw-orders-h"><div class="psw-section-heading"><div><p class="psw-eyebrow">04 / MONDAY ORDERS</p><h2 id="psw-orders-h">From research to a decision.</h2></div></div>',
+   '<section class="psw-orders" aria-labelledby="psw-orders-h"><div class="psw-section-heading"><div><p class="psw-eyebrow">04 / CURRENT DESK ORDERS</p><h2 id="psw-orders-h">From research to a decision.</h2></div></div>',
    '<div class="psw-orders-grid"><article><strong>VERIFY</strong><p>Check official data, source date and contradictions before repeating a story.</p></article>',
    '<article><strong>COMPARE</strong><p>Use rates, AI cash conversion, energy and breadth to update the scenario view.</p></article>',
    '<article><strong>WAIT FOR THE GATE</strong><p>Define the entry trigger, invalidation, position size and catalyst before a trade.</p></article>',
@@ -172,7 +172,7 @@ function mountWarRoom(workspace,getState,{asOf}={}){
       }
       panel.append(ideas);
     }else{
-      panel.append(el("p","psw-desk-empty","No matching owner-tracker research available; this desk is an investigation mandate, not an active trading signal."));
+      panel.append(el("p","psw-desk-empty","No matching owner-tracker research is verified for this desk. Its instructions describe investigation requirements, not a trading signal."));
     }
   }
   function render(){
