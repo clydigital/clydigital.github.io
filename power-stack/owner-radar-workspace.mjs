@@ -5,8 +5,8 @@
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
-import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-evidence1";
-import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
+import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-evidence2";
+import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261114-ps1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
@@ -20,13 +20,15 @@ export const MARKET_THEMES=Object.freeze([
  {id:"power",name:"Power & Nuclear",symbol:"✧",description:"Electricity, grid supply and nuclear investment",tickers:["BWXT","CCJ","CEG","LEU","SMR","PWR","ETN","NVT","GEV","VST","TENAGA","YTLPOWR","1164.HK","1816.HK"]},
  {id:"china",name:"China & Asia Tech",symbol:"▣",description:"China compute, manufacturing and Hong Kong",tickers:["688825","9988.HK","3191.HK","3308.HK","6809.HK"]},
  {id:"agri",name:"Fertilisers & Agriculture",symbol:"✳",description:"Nutrients, food supply and natural resources",tickers:["CF","NTR","CTVA","BG","VMI"]},
+ {id:"aviation",name:"Airlines & Airport Operations",symbol:"✈",description:"Operational recovery, cancellations and fuel cost",tickers:["DAL","UAL","AAL","JBLU","JETS"]},
+ {id:"govsystems",name:"Government & Aerospace Systems",symbol:"⬡",description:"FAA surveillance and procurement evidence, not automatic windfalls",tickers:["RTX","LHX"]},
  {id:"consumer",name:"Consumer & Industrials",symbol:"▤",description:"Consumer demand, mobility and industrials",tickers:["GRAB","TSLA","SPCX","AAPL","SYM","MNHLDG","FCFS","6742UW"]},
  {id:"crypto",name:"Crypto & High Beta",symbol:"◎",description:"Digital assets and high-beta exposures",tickers:["BTC","COIN","MSTR"]}
 ]);
 export const THEME_ICON_NAMES=Object.freeze({
  ai:"cpu",equities:"bars",europe:"globe",energy:"fuel",shipping:"ship",
  bonds:"landmark",metals:"gem",power:"orbit",china:"building",agri:"sprout",
- consumer:"truck",crypto:"coins",
+ consumer:"truck",aviation:"network",govsystems:"shield",crypto:"coins",
 });
 export const SCENARIOS=Object.freeze([
  {id:"oil-escalation",name:"Hormuz disruption worsens",family:"oil",kind:"Supply shock",
@@ -34,67 +36,91 @@ export const SCENARIOS=Object.freeze([
   test:"Verify UKMTO incidents, complete vessel transits, Brent, distillate cracks, inventories and insurance.",
   falsifier:"Sustained safe commercial transit and narrowing delivered-product premiums.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"down",equities:"down",energy:"up",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
+  impact:{ai:"down",equities:"down",energy:"up",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown",aviation:"down",govsystems:"mixed"}},
  {id:"oil-reopening",name:"Hormuz routes normalise",family:"oil",kind:"Supply relief",
   premise:"Sustained safe shipping and fuel availability improve; war premia and freight costs ease.",
   test:"Require repeated complete vessel transits, fewer incidents, insured access and product restocking.",
   falsifier:"Renewed strikes, missing traffic evidence or persistent diesel/LNG tightness.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"up",equities:"up",energy:"down",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"mixed",europe:"unknown"}},
+  impact:{ai:"up",equities:"up",energy:"down",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"mixed",europe:"unknown",aviation:"up",govsystems:"neutral"}},
  {id:"fuel-scarcity",name:"Diesel stays tight, crude eases",family:"fuels",kind:"Product divergence",
   premise:"Crude falls while diesel/refining availability remains constrained.",
   test:"Compare matched diesel cracks, refinery utilisation, distillate inventories and freight rates.",
   falsifier:"Product stocks rebuild and crack spreads narrow alongside crude.",
   source:"https://bluebelly-desk.vercel.app/hormuz",
-  impact:{ai:"mixed",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"mixed",europe:"unknown"}},
+  impact:{ai:"mixed",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"mixed",europe:"unknown",aviation:"down",govsystems:"neutral"}},
  {id:"hot-inflation",name:"Hot CPI / Treasury yields rise",family:"rates",kind:"Rate shock",
   premise:"Persistent inflation pushes real yields and expected funding costs higher.",
   test:"Confirm in BLS releases, matched 2Y/10Y/30Y nominal and real yields and credit spreads.",
   falsifier:"Cooling core inflation and lower real yields persist across matched sessions.",
   source:"https://bluebelly-desk.vercel.app/regime-watch",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"down",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"down",metals:"mixed",power:"mixed",china:"down",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown",aviation:"down",govsystems:"mixed"}},
  {id:"rates-relief",name:"Inflation eases / yields decline",family:"rates",kind:"Funding relief",
   premise:"Inflation moderates without an earnings collapse and real yields retreat.",
   test:"Confirm CPI/PCE composition, TIPS yields, Fed path, credit and issuer revisions.",
   falsifier:"Renewed energy inflation or higher long real yields undermines relief.",
   source:"https://bluebelly-desk.vercel.app/regime-watch",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"up",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"up",metals:"mixed",power:"up",china:"up",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown",aviation:"up",govsystems:"mixed"}},
  {id:"equity-stress",name:"Equities fall / credit tightens",family:"equities",kind:"Risk-off",
   premise:"Index selling broadens beyond megacaps and credit-market financing conditions deteriorate.",
   test:"Compare SPY/RSP breadth, HY and IG spreads, issuance, earnings revisions and bank provisions.",
   falsifier:"Breadth recovers, refinancing remains accessible and credit spreads stabilise.",
   source:"https://bluebelly-desk.vercel.app/crash-opportunity",
-  impact:{ai:"down",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"down",consumer:"down",crypto:"down",europe:"unknown"}},
+  impact:{ai:"down",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"down",agri:"down",consumer:"down",crypto:"down",europe:"unknown",aviation:"down",govsystems:"mixed"}},
  {id:"equity-recovery",name:"Broader equity recovery",family:"equities",kind:"Breadth improvement",
   premise:"Equal-weight participation, earnings and credit conditions improve together.",
   test:"Use matched SPY/RSP returns, advance/decline breadth, sector participation and HY spreads.",
   falsifier:"Rally narrows, earnings guidance deteriorates or spreads widen materially.",
   source:"https://bluebelly-desk.vercel.app/crash-opportunity",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"up",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"up",consumer:"up",crypto:"up",europe:"unknown"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"up",bonds:"mixed",metals:"mixed",power:"up",china:"up",agri:"up",consumer:"up",crypto:"up",europe:"unknown",aviation:"up",govsystems:"mixed"}},
  {id:"ai-financing",name:"AI funding / cash-flow squeeze",family:"ai",kind:"Capital pressure",
   premise:"Debt service, leases and infrastructure capex outrun realised customer cash conversion.",
   test:"Compare original issuer filings, cash receipts, debt costs, utilisation and capex commitments.",
   falsifier:"Cash receipts, interest coverage and paid utilisation improve sustainably.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/ai",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"down",china:"mixed",agri:"mixed",consumer:"mixed",crypto:"down",europe:"unknown"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"down",china:"mixed",agri:"mixed",consumer:"mixed",crypto:"down",europe:"unknown",aviation:"neutral",govsystems:"neutral"}},
  {id:"ai-monetisation",name:"AI adoption converts to cash",family:"ai",kind:"Earnings confirmation",
   premise:"Paid utilisation, cloud margins and free cash conversion validate the AI investment cycle.",
   test:"Verify revenue quality, cash receipts, returns on invested capital and capital discipline.",
   falsifier:"Utilisation disappoints or recurring capex and debt service overwhelm collections.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/ai",
-  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"mixed",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown"}},
+  impact:{ai:"up",equities:"up",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"up",china:"mixed",agri:"mixed",consumer:"up",crypto:"up",europe:"unknown",aviation:"neutral",govsystems:"neutral"}},
+ {id:"ai-export-control",name:"US tightens AI chip export access",family:"ai-policy",kind:"Security policy",
+  premise:"US officials issue actual new export restrictions or specific Entity List actions. Potential US capacity reallocation is conditional, not an assumed price cut.",
+  test:"Compare Commerce rules, Nvidia licence/customer exposure, order revisions, domestic GPU deliveries and hyperscaler procurement economics.",
+  falsifier:"No material new restrictions or customer cash flows and pricing remain unchanged despite policy headlines.",
+  source:"https://www.bis.gov/",
+  impact:{ai:"mixed",equities:"mixed",energy:"neutral",shipping:"neutral",bonds:"neutral",metals:"neutral",power:"mixed",china:"mixed",agri:"neutral",consumer:"neutral",crypto:"neutral",europe:"mixed",aviation:"neutral",govsystems:"mixed"}},
+ {id:"faa-backlog",name:"FAA disruptions persist beyond Friday",family:"faa",kind:"Aviation recovery delay",
+  premise:"Repeated system failures or slow plane/crew repositioning create further cancelled flights and direct airline operating costs.",
+  test:"Verify FAA operational advisories, matched flight completion/cancellation rates, airline guidance and a confirmed final technical cause.",
+  falsifier:"Airlines restore normal schedules, and the FAA network holds without material residual cost.",
+  source:"https://apnews.com/article/f81b0904331dafad6133f291e5f531a8",
+  impact:{ai:"neutral",equities:"mixed",energy:"mixed",shipping:"neutral",bonds:"neutral",metals:"neutral",power:"neutral",china:"neutral",agri:"neutral",consumer:"mixed",crypto:"neutral",europe:"neutral",aviation:"down",govsystems:"mixed"}},
+ {id:"faa-recovery",name:"FAA network and flights normalise",family:"faa",kind:"Operational recovery",
+  premise:"The stop remains lifted, commercial flight schedules recover and additional operational losses prove limited.",
+  test:"Require matched FAA notices, flight completion, cancellation recovery and airline cost disclosures after 13 November.",
+  falsifier:"Recurring network instability or multi-day airline schedule disruption causes substantial incremental losses.",
+  source:"https://www.faa.gov/",
+  impact:{ai:"neutral",equities:"neutral",energy:"neutral",shipping:"neutral",bonds:"neutral",metals:"neutral",power:"neutral",china:"neutral",agri:"neutral",consumer:"neutral",crypto:"neutral",europe:"neutral",aviation:"up",govsystems:"neutral"}},
+ {id:"faa-funded-modernisation",name:"Incremental FAA contracts funded",family:"faa-funding",kind:"Procurement acceleration",
+  premise:"Congress authorises incremental modernisation and the FAA awards funded, commercially material contracts beyond pre-outage programmes.",
+  test:"Check appropriations, signed contract amendments, named recipients, delivery times, margins and revenue materiality.",
+  falsifier:"Only existing awards are repeated in headlines or new funding fails to create material incremental cash flow.",
+  source:"https://www.faa.gov/newsroom/trumps-transportation-secretary-duffy-faa-administrator-bedford-announce-radar-contracts",
+  impact:{ai:"neutral",equities:"neutral",energy:"neutral",shipping:"neutral",bonds:"neutral",metals:"neutral",power:"neutral",china:"neutral",agri:"neutral",consumer:"neutral",crypto:"neutral",europe:"neutral",aviation:"mixed",govsystems:"up"}},
  {id:"yen-unwind",name:"Yen carry unwind accelerates",family:"fx",kind:"Funding / FX",
   premise:"Yen strength is accompanied by verified deleveraging and dollar-funding spillovers.",
   test:"Match USDJPY, JGB-US rate spreads, cross-yen breadth and actual basis/funding stress.",
   falsifier:"Funding stays orderly and carry crosses stabilise despite yen strength.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/yen",
-  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown"}},
+  impact:{ai:"down",equities:"down",energy:"mixed",shipping:"mixed",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"mixed",consumer:"down",crypto:"down",europe:"unknown",aviation:"down",govsystems:"neutral"}},
  {id:"housing-credit",name:"Housing-led credit downturn",family:"housing",kind:"Household stress",
   premise:"Housing weakness broadens into delinquencies, lender losses and household consumption.",
   test:"Mortgage rates, new-home starts, delinquency transitions, bank provisions and HY spreads.",
   falsifier:"Affordability and housing activity recover without loan-quality deterioration.",
   source:"https://bluebelly-desk.vercel.app/regime-watch/housing",
-  impact:{ai:"mixed",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"down",europe:"unknown"}}
+  impact:{ai:"mixed",equities:"down",energy:"down",shipping:"down",bonds:"mixed",metals:"mixed",power:"mixed",china:"mixed",agri:"down",consumer:"down",crypto:"down",europe:"unknown",aviation:"down",govsystems:"mixed"}}
 ]);
 const IMPACT=Object.freeze({
  up:{symbol:"↑",label:"Tailwind",css:"up"},
@@ -106,8 +132,8 @@ const IMPACT=Object.freeze({
 });
 const SCENARIO_BY_ID=new Map(SCENARIOS.map(s=>[s.id,s]));
 const TICKER_THEMES=new Map(MARKET_THEMES.flatMap(theme=>theme.tickers.map(id=>[id,theme.id])));
-export const RADAR_WATCH=["NVDA","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX","ADBE","CI","CVS","JBL"];
-export const POINTS=[[21,32],[68,21],[81,46],[62,67],[34,75],[14,57],[47,24],[74,81],[42,51],[88,28],[11,34],[56,91],[94,64],[28,10]];
+export const RADAR_WATCH=["NVDA","CSCO","NBIS","DAL","RTX","GOOGL","SMH","TLT","XOM","CF","CRWV","GRAB","BWXT","CVX","ADBE","CI","CVS","JBL"];
+export const POINTS=[[21,32],[68,21],[81,46],[62,67],[34,75],[14,57],[47,24],[74,81],[42,51],[88,28],[11,34],[56,91],[94,64],[28,10],[16,87],[73,53],[36,45],[83,14]];
 function node(tag,cls,value){
  const element=document.createElement(tag);
  if(cls)element.className=cls;
@@ -153,7 +179,7 @@ export function scenarioPair(a,b){
  const one=SCENARIO_BY_ID.get(a),two=SCENARIO_BY_ID.get(b);
  if(!one||!two)return {compatible:false,reason:"Unknown scenario"};
  if(one.id===two.id)return {compatible:false,reason:"Select different scenarios"};
- if(one.family===two.family&&["oil","rates","equities","ai"].includes(one.family))
+ if(one.family===two.family&&["oil","rates","equities","ai","faa"].includes(one.family))
   return {compatible:false,reason:"These describe opposing outcomes for the same driver. Compare them separately, not as simultaneous shocks."};
  return {compatible:true,reason:"Qualitative overlap, not a probability or forecast"};
 }
