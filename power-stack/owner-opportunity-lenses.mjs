@@ -1,7 +1,7 @@
 // Research-only opportunity content shared between the private-home overview and detailed idea reader.
 // Public source code contains no private positions, holdings, cash or authenticated decisions.
 export const LENS_CONTRACT="power-stack-opportunity-lenses/1";
-export const LENS_EDITION="2026-11-13";
+export const LENS_EDITION="2026-11-14";
 export const OPPORTUNITY_LENSES=Object.freeze([
   {
     "id": "missing",
@@ -40,6 +40,104 @@ export const OPPORTUNITY_LENSES=Object.freeze([
   }
 ]);
 export const LENS_CASES=Object.freeze([
+  {
+    "ticker": "CSCO",
+    "name": "Cisco",
+    "lens": "value",
+    "action": "INVESTIGATE",
+    "why": "Q1 FY27 revenue rose 24% and non-GAAP EPS 40%; raised guidance versus an 11% 20-session share fall. RSI14 37.1, no daily band reclaim.",
+    "test": "Reconcile FY27 EPS $5.47–5.53 against cash, margin mix, AI order growth and a $97.78 lower EMA20 band reclaim.",
+    "reviewBy": "2026-11-20",
+    "source": "https://investor.cisco.com/financials/quarterly-results/",
+    "risk": "Hardware mix, gross-margin compression and slower order momentum",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "NBIS",
+    "name": "Nebius",
+    "lens": "spec",
+    "action": "WAIT",
+    "why": "Down 30.0% over 20 sessions; RSI14 35.8. Revenue/capacity delays and large capex complicate the bargain case.",
+    "test": "Verify funded capacity, customer prepayments and diluted FCF; require lower EMA20 band (~$134.08) reclaim and retest.",
+    "reviewBy": "2026-11-20",
+    "source": "https://ir.nebius.com/",
+    "risk": "Leverage, dilution, capex and operating delays",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "lens": "spec",
+    "action": "WAIT",
+    "why": "Revenue growth faces a much larger interest/capex bill; RSI14 43.1 is not an oversold signal.",
+    "test": "Reconcile debt interest, utilisation, capex, advance receipts and customer concentration before a buy case.",
+    "reviewBy": "2026-11-20",
+    "source": "https://investors.coreweave.com/",
+    "risk": "Funding costs, collateral, customer concentration and dilution",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "DAL",
+    "name": "Delta Air Lines",
+    "lens": "catalyst",
+    "action": "WATCH",
+    "why": "FAA ground stop lifted; operating normalisation could aid sentiment. RSI14 53.9 and +14.4% 20-session return are not oversold.",
+    "test": "Check 16 Nov flights, cancellations, fuel, FY26 FCF and debt before classifying an event rebound.",
+    "reviewBy": "2026-11-16",
+    "source": "https://ir.delta.com/",
+    "risk": "Crew dislocation, fuel, weaker demand and flight costs",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "UAL",
+    "name": "United Airlines",
+    "lens": "catalyst",
+    "action": "WATCH",
+    "why": "Stronger operating momentum but FAA recovery is not a capitulation bargain; RSI14 49.8.",
+    "test": "Compare Monday completion/cancellations with earnings and short-term flight cost; no automatic gap trade.",
+    "reviewBy": "2026-11-16",
+    "source": "https://ir.united.com/",
+    "risk": "Disruption duration, fuel and high operating leverage",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "RTX",
+    "name": "RTX",
+    "lens": "quality",
+    "action": "WATCH",
+    "why": "FAA radar award predates outage. RSI14 54: no oversold condition; assess incremental economics instead.",
+    "test": "Validate newly appropriated funds, contract modifications, margins and valuation versus existing backlog.",
+    "reviewBy": "2026-12-01",
+    "source": "https://www.faa.gov/newsroom/trumps-transportation-secretary-duffy-faa-administrator-bedford-announce-radar-contracts",
+    "risk": "Valuation and procurement delivery timelines",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "LHX",
+    "name": "L3Harris",
+    "lens": "quality",
+    "action": "WATCH",
+    "why": "Existing FAA surveillance contract supports order evidence; RSI14 59.9 is not a dip.",
+    "test": "Look for funded incremental FAA awards and cash conversion, not speculation about the failed network vendor.",
+    "reviewBy": "2026-12-01",
+    "source": "https://www.l3harris.com/newsroom/press-release/2026/07/faa-awards-l3harris-airspace-surveillance-modernization-contract",
+    "risk": "Programme margins, procurement timing and elevated expectations",
+    "evidenceAsOf": "2026-11-13",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
   {
     "ticker": "NVT",
     "name": "nVent",
@@ -342,7 +440,7 @@ export function renderOpportunityLensSummary({id="ps-opportunity-lenses",compact
  const header=el("div","psl-head"),copy=el("div");
  copy.append(el("p","psl-overline","OPPORTUNITY RESEARCH"),el("h2",null,"Where to look next"),
    el("p","psl-intro","Promising companies, their risks, and what must happen next."));
- header.append(copy,el("span","psl-vintage","13 Nov research · not live trade calls"));section.append(header);
+ header.append(copy,el("span","psl-vintage","14 Nov research · 13 Nov market close · not trade signals"));section.append(header);
  const tabs=el("div","psl-tabs");tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Opportunity categories");
  const panel=el("div","psl-panel");panel.id=id+"-panel";panel.setAttribute("role","tabpanel");panel.tabIndex=0;
  const heading=el("div","psl-panel-head"),cards=el("div","psl-items");panel.append(heading,cards);
