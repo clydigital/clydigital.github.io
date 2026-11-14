@@ -217,7 +217,7 @@ test("browser module versions invalidate cached pre-12-Nov quote display and ear
  assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v=20261114-rooms1"'),page);
+   assert(html.includes('src="auth-gate.mjs?v='+(page==="index"?"20261114-debug1":"20261114-rooms1")+'"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
