@@ -419,6 +419,23 @@ export function installRadarWorkspace(main,getState){
  toolsHeading.setAttribute("aria-label","Expand the original investment decision tools");
  deskTools.append(legacy);
  main.replaceChildren(landing,workspace);
+ // Temporary, opt-in layout diagnostics. Reports only element dimensions and
+ // computed CSS; it never reads owner holdings, account values or research.
+ if(new URLSearchParams(location.search).has("layoutDebug")){
+  requestAnimationFrame(()=>{
+   const top=document.createElement("pre");
+   top.id="ps-layout-debug";
+   top.style.cssText="position:fixed;inset:8px 8px auto 370px;z-index:99999;white-space:pre-wrap;background:#101d21;color:#f1e2b6;padding:12px;border:2px solid #d9a45d;font:12px/1.5 monospace;max-height:38vh;overflow:auto";
+   const targets=[["body",document.body],["main",main],["workspace",workspace],["quick",quick],["hub",hub],["war",warRoomDrawer]];
+   top.textContent="RADAR LAYOUT DIAGNOSTICS 20261114\n"+targets.map(([name,e])=>{
+    const b=e.getBoundingClientRect(),c=getComputedStyle(e);
+    return name+" rect left="+Math.round(b.left)+" width="+Math.round(b.width)+" height="+Math.round(b.height)+
+    " css width="+c.width+" minWidth="+c.minWidth+" display="+c.display+" grid="+c.gridTemplateColumns+
+    " position="+c.position+" maxWidth="+c.maxWidth+" margin="+c.marginLeft+"/"+c.marginRight;
+   }).join("\n");
+   document.body.append(top);
+  });
+ }
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
   landing.hidden=false;workspace.hidden=true;document.body.classList.add("psr-landing-active");
