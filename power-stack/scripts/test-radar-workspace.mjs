@@ -325,13 +325,22 @@ test("specialist rooms keep personalized instructions behind owner RLS",()=>{
    assert(css.includes(cssRule));
  for(const page of ["index","portfolio","ideas","research","sectors","decisions"]){
   const html=read(page+".html");
-  assert(html.includes("owner-command-rooms.css?v=20261114-rooms1"),page+" missing room styles");
+  assert(html.includes("owner-command-rooms.css?v="+(page==="index"?"20261114-width2":"20261114-rooms1")),page+" missing room styles");
  }
  for(const secret of ["YTLPOWR","6742UW","DAYANG","HIBISCS","TSLA","TTWO"])
   assert(!room.includes(secret),"Private holding disclosed in public JS: "+secret);
  assert(!/\.insert\(|\.upsert\(|placeOrder|service_role|brokerQuantity|cash_delta/.test(room));
 });
 
+test("Market Radar cannot collapse into an intrinsic narrow content strip",()=>{ 
+ const css=read("owner-command-rooms.css");
+ const html=read("index.html");
+ assert(css.includes('html[data-private-page="index"] body.ps-fin-pulse main.wrap > .psr-workspace'));
+ assert(css.includes('width:100%!important;'));
+ assert(css.includes('grid-template-columns:minmax(0,1fr)!important;'));
+ assert(css.includes('justify-self:stretch!important;'));
+ assert(html.includes('owner-command-rooms.css?v=20261114-width2'));
+});
 test("Matt leads an evidence-first War Room without standing instruction cards",()=>{
  const war=read("owner-war-room.mjs"),radar=read("owner-radar-workspace.mjs");
  const ideas=read("owner-ideas-tracker.mjs"),css=read("owner-war-room.css");

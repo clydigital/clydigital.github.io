@@ -44,3 +44,52 @@
 @media(max-width:930px){.psr-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:690px){.pscr-root{padding:16px;margin:12px auto 24px}.pscr-grid,.psr-room-grid{grid-template-columns:1fr}.pscr-card{padding:13px}.pscr-links a{flex:1 1 44%;justify-content:center;text-align:center}.psr-room-card{min-height:90px}}
 @media(prefers-reduced-motion:reduce){.pscr-links a,.psr-room-card{transition:none!important}}
+
+/* Radar width regression hotfix, reproduced in authenticated desktop Opera.
+   The pre-existing tavern and War Room grid overrides were written for a
+   different DOM hierarchy. Explicitly size the authenticated main and Radar
+   workspace; prevent anonymous intrinsic grid sizing from collapsing the
+   page into a thin strip beside the navigation. */
+html[data-private-page="index"] body.ps-fin-pulse main.wrap{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:0 clamp(16px,2.5vw,42px)!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse main.wrap > .psr-workspace{
+  box-sizing:border-box!important;
+  display:grid!important;
+  width:100%!important;
+  max-width:1600px!important;
+  min-width:0!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  justify-content:stretch!important;
+  justify-self:stretch!important;
+  align-items:stretch!important;
+  margin:0 auto!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace > *{
+  box-sizing:border-box;
+  grid-column:1/-1!important;
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  justify-self:stretch!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-simple-header{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace > .psw-war-room-drawer,
+html[data-private-page="index"] body.ps-fin-pulse .psr-workspace > #desk-tools{
+  min-width:0!important;
+}
+@media(max-width:760px){
+ html[data-private-page="index"] body.ps-fin-pulse main.wrap{
+  padding:0 12px!important;
+ }
+}
