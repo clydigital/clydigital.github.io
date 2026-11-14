@@ -26,7 +26,7 @@ test("valuation and price evidence stays owner-gated, date-stamped and distinct 
 });
 test("client navigation keeps price watch, research and sign out reachable",()=>{
  const ui=read("owner-advisor-presentation.mjs");
- for(const item of ['Overview','Opportunities','Market watch','Portfolio','Research','Sector research','Company decisions','Past editions'])
+ for(const item of ['Market Radar','Matt\'s War Room','Opportunity Command','Market watch','Holdings Command','Evidence Command','Sector Strategy','Decision Control','Past editions'])
   assert(ui.includes(item),item);
  assert(ui.includes('fragment.append(signout)'));
  assert(ui.includes('backoffice.before(details);details.append(backoffice)'));

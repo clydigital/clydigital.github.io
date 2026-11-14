@@ -36,15 +36,15 @@ export function presentClientView(page,main){
   const owner=nav.querySelector("#owner-indicator");
   const signout=nav.querySelector("#logout-button");
   const links=[
-   ["index.html","War Room Overview","index"],
-   ["index.html#warroom-team","Analyst desks","research"],
-   ["index.html#desk-tools","Full market radar","sectors"],
-   ["index.html#scenario-matrix","Scenarios","market"],
-   ["portfolio.html#holdings","My holdings","portfolio"],
+   ["index.html","Market Radar","index"],
+   ["index.html#war-room","Matt's War Room","warroom"],
+   ["portfolio.html#holdings","Holdings Command","portfolio"],
+   ["ideas.html","Opportunity Command","ideas"],
+   ["ideas.html#trades","Trade Setup Command","trades"],
    ["portfolio.html#watchlist","Market watch","market"],
-   ["portfolio.html#bonds","Bond ETFs","bonds"],
-   ["ideas.html","Opportunities","ideas"],
-   ["research.html","Research","research"]
+   ["index.html#scenario-matrix","Scenario Matrix","scenarios"],
+   ["portfolio.html#bonds","Bond Strategy","bonds"],
+   ["research.html","Evidence Command","research"]
   ];
   const fragment=document.createDocumentFragment();
   const label=document.createElement("p");label.textContent="YOUR WORKSPACE";label.className="ps-sidebar-label";fragment.append(label);
@@ -54,7 +54,12 @@ export function presentClientView(page,main){
      slug==="market"&&location.hash==="#watchlist"||
      slug==="bonds"&&location.hash==="#bonds"||
      slug==="portfolio"&&!["#watchlist","#bonds"].includes(location.hash));
-   if(page!=="portfolio"&&slug===page||portfolioTab)
+   const ideasTab=page==="ideas"&&(slug==="trades"&&location.hash==="#trades"||
+     slug==="ideas"&&location.hash!=="#trades");
+   const indexTab=page==="index"&&(slug==="warroom"&&location.hash.startsWith("#war")||
+     slug==="index"&&!location.hash.startsWith("#war")&&!location.hash.startsWith("#scenario")||
+     slug==="scenarios"&&location.hash.startsWith("#scenario"));
+   if(page!=="portfolio"&&page!=="ideas"&&page!=="index"&&slug===page||portfolioTab||ideasTab||indexTab)
      a.setAttribute("aria-current","page");
    a.dataset.slug=slug;
    a.prepend(navIcon(slug));fragment.append(a);
@@ -62,9 +67,9 @@ export function presentClientView(page,main){
   const more=document.createElement("details");more.className="ps-advisor-more";
   const summary=document.createElement("summary");summary.textContent="More";more.append(summary);
   const list=document.createElement("div");
-  for(const [href,label] of [["sectors.html","Sector research"],["decisions.html","Company decisions"],["archive.html","Past editions"]]){
+  for(const [href,label] of [["sectors.html","Sector Strategy"],["decisions.html","Decision Control"],["archive.html","Past editions"]]){
    const link=document.createElement("a");link.href=href;link.textContent=label;
-   link.prepend(navIcon(label==="Sector research"?"sectors":label==="Company decisions"?"decisions":"archive"));
+   link.prepend(navIcon(label==="Sector Strategy"?"sectors":label==="Decision Control"?"decisions":"archive"));
    list.append(link);
   }
   more.append(list);fragment.append(more);

@@ -83,7 +83,7 @@ test("first screen stays compact and research remains private and non-executable
  const radar=read("owner-radar-workspace.mjs"),desk=read("owner-decision-desk.mjs"),
   module=read("owner-research-review.mjs");
  assert.match(radar,/renderResearchReview\(reviewStrip,/);
- assert.match(radar,/workspace\.prepend\(quick,reviewStrip,snapshot/);
+ assert.match(radar,/workspace\.prepend\(quick,hub,reviewStrip,snapshot/);
  assert.match(radar,/decisionCount:s\.dataReady\?s\.totalRows:null/);
  assert.match(desk,/power_stack_private_pages/);
  assert.match(desk,/page_key,updated_at/);
@@ -114,7 +114,7 @@ test("research page adds source-dated causal investment analysis after owner aut
  assert(auth.includes('await import("./owner-research-theses.mjs?v=20261113-research1")'));
  const html=read("research.html");
  assert(html.includes("owner-research-theses.css?v=20261113-research1"));
- assert(html.includes("auth-gate.mjs?v=20261113-research1"));
+ assert(html.includes("auth-gate.mjs?v=20261114-rooms1"));
  assert(html.includes('data-private-page="research"'));
  assert(!html.includes("Source-dated investment reasoning"));
 });

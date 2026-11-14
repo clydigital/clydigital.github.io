@@ -79,7 +79,7 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
- assert(html.includes('owner-radar-workspace.css?v=20261113-picks2'));
+ assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
  assert(radar.includes("VIEW TOP STOCK PICKS")&&radar.includes("picksEntry.addEventListener"));
@@ -131,7 +131,7 @@ test("market snapshot uses latest matching completed-session signs and counts mi
 });
 test("simple homepage defaults to direct overview and preserves optional radar and scenario deep links",()=>{
  const radar=read("owner-radar-workspace.mjs"),html=read("index.html"),css=read("owner-calm-layout.css");
- assert(radar.includes('node("h1",null,"Your market, at a glance.")'));
+ assert(radar.includes('node("h1",null,"Market Radar")'));
  assert(radar.includes('if(location.hash==="#radar")'));
  assert(radar.includes('landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active")'));
  assert(radar.includes('if(target==="#scenario-matrix"){matrixDrawer.open=true;'));
@@ -275,33 +275,61 @@ test("Guildhall opportunity lens sits after market boards, before thematic drill
  const radar=read("owner-radar-workspace.mjs");
  const terminal=read("owner-opportunity-terminal.mjs");
  assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
- assert(radar.includes('workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section'));
+ assert(radar.includes('workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,opportunityOverview,section'));
  assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
  assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
  assert(radar.includes('for(const original of originals){if(original!==topPicks)legacy.append(original);}'));
 });
 
 
-test("War Room is the owner-gated decision entry point and preserves legacy research",()=>{
+test("Market Radar is the owner-gated homepage and War Room is deep-linked",()=>{
   const war=read("owner-war-room.mjs");
   const radar=read("owner-radar-workspace.mjs");
   const home=read("index.html"),gate=read("auth-gate.mjs");
   const nav=read("owner-advisor-presentation.mjs");
-  assert(home.includes('owner-war-room.css?v=20261114-evidence1'));
-  assert(home.includes("The War Room · Private Power Stack"));
+  assert(home.includes('owner-war-room.css?v=20261114-rooms1'));
+  assert(home.includes("Market Radar · Private Power Stack"));
   assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
-  assert(radar.includes('mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF})'));
+  assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF})'));
   assert(radar.includes('deskTools.id="desk-tools"'));
   assert(radar.includes('deskTools.open=true'));
+  assert(radar.includes('warRoomDrawer.id="war-room"'));
+  assert(radar.includes('warRoomDrawer.open=true'));
+  assert(radar.includes('deskTools.append(legacy)'));
+  assert(radar.includes('psr-room-grid'));
+  assert(!radar.includes('for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child)'));
   assert(radar.includes('warRoom.render()'));
-  assert(nav.includes('["index.html","War Room Overview","index"]'));
-  assert(nav.includes('["index.html#warroom-team","Analyst desks","research"]'));
+  assert(nav.includes('["index.html","Market Radar","index"]'));
+  assert(nav.includes(`["index.html#war-room","Matt's War Room","warroom"]`));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);
   for(const critical of ["What the evidence says","THE CALL","WHY IT MATTERS","What would change this view?","Did the investment call change?"])
     assert(war.includes(critical),critical);
   assert(war.includes("No saved decision revisions verified."));
   assert(!/\.insert\(|\.upsert\(|placeOrder|sb_secret_|service_role|brokerQuantity|cash_delta/.test(war));
+});
+
+test("specialist rooms keep personalized instructions behind owner RLS",()=>{
+ const room=read("owner-command-rooms.mjs"),css=read("owner-command-rooms.css");
+ const gate=read("auth-gate.mjs"),radar=read("owner-radar-workspace.mjs");
+ const ideas=read("owner-ideas-tracker.mjs");
+ for(const proof of ["Next evidence / action","Reversal / invalidation","ROOM_EDITION","privateRooms","hashchange","Research-only"])
+   assert(room.includes(proof)||room.toLowerCase().includes(proof.toLowerCase()));
+ assert(gate.includes('eq("page_key","index")'));
+ assert(gate.includes('eq("owner_user_id",user.id)'));
+ assert(gate.includes('secureMain(roomPage.body_html)'));
+ assert(gate.includes('mountCommandRoom(PAGE,content,privateRooms)'));
+ assert(radar.includes('index.html#war-room')&&radar.includes("portfolio.html#holdings")&&radar.includes('ideas.html#trades'));
+ assert(ideas.includes('location.hash==="#trades"'));
+ for(const cssRule of [".pscr-root",".psr-room-grid",".pscr-card",".pscr-verdict"])
+   assert(css.includes(cssRule));
+ for(const page of ["index","portfolio","ideas","research","sectors","decisions"]){
+  const html=read(page+".html");
+  assert(html.includes("owner-command-rooms.css?v=20261114-rooms1"),page+" missing room styles");
+ }
+ for(const secret of ["YTLPOWR","6742UW","DAYANG","HIBISCS","TSLA","TTWO"])
+  assert(!room.includes(secret),"Private holding disclosed in public JS: "+secret);
+ assert(!/\.insert\(|\.upsert\(|placeOrder|service_role|brokerQuantity|cash_delta/.test(room));
 });
 
 test("Matt leads an evidence-first War Room without standing instruction cards",()=>{

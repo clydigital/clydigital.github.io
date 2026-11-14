@@ -228,9 +228,11 @@ export async function initIdeasTracker(db,main,user){
  $("psi-search").addEventListener("input",render);
  $("psi-filter").addEventListener("change",render);
  if(location.hash==="#bonds"){$("psi-filter").value="BONDS";trackedDrawer.open=true;}
+  if(location.hash==="#trades"){$("psi-filter").value="TRADE";trackedDrawer.open=true;}
  if(location.hash==="#tracked")trackedDrawer.open=true;
  window.addEventListener("hashchange",()=>{
   if(location.hash==="#bonds"){$("psi-filter").value="BONDS";trackedDrawer.open=true;render();}
+   if(location.hash==="#trades"){$("psi-filter").value="TRADE";trackedDrawer.open=true;render();}
   if(location.hash==="#tracked")trackedDrawer.open=true;
  });
  form.addEventListener("submit",async event=>{

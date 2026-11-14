@@ -242,14 +242,35 @@ export function installRadarWorkspace(main,getState){
  const landingFooter=add(landing,node("p","psr-landing-footer","Delayed observations · not live quotes."));
  const workspace=node("div","psr-workspace");workspace.id="workspace";workspace.hidden=true;
  const quick=add(workspace,node("section","psr-simple-header"));quick.setAttribute("aria-label","Power Stack quick navigation");
- quick.append(node("p","psr-simple-eyebrow","FULL MARKET RADAR"),
-  node("h1",null,"Your market, at a glance."));
+ quick.append(node("p","psr-simple-eyebrow","THE POWER STACK HOMEPAGE"),
+  node("h1",null,"Market Radar"));
+ quick.append(node("p","psr-room-brief","Source-dated market observations below. Open a specialist command room for what the evidence means for your positions, prospects or trades."));
  const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
- for(const [label,url,kind] of [["Explore trade & investment ideas","ideas.html","ideas"],
-  ["Market watch & comparisons","portfolio.html#watchlist","market"],
-  ["My portfolio","portfolio.html","portfolio"]]){
+ for(const [label,url,kind] of [["Matt\x27s War Room","index.html#war-room","warroom"],
+  ["Holdings Command","portfolio.html#holdings","portfolio"],
+  ["Opportunity Command","ideas.html","ideas"],
+  ["Market watch","portfolio.html#watchlist","market"]]){
   const a=add(nav,node("a","psr-simple-link psr-simple-"+kind,label));a.href=url;
   a.prepend(psIcon(kind==="ideas"?"target":kind==="market"?"chart":"wallet","psr-nav-icon"));
+ }
+ const hub=node("section","psr-room-hub");hub.id="command-rooms";
+ hub.setAttribute("aria-label","Specialist decision rooms");
+ const roomHead=add(hub,node("div","psr-room-hub-head"));
+ const roomIntro=add(roomHead,node("div"));
+ roomIntro.append(node("p","psr-simple-eyebrow","YOUR DECISION DESTINATIONS"),
+  node("h2",null,"Go to the room that owns the decision"),
+  node("p",null,"Market Radar shows what moved; each specialist room explains what to do, why, what evidence is missing and what reverses the call."));
+ const roomGrid=add(hub,node("nav","psr-room-grid"));roomGrid.setAttribute("aria-label","Go to specialist rooms");
+ for(const [heading,description,verb,href,mainRoom] of [
+  ["Matt's War Room","Macro causality, analyst conclusions and current regime risks","THE BIG PICTURE","index.html#war-room",true],
+  ["Holdings Command","Hold, reduce or add gates for recorded positions","PROTECT CAPITAL","portfolio.html#holdings",false],
+  ["Opportunity Command","Rank new investment prospects with valuation proof","ALLOCATE NEXT","ideas.html",false],
+  ["Trade Setup Command","Entries, invalidation and short-term risk checks","TIMING & TRADES","ideas.html#trades",false],
+  ["Sector Strategy","Which sub-industries actually win under a scenario?","RELATIVE WINNERS","sectors.html",false],
+  ["Evidence Command","Issuer facts, countercases and reviewed research","VERIFY THE THESIS","research.html",false]
+ ]){
+  const a=add(roomGrid,node("a","psr-room-card"+(mainRoom?" psr-room-main":"")));
+  a.href=href;a.append(node("span","psr-room-verb",verb),node("strong",null,heading),node("small",null,description));
  }
  const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
  radarToggle.prepend(psIcon("compass","psr-nav-icon"));
@@ -385,14 +406,18 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  for(const original of originals){if(original!==topPicks)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(quick,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
- // WAR ROOM FIRST: Keep all previously authenticated tools in one accessible drawer.
- // No source data or owner decisions are changed; only page hierarchy and narration.
+ workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ // Market Radar is the first screen. Matt's source-dated briefing is a separate,
+ // deep-linkable room; the archive stays available without hiding active radar data.
+ const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
+ warRoomDrawer.id="war-room";
+ const warHeading=add(warRoomDrawer,node("summary",null,"Enter Matt's War Room · findings and conclusions"));
+ warHeading.setAttribute("aria-label","Open Matt's War Room with analyst findings");
+ const warRoom=mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF});
  const deskTools=add(workspace,node("details","psw-tools"));deskTools.id="desk-tools";
- const toolsHeading=add(deskTools,node("summary",null,"Market radar, scenarios & decision archive"));
- toolsHeading.setAttribute("aria-label","Expand original market radar and investment decision tools");
- for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child);
- const warRoom=mountWarRoom(workspace,getState,{asOf:RESEARCH_ASOF});
+ const toolsHeading=add(deskTools,node("summary",null,"Open detailed research & decision archive"));
+ toolsHeading.setAttribute("aria-label","Expand the original investment decision tools");
+ deskTools.append(legacy);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
@@ -401,16 +426,19 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
- if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
+ if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  window.addEventListener("hashchange",()=>{
-  if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table"].includes(location.hash))openWorkspace(location.hash);
+  if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  });
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
-  if(["#desk-tools","#advanced-research","#scenario-matrix","#ps-top-stock-picks-20261113","#market-table"].includes(target))deskTools.open=true;
+  if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
+  if(["#desk-tools","#advanced-research"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
-  if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
+  if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
+  else if(target.startsWith("#warroom-"))(main.querySelector(target)||warRoomDrawer).scrollIntoView({block:"start"});
+  else if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
   else if(target==="#scenario-matrix"){matrixDrawer.open=true;matrixDrawer.scrollIntoView({block:"start"});}
   else if(target==="#ps-top-stock-picks-20261113"&&featured){featured.open=true;featured.scrollIntoView({block:"start"});}
   else if(target==="#market-table"){tableDrawer.open=true;tableDrawer.scrollIntoView({block:"start"});}
