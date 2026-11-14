@@ -79,7 +79,7 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
- assert(html.includes('owner-radar-workspace.css?v=20261113-picks2'));
+ assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
  assert(radar.includes("VIEW TOP STOCK PICKS")&&radar.includes("picksEntry.addEventListener"));
@@ -131,7 +131,7 @@ test("market snapshot uses latest matching completed-session signs and counts mi
 });
 test("simple homepage defaults to direct overview and preserves optional radar and scenario deep links",()=>{
  const radar=read("owner-radar-workspace.mjs"),html=read("index.html"),css=read("owner-calm-layout.css");
- assert(radar.includes('node("h1",null,"Your market, at a glance.")'));
+ assert(radar.includes('node("h1",null,"Market Radar")'));
  assert(radar.includes('if(location.hash==="#radar")'));
  assert(radar.includes('landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active")'));
  assert(radar.includes('if(target==="#scenario-matrix"){matrixDrawer.open=true;'));
@@ -287,7 +287,7 @@ test("Market Radar is the owner-gated homepage and War Room is deep-linked",()=>
   const radar=read("owner-radar-workspace.mjs");
   const home=read("index.html"),gate=read("auth-gate.mjs");
   const nav=read("owner-advisor-presentation.mjs");
-  assert(home.includes('owner-war-room.css?v=20261114-evidence1'));
+  assert(home.includes('owner-war-room.css?v=20261114-rooms1'));
   assert(home.includes("Market Radar · Private Power Stack"));
   assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
   assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF})'));
