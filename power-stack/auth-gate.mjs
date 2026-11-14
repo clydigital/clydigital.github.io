@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-evidence1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-rooms1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261114-matt2");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261114-rooms1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
@@ -116,7 +116,7 @@ async function load(){
  // Both presentation stylesheets are loaded by the HTML <head> before first paint.
  // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261114-warroom1");
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261114-rooms1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  if(PAGE==="research"){
@@ -130,6 +130,24 @@ async function load(){
    fallback.textContent="The updated investment reasoning is unavailable. The original private research archive remains accessible.";
    content.prepend(fallback);console.error("Research reasoning unavailable",error);
   }
+ }
+ // Apply a consistent findings-first decision room on authenticated specialist pages.
+ // No static HTML includes private positions and no room alters owner decisions.
+ if(["portfolio","ideas","research","sectors","decisions"].includes(PAGE)){
+  try{
+   // The public GitHub Pages asset contains presentation logic only. All specific
+   // holding and prospect instructions are read from a separately RLS-protected
+   // owner-only payload AFTER Google account authorization.
+   const {data:roomPage,error:roomError}=await db.from("power_stack_private_pages")
+    .select("body_html").eq("page_key","index").eq("owner_user_id",user.id).limit(1).maybeSingle();
+   if(roomError||!roomPage?.body_html)throw Error("Owner room data unavailable");
+   const privateSource=secureMain(roomPage.body_html);
+   const raw=privateSource.querySelector("#ps-owner-command-rooms-data")?.textContent;
+   if(!raw)throw Error("Owner room instructions missing");
+   const privateRooms=JSON.parse(raw);
+   const {mountCommandRoom}=await import("./owner-command-rooms.mjs?v=20261114-rooms2");
+   mountCommandRoom(PAGE,content,privateRooms);
+  }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
