@@ -517,7 +517,7 @@ function card(item,prices,ownerResearch=[]){
 /** Separate verified close tape: never pass an old EMA reading as a new-session indicator. */
 export function validatePriorityCloses(data,now=new Date()){
  if(data?.contractVersion!=="power-stack-independent-close-overlay/1"||
-    !/^20\\d{2}-\\d{2}-\\d{2}$/.test(data?.session||"")||
+    !/^20\d{2}-\d{2}-\d{2}$/.test(data?.session||"")||
     !Array.isArray(data.rows)||data.rows.length<2||data.rows.length>120)return null;
  const mark=Date.parse(data.session+"T21:00:00Z"),age=now.getTime()-mark;
  if(!Number.isFinite(mark)||!Number.isFinite(age)||age<0||age>6*86400000||
