@@ -60,12 +60,13 @@ test("the new terminal remains behind the existing owner gate and separates exis
 test("Guildhall opportunity lenses remain research-only with safe review expiry",()=>{
  assert.equal(LENS_CONTRACT,"power-stack-opportunity-lenses/1");
  assert.equal(OPPORTUNITY_LENSES.length,7);
- assert.equal(LENS_CASES.length,20);
+ assert.equal(LENS_CASES.length,27);
  assert(validOpportunityLenses());
  assert.equal(new Set(LENS_CASES.map(x=>x.ticker)).size,LENS_CASES.length);
  assert(LENS_CASES.every(x=>x.readiness==="RESEARCH_ONLY"&&x.executionReady===false));
  assert.equal(lensReviewState(LENS_CASES.find(x=>x.ticker==="POWL"),new Date("2026-11-20T00:00:00Z")),"RECHECK REQUIRED");
  for(const ticker of ["NVT","POWL","BDX","MOD","VRT"])assert(OPPORTUNITIES.some(x=>x.ticker===ticker));
+  for(const ticker of ["CSCO","NBIS","CRWV","DAL","UAL","RTX","LHX"])assert(LENS_CASES.some(x=>x.ticker===ticker),"Missing new research case "+ticker);
  const home=read("owner-radar-workspace.mjs");
  assert(home.includes('opportunityOverview')&&home.includes("renderOpportunityLensSummary"));
  assert(read("owner-opportunity-terminal.css").includes(".psl-tabs"));
@@ -162,32 +163,36 @@ test("creator commentary is source attributed, no fabricated source completion o
  assert(s.includes("NEED_250_COMPLETED_SESSIONS")===false);
 });
 
-test("12 Nov close overlay is source-qualified and never reuses previous-day technical indicators",()=>{
- const raw=JSON.parse(read("market-close-overlay.json"));
- const v=validatePriorityCloses(raw,new Date("2026-11-13T00:00:00Z"));
- assert.equal(v?.session,"2026-11-12");
- assert(v.rows.length>=25);
- assert.equal(v.rows.find(x=>x.ticker==="SPCX")?.close,139.94);
- assert.equal(v.rows.find(x=>x.ticker==="TSLA")?.close,397.45);
- assert.equal(v.rows.find(x=>x.ticker==="NVDA")?.close,166.19);
- assert.equal(v.rows.find(x=>x.ticker==="ADBE")?.close,238.54);
- assert(v.rows.every(x=>x.currency==="USD"&&x.technicalStatus==="NOT_RECALCULATED_IN_THIS_OVERLAY"));
- assert.equal(validatePriorityCloses({...raw,session:"2026-11-11"},new Date("2026-11-13T00:00:00Z")),null);
- assert.equal(validatePriorityCloses({...raw,source:"not vetted"},new Date("2026-11-13T00:00:00Z")),null);
- assert.equal(validatePriorityCloses(raw,new Date("2026-11-20T00:00:00Z")),null);
- assert.equal(validatePriorityCloses({...raw,rows:[{...raw.rows[0],close:0},...raw.rows.slice(1)]},new Date("2026-11-13T00:00:00Z")),null);
- assert(!JSON.stringify(raw).match(/owner_user_id|holdingAmount|brokerQuantity|access_token|refresh_token/i));
- const file=read("owner-opportunity-terminal.mjs");
- assert(file.includes('fetch("./market-close-overlay.json",{cache:"no-store"})'));
- assert(file.includes('technical:null,basis:"Finnhub regular-session close'));
- assert(file.includes("mergerMount.replaceChildren(renderMergerWatch(cardPrices))"));
- assert(file.includes("node.dataset.kind=item.kind;node.dataset.direction=item.direction;"));
- const source=JSON.parse(read("market-prices.json"));
- const official=source.rows.find(x=>x.ticker==="SPCX");
- assert(official?.sessionDate);
- assert.equal(official.technicals?.asOf,official.sessionDate,
-  "full-market technical date must follow the OHLC producer, never the close overlay");
- assert(!raw.rows[0].technicals,"close overlay may not carry historical technical fields");
+test("13 Nov priority close overlay excludes stale symbols and never recycles earlier technical indicators",()=>{
+  const raw=JSON.parse(read("market-close-overlay.json"));
+  const checkDate=new Date("2026-11-14T10:30:00Z");
+  const v=validatePriorityCloses(raw,checkDate);
+  assert.equal(v?.session,"2026-11-13");
+  assert.equal(v.rows.length,12);
+  assert.equal(v.stale,24);
+  assert.equal(v.rows.find(x=>x.ticker==="NVDA")?.close,162.85);
+  assert.equal(v.rows.find(x=>x.ticker==="CSCO")?.close,95.64);
+  assert.equal(v.rows.find(x=>x.ticker==="SMH")?.close,486.75);
+  assert(!v.rows.some(x=>["SPCX","TSLA","TLT","ADBE"].includes(x.ticker)),"Older session rows must remain excluded");
+  assert(v.rows.every(x=>x.session===raw.session&&x.currency==="USD"&&x.technicalStatus==="NOT_RECALCULATED_IN_THIS_OVERLAY"));
+  assert.equal(validatePriorityCloses({...raw,session:"2026-11-12"},checkDate),null);
+  assert.equal(validatePriorityCloses({...raw,source:"not vetted"},checkDate),null);
+  assert.equal(validatePriorityCloses(raw,new Date("2026-11-20T00:00:00Z")),null);
+  const currentIndex=raw.rows.findIndex(x=>x.session===raw.session);
+  const broken=raw.rows.map((x,i)=>i===currentIndex?{...x,close:0}:x);
+  assert.equal(validatePriorityCloses({...raw,rows:broken},checkDate),null);
+  assert(!JSON.stringify(raw).match(/owner_user_id|holdingAmount|brokerQuantity|access_token|refresh_token/i));
+  const file=read("owner-opportunity-terminal.mjs");
+  assert(file.includes('fetch("./market-close-overlay.json",{cache:"no-store"})'));
+  assert(file.includes('technical:null,basis:q.provider+'));
+  assert(file.includes("mergerMount.replaceChildren(renderMergerWatch(cardPrices))"));
+  assert(file.includes("node.dataset.kind=item.kind;node.dataset.direction=item.direction;"));
+  const source=JSON.parse(read("market-prices.json"));
+  const official=source.rows.find(x=>x.ticker==="SPCX");
+  assert(official?.sessionDate);
+  assert.equal(official.technicals?.asOf,official.sessionDate,
+    "Full-market technical date follows the OHLC producer, never the close overlay");
+  assert(!raw.rows[0].technicals,"Close overlay may not carry historical technical fields");
 });
 test("readability layer loads last and keeps high contrast, larger fonts and mobile grid fallback",()=>{
  for(const name of ["index","ideas"]){
@@ -211,13 +216,13 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
 test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
  const gate=read("auth-gate.mjs");
  const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
- assert(gate.includes('owner-decision-desk.mjs?v=20261114-rooms1'));
- assert(gate.includes('owner-ideas-tracker.mjs?v=20261114-rooms1'));
- assert(desk.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
- assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261113-guildlens1'));
+ assert(gate.includes('owner-decision-desk.mjs?v=20261114-ps1'));
+ assert(gate.includes('owner-ideas-tracker.mjs?v=20261114-ps1'));
+ assert(desk.includes('owner-opportunity-terminal.mjs?v=20261114-ps1'));
+ assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261114-ps1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio"]){
    const html=read(page+".html");
-   assert(html.includes('src="auth-gate.mjs?v=20261114-rooms1"'),page);
+   assert(html.includes('src="auth-gate.mjs?v=20261114-ps1"'),page);
  }
  for(const page of ["index","ideas"])assert(read(page+".html").includes('owner-legibility-contrast.css?v=20261113-c1'));
 });
@@ -231,7 +236,7 @@ test("Ideas reduce noise: cards reveal four at once, merger and screeners open o
  assert(terminal.includes('selected.filter(x=>x.kind==="INVESTMENT").slice(0,2)'));
  assert(terminal.includes('const visible=home||expanded?selected:preview'));
  assert(terminal.includes('showMore.setAttribute("aria-expanded",String(expanded))'));
- assert(terminal.includes('const prominent=["SPCX","TSLA","NVDA","QQQ","TLT","ADBE"]'));
+ assert(terminal.includes('const prominent=["NVDA","CSCO","NBIS","SMH","DAL","UAL","RTX"]'));
  assert(ideas.includes('id="psi-tracked-drawer"'));
  assert(ideas.includes('trackedDrawer.open=true'));
  assert(ideas.includes('id="psi-cards"'));
@@ -263,7 +268,7 @@ test("Figtree UI, icons and regional market bridge have font CSP and accessible 
   assert(html.includes("owner-figtree-visuals.css?v=20261113-fg1"),page);
   assert(html.includes("fonts.googleapis.com/css2?family=Figtree"),page);
   assert(html.includes("font-src 'self' https://fonts.gstatic.com"),page);
-  assert(html.includes('src="auth-gate.mjs?v=20261114-rooms1"'),page);
+  assert(html.includes('src="auth-gate.mjs?v=20261114-ps1"'),page);
  }
  for(const page of ["index","ideas"])
   assert(read(page+".html").includes("connect-src 'self' https://qdtlrfgxpsnxajiptrno.supabase.co https://bluebelly-desk.vercel.app"));

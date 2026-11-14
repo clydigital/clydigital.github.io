@@ -111,10 +111,10 @@ test("research page adds source-dated causal investment analysis after owner aut
  assert(!/sb_secret_|service_role|@gmail\\.com|owner_user_id|brokerQuantity|cash_delta/i.test(source));
  const auth=read("auth-gate.mjs");
  assert(auth.indexOf('const user=await authenticate()')<auth.indexOf('if(PAGE==="research")'));
- assert(auth.includes('await import("./owner-research-theses.mjs?v=20261113-research1")'));
+ assert(auth.includes('await import("./owner-research-theses.mjs?v=20261114-ps1")'));
  const html=read("research.html");
  assert(html.includes("owner-research-theses.css?v=20261113-research1"));
- assert(html.includes("auth-gate.mjs?v=20261114-rooms1"));
+ assert(html.includes("auth-gate.mjs?v=20261114-ps1"));
  assert(html.includes('data-private-page="research"'));
  assert(!html.includes("Source-dated investment reasoning"));
 });

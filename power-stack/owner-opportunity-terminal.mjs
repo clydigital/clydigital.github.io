@@ -517,6 +517,7 @@ function card(item,prices,ownerResearch=[]){
 /** Separate verified close tape: never pass an old EMA reading as a new-session indicator. */
 export function validatePriorityCloses(data,now=new Date()){
  if(data?.contractVersion!=="power-stack-independent-close-overlay/1"||
+    !["Finnhub quote connector","Mixed-source priority close overlay; each row retains its own market session"].includes(data?.source)||
     !/^20\d{2}-\d{2}-\d{2}$/.test(data?.session||"")||
     !Array.isArray(data.rows)||data.rows.length<2||data.rows.length>120)return null;
  const mark=Date.parse(data.session+"T21:00:00Z"),age=now.getTime()-mark;
@@ -526,7 +527,10 @@ export function validatePriorityCloses(data,now=new Date()){
  for(const q of data.rows){
   if(!q||!/^[A-Z0-9.]{1,10}$/.test(q.ticker||"")||seen.has(q.ticker))return null;
   seen.add(q.ticker);
-  if(q.session!==data.session){stale++;continue;} // exclude old bars; never relabel an older close
+  if(q.session!==data.session){
+   if(!/^20\d{2}-\d{2}-\d{2}$/.test(q.session||"")||q.session>data.session) return null;
+   stale++;continue;
+  } // exclude old bars; never relabel an older close
   if(q.currency!=="USD"||!["Finnhub quote connector","Longbridge daily regular-session candlestick"].includes(q.provider)||
      q.closeTimestampUTC!==data.marketCloseTimestampUTC||
      !Number.isFinite(q.close)||q.close<=0||
