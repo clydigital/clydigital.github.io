@@ -1,11 +1,11 @@
 {
   "contractVersion": "power-stack-independent-close-overlay/1",
-  "session": "2026-11-12",
+  "session": "2026-11-13",
   "market": "US equities and ETFs regular session",
-  "marketCloseTimestampUTC": "2026-11-12T21:00:00.000Z",
-  "source": "Finnhub quote connector",
-  "sourceDocumentation": "https://finnhub.io/docs/api/quote",
-  "purpose": "Dated priority-watch closing prices. Independent full-universe daily bar feed remains separate and owns 1D technicals.",
+  "marketCloseTimestampUTC": "2026-11-13T21:00:00.000Z",
+  "source": "Mixed-source priority close overlay; each row retains its own market session",
+  "sourceDocumentation": "https://open.longbridge.com/docs/quote/pull/candlestick",
+  "purpose": "13 Nov priority close refresh with stale 12 Nov rows expressly retained, not marked current. Independent full-universe daily-bar technical feed owns indicator calculations.",
   "rows": [
     {
       "ticker": "ADBE",
@@ -21,12 +21,12 @@
     {
       "ticker": "AMD",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 585.3,
-      "previousClose": 552.9,
-      "changePct": 5.86,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 534.06,
+      "previousClose": 585.3,
+      "changePct": -8.754,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -87,12 +87,23 @@
     {
       "ticker": "CRWV",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 56.6,
-      "previousClose": 60.77,
-      "changePct": -6.862,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 53.13,
+      "previousClose": 56.6,
+      "changePct": -6.131,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "CSCO",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 95.64,
+      "previousClose": 102.01,
+      "changePct": -6.244,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -115,6 +126,17 @@
       "changePct": 1.439,
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "DAL",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 86.25,
+      "previousClose": 86.55,
+      "changePct": -0.347,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -217,6 +239,17 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
+      "ticker": "LHX",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 272.35,
+      "previousClose": 271.84,
+      "changePct": 0.188,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
       "ticker": "MSFT",
       "currency": "USD",
       "session": "2026-11-12",
@@ -239,25 +272,36 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
+      "ticker": "NBIS",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 115.88,
+      "previousClose": 128.64,
+      "changePct": -9.919,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
       "ticker": "NVDA",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 166.19,
-      "previousClose": 173.73,
-      "changePct": -4.34,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 162.85,
+      "previousClose": 166.19,
+      "changePct": -2.01,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
       "ticker": "QQQ",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 688.17,
-      "previousClose": 690.38,
-      "changePct": -0.32,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 679.89,
+      "previousClose": 688.17,
+      "changePct": -1.203,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -272,14 +316,25 @@
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
+      "ticker": "RTX",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 198.58,
+      "previousClose": 198.36,
+      "changePct": 0.111,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
       "ticker": "SMH",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 501.73,
-      "previousClose": 506.96,
-      "changePct": -1.032,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 486.75,
+      "previousClose": 501.73,
+      "changePct": -2.986,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -307,12 +362,12 @@
     {
       "ticker": "SPY",
       "currency": "USD",
-      "session": "2026-11-12",
-      "close": 757.12,
-      "previousClose": 759.81,
-      "changePct": -0.354,
-      "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
-      "provider": "Finnhub quote connector",
+      "session": "2026-11-13",
+      "close": 754.37,
+      "previousClose": 757.12,
+      "changePct": -0.363,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     },
     {
@@ -336,10 +391,23 @@
       "closeTimestampUTC": "2026-11-12T21:00:00.000Z",
       "provider": "Finnhub quote connector",
       "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
+    },
+    {
+      "ticker": "UAL",
+      "currency": "USD",
+      "session": "2026-11-13",
+      "close": 109.31,
+      "previousClose": 111.25,
+      "changePct": -1.744,
+      "closeTimestampUTC": "2026-11-13T21:00:00.000Z",
+      "provider": "Longbridge daily regular-session candlestick",
+      "technicalStatus": "NOT_RECALCULATED_IN_THIS_OVERLAY"
     }
   ],
   "coverage": {
-    "verified": 30
+    "verified": 12,
+    "stale": 24,
+    "notes": "Only matched 13 Nov Longbridge daily bars count as verified for the overlay date."
   },
   "NOT_FOR_INFERRED_4H_OR_DAILY_TECHNICAL_SIGNAL": true,
   "NO_OWNER_POSITIONS_OR_ACCOUNT_DATA": true,
