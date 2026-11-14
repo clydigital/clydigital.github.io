@@ -2,7 +2,7 @@
 // Public script contains no account data; authenticated pages render it only after owner access.
 // Candidacy never means a verified EMA trigger, approved short locate or funded broker order.
 export const OPPORTUNITY_CONTRACT="power-stack-guided-opportunities/1";
-import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
+import {LENS_CASES,OPPORTUNITY_LENSES,renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261114-ps1";
 export const OPPORTUNITY_REVIEW_DATE="2026-11-13";
 const LEGACY_OPPORTUNITIES=Object.freeze([
  {id:"crwv-short",ticker:"CRWV",name:"CoreWeave",kind:"TRADE",direction:"SHORT",
@@ -517,32 +517,35 @@ function card(item,prices,ownerResearch=[]){
 /** Separate verified close tape: never pass an old EMA reading as a new-session indicator. */
 export function validatePriorityCloses(data,now=new Date()){
  if(data?.contractVersion!=="power-stack-independent-close-overlay/1"||
-  data?.source!=="Finnhub quote connector"||data?.session?.length!==10||
-  !Array.isArray(data.rows)||data.rows.length<2||data.rows.length>120)return null;
- const mark=Date.parse(data.session+"T21:00:00Z");
- const age=now.getTime()-mark;
+    !/^20\\d{2}-\\d{2}-\\d{2}$/.test(data?.session||"")||
+    !Array.isArray(data.rows)||data.rows.length<2||data.rows.length>120)return null;
+ const mark=Date.parse(data.session+"T21:00:00Z"),age=now.getTime()-mark;
  if(!Number.isFinite(mark)||!Number.isFinite(age)||age<0||age>6*86400000||
-  data.marketCloseTimestampUTC!==data.session+"T21:00:00.000Z")return null;
- const rows=[],seen=new Set();
+    data.marketCloseTimestampUTC!==data.session+"T21:00:00.000Z")return null;
+ const rows=[],seen=new Set();let stale=0;
  for(const q of data.rows){
-  if(!q||!/^[A-Z0-9.]{1,10}$/.test(q.ticker||"")||seen.has(q.ticker)||
-    q.session!==data.session||q.currency!=="USD"||q.provider!==data.source||
-    q.closeTimestampUTC!==data.marketCloseTimestampUTC||
-    !Number.isFinite(q.close)||q.close<=0||
-    !Number.isFinite(q.previousClose)||q.previousClose<=0||
-    !Number.isFinite(q.changePct)||q.technicalStatus!=="NOT_RECALCULATED_IN_THIS_OVERLAY"||
-    Math.abs(100*(q.close/q.previousClose-1)-q.changePct)>.02)return null;
-  seen.add(q.ticker);rows.push(q);
+  if(!q||!/^[A-Z0-9.]{1,10}$/.test(q.ticker||"")||seen.has(q.ticker))return null;
+  seen.add(q.ticker);
+  if(q.session!==data.session){stale++;continue;} // exclude old bars; never relabel an older close
+  if(q.currency!=="USD"||!["Finnhub quote connector","Longbridge daily regular-session candlestick"].includes(q.provider)||
+     q.closeTimestampUTC!==data.marketCloseTimestampUTC||
+     !Number.isFinite(q.close)||q.close<=0||
+     !Number.isFinite(q.previousClose)||q.previousClose<=0||
+     !Number.isFinite(q.changePct)||q.technicalStatus!=="NOT_RECALCULATED_IN_THIS_OVERLAY"||
+     Math.abs(100*(q.close/q.previousClose-1)-q.changePct)>.02)return null;
+  rows.push(q);
  }
- return {session:data.session,rows};
+ if(!rows.length||data.coverage?.verified!==rows.length||
+    (data.coverage?.stale!=null&&data.coverage.stale!==stale))return null;
+ return {session:data.session,rows,stale};
 }
 function renderClosePanel(target,tape){
  const header=make("div","pso-close-head");
  header.append(make("strong",null,"US market closes · "+tape.session),
-  make("span",null,"Finnhub verified · 4:00 p.m. New York · USD"));
+  make("span",null,"Matched completed-session candles · 4:00 p.m. New York · USD"));
  const note=make("p","pso-close-notice",
-  "Independent completed-session prices, not live quotes or trading signals. Daily EMA / Stoch RSI readings remain on their own validated historical session.");
- const prominent=["SPCX","TSLA","NVDA","QQQ","TLT","ADBE"];
+  "Independent completed-session prices; "+tape.stale+" older-session symbols omitted. Not live or trade signals. Daily EMA / Stoch RSI remain independently dated.");
+ const prominent=["NVDA","CSCO","NBIS","SMH","DAL","UAL","RTX"];
  const map=new Map(tape.rows.map(x=>[x.ticker,x]));
  const main=make("div","pso-close-grid");
  function insertQuote(node,q){
@@ -691,7 +694,7 @@ export function renderOpportunityTerminal(target,prices=new Map(),options={}){
    const prev=prices.get(q.ticker);
    if(prev?.session&&prev.session>q.session)continue;
    updated.set(q.ticker,{...prev,close:q.close,day:q.changePct,session:q.session,
-    currency:q.currency,technical:null,basis:"Finnhub regular-session close · separate technical lineage"});
+    currency:q.currency,technical:null,basis:q.provider+" · separate technical lineage"});
   }
   cardPrices=updated;select(chosen);
   mergerMount.replaceChildren(renderMergerWatch(cardPrices));
