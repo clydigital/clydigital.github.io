@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-rooms1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-ps1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261114-rooms1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261114-ps1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
@@ -122,7 +122,7 @@ async function load(){
  if(PAGE==="research"){
   // Augment only a successfully authenticated and RLS-retrieved private research page.
   try{
-   const {mountResearchTheses}=await import("./owner-research-theses.mjs?v=20261113-research1");
+   const {mountResearchTheses}=await import("./owner-research-theses.mjs?v=20261114-ps1");
    mountResearchTheses(content);
   }catch(error){
    const fallback=document.createElement("p");
