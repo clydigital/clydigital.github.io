@@ -250,7 +250,7 @@ export function renderResearchTheses(){
  method.append(methodBody);shell.append(method);
  const links=el("div","psrt-foot");
  links.append(el("p",null,"This is the current review overlay. The original private research library below remains unchanged."));
- links.append(external("Detailed source research on GitHub","https://github.com/clydigital/power-stack/pull/123"));
+ links.append(external("Detailed source research on GitHub","https://github.com/clydigital/power-stack/blob/main/research/2026-11-14-nvidia-cisco-faa-opportunity-reassessment.md"));
  shell.append(links);return shell;
 }
 export function mountResearchTheses(main){
