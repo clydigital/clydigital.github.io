@@ -202,9 +202,9 @@ function comparisonCard(c,open=false){
 export function renderResearchTheses(){
  const shell=el("section","psrt-shell");shell.id="ps-research-theses";shell.setAttribute("aria-label","Source-dated investment reasoning");
  const intro=el("div","psrt-head"),head=el("div");
- head.append(el("p","psrt-kicker","INVESTMENT INTELLIGENCE  /  13 NOVEMBER 2026"),
+ head.append(el("p","psrt-kicker","INVESTMENT INTELLIGENCE / 13 NOV BASE CASES + 14 NOV EVENT REVIEW"),
   el("h1",null,"What looks worth investigating — and why"),
-  el("p","psrt-lead","A business can be attractive without its shares being cheap. Compare earnings quality, valuation and scenario resilience before timing an entry."));
+  el("p","psrt-lead","Nvidia, Cisco, AI financing and FAA conclusions have been added in Evidence Command above. The issuer comparisons below preserve the prior 13 Nov research; a price decline is not proof of value."));
  intro.append(head,el("span","psrt-research-only","RESEARCH ONLY · NO ORDERS"));shell.append(intro);
  const takeaway=el("div","psrt-summary");
  [["NVT","Best new electrical infrastructure challenger — pending post-acquisition cash and debt"],
@@ -213,7 +213,7 @@ export function renderResearchTheses(){
   const card=el("div","psrt-summary-card");card.append(el("strong",null,symbol),el("p",null,reason));takeaway.append(card);
  });
  shell.append(takeaway);
- shell.append(el("p","psrt-method-note","Source-dated 12 Nov US closes and issuer reports; provider forward multiples and adjusted earnings are not interchangeable with GAAP or distributable free cash flow. Rankings indicate RESEARCH PRIORITY, not purchases."));
+ shell.append(el("p","psrt-method-note","Continuing 13 Nov comparison edition using source-dated 12 Nov US closes and issuer reports; provider forward multiples and adjusted earnings are not interchangeable with GAAP or distributable free cash flow. Rankings indicate RESEARCH PRIORITY, not purchases."));
  const sectionHead=el("div","psrt-section-heading");
  sectionHead.append(el("h2",null,"Peer decisions"),el("span",null,"Open a case for the evidence, counterargument and next test"));shell.append(sectionHead);
  COMPARISONS.forEach((item,i)=>shell.append(comparisonCard(item,i===0)));
