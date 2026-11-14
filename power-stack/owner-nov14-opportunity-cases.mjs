@@ -17,4 +17,4 @@ export const CASES=Object.freeze([
  {id:"googl",symbol:"GOOGL",name:"Alphabet",room:["prospects","research","watch"],close:null,rsi:40.6,status:"AI CASH-QUALITY WATCH",quality:"Established core operating cash versus rising AI capex",finding:"Potential quality rotation if AI hardware sells off while cloud and advertising profitability holds. No automatic benefit from a US export restriction is established.",test:"Compare cloud profitability, cash conversion after capex, AI demand and relative strength against SMH and QQQ.",invalid:"Cash conversion weakens or capex rises faster than returns.",source:"https://abc.xyz/investor/",reviewBy:"2026-11-20"}
 ]);
 export function casesForRoom(room){return CASES.filter(x=>x.room.includes(room))}
-export function validCase(x){return Boolean(x.id&&x.symbol&&x.finding&&x.test&&x.invalid&&x.source?.startsWith("https://")&&/^20\\d{2}-\\d{2}-\\d{2}$/.test(x.reviewBy))}
+export function validCase(x){return Boolean(x.id&&x.symbol&&x.finding&&x.test&&x.invalid&&x.source?.startsWith("https://")&&/^20\d{2}-\d{2}-\d{2}$/.test(x.reviewBy))}
