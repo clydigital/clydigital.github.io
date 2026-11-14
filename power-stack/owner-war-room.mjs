@@ -1,7 +1,7 @@
 /* Evidence-first War Room. The stage voices are editorial. Findings are dated,
    sourced research snapshots; owner decisions and prices remain separately identified.
    No brokerage operations, auto-updates or invented confidence scores. */
-import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261114-evidence1";
+import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261114-evidence2";
 export const DESKS=Object.freeze([
  {id:"matt",name:"Matt",role:"HEAD OF THE DESK",icon:"M"},
  {id:"rates",name:"Jimmy",role:"RATES & INFLATION",icon:"%"},
@@ -13,9 +13,9 @@ export const DESKS=Object.freeze([
 const MATT_SAYS=Object.freeze({
  matt:"THAT'S THE GODDAMN PICTURE! RATES ARE HIGH, THE AI STORY IS SPLITTING, OIL HAS ROLLED OVER, AND THE FAA JUST REMINDED US INFRASTRUCTURE MATTERS. DIFFERENT PROBLEMS. DIFFERENT TRADES!",
  rates:"JIMMY! MONTHLY INFLATION COOLED BUT THE TEN-YEAR IS STILL OVER FIVE! THAT MEANS OUR DURATION BUY BUTTON STAYS LOCKED UNTIL THE YIELD ACTUALLY TURNS!",
- ai:"DAVID! THE CEO HAS RESIGNED, BUT THAT DOESN'T PROVE ORDERS VANISHED! NVDA IS ON EVENT VETO. SHOW ME THE NEXT GUIDANCE WHILE WE COMPARE CASH GENERATORS!",
+ ai:"DAVID! NVIDIA IS RSI-OVERSOLD AND BELOW ITS LOWER DAILY BAND. THAT IS NOT A BUY ORDER! COMPARE CISCO\'S GUIDANCE AND NEBIUS\'S FINANCING BEFORE WE RISK A SINGLE DOLLAR!",
  energy:"MIKE! OIL'S DOWN ON THE WEEK WHILE HORMUZ IS STILL RISKY! THAT'S THE CONTRADICTION. STOP BUYING EVERY PRODUCER ON A WAR HEADLINE!",
- aviation:"RACHEL! THE GROUND STOP HAPPENED. THE RECOVERY AND COST AREN'T VERIFIED HERE. L3HARRIS ALREADY HAS A CONTRACT; IT DIDN'T MAGICALLY WIN ANOTHER ONE!",
+ aviation:"RACHEL! FRIDAY\'S GROUND STOP WAS LIFTED. THE NETWORK OVERLOAD IS THE PRELIMINARY FAILURE MECHANISM; THE TRIGGER IS NOT YET PROVEN. SHOW ME REAL NEW CONTRACTS, NOT OLD AWARDS!",
  selection:"SARAH! NVENT'S GROWTH LOOKS GOOD AGAINST EATON, BUT WHAT ABOUT ACQUISITION DEBT? SHOW ME THE FULL CASH ECONOMICS BEFORE CALLING IT CHEAP!"
 });
 const $=(root,s)=>root.querySelector(s);
@@ -182,7 +182,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
   $(root,"#psw-matt-lead").textContent=revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
-    :'"THE TEN-YEAR HELD OVER FIVE, NVIDIA LOST ITS CEO, CRUDE FELL AND THE FAA STOPPED DEPARTURES! FOUR DIFFERENT STORIES — NO BLIND MARKET-WIDE TRADE!"';
+    :'"NVIDIA IS OVERSOLD, CISCO HAS AN EARNINGS-EXPECTATION GAP, THE FAA REOPENED AND CHIP BREADTH REMAINS WEAK! DIFFERENT SETUPS — NO BLIND DIP BUY!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
   for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));
