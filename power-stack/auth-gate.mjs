@@ -145,7 +145,7 @@ async function load(){
    const raw=privateSource.querySelector("#ps-owner-command-rooms-data")?.textContent;
    if(!raw)throw Error("Owner room instructions missing");
    const privateRooms=JSON.parse(raw);
-   const {mountCommandRoom}=await import("./owner-command-rooms.mjs?v=20261114-rooms2");
+   const {mountCommandRoom}=await import("./owner-command-rooms.mjs?v=20261114-opportunity1");
    mountCommandRoom(PAGE,content,privateRooms);
   }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }
