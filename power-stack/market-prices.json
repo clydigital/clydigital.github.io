@@ -1,6 +1,6 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-14T02:39:44.439Z",
+  "generatedAt": "2026-11-16T21:03:05.110Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
@@ -29,7 +29,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 493,
+        "lookbackSessions": 490,
         "emaBands": {
           "20": {
             "basis": 2.125,
@@ -53,9 +53,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 2.732,
+            "basis": 2.733,
             "lower": 2.488,
-            "upper": 2.976,
+            "upper": 2.977,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -88,7 +88,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 493,
+        "lookbackSessions": 490,
         "emaBands": {
           "20": {
             "basis": 3.363,
@@ -135,55 +135,55 @@
       "providerSymbol": "3191.HK",
       "currency": "HKD",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 66.5,
-      "previousClose": 64.9,
-      "changePct": 2.465,
-      "change3dPct": 5.556,
-      "change5dPct": 2.151,
+      "sessionDate": "2026-11-13",
+      "close": 65.26,
+      "previousClose": 66.5,
+      "changePct": -1.865,
+      "change3dPct": 2.934,
+      "change5dPct": 2.224,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 492,
+        "lookbackSessions": 490,
         "emaBands": {
           "20": {
-            "basis": 66.073,
-            "lower": 63.415,
-            "upper": 68.731,
+            "basis": 65.996,
+            "lower": 63.518,
+            "upper": 68.473,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 72.639,
-            "lower": 64.157,
-            "upper": 81.122,
+            "basis": 72.35,
+            "lower": 63.898,
+            "upper": 80.802,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 77.355,
-            "lower": 69.718,
-            "upper": 84.992,
+            "basis": 77.115,
+            "lower": 69.471,
+            "upper": 84.759,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 75.244,
-            "lower": 71.085,
-            "upper": 79.403,
+            "basis": 75.113,
+            "lower": 70.957,
+            "upper": 79.269,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 100,
+        "stochRsi14": 89.7,
         "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 46.9,
-        "volumeToPrior20": 1.42
+        "rsi14": 44.2,
+        "volumeToPrior20": 1.55
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/3191.HK?interval=1d&range=2y&includePrePost=false",
@@ -292,7 +292,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 493,
+        "lookbackSessions": 490,
         "emaBands": {
           "20": {
             "basis": 100.623,
@@ -316,9 +316,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 117.352,
-            "lower": 112.766,
-            "upper": 121.938,
+            "basis": 117.321,
+            "lower": 112.735,
+            "upper": 121.907,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -351,7 +351,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 346.551,
@@ -375,9 +375,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 307.521,
-            "lower": 299.701,
-            "upper": 315.34,
+            "basis": 307.52,
+            "lower": 299.7,
+            "upper": 315.339,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -410,7 +410,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 244.704,
@@ -427,16 +427,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 249.053,
-            "lower": 239.008,
-            "upper": 259.099,
+            "basis": 249.052,
+            "lower": 239.007,
+            "upper": 259.097,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 262.498,
-            "lower": 257.49,
-            "upper": 267.507,
+            "basis": 262.294,
+            "lower": 257.285,
+            "upper": 267.303,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -457,55 +457,55 @@
       "providerSymbol": "ADYEN.AS",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 868,
-      "previousClose": 874.6,
-      "changePct": -0.755,
-      "change3dPct": -1.442,
-      "change5dPct": -2.745,
+      "sessionDate": "2026-11-16",
+      "close": 867.1,
+      "previousClose": 867.1,
+      "changePct": 0,
+      "change3dPct": -0.858,
+      "change5dPct": -1.544,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 881.612,
-            "lower": 835.444,
-            "upper": 927.779,
+            "basis": 878.979,
+            "lower": 835.579,
+            "upper": 922.38,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 899.921,
-            "lower": 853.472,
-            "upper": 946.37,
+            "basis": 897.397,
+            "lower": 856.942,
+            "upper": 937.853,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 918.303,
-            "lower": 879.391,
-            "upper": 957.216,
+            "basis": 916.294,
+            "lower": 877.724,
+            "upper": 954.864,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 983.216,
-            "lower": 963.001,
-            "upper": 1003.432,
+            "basis": 980.689,
+            "lower": 961.444,
+            "upper": 999.935,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 56.9,
+        "stochRsi14": 68.1,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 46,
-        "volumeToPrior20": 0.47
+        "rsi14": 45.8,
+        "volumeToPrior20": 0.41
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ADYEN.AS?interval=1d&range=2y&includePrePost=false",
@@ -528,7 +528,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 183.182,
@@ -545,16 +545,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 183.427,
-            "lower": 172.26,
+            "basis": 183.428,
+            "lower": 172.261,
             "upper": 194.594,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 179.966,
-            "lower": 173.799,
-            "upper": 186.133,
+            "basis": 179.982,
+            "lower": 173.815,
+            "upper": 186.149,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -575,55 +575,55 @@
       "providerSymbol": "AIR.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 208.25,
-      "previousClose": 210.7,
-      "changePct": -1.163,
-      "change3dPct": 1.092,
-      "change5dPct": 4.711,
+      "sessionDate": "2026-11-16",
+      "close": 204.15,
+      "previousClose": 206.65,
+      "changePct": -1.21,
+      "change3dPct": -3.109,
+      "change5dPct": -0.898,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 199.217,
-            "lower": 193.457,
-            "upper": 204.978,
+            "basis": 200.328,
+            "lower": 194.2,
+            "upper": 206.455,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 196.918,
-            "lower": 191.473,
-            "upper": 202.362,
+            "basis": 197.568,
+            "lower": 191.783,
+            "upper": 203.353,
             "sdMultiplier": 1,
             "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 195.447,
-            "lower": 191.54,
-            "upper": 199.355,
+            "basis": 195.837,
+            "lower": 191.944,
+            "upper": 199.731,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 192.222,
-            "lower": 188.675,
-            "upper": 195.768,
+            "basis": 192.483,
+            "lower": 188.911,
+            "upper": 196.055,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
-        "band20Event": "NONE",
+        "band20Event": "REJECTED_UPPER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 79.9,
+        "stochRsi14": 47.6,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 63,
-        "volumeToPrior20": 1.08
+        "rsi14": 56.8,
+        "volumeToPrior20": 0.92
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AIR.PA?interval=1d&range=2y&includePrePost=false",
@@ -646,7 +646,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 526.856,
@@ -670,9 +670,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 443.369,
-            "lower": 407.673,
-            "upper": 479.065,
+            "basis": 443.37,
+            "lower": 407.674,
+            "upper": 479.066,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -705,7 +705,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 259.385,
@@ -722,16 +722,16 @@
             "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 253.805,
+            "basis": 253.804,
             "lower": 248.142,
-            "upper": 259.468,
+            "upper": 259.467,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 247.454,
-            "lower": 242.099,
-            "upper": 252.809,
+            "basis": 247.388,
+            "lower": 242.034,
+            "upper": 252.743,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -764,7 +764,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 79.991,
@@ -788,9 +788,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 79.754,
-            "lower": 78.22,
-            "upper": 81.288,
+            "basis": 79.763,
+            "lower": 78.229,
+            "upper": 81.297,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -811,55 +811,55 @@
       "providerSymbol": "ASML.AS",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 1376.8,
-      "previousClose": 1403.8,
-      "changePct": -1.923,
-      "change3dPct": 2.456,
-      "change5dPct": 10.144,
+      "sessionDate": "2026-11-16",
+      "close": 1306.6,
+      "previousClose": 1338.8,
+      "changePct": -2.405,
+      "change3dPct": -6.924,
+      "change5dPct": -2.768,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 1407.217,
-            "lower": 1338.008,
-            "upper": 1476.425,
+            "basis": 1391.739,
+            "lower": 1323.011,
+            "upper": 1460.466,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 1456.1,
-            "lower": 1363.579,
-            "upper": 1548.622,
+            "basis": 1445.818,
+            "lower": 1348.449,
+            "upper": 1543.187,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 1456.285,
-            "lower": 1412.904,
-            "upper": 1499.665,
+            "basis": 1451.04,
+            "lower": 1406.392,
+            "upper": 1495.689,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 1366.296,
-            "lower": 1326.396,
-            "upper": 1406.197,
+            "basis": 1365.44,
+            "lower": 1325.926,
+            "upper": 1404.954,
             "sdMultiplier": 0.25,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           }
         },
-        "band20Event": "NONE",
+        "band20Event": "BROKE_LOWER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 75,
+        "stochRsi14": 48,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 44.8,
-        "volumeToPrior20": 1.05
+        "rsi14": 38.8,
+        "volumeToPrior20": 0.97
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ASML.AS?interval=1d&range=2y&includePrePost=false",
@@ -882,7 +882,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 335.204,
@@ -900,15 +900,15 @@
           },
           "100": {
             "basis": 357.239,
-            "lower": 343.815,
+            "lower": 343.814,
             "upper": 370.663,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 357.269,
-            "lower": 347.689,
-            "upper": 366.848,
+            "basis": 357.237,
+            "lower": 347.658,
+            "upper": 366.816,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -941,7 +941,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 100.779,
@@ -965,9 +965,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 109.57,
-            "lower": 107.393,
-            "upper": 111.747,
+            "basis": 109.592,
+            "lower": 107.415,
+            "upper": 111.769,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -1000,7 +1000,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 51.656,
@@ -1025,7 +1025,7 @@
           },
           "200": {
             "basis": 56.84,
-            "lower": 55.717,
+            "lower": 55.716,
             "upper": 57.964,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
@@ -1047,16 +1047,16 @@
       "providerSymbol": null,
       "currency": "USD",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 68207.5491,
-      "previousClose": 71340.7938,
-      "changePct": -4.392,
-      "change3dPct": -7.358,
-      "change5dPct": -8.33,
+      "sessionDate": "2026-11-15",
+      "close": 65213.8934,
+      "previousClose": 63499.563,
+      "changePct": 2.7,
+      "change3dPct": -8.588,
+      "change5dPct": -11.424,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "UNAVAILABLE",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-15",
         "timeframe": "1D",
         "reason": "NEED_250_COMPLETED_SESSIONS",
         "indicatorBasis": "Completed daily unadjusted OHLC; not 4H, intraday, broker or split-adjusted"
@@ -1083,7 +1083,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 128.565,
@@ -1107,9 +1107,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 164.999,
-            "lower": 157.27,
-            "upper": 172.728,
+            "basis": 164.985,
+            "lower": 157.256,
+            "upper": 172.714,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -1142,7 +1142,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 76.256,
@@ -1160,15 +1160,15 @@
           },
           "100": {
             "basis": 89.248,
-            "lower": 84.712,
+            "lower": 84.713,
             "upper": 93.783,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 93.178,
-            "lower": 89.636,
-            "upper": 96.721,
+            "basis": 93.197,
+            "lower": 89.655,
+            "upper": 96.74,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -1201,7 +1201,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 266.673,
@@ -1220,14 +1220,14 @@
           "100": {
             "basis": 271.513,
             "lower": 264.315,
-            "upper": 278.711,
+            "upper": 278.712,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 279.847,
-            "lower": 274.514,
-            "upper": 285.18,
+            "basis": 279.88,
+            "lower": 274.548,
+            "upper": 285.213,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -1260,7 +1260,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 120.443,
@@ -1278,15 +1278,15 @@
           },
           "100": {
             "basis": 119.729,
-            "lower": 116.119,
+            "lower": 116.12,
             "upper": 123.339,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 114.906,
-            "lower": 112.222,
-            "upper": 117.589,
+            "basis": 114.917,
+            "lower": 112.233,
+            "upper": 117.6,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -1319,7 +1319,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 297.099,
@@ -1343,9 +1343,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 285.862,
-            "lower": 283.167,
-            "upper": 288.556,
+            "basis": 285.852,
+            "lower": 283.157,
+            "upper": 288.547,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -1378,7 +1378,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 147.803,
@@ -1395,16 +1395,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 168.796,
-            "lower": 159.928,
-            "upper": 177.663,
+            "basis": 168.798,
+            "lower": 159.931,
+            "upper": 177.665,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 185.204,
-            "lower": 180.393,
-            "upper": 190.016,
+            "basis": 185.52,
+            "lower": 180.708,
+            "upper": 190.331,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -1437,7 +1437,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 148.763,
@@ -1461,9 +1461,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 179.2,
-            "lower": 166.136,
-            "upper": 192.264,
+            "basis": 179.191,
+            "lower": 166.127,
+            "upper": 192.255,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -1496,7 +1496,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 225.837,
@@ -1513,16 +1513,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 218.772,
+            "basis": 218.771,
             "lower": 202.695,
             "upper": 234.848,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 215.49,
-            "lower": 208.414,
-            "upper": 222.565,
+            "basis": 215.426,
+            "lower": 208.351,
+            "upper": 222.501,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -1555,7 +1555,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 237.755,
@@ -1579,9 +1579,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 190.542,
-            "lower": 176.198,
-            "upper": 204.886,
+            "basis": 190.54,
+            "lower": 176.196,
+            "upper": 204.884,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -1673,7 +1673,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 11.664,
@@ -1697,7 +1697,7 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 11.917,
+            "basis": 11.916,
             "lower": 11.741,
             "upper": 12.092,
             "sdMultiplier": 0.25,
@@ -1732,7 +1732,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 88.567,
@@ -1756,9 +1756,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 88.881,
-            "lower": 86.258,
-            "upper": 91.505,
+            "basis": 88.888,
+            "lower": 86.264,
+            "upper": 91.511,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -1791,7 +1791,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 218.857,
@@ -1815,9 +1815,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 195.587,
-            "lower": 191.848,
-            "upper": 199.327,
+            "basis": 195.58,
+            "lower": 191.841,
+            "upper": 199.319,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -1850,7 +1850,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 1.304,
@@ -1909,7 +1909,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 406.318,
@@ -1933,9 +1933,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 370.509,
-            "lower": 333.279,
-            "upper": 407.74,
+            "basis": 370.52,
+            "lower": 333.29,
+            "upper": 407.751,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -1968,7 +1968,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 521.117,
@@ -1992,9 +1992,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 507.998,
-            "lower": 502.731,
-            "upper": 513.264,
+            "basis": 507.974,
+            "lower": 502.708,
+            "upper": 513.24,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -2027,7 +2027,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 58.421,
@@ -2051,9 +2051,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 61.5,
-            "lower": 60.652,
-            "upper": 62.348,
+            "basis": 61.498,
+            "lower": 60.65,
+            "upper": 62.346,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2086,7 +2086,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 370.561,
@@ -2110,9 +2110,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 393.547,
-            "lower": 386.577,
-            "upper": 400.517,
+            "basis": 393.52,
+            "lower": 386.55,
+            "upper": 400.49,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2145,7 +2145,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 191.149,
@@ -2169,9 +2169,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 200.032,
-            "lower": 196.064,
-            "upper": 204.001,
+            "basis": 200.025,
+            "lower": 196.057,
+            "upper": 203.993,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2204,7 +2204,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 63.399,
@@ -2228,9 +2228,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 63.615,
-            "lower": 62.23,
-            "upper": 64.999,
+            "basis": 63.617,
+            "lower": 62.232,
+            "upper": 65.001,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2263,7 +2263,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 83.243,
@@ -2287,9 +2287,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 99.529,
-            "lower": 91.938,
-            "upper": 107.121,
+            "basis": 99.525,
+            "lower": 91.934,
+            "upper": 107.117,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2322,7 +2322,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 84.438,
@@ -2346,9 +2346,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 85.643,
-            "lower": 83.196,
-            "upper": 88.091,
+            "basis": 85.652,
+            "lower": 83.205,
+            "upper": 88.1,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2381,7 +2381,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 849.388,
@@ -2405,9 +2405,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 898.051,
-            "lower": 873.358,
-            "upper": 922.744,
+            "basis": 898.047,
+            "lower": 873.354,
+            "upper": 922.74,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2440,7 +2440,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 369.141,
@@ -2458,15 +2458,15 @@
           },
           "100": {
             "basis": 386.233,
-            "lower": 377.857,
+            "lower": 377.858,
             "upper": 394.609,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 389.485,
-            "lower": 381.208,
-            "upper": 397.761,
+            "basis": 389.512,
+            "lower": 381.236,
+            "upper": 397.789,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2499,7 +2499,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 79.67,
@@ -2523,9 +2523,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 83.975,
-            "lower": 82.204,
-            "upper": 85.747,
+            "basis": 83.981,
+            "lower": 82.21,
+            "upper": 85.753,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2558,7 +2558,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 302.824,
@@ -2582,9 +2582,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 325.901,
-            "lower": 318.49,
-            "upper": 333.312,
+            "basis": 325.899,
+            "lower": 318.488,
+            "upper": 333.31,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2617,7 +2617,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 3.145,
@@ -2641,9 +2641,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 3.627,
-            "lower": 3.527,
-            "upper": 3.727,
+            "basis": 3.629,
+            "lower": 3.529,
+            "upper": 3.729,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2676,7 +2676,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 2.093,
@@ -2702,7 +2702,7 @@
           "200": {
             "basis": 2.021,
             "lower": 1.961,
-            "upper": 2.081,
+            "upper": 2.082,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2735,7 +2735,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 77.24,
@@ -2759,9 +2759,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 78.974,
-            "lower": 78.686,
-            "upper": 79.263,
+            "basis": 78.975,
+            "lower": 78.687,
+            "upper": 79.264,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2794,7 +2794,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 90.908,
@@ -2818,9 +2818,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 92.966,
-            "lower": 92.425,
-            "upper": 93.507,
+            "basis": 92.968,
+            "lower": 92.427,
+            "upper": 93.508,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -2841,54 +2841,54 @@
       "providerSymbol": "IFX.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 52.11,
-      "previousClose": 52.12,
-      "changePct": -0.019,
-      "change3dPct": 7.167,
-      "change5dPct": 13.406,
+      "sessionDate": "2026-11-16",
+      "close": 49.24,
+      "previousClose": 49.875,
+      "changePct": -1.273,
+      "change3dPct": -5.526,
+      "change5dPct": 1.265,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 506,
+        "lookbackSessions": 505,
         "emaBands": {
           "20": {
-            "basis": 51.483,
-            "lower": 49.214,
-            "upper": 53.752,
+            "basis": 51.131,
+            "lower": 48.895,
+            "upper": 53.367,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 54.526,
-            "lower": 50.141,
-            "upper": 58.911,
+            "basis": 54.144,
+            "lower": 49.713,
+            "upper": 58.574,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 56.913,
-            "lower": 53.069,
-            "upper": 60.758,
+            "basis": 56.625,
+            "lower": 52.955,
+            "upper": 60.294,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 55.277,
-            "lower": 52.055,
-            "upper": 58.498,
+            "basis": 55.165,
+            "lower": 51.965,
+            "upper": 58.366,
             "sdMultiplier": 0.25,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 99.9,
-        "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 49.6,
+        "stochRsi14": 63,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 43.4,
         "volumeToPrior20": 1.1
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
@@ -2912,7 +2912,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 103.911,
@@ -2936,9 +2936,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 99.938,
-            "lower": 97.429,
-            "upper": 102.446,
+            "basis": 99.925,
+            "lower": 97.416,
+            "upper": 102.433,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -2971,7 +2971,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 72.024,
@@ -2995,9 +2995,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 84.524,
-            "lower": 77.356,
-            "upper": 91.692,
+            "basis": 84.523,
+            "lower": 77.355,
+            "upper": 91.691,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3030,7 +3030,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 278.95,
@@ -3054,9 +3054,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 277.096,
-            "lower": 273.106,
-            "upper": 281.086,
+            "basis": 277.076,
+            "lower": 273.086,
+            "upper": 281.066,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -3089,7 +3089,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 266.622,
@@ -3113,9 +3113,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 293.177,
-            "lower": 283.006,
-            "upper": 303.348,
+            "basis": 293.172,
+            "lower": 283.001,
+            "upper": 303.343,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3148,7 +3148,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 109.33,
@@ -3172,9 +3172,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 168.599,
-            "lower": 159.623,
-            "upper": 177.575,
+            "basis": 168.58,
+            "lower": 159.604,
+            "upper": 177.556,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3207,7 +3207,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 296.395,
@@ -3231,9 +3231,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 262.955,
-            "lower": 256.943,
-            "upper": 268.968,
+            "basis": 262.982,
+            "lower": 256.97,
+            "upper": 268.995,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -3266,7 +3266,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 103.764,
@@ -3290,9 +3290,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 106.551,
-            "lower": 105.9,
-            "upper": 107.202,
+            "basis": 106.553,
+            "lower": 105.902,
+            "upper": 107.204,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3313,55 +3313,55 @@
       "providerSymbol": "MC.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 404.7,
-      "previousClose": 403.1,
-      "changePct": 0.397,
-      "change3dPct": 0.559,
-      "change5dPct": -3.332,
+      "sessionDate": "2026-11-16",
+      "close": 404,
+      "previousClose": 403.45,
+      "changePct": 0.136,
+      "change3dPct": 0.223,
+      "change5dPct": 0.385,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 398.874,
-            "lower": 388.275,
-            "upper": 409.474,
+            "basis": 399.757,
+            "lower": 388.978,
+            "upper": 410.535,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 405.998,
-            "lower": 392.5,
-            "upper": 419.495,
+            "basis": 405.823,
+            "lower": 393.959,
+            "upper": 417.688,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 427.08,
-            "lower": 406.774,
-            "upper": 447.386,
+            "basis": 426.165,
+            "lower": 406.187,
+            "upper": 446.142,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 459.248,
-            "lower": 448.117,
-            "upper": 470.378,
+            "basis": 458.237,
+            "lower": 447.153,
+            "upper": 469.32,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 52.9,
+        "stochRsi14": 50.3,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 55,
-        "volumeToPrior20": 0.98
+        "rsi14": 54.3,
+        "volumeToPrior20": 0.59
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/MC.PA?interval=1d&range=2y&includePrePost=false",
@@ -3384,7 +3384,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 642.801,
@@ -3401,16 +3401,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 646.381,
-            "lower": 615.562,
-            "upper": 677.2,
+            "basis": 646.38,
+            "lower": 615.561,
+            "upper": 677.199,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 641.7,
-            "lower": 628.717,
-            "upper": 654.683,
+            "basis": 641.546,
+            "lower": 628.563,
+            "upper": 654.53,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -3443,7 +3443,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 8.075,
@@ -3467,9 +3467,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 8.004,
-            "lower": 7.946,
-            "upper": 8.062,
+            "basis": 8.001,
+            "lower": 7.943,
+            "upper": 8.059,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3502,7 +3502,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 3.807,
@@ -3527,7 +3527,7 @@
           },
           "200": {
             "basis": 2.941,
-            "lower": 2.731,
+            "lower": 2.732,
             "upper": 3.151,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
@@ -3561,7 +3561,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 418.072,
@@ -3585,9 +3585,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 323.4,
-            "lower": 302.304,
-            "upper": 344.497,
+            "basis": 323.412,
+            "lower": 302.316,
+            "upper": 344.509,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -3620,7 +3620,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 528.291,
@@ -3637,16 +3637,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 492.221,
+            "basis": 492.22,
             "lower": 464.23,
-            "upper": 520.212,
+            "upper": 520.211,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 470.608,
-            "lower": 456.31,
-            "upper": 484.905,
+            "basis": 470.533,
+            "lower": 456.235,
+            "upper": 484.83,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -3679,7 +3679,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 131.509,
@@ -3696,16 +3696,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 134.674,
-            "lower": 122.255,
-            "upper": 147.094,
+            "basis": 134.677,
+            "lower": 122.257,
+            "upper": 147.096,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 150.536,
-            "lower": 144.17,
-            "upper": 156.902,
+            "basis": 150.924,
+            "lower": 144.558,
+            "upper": 157.29,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3738,7 +3738,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 831.108,
@@ -3755,16 +3755,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 886.671,
+            "basis": 886.67,
             "lower": 836.682,
             "upper": 936.659,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 769.711,
-            "lower": 705.184,
-            "upper": 834.239,
+            "basis": 769.7,
+            "lower": 705.172,
+            "upper": 834.228,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -3785,55 +3785,55 @@
       "providerSymbol": "NOVO-B.CO",
       "currency": "DKK",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 275.75,
-      "previousClose": 272.7,
-      "changePct": 1.118,
-      "change3dPct": 1.081,
-      "change5dPct": 1.659,
+      "sessionDate": "2026-11-16",
+      "close": 285.25,
+      "previousClose": 278.45,
+      "changePct": 2.442,
+      "change3dPct": 4.602,
+      "change5dPct": 4.564,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 497,
+        "lookbackSessions": 496,
         "emaBands": {
           "20": {
-            "basis": 267.979,
-            "lower": 260.586,
-            "upper": 275.371,
+            "basis": 270.526,
+            "lower": 262.299,
+            "upper": 278.753,
             "sdMultiplier": 1,
             "state": "ABOVE_UPPER"
           },
           "50": {
-            "basis": 270.279,
-            "lower": 256.818,
-            "upper": 283.74,
+            "basis": 271.174,
+            "lower": 259.045,
+            "upper": 283.304,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 278.356,
-            "lower": 264.764,
-            "upper": 291.947,
+            "basis": 278.492,
+            "lower": 265.033,
+            "upper": 291.95,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 297.038,
-            "lower": 288.941,
-            "upper": 305.135,
+            "basis": 296.392,
+            "lower": 288.738,
+            "upper": 304.047,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
-        "band20Event": "BROKE_UPPER_BAND",
+        "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 58.8,
-        "stochRsiZone": "NEUTRAL",
-        "rsi14": 58.1,
-        "volumeToPrior20": 1.4
+        "stochRsi14": 83.7,
+        "stochRsiZone": "OVERBOUGHT",
+        "rsi14": 64.8,
+        "volumeToPrior20": 0.9
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/NOVO-B.CO?interval=1d&range=2y&includePrePost=false",
@@ -3856,7 +3856,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 70.854,
@@ -3873,16 +3873,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 70.831,
+            "basis": 70.83,
             "lower": 68.607,
             "upper": 73.054,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 69.289,
-            "lower": 68.195,
-            "upper": 70.382,
+            "basis": 69.284,
+            "lower": 68.19,
+            "upper": 70.377,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -3915,7 +3915,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 193.266,
@@ -3932,16 +3932,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 209.43,
+            "basis": 209.429,
             "lower": 201.714,
             "upper": 217.145,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 203.644,
-            "lower": 199.198,
-            "upper": 208.089,
+            "basis": 203.599,
+            "lower": 199.154,
+            "upper": 208.045,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -3974,7 +3974,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 124.756,
@@ -3998,9 +3998,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 140.157,
-            "lower": 134.753,
-            "upper": 145.562,
+            "basis": 140.154,
+            "lower": 134.749,
+            "upper": 145.558,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -4021,55 +4021,55 @@
       "providerSymbol": "OR.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 446.85,
-      "previousClose": 446.65,
-      "changePct": 0.045,
-      "change3dPct": 0.011,
-      "change5dPct": -1.921,
+      "sessionDate": "2026-11-16",
+      "close": 450.15,
+      "previousClose": 451.2,
+      "changePct": -0.233,
+      "change3dPct": 0.784,
+      "change5dPct": 0.75,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 431.128,
-            "lower": 414.877,
-            "upper": 447.379,
+            "basis": 434.669,
+            "lower": 420.012,
+            "upper": 449.326,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "ABOVE_UPPER"
           },
           "50": {
-            "basis": 410.997,
-            "lower": 384.149,
-            "upper": 437.846,
+            "basis": 414.048,
+            "lower": 385.797,
+            "upper": 442.298,
             "sdMultiplier": 1,
             "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 397.7,
-            "lower": 386.977,
-            "upper": 408.423,
+            "basis": 399.777,
+            "lower": 388.311,
+            "upper": 411.244,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 387.149,
-            "lower": 381.697,
-            "upper": 392.601,
+            "basis": 388.394,
+            "lower": 382.686,
+            "upper": 394.102,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
-        "band20Event": "REJECTED_UPPER_BAND",
+        "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 9.4,
-        "stochRsiZone": "OVERSOLD",
-        "rsi14": 67.5,
-        "volumeToPrior20": 1.01
+        "stochRsi14": 21.4,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 68.5,
+        "volumeToPrior20": 0.6
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/OR.PA?interval=1d&range=2y&includePrePost=false",
@@ -4092,7 +4092,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 178.243,
@@ -4116,9 +4116,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 162.517,
-            "lower": 156.505,
-            "upper": 168.529,
+            "basis": 162.531,
+            "lower": 156.519,
+            "upper": 168.543,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -4151,7 +4151,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 265.992,
@@ -4169,15 +4169,15 @@
           },
           "100": {
             "basis": 243.893,
-            "lower": 226.628,
+            "lower": 226.629,
             "upper": 261.158,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 214.896,
-            "lower": 203.877,
-            "upper": 225.915,
+            "basis": 214.907,
+            "lower": 203.887,
+            "upper": 225.926,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -4210,7 +4210,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 601.157,
@@ -4234,9 +4234,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 606.173,
-            "lower": 588.771,
-            "upper": 623.576,
+            "basis": 606.204,
+            "lower": 588.802,
+            "upper": 623.607,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -4269,7 +4269,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 693.94,
@@ -4293,9 +4293,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 684.627,
-            "lower": 671.318,
-            "upper": 697.936,
+            "basis": 684.569,
+            "lower": 671.26,
+            "upper": 697.878,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -4316,55 +4316,55 @@
       "providerSymbol": "RHM.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 772.6,
-      "previousClose": 794.1,
-      "changePct": -2.707,
-      "change3dPct": -8.611,
-      "change5dPct": -8.188,
+      "sessionDate": "2026-11-16",
+      "close": 769.7,
+      "previousClose": 765.5,
+      "changePct": 0.549,
+      "change3dPct": -3.073,
+      "change5dPct": -8.954,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 506,
+        "lookbackSessions": 505,
         "emaBands": {
           "20": {
-            "basis": 924.431,
-            "lower": 824.56,
-            "upper": 1024.302,
+            "basis": 896,
+            "lower": 787.255,
+            "upper": 1004.745,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 982.692,
-            "lower": 913.763,
-            "upper": 1051.621,
+            "basis": 966.156,
+            "lower": 886.485,
+            "upper": 1045.828,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 1055.828,
-            "lower": 1009.249,
-            "upper": 1102.408,
+            "basis": 1044.528,
+            "lower": 994.563,
+            "upper": 1094.492,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 1181.4,
-            "lower": 1120.048,
-            "upper": 1242.752,
+            "basis": 1173.268,
+            "lower": 1112.136,
+            "upper": 1234.4,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
-        "donchian20": "CLOSE_BELOW_PRIOR_20_LOW",
-        "stochRsi14": 3.4,
+        "donchian20": "INSIDE_PRIOR_20_RANGE",
+        "stochRsi14": 4.6,
         "stochRsiZone": "OVERSOLD",
-        "rsi14": 27.3,
-        "volumeToPrior20": 1.65
+        "rsi14": 27.7,
+        "volumeToPrior20": 1.06
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/RHM.DE?interval=1d&range=2y&includePrePost=false",
@@ -4387,7 +4387,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 218.667,
@@ -4411,9 +4411,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 209.184,
-            "lower": 207.028,
-            "upper": 211.34,
+            "basis": 209.18,
+            "lower": 207.024,
+            "upper": 211.336,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -4434,55 +4434,55 @@
       "providerSymbol": "SAP.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 212.55,
-      "previousClose": 210.95,
-      "changePct": 0.758,
-      "change3dPct": 0.425,
-      "change5dPct": -1.483,
+      "sessionDate": "2026-11-16",
+      "close": 213.4,
+      "previousClose": 213.45,
+      "changePct": -0.023,
+      "change3dPct": 1.161,
+      "change5dPct": 0.827,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 506,
+        "lookbackSessions": 505,
         "emaBands": {
           "20": {
-            "basis": 208.069,
-            "lower": 203.414,
-            "upper": 212.725,
+            "basis": 209.041,
+            "lower": 205.861,
+            "upper": 212.22,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "ABOVE_UPPER"
           },
           "50": {
-            "basis": 197.6,
-            "lower": 185.055,
-            "upper": 210.144,
+            "basis": 198.817,
+            "lower": 186.054,
+            "upper": 211.579,
             "sdMultiplier": 1,
             "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 185.971,
-            "lower": 173.532,
-            "upper": 198.409,
+            "basis": 187.047,
+            "lower": 174.74,
+            "upper": 199.354,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 182.402,
-            "lower": 176.708,
-            "upper": 188.095,
+            "basis": 183.01,
+            "lower": 177.198,
+            "upper": 188.823,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 19.6,
-        "stochRsiZone": "OVERSOLD",
-        "rsi14": 60.6,
-        "volumeToPrior20": 0.63
+        "stochRsi14": 34.5,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 61.6,
+        "volumeToPrior20": 0.69
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SAP.DE?interval=1d&range=2y&includePrePost=false",
@@ -4505,7 +4505,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 100.546,
@@ -4529,9 +4529,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 100.545,
-            "lower": 100.523,
-            "upper": 100.567,
+            "basis": 100.546,
+            "lower": 100.524,
+            "upper": 100.568,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -4552,55 +4552,55 @@
       "providerSymbol": "SIE.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 281.7,
-      "previousClose": 277,
-      "changePct": 1.697,
-      "change3dPct": 3.948,
-      "change5dPct": 3.092,
+      "sessionDate": "2026-11-16",
+      "close": 272.55,
+      "previousClose": 279.4,
+      "changePct": -2.452,
+      "change3dPct": -1.607,
+      "change5dPct": 0.572,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 506,
+        "lookbackSessions": 505,
         "emaBands": {
           "20": {
-            "basis": 271.159,
-            "lower": 264.681,
-            "upper": 277.638,
+            "basis": 272.002,
+            "lower": 265.083,
+            "upper": 278.921,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 271.132,
-            "lower": 264.677,
-            "upper": 277.587,
+            "basis": 271.499,
+            "lower": 264.911,
+            "upper": 278.088,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 269.644,
-            "lower": 265.93,
-            "upper": 273.358,
+            "basis": 269.891,
+            "lower": 266.184,
+            "upper": 273.599,
             "sdMultiplier": 0.5,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "200": {
-            "basis": 262.071,
-            "lower": 256.878,
-            "upper": 267.265,
+            "basis": 262.375,
+            "lower": 257.176,
+            "upper": 267.573,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
-        "band20Event": "NONE",
-        "donchian20": "CLOSE_ABOVE_PRIOR_20_HIGH",
-        "stochRsi14": 100,
-        "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 59.1,
-        "volumeToPrior20": 1.69
+        "band20Event": "REJECTED_UPPER_BAND",
+        "donchian20": "INSIDE_PRIOR_20_RANGE",
+        "stochRsi14": 40,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 50.8,
+        "volumeToPrior20": 1.12
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SIE.DE?interval=1d&range=2y&includePrePost=false",
@@ -4623,7 +4623,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 51.156,
@@ -4648,7 +4648,7 @@
           },
           "200": {
             "basis": 49.848,
-            "lower": 49.003,
+            "lower": 49.004,
             "upper": 50.692,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
@@ -4682,7 +4682,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 516.444,
@@ -4699,16 +4699,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 549.062,
+            "basis": 549.061,
             "lower": 529.759,
             "upper": 568.364,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 516.241,
-            "lower": 495.698,
-            "upper": 536.785,
+            "basis": 516.197,
+            "lower": 495.654,
+            "upper": 536.74,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -4741,7 +4741,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 5.476,
@@ -4758,16 +4758,16 @@
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 8.099,
+            "basis": 8.1,
             "lower": 7.264,
             "upper": 8.935,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 11.34,
-            "lower": 10.657,
-            "upper": 12.023,
+            "basis": 11.358,
+            "lower": 10.675,
+            "upper": 12.041,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -4859,7 +4859,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 156.85,
@@ -4883,9 +4883,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 157.877,
-            "lower": 150.29,
-            "upper": 165.463,
+            "basis": 157.867,
+            "lower": 150.281,
+            "upper": 165.453,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -4941,7 +4941,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 757.803,
@@ -4965,9 +4965,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 734.885,
-            "lower": 725.348,
-            "upper": 744.423,
+            "basis": 734.85,
+            "lower": 725.313,
+            "upper": 744.388,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5000,7 +5000,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 84.002,
@@ -5024,9 +5024,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 76.671,
-            "lower": 75.256,
-            "upper": 78.085,
+            "basis": 76.67,
+            "lower": 75.255,
+            "upper": 78.084,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5047,55 +5047,55 @@
       "providerSymbol": "SU.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 244.8,
-      "previousClose": 242.5,
-      "changePct": 0.948,
-      "change3dPct": 4.437,
-      "change5dPct": 7.439,
+      "sessionDate": "2026-11-16",
+      "close": 241.55,
+      "previousClose": 243.45,
+      "changePct": -0.78,
+      "change3dPct": -0.392,
+      "change5dPct": 3.05,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 243.413,
-            "lower": 236.039,
-            "upper": 250.786,
+            "basis": 243.238,
+            "lower": 237.126,
+            "upper": 249.351,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 258.143,
-            "lower": 234.493,
-            "upper": 281.792,
+            "basis": 256.938,
+            "lower": 233.546,
+            "upper": 280.331,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 266.213,
-            "lower": 255.149,
-            "upper": 277.277,
+            "basis": 265.283,
+            "lower": 253.993,
+            "upper": 276.572,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 264.58,
-            "lower": 259.719,
-            "upper": 269.44,
+            "basis": 264.132,
+            "lower": 259.254,
+            "upper": 269.01,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 100,
+        "stochRsi14": 83.8,
         "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 47.7,
-        "volumeToPrior20": 0.84
+        "rsi14": 45.1,
+        "volumeToPrior20": 0.67
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SU.PA?interval=1d&range=2y&includePrePost=false",
@@ -5118,7 +5118,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 37.752,
@@ -5142,9 +5142,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 45.02,
-            "lower": 43.227,
-            "upper": 46.813,
+            "basis": 45.025,
+            "lower": 43.232,
+            "upper": 46.817,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5177,7 +5177,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 13.075,
@@ -5203,7 +5203,7 @@
           "200": {
             "basis": 13.764,
             "lower": 13.627,
-            "upper": 13.902,
+            "upper": 13.901,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5236,7 +5236,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 80.739,
@@ -5260,9 +5260,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 83.53,
-            "lower": 82.749,
-            "upper": 84.311,
+            "basis": 83.529,
+            "lower": 82.748,
+            "upper": 84.31,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5295,7 +5295,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 383.059,
@@ -5312,16 +5312,16 @@
             "state": "INSIDE"
           },
           "100": {
-            "basis": 375.351,
-            "lower": 361.414,
-            "upper": 389.288,
+            "basis": 375.352,
+            "lower": 361.415,
+            "upper": 389.289,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 379.338,
-            "lower": 371.722,
-            "upper": 386.954,
+            "basis": 379.525,
+            "lower": 371.909,
+            "upper": 387.14,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5354,7 +5354,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 408.207,
@@ -5378,9 +5378,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 395.203,
-            "lower": 385.859,
-            "upper": 404.547,
+            "basis": 395.196,
+            "lower": 385.853,
+            "upper": 404.54,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -5401,55 +5401,55 @@
       "providerSymbol": "TTE.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-12",
-      "close": 80.63,
-      "previousClose": 79.37,
-      "changePct": 1.587,
-      "change3dPct": 2.387,
-      "change5dPct": -0.087,
+      "sessionDate": "2026-11-16",
+      "close": 81.96,
+      "previousClose": 82.17,
+      "changePct": -0.256,
+      "change3dPct": 3.263,
+      "change5dPct": 4.076,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-12",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 510,
+        "lookbackSessions": 509,
         "emaBands": {
           "20": {
-            "basis": 80.703,
-            "lower": 78.69,
-            "upper": 82.716,
+            "basis": 80.949,
+            "lower": 78.958,
+            "upper": 82.941,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 79.531,
-            "lower": 77.029,
-            "upper": 82.032,
+            "basis": 79.725,
+            "lower": 77.253,
+            "upper": 82.198,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 77.571,
-            "lower": 75.384,
-            "upper": 79.758,
+            "basis": 77.747,
+            "lower": 75.599,
+            "upper": 79.895,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 73.719,
-            "lower": 72.426,
-            "upper": 75.012,
+            "basis": 73.898,
+            "lower": 72.635,
+            "upper": 75.161,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 33.8,
+        "stochRsi14": 48.5,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 50.5,
-        "volumeToPrior20": 0.79
+        "rsi14": 55,
+        "volumeToPrior20": 0.74
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TTE.PA?interval=1d&range=2y&includePrePost=false",
@@ -5472,7 +5472,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 212.003,
@@ -5496,9 +5496,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 221.016,
-            "lower": 216.749,
-            "upper": 225.283,
+            "basis": 221.026,
+            "lower": 216.759,
+            "upper": 225.293,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5531,7 +5531,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 57.309,
@@ -5555,9 +5555,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 58.313,
-            "lower": 58.053,
-            "upper": 58.572,
+            "basis": 58.314,
+            "lower": 58.054,
+            "upper": 58.573,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5590,7 +5590,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 115.7,
@@ -5614,9 +5614,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 111.803,
-            "lower": 108.618,
-            "upper": 114.987,
+            "basis": 111.792,
+            "lower": 108.607,
+            "upper": 114.976,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -5649,7 +5649,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 383.181,
@@ -5673,9 +5673,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 309.56,
-            "lower": 291.198,
-            "upper": 327.923,
+            "basis": 309.587,
+            "lower": 291.225,
+            "upper": 327.95,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5708,7 +5708,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 429.814,
@@ -5732,9 +5732,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 462.089,
-            "lower": 450.51,
-            "upper": 473.669,
+            "basis": 462.091,
+            "lower": 450.512,
+            "upper": 473.671,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5767,7 +5767,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 136.205,
@@ -5785,15 +5785,15 @@
           },
           "100": {
             "basis": 145.518,
-            "lower": 140.307,
+            "lower": 140.308,
             "upper": 150.729,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 151.491,
-            "lower": 148.731,
-            "upper": 154.251,
+            "basis": 151.546,
+            "lower": 148.787,
+            "upper": 154.306,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -5826,7 +5826,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 9.132,
@@ -5850,9 +5850,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 8.397,
-            "lower": 8.138,
-            "upper": 8.655,
+            "basis": 8.393,
+            "lower": 8.134,
+            "upper": 8.651,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -5885,7 +5885,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 131.449,
@@ -5909,9 +5909,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 128.816,
-            "lower": 125.164,
-            "upper": 132.468,
+            "basis": 128.827,
+            "lower": 125.175,
+            "upper": 132.478,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -5944,7 +5944,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 153.41,
@@ -5968,9 +5968,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 143.178,
-            "lower": 139.613,
-            "upper": 146.743,
+            "basis": 143.144,
+            "lower": 139.579,
+            "upper": 146.709,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6003,7 +6003,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 52.126,
@@ -6029,7 +6029,7 @@
           "200": {
             "basis": 50.468,
             "lower": 50.129,
-            "upper": 50.806,
+            "upper": 50.807,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6062,7 +6062,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 106.568,
@@ -6086,9 +6086,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 110.917,
-            "lower": 109.933,
-            "upper": 111.9,
+            "basis": 110.91,
+            "lower": 109.927,
+            "upper": 111.893,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
@@ -6121,7 +6121,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 64.99,
@@ -6145,9 +6145,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 59.162,
-            "lower": 58.09,
-            "upper": 60.235,
+            "basis": 59.166,
+            "lower": 58.093,
+            "upper": 60.239,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6180,7 +6180,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 57.24,
@@ -6204,9 +6204,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 54.782,
-            "lower": 54.074,
-            "upper": 55.49,
+            "basis": 54.785,
+            "lower": 54.077,
+            "upper": 55.492,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6239,7 +6239,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 168.308,
@@ -6263,9 +6263,9 @@
             "state": "INSIDE"
           },
           "200": {
-            "basis": 170.211,
-            "lower": 168.657,
-            "upper": 171.765,
+            "basis": 170.205,
+            "lower": 168.65,
+            "upper": 171.759,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -6298,7 +6298,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 177.615,
@@ -6322,9 +6322,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 172.907,
-            "lower": 167.665,
-            "upper": 178.149,
+            "basis": 172.89,
+            "lower": 167.648,
+            "upper": 178.132,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -6357,7 +6357,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 89.421,
@@ -6381,9 +6381,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 84.548,
-            "lower": 83.911,
-            "upper": 85.186,
+            "basis": 84.547,
+            "lower": 83.91,
+            "upper": 85.185,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6416,7 +6416,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 43.604,
@@ -6440,9 +6440,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 43.206,
-            "lower": 42.853,
-            "upper": 43.56,
+            "basis": 43.209,
+            "lower": 42.856,
+            "upper": 43.563,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6475,7 +6475,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 43.112,
@@ -6499,9 +6499,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 43.411,
-            "lower": 42.931,
-            "upper": 43.891,
+            "basis": 43.418,
+            "lower": 42.937,
+            "upper": 43.898,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6534,7 +6534,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 183.662,
@@ -6553,14 +6553,14 @@
           "100": {
             "basis": 171.003,
             "lower": 166.889,
-            "upper": 175.118,
+            "upper": 175.117,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 163.51,
-            "lower": 160.498,
-            "upper": 166.523,
+            "basis": 163.493,
+            "lower": 160.481,
+            "upper": 166.505,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6593,7 +6593,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 117.675,
@@ -6617,9 +6617,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 115.337,
-            "lower": 114.458,
-            "upper": 116.216,
+            "basis": 115.338,
+            "lower": 114.459,
+            "upper": 116.217,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6652,7 +6652,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 171.814,
@@ -6676,9 +6676,9 @@
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 154.52,
-            "lower": 151.808,
-            "upper": 157.232,
+            "basis": 154.518,
+            "lower": 151.806,
+            "upper": 157.23,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
@@ -6711,7 +6711,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 487,
         "emaBands": {
           "20": {
             "basis": 5.034,
@@ -6735,9 +6735,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 4.575,
-            "lower": 4.338,
-            "upper": 4.812,
+            "basis": 4.574,
+            "lower": 4.337,
+            "upper": 4.811,
             "sdMultiplier": 0.25,
             "state": "INSIDE"
           }
@@ -6770,7 +6770,7 @@
         "asOf": "2026-11-13",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 501,
+        "lookbackSessions": 499,
         "emaBands": {
           "20": {
             "basis": 57.625,
@@ -6794,9 +6794,9 @@
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 60.538,
-            "lower": 59.663,
-            "upper": 61.414,
+            "basis": 60.535,
+            "lower": 59.66,
+            "upper": 61.411,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
