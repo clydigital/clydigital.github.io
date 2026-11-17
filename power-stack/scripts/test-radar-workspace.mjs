@@ -275,10 +275,10 @@ test("Guildhall opportunity lens sits after market boards, before thematic drill
  const radar=read("owner-radar-workspace.mjs");
  const terminal=read("owner-opportunity-terminal.mjs");
  assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
- assert(radar.includes('workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,opportunityOverview,section'));
+ assert(radar.includes('workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section'));
  assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
  assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
- assert(radar.includes('for(const original of originals){if(original!==topPicks)legacy.append(original);}'));
+ assert(radar.includes('for(const original of originals){if(original!==topPicks&&original!==dailyBrief)legacy.append(original);}'));
 });
 
 
@@ -361,6 +361,7 @@ test("Matt leads an evidence-first War Room without standing instruction cards",
 
 test("all desk results are actual source-dated findings with inference and a call",()=>{
  assert.equal(BRIEFING_EDITION,"2026-11-17");
+ for(const id of ["nov17-bis-remote","nov17-anthropic","nov17-fed-usd","nov17-urea-recovery"])assert(VERIFIED_FINDINGS.some(x=>x.id===id&&validateFinding(x)),id);
  assert(VERIFIED_FINDINGS.some(x=>x.id==="nov17-agriculture"&&x.posture==="RESEARCH / WAIT"));
  assert(SCENARIOS.some(x=>x.id==="agri-supply-squeeze"));
  assert(VERIFIED_FINDINGS.length>=10);

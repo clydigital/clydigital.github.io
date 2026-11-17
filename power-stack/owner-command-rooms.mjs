@@ -1,8 +1,8 @@
-/* Power Stack decision rooms / 14 Nov 2026.
+/* Power Stack decision rooms / 17 Nov 2026.
    Dated research instructions only. Never converts archived positions or
    watchlist ideas into verified broker holdings, current valuations or orders. */
 import {CASES,CASE_EDITION,PRICE_SESSION,casesForRoom,validCase} from "./owner-nov14-opportunity-cases.mjs?v=20261114-ps-cases1";
-export const ROOM_EDITION="2026-11-14";
+export const ROOM_EDITION="2026-11-17";
 const link=(href,label)=>({href,label});
 // Specialist research instructions are stored ONLY in RLS-protected owner page data.
 // This public JS asset intentionally contains no ticker-specific portfolio calls.

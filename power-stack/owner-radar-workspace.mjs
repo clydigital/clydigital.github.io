@@ -5,7 +5,7 @@
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
-import {mountWarRoom} from "./owner-war-room.mjs?v=20261117-agri1";
+import {mountWarRoom} from "./owner-war-room.mjs?v=20261117-market2";
 import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
@@ -239,6 +239,7 @@ export function summarizeRegionalCloses(map,region="US"){
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
+ const dailyBrief=originals.find(node=>node.nodeType===1&&node.id.startsWith("ps-market-update-"))||null;
  // Keep the private, source-dated stock picks visible in the normal workspace.
  // They are fetched only after owner authentication; do not copy them into static assets.
  const topPicks=originals.find(node=>node.nodeType===1&&node.id==="ps-top-stock-picks-20261113")||null;
@@ -431,9 +432,9 @@ export function installRadarWorkspace(main,getState){
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
- for(const original of originals){if(original!==topPicks)legacy.append(original);}
+ for(const original of originals){if(original!==topPicks&&original!==dailyBrief)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  // Market Radar is the first screen. Matt's source-dated briefing is a separate,
  // deep-linkable room; the archive stays available without hiding active radar data.
  const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
