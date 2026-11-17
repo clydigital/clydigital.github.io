@@ -6,7 +6,7 @@ import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
 import {mountWarRoom} from "./owner-war-room.mjs?v=20261114-evidence2";
-import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261114-ps1";
+import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
 export const MARKET_THEMES=Object.freeze([
@@ -19,7 +19,7 @@ export const MARKET_THEMES=Object.freeze([
  {id:"metals",name:"Gold & Real Assets",symbol:"◇",description:"Gold, miners and industrial metals",tickers:["GLD","GLDM","GDX","WPM","FCX"]},
  {id:"power",name:"Power & Nuclear",symbol:"✧",description:"Electricity, grid supply and nuclear investment",tickers:["BWXT","CCJ","CEG","LEU","SMR","PWR","ETN","NVT","GEV","VST","TENAGA","YTLPOWR","1164.HK","1816.HK"]},
  {id:"china",name:"China & Asia Tech",symbol:"▣",description:"China compute, manufacturing and Hong Kong",tickers:["688825","9988.HK","3191.HK","3308.HK","6809.HK"]},
- {id:"agri",name:"Fertilisers & Agriculture",symbol:"✳",description:"Nutrients, food supply and natural resources",tickers:["CF","NTR","CTVA","BG","VMI"]},
+ {id:"agri",name:"Fertilisers & Agriculture",symbol:"✳",description:"Nutrients, food supply and natural resources",tickers:["CF","NTR","MOS","HSPLANT","SOP","CTVA","BG","VMI"]},
  {id:"aviation",name:"Airlines & Airport Operations",symbol:"✈",description:"Operational recovery, cancellations and fuel cost",tickers:["DAL","UAL","AAL","JBLU","JETS"]},
  {id:"govsystems",name:"Government & Aerospace Systems",symbol:"⬡",description:"FAA surveillance and procurement evidence, not automatic windfalls",tickers:["RTX","LHX"]},
  {id:"consumer",name:"Consumer & Industrials",symbol:"▤",description:"Consumer demand, mobility and industrials",tickers:["GRAB","TSLA","SPCX","AAPL","SYM","MNHLDG","FCFS","6742UW"]},
@@ -31,6 +31,7 @@ export const THEME_ICON_NAMES=Object.freeze({
  consumer:"truck",aviation:"network",govsystems:"shield",crypto:"coins",
 });
 export const SCENARIOS=Object.freeze([
+ {"id":"agri-supply-squeeze","name":"Agricultural supply squeeze","family":"agriculture","kind":"Physical supply overlay","premise":"Energy and fertiliser disruptions lift costs; lower application may reduce yields and draw inventories. Nitrogen, grain and palm can diverge.","test":"Verify actual Indian urea tender, Chinese export flows, gas spread, USDA grain revisions, MPOB stock draws and realised B50 demand.","falsifier":"Nitrogen availability normalises, or grain and palm inventory builds persist despite disruption.","source":"https://esmis.nal.usda.gov/sites/default/release-files/796142/wasde1126.pdf","impact":{"ai":"neutral","equities":"mixed","energy":"mixed","shipping":"mixed","bonds":"mixed","metals":"neutral","power":"mixed","china":"mixed","agri":"mixed","consumer":"down","crypto":"neutral","europe":"unknown","aviation":"mixed","govsystems":"neutral"}},
  {id:"oil-escalation",name:"Hormuz disruption worsens",family:"oil",kind:"Supply shock",
   premise:"Physical traffic disruption and insured-delivery costs worsen; crude and product pressure persist.",
   test:"Verify UKMTO incidents, complete vessel transits, Brent, distillate cracks, inventories and insurance.",
@@ -663,7 +664,7 @@ export function installRadarWorkspace(main,getState){
   const a=SCENARIO_BY_ID.get(selA.value),b=SCENARIO_BY_ID.get(selB.value);
   const compat=scenarioPair(a?.id,b?.id);
   matrixNote.textContent=compat.compatible?
-   "Source-dated Bluebelly scenarios · editorial mechanisms reviewed through "+RESEARCH_ASOF+" · Not live/regime verdicts.":
+   "Source-dated Bluebelly scenarios · base editorial mechanisms reviewed through "+RESEARCH_ASOF+" · Agriculture overlay 17 Nov · Not live/regime verdicts.":
    compat.reason+" Combined result withheld.";
   scenarioCards.replaceChildren();
   for(const s of [a,b]){
