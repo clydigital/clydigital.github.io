@@ -1,7 +1,7 @@
 // Research-only opportunity content shared between the private-home overview and detailed idea reader.
 // Public source code contains no private positions, holdings, cash or authenticated decisions.
 export const LENS_CONTRACT="power-stack-opportunity-lenses/1";
-export const LENS_EDITION="2026-11-14";
+export const LENS_EDITION="2026-11-17";
 export const OPPORTUNITY_LENSES=Object.freeze([
   {
     "id": "missing",
@@ -40,6 +40,76 @@ export const OPPORTUNITY_LENSES=Object.freeze([
   }
 ]);
 export const LENS_CASES=Object.freeze([
+  {
+    "ticker": "HSPLANT",
+    "name": "Hap Seng Plantations (5138)",
+    "lens": "quality",
+    "action": "WAIT",
+    "why": "H1 operating cash RM140.617m less capex RM33.895m = RM106.722m. Cash and money-market deposits less leases ≈ RM0.887/share; no bank debt reported. Balance-sheet resilience, not a price floor.",
+    "test": "Require sequential MPOB inventory draw, realised B50 demand, current CPO, costs and normalised cash flow.",
+    "risk": "Commodity prices, harvest, cost and valuation risk; RM2.18 reference on 10 Nov is dated.",
+    "source": "https://www.hapsengplantations.com.my/bursa-announcements.html",
+    "evidenceAsOf": "2026-11-10",
+    "reviewBy": "2026-12-10",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "CF",
+    "name": "CF Industries",
+    "lens": "value",
+    "action": "WAIT",
+    "why": "9M CFO $2.544bn less capex $0.776bn = $1.768bn. Q3 realised urea $423/US short ton vs $450; cost $243 vs $223. Physical urea prices weakened; strong trailing FCF is not trough-cycle value.",
+    "test": "Confirm actual India tender award, Chinese exports, natural-gas spread, normalised FCF and valuation.",
+    "risk": "Normalising nitrogen prices and rising gas costs can erase the apparent discount.",
+    "source": "https://www.cfindustries.com/newsroom/2026/cf-9m-2026-earnings",
+    "evidenceAsOf": "2026-11-16",
+    "reviewBy": "2026-12-10",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "SOP",
+    "name": "Sarawak Oil Palms (5126)",
+    "lens": "missing",
+    "action": "WAIT",
+    "why": "H1 attributable earnings RM218m vs RM205.7m; Q2 RM153.7m vs RM91.9m; palm-price operating leverage. RM4.75 reported net assets per share are not cash.",
+    "test": "Require inventory draw, realised B50 demand, production, issuer debt and full cash flow bridge.",
+    "risk": "Higher sensitivity to palm prices and margins; RM5.13 reference 10 Nov is dated.",
+    "source": "https://www.klsescreener.com/v2/announcements/view/11657125",
+    "evidenceAsOf": "2026-11-10",
+    "reviewBy": "2026-12-10",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "NTR",
+    "name": "Nutrien",
+    "lens": "value",
+    "action": "WATCH",
+    "why": "9M raw CFO less capex −$133m (seasonal), trailing simple FCF $2.093bn; Q3 adjusted EBITDA down 8%.",
+    "test": "Compare normalised cash, leverage and farmer affordability.",
+    "risk": "Seasonality, leverage and weaker nutrient spreads.",
+    "source": "https://www.nutrien.com/news/press-releases/nutrien-reports-third-quarter-2026-results-1761",
+    "evidenceAsOf": "2026-11-16",
+    "reviewBy": "2026-12-10",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
+  {
+    "ticker": "MOS",
+    "name": "Mosaic",
+    "lens": "catalyst",
+    "action": "WATCH",
+    "why": "Q3 adjusted EBITDA $324m (−60%); 9M CFO less capex −$402.6m. Recovery requires improving phosphate margins.",
+    "test": "Confirm falling sulphur input costs and cash conversion.",
+    "risk": "Input cost squeeze, debt and weak margins.",
+    "source": "https://investors.mosaicco.com/press-releases/news-details/2026/The-Mosaic-Company-Reports-Third-Quarter-2026-Results/default.aspx",
+    "evidenceAsOf": "2026-11-16",
+    "reviewBy": "2026-12-10",
+    "readiness": "RESEARCH_ONLY",
+    "executionReady": false
+  },
   {
     "ticker": "CSCO",
     "name": "Cisco",
@@ -251,20 +321,6 @@ export const LENS_CASES=Object.freeze([
     "executionReady": false
   },
   {
-    "ticker": "CF",
-    "name": "CF Industries",
-    "lens": "value",
-    "action": "COMPARE",
-    "why": "Strong trailing fertiliser cash may not represent midcycle economics.",
-    "test": "Stress nitrogen spreads, gas costs and JV cash demands.",
-    "reviewBy": "2026-12-04",
-    "source": "https://ir.cfindustries.com/Investors/news/news-details/2026/CF-Industries-Holdings-Inc--Reports-First-Nine-Months-2026-Net-Earnings-of-1-78-Billion-Adjusted-EBITDA-of-3-01-Billion/default.aspx",
-    "risk": "Commodity cycle and one-off income",
-    "evidenceAsOf": "2026-11-13",
-    "readiness": "RESEARCH_ONLY",
-    "executionReady": false
-  },
-  {
     "ticker": "ETN",
     "name": "Eaton",
     "lens": "quality",
@@ -440,7 +496,7 @@ export function renderOpportunityLensSummary({id="ps-opportunity-lenses",compact
  const header=el("div","psl-head"),copy=el("div");
  copy.append(el("p","psl-overline","OPPORTUNITY RESEARCH"),el("h2",null,"Where to look next"),
    el("p","psl-intro","Promising companies, their risks, and what must happen next."));
- header.append(copy,el("span","psl-vintage","14 Nov research · 13 Nov market close · not trade signals"));section.append(header);
+ header.append(copy,el("span","psl-vintage","17 Nov research supplement · mixed market dates · not trade signals"));section.append(header);
  const tabs=el("div","psl-tabs");tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Opportunity categories");
  const panel=el("div","psl-panel");panel.id=id+"-panel";panel.setAttribute("role","tabpanel");panel.tabIndex=0;
  const heading=el("div","psl-panel-head"),cards=el("div","psl-items");panel.append(heading,cards);
