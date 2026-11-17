@@ -1,13 +1,15 @@
 /* Reviewed event facts as of 14 Nov 2026, and already-published issuer evidence.
    This is a source-dated research edition, NOT a live news feed. Replace this
    snapshot with newly verified evidence rather than silently changing its date. */
-import {LENS_CASES} from "./owner-opportunity-lenses.mjs?v=20261113-guildlens1";
+import {LENS_CASES} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
 import {COMPARISONS} from "./owner-research-theses.mjs?v=20261113-research1";
-export const BRIEFING_EDITION="2026-11-14";
+export const BRIEFING_EDITION="2026-11-17";
 const lens=ticker=>LENS_CASES.find(x=>x.ticker===ticker);
 const comparison=id=>COMPARISONS.find(x=>x.id===id);
 const finding=(x)=>Object.freeze(x);
 export const VERIFIED_FINDINGS=Object.freeze([
+ finding({"id":"nov17-agriculture","desk":"selection","symbol":"CF / HSPLANT / SOP","headline":"Agricultural supply risk is not a blanket shortage trade","fact":"13 Nov China granular urea $420/metric tonne FOB; anticipated Indian $375 CFR is not an award. October MPOB stocks ~3.62Mt, +3.15% month on month.","why":"Nitrogen price and natural gas spreads drive CF; palm inventory and realised biodiesel demand drive plantation economics. Strong cash does not eliminate cyclical downside.","call":"CF: WAIT. Compare HSP balance-sheet resilience and SOP operating leverage; no confirmed entry.","change":"Actual tender award, Chinese exports, normalised gas spreads, sequential palm inventory draws and realised B50 volumes.","posture":"RESEARCH / WAIT","asOf":"2026-11-17","source":"https://ausfertcorp.com/weekly-update-global-fertiliser-markets-w-e-13-11-2026/","secondary":"https://bepi.mpob.gov.my/stat/web_report1.php?val=202684","featured":true}),
+ finding({"id":"nov17-corn","desk":"energy","symbol":"GRAIN","headline":"Corn stocks forecast lower year-on-year, but revised upward","fact":"November WASDE projected world corn ending stocks 281.94Mt versus 308.31Mt prior season, up 1.5Mt versus October forecast.","why":"Reduced inventory can support prices in a later shortage scenario but the revision and farmer affordability counter immediate scarcity assumptions.","call":"WATCH physical inventory and producer margins, not generic food inflation.","change":"Crop revisions, stocks-to-use, fertiliser application and actual export volumes.","posture":"CONDITIONAL","asOf":"2026-11-17","source":"https://esmis.nal.usda.gov/sites/default/release-files/796142/wasde1126.pdf","featured":true}),
  finding({id:"rate-cpi",desk:"rates",symbol:"CPI / PPI",headline:"Monthly inflation eased — the inflation problem did not disappear",
   fact:"October CPI rose 0.4% after 0.6% in September; core CPI rose 0.3%. October PPI rose 0.3%, but annual PPI reached 6.5%.",
   why:"A sequential slowdown in prices and still-high annual inflation can coexist. One softer monthly PPI print does not establish a sustained disinflation trend.",
@@ -102,7 +104,7 @@ export const VERIFIED_FINDINGS=Object.freeze([
  finding({id:"selection-cf",desk:"selection",symbol:"CF",headline:"Fertiliser cash generation is a non-AI alternative — but the cycle matters",
   fact:lens("CF")?.why||"CF's trailing cash generation is strong, but may not describe midcycle profitability.",
   why:"A cheap-looking cash yield can reverse when nitrogen prices normalise or natural gas costs rise.",
-  call:"CF: COMPARE normalised cash flow and valuation before treating it as a defensive stock.",
+  call:"CF: WAIT — check actual tender, gas spread and normalised valuation. Earlier research is historical.",
   change:"Sustained deterioration in nitrogen spreads, gas input costs or adjusted free cash flow.",
   posture:"MIDCYCLE CHECK",asOf:lens("CF")?.evidenceAsOf||"2026-11-13",source:lens("CF")?.source,featured:false})
 ]);

@@ -1,7 +1,7 @@
 /* Evidence-first War Room. The stage voices are editorial. Findings are dated,
    sourced research snapshots; owner decisions and prices remain separately identified.
    No brokerage operations, auto-updates or invented confidence scores. */
-import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261114-evidence2";
+import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261117-agri1";
 export const DESKS=Object.freeze([
  {id:"matt",name:"Matt",role:"HEAD OF THE DESK",icon:"M"},
  {id:"rates",name:"Jimmy",role:"RATES & INFLATION",icon:"%"},
@@ -11,7 +11,7 @@ export const DESKS=Object.freeze([
  {id:"selection",name:"Sarah",role:"VALUATION & STOCK SELECTION",icon:"◇"}
 ]);
 const MATT_SAYS=Object.freeze({
- matt:"THAT'S THE GODDAMN PICTURE! RATES ARE HIGH, THE AI STORY IS SPLITTING, OIL HAS ROLLED OVER, AND THE FAA JUST REMINDED US INFRASTRUCTURE MATTERS. DIFFERENT PROBLEMS. DIFFERENT TRADES!",
+ matt:"FOOD SUPPLY IS NOT ONE GODDAMN TRADE! UREA PRICES HAVE WEAKENED, PALM INVENTORIES ARE BUILDING, AND CHEAP-LOOKING CASH FLOW NEEDS A MIDCYCLE CHECK.",
  rates:"JIMMY! MONTHLY INFLATION COOLED BUT THE TEN-YEAR IS STILL OVER FIVE! THAT MEANS OUR DURATION BUY BUTTON STAYS LOCKED UNTIL THE YIELD ACTUALLY TURNS!",
  ai:"DAVID! NVIDIA IS RSI-OVERSOLD AND BELOW ITS LOWER DAILY BAND. THAT IS NOT A BUY ORDER! COMPARE CISCO\'S GUIDANCE AND NEBIUS\'S FINANCING BEFORE WE RISK A SINGLE DOLLAR!",
  energy:"MIKE! OIL'S DOWN ON THE WEEK WHILE HORMUZ IS STILL RISKY! THAT'S THE CONTRADICTION. STOP BUYING EVERY PRODUCER ON A WAR HEADLINE!",
@@ -182,7 +182,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
   $(root,"#psw-matt-lead").textContent=revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
-    :'"NVIDIA IS OVERSOLD, CISCO HAS AN EARNINGS-EXPECTATION GAP, THE FAA REOPENED AND CHIP BREADTH REMAINS WEAK! DIFFERENT SETUPS — NO BLIND DIP BUY!"';
+    :'"UREA IS WEAKER, PALM STOCKS ARE BUILDING, AND NVIDIA STILL HAS AN EARNINGS EVENT. HSP, CF AND SOP WARRANT DIFFERENT TESTS — NO BLIND SCARCITY BUY!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
   for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));

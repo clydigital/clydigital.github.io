@@ -227,7 +227,8 @@ test("historical earnings have their own owner-gated archive; current decision s
  const version=/auth-gate\.mjs\?v=[0-9]{8}[a-z0-9-]*/;
  assert.match(archive,version);assert.match(index,version);
  assert.equal(archive.match(version)?.[0],index.match(version)?.[0],"Archive and current desk must load the same owner gate");
- assert.match(gate,/\["index","research","sectors","decisions","portfolio","archive","ideas"\]/);
+ assert.match(gate,/\["index","research","sectors","decisions","portfolio","archive","ideas","dossiers"\]/);
+ assert.match(gate,/mountNov17Research\(PAGE,content\)/);
  assert.match(gate,/ps-legacy-note/);
  assert.match(index,/owner-decision-desk\.css/);
  assert.match(decision,/href="archive\.html"/);
