@@ -114,7 +114,7 @@ test("research page adds source-dated causal investment analysis after owner aut
  assert(auth.includes('await import("./owner-research-theses.mjs?v=20261114-ps1")'));
  const html=read("research.html");
  assert(html.includes("owner-research-theses.css?v=20261113-research1"));
- assert(html.includes("auth-gate.mjs?v=20261114-ps1"));
+ assert(html.includes("auth-gate.mjs?v=20261117-dossiers1"));
  assert(html.includes('data-private-page="research"'));
  assert(!html.includes("Source-dated investment reasoning"));
 });
@@ -130,4 +130,18 @@ test("research presentation is compact and leaves original private database page
  assert(css.includes(".psrt-study"));
  assert(css.includes("@media(max-width:640px)"));
  assert(css.includes("prefers-reduced-motion"));
+});
+
+
+test("dossier archive uses owner-only shell and preserves OAuth destination without leaking private report links",()=>{
+ const html=read("dossiers.html"),gate=read("auth-gate.mjs"),presentation=read("owner-advisor-presentation.mjs");
+ assert(html.includes('data-private-page="dossiers"'));
+ assert(html.includes('<div id="private-main" hidden></div>'));
+ assert(html.includes('owner-dossiers.css'));
+ assert(!/libfile_|\/api\/library\/files|Market_Research_Dossier_Expanded/.test(html));
+ assert(gate.includes('"archive","ideas","dossiers"].includes(planned)'));
+ assert(presentation.includes('["dossiers.html","Dossiers","dossiers"]'));
+ for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio","dossiers"]){
+  assert(read(page+".html").includes('href="dossiers.html"'),page);
+ }
 });
