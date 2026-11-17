@@ -116,7 +116,7 @@ async function load(){
  // Both presentation stylesheets are loaded by the HTML <head> before first paint.
  // Apply the complete layout while the authenticated view is still hidden.
  try{
-  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261114-rooms1");
+  const {presentClientView}=await import("./owner-advisor-presentation.mjs?v=20261117-dossiers1");
   presentClientView(PAGE,content);
  }catch(error){console.error("Advisor presentation unavailable",error);}
  if(PAGE==="research"){
@@ -152,7 +152,7 @@ async function load(){
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
-  const safe=["index","research","sectors","decisions","portfolio","archive","ideas"].includes(planned)?planned:"index";
+  const safe=["index","research","sectors","decisions","portfolio","archive","ideas","dossiers"].includes(planned)?planned:"index";
   if(safe!==PAGE){location.replace(safe+".html");return;}
  }
  // Reveal everything together; no intermediate old-theme page is shown.

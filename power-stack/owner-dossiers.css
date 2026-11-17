@@ -1,0 +1,17 @@
+/* Generic presentation only; dossier titles and download locations are owner-only data. */
+.ps-dossier-library{max-width:1160px;margin-inline:auto}
+.ps-dossier-library .research-hero{margin-bottom:22px}
+.ps-dossier-library .ps-dossier-card{padding:clamp(18px,3vw,28px);min-height:0;gap:16px}
+.ps-dossier-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.ps-dossier-library .ps-dossier-card h3{font-size:clamp(21px,3vw,30px);line-height:1.2;margin:8px 0 12px;max-width:800px}
+.ps-dossier-format{border:1px solid #526e82;border-radius:8px;background:#142b39;color:#c4dfed;padding:10px 15px;font:700 12px/1.4 system-ui;white-space:nowrap}
+.ps-dossier-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.ps-dossier-stats div{border:1px solid var(--line,#354c5b);border-radius:9px;padding:12px;background:rgba(9,19,28,.32)}
+.ps-dossier-stats strong,.ps-dossier-stats small{display:block}
+.ps-dossier-stats strong{font-size:24px;font-weight:850;color:var(--mint,#9fd7bb)}
+.ps-dossier-stats small{font-size:11px;color:var(--muted,#a6b5b8);line-height:1.4}
+.ps-dossier-topics{display:flex;gap:7px;flex-wrap:wrap}
+.ps-dossier-topics span{border:1px solid var(--line,#354c5b);border-radius:999px;padding:5px 10px;font-size:11px;color:var(--text,#eff6ef)}
+.ps-dossier-library .actions{margin-top:4px}
+.ps-dossier-library .ps-dossier-note{font-size:12px;line-height:1.5;color:var(--muted,#a6b5b8)}
+@media(max-width:620px){.ps-dossier-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ps-dossier-top{flex-wrap:wrap}.ps-dossier-library .actions a{min-height:42px}}

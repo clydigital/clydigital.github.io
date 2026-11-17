@@ -15,6 +15,7 @@ function navIcon(kind){
   research:["path:M4 19.5V4a2 2 0 0 1 2-2h13v20H6a2 2 0 0 1-2-2.5Z","path:M8 7h7","path:M8 11h7","path:M8 15h4"],
   sectors:["rect:3,3,7,7,1","rect:14,3,7,7,1","rect:3,14,7,7,1","rect:14,14,7,7,1"],
   decisions:["path:M9 12l2 2 4-4","path:M12 22c5.5-2.2 8-6 8-11V5l-8-3-8 3v6c0 5 2.5 8.8 8 11Z"],
+  dossiers:["path:M5 3h14v18H5Z","path:M8 7h8","path:M8 11h8","path:M8 15h5"],
   archive:["rect:3,4,18,17,2","path:M3 9h18","path:M9 13h6"]
  };
  for(const raw of shapes[kind]||shapes.index){
@@ -44,7 +45,8 @@ export function presentClientView(page,main){
    ["portfolio.html#watchlist","Market watch","market"],
    ["index.html#scenario-matrix","Scenario Matrix","scenarios"],
    ["portfolio.html#bonds","Bond Strategy","bonds"],
-   ["research.html","Evidence Command","research"]
+   ["research.html","Evidence Command","research"],
+   ["dossiers.html","Dossiers","dossiers"]
   ];
   const fragment=document.createDocumentFragment();
   const label=document.createElement("p");label.textContent="YOUR WORKSPACE";label.className="ps-sidebar-label";fragment.append(label);
