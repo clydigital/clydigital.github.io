@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261114-ps1");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261117-agri1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -103,7 +103,7 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261114-ps1");
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261117-agri1");
    await initIdeasTracker(db,content,user);
   }catch(error){
    content.replaceChildren();
@@ -149,6 +149,7 @@ async function load(){
    mountCommandRoom(PAGE,content,privateRooms);
   }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }
+ try{const {mountNov17Research}=await import("./owner-nov17-research.mjs?v=20261117-agri1");mountNov17Research(PAGE,content);}catch(error){console.error("Dated market supplement unavailable",error);}
  const planned=sessionStorage.getItem("power-stack-target");
  if(planned){
   sessionStorage.removeItem("power-stack-target");
