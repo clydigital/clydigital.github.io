@@ -42,7 +42,7 @@ test("scenario impact schema is complete with approved evidence sources and no f
  const known=new Set(["up","down","mixed","neutral","unknown"]);
  for(const s of SCENARIOS){
   assert(s.id&&s.name&&s.premise&&s.test&&s.falsifier);
-  assert(["https://bluebelly-desk.vercel.app/","https://www.bis.gov/","https://www.faa.gov/","https://apnews.com/article/"].some(prefix=>s.source.startsWith(prefix)),"Approved primary or Bluebelly source required: "+s.id);
+  assert(["https://bluebelly-desk.vercel.app/","https://www.bis.gov/","https://www.faa.gov/","https://apnews.com/article/","https://esmis.nal.usda.gov/sites/default/release-files/"].some(prefix=>s.source.startsWith(prefix)),"Approved primary or Bluebelly source required: "+s.id);
   assert.deepEqual(Object.keys(s.impact).sort(),MARKET_THEMES.map(x=>x.id).sort(),s.id);
   for(const effect of Object.values(s.impact))assert(known.has(effect),s.id);
   assert(!Object.hasOwn(s,"probability"),"Scenario must not claim probability");
@@ -360,7 +360,9 @@ test("Matt leads an evidence-first War Room without standing instruction cards",
 });
 
 test("all desk results are actual source-dated findings with inference and a call",()=>{
- assert.equal(BRIEFING_EDITION,"2026-11-14");
+ assert.equal(BRIEFING_EDITION,"2026-11-17");
+ assert(VERIFIED_FINDINGS.some(x=>x.id==="nov17-agriculture"&&x.posture==="RESEARCH / WAIT"));
+ assert(SCENARIOS.some(x=>x.id==="agri-supply-squeeze"));
  assert(VERIFIED_FINDINGS.length>=10);
  assert(VERIFIED_FINDINGS.every(validateFinding));
  assert.equal(new Set(VERIFIED_FINDINGS.map(x=>x.id)).size,VERIFIED_FINDINGS.length);
