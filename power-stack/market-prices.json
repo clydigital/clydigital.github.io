@@ -1,6 +1,6 @@
 {
   "contractVersion": "power-stack-public-prices/1",
-  "generatedAt": "2026-11-17T07:36:13.317Z",
+  "generatedAt": "2026-11-17T19:51:56.215Z",
   "isDelayed": true,
   "description": "Completed sessions, delayed price changes and optional daily technical observations. Independent of Bluebelly and personal positions; not executable quotes.",
   "technicalContract": "power-stack-daily-technicals/1",
@@ -135,55 +135,55 @@
       "providerSymbol": "3191.HK",
       "currency": "HKD",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 65.26,
-      "previousClose": 66.5,
-      "changePct": -1.865,
-      "change3dPct": 2.934,
-      "change5dPct": 2.224,
+      "sessionDate": "2026-11-16",
+      "close": 62.2,
+      "previousClose": 65.26,
+      "changePct": -4.689,
+      "change3dPct": -4.16,
+      "change5dPct": -1.27,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-16",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 490,
+        "lookbackSessions": 491,
         "emaBands": {
           "20": {
-            "basis": 65.996,
-            "lower": 63.518,
-            "upper": 68.473,
+            "basis": 65.634,
+            "lower": 63.308,
+            "upper": 67.96,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 72.35,
-            "lower": 63.898,
-            "upper": 80.802,
+            "basis": 71.952,
+            "lower": 63.471,
+            "upper": 80.433,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 77.115,
-            "lower": 69.471,
-            "upper": 84.759,
+            "basis": 76.82,
+            "lower": 69.197,
+            "upper": 84.443,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 75.113,
-            "lower": 70.957,
-            "upper": 79.269,
+            "basis": 74.984,
+            "lower": 70.829,
+            "upper": 79.139,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
-        "band20Event": "NONE",
+        "band20Event": "BROKE_LOWER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 89.7,
-        "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 44.2,
-        "volumeToPrior20": 1.55
+        "stochRsi14": 67.5,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 38.3,
+        "volumeToPrior20": 1.11
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/3191.HK?interval=1d&range=2y&includePrePost=false",
@@ -387,7 +387,7 @@
         "stochRsi14": 77.7,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 57,
-        "volumeToPrior20": 0.97
+        "volumeToPrior20": 1.07
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AAPL?interval=1d&range=2y&includePrePost=false",
@@ -457,55 +457,55 @@
       "providerSymbol": "ADYEN.AS",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 867.1,
-      "previousClose": 868,
-      "changePct": -0.104,
-      "change3dPct": -0.642,
-      "change5dPct": -3.784,
+      "sessionDate": "2026-11-17",
+      "close": 837.7,
+      "previousClose": 867.1,
+      "changePct": -3.391,
+      "change3dPct": -3.491,
+      "change5dPct": -4.011,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 880.23,
-            "lower": 835.781,
-            "upper": 924.679,
+            "basis": 875.048,
+            "lower": 831.713,
+            "upper": 918.383,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 898.634,
-            "lower": 855.689,
-            "upper": 941.579,
+            "basis": 895.056,
+            "lower": 856.263,
+            "upper": 933.85,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 917.288,
-            "lower": 878.557,
-            "upper": 956.019,
+            "basis": 914.738,
+            "lower": 876.263,
+            "upper": 953.213,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 981.831,
-            "lower": 962.102,
-            "upper": 1001.56,
+            "basis": 979.266,
+            "lower": 960.385,
+            "upper": 998.148,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 56.1,
+        "stochRsi14": 37.1,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 45.8,
-        "volumeToPrior20": 0.48
+        "rsi14": 40.1,
+        "volumeToPrior20": 0.5
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ADYEN.AS?interval=1d&range=2y&includePrePost=false",
@@ -575,55 +575,55 @@
       "providerSymbol": "AIR.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 206.65,
-      "previousClose": 208.25,
-      "changePct": -0.768,
-      "change3dPct": -0.768,
-      "change5dPct": 5.219,
+      "sessionDate": "2026-11-17",
+      "close": 201.1,
+      "previousClose": 204.15,
+      "changePct": -1.494,
+      "change3dPct": -3.433,
+      "change5dPct": -3.433,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 199.925,
-            "lower": 193.856,
-            "upper": 205.994,
+            "basis": 200.401,
+            "lower": 194.373,
+            "upper": 206.43,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 197.299,
-            "lower": 191.636,
-            "upper": 202.963,
+            "basis": 197.706,
+            "lower": 191.913,
+            "upper": 203.5,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 195.669,
-            "lower": 191.763,
-            "upper": 199.576,
+            "basis": 195.941,
+            "lower": 192.056,
+            "upper": 199.827,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 192.366,
-            "lower": 188.805,
-            "upper": 195.927,
+            "basis": 192.569,
+            "lower": 188.989,
+            "upper": 196.148,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 67,
+        "stochRsi14": 22.1,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 60.6,
-        "volumeToPrior20": 0.68
+        "rsi14": 52.5,
+        "volumeToPrior20": 0.79
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AIR.PA?interval=1d&range=2y&includePrePost=false",
@@ -682,7 +682,7 @@
         "stochRsi14": 61.2,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 46.7,
-        "volumeToPrior20": 1.03
+        "volumeToPrior20": 1.07
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AMD?interval=1d&range=2y&includePrePost=false",
@@ -811,55 +811,55 @@
       "providerSymbol": "ASML.AS",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 1338.8,
-      "previousClose": 1376.8,
-      "changePct": -2.76,
-      "change3dPct": -1.631,
-      "change5dPct": 4.3,
+      "sessionDate": "2026-11-17",
+      "close": 1236.8,
+      "previousClose": 1306.6,
+      "changePct": -5.342,
+      "change3dPct": -10.169,
+      "change5dPct": -9.126,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 1400.701,
-            "lower": 1331.608,
-            "upper": 1469.793,
+            "basis": 1376.983,
+            "lower": 1301.822,
+            "upper": 1452.143,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 1451.5,
-            "lower": 1356.956,
-            "upper": 1546.045,
+            "basis": 1437.621,
+            "lower": 1335.115,
+            "upper": 1540.127,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 1453.958,
-            "lower": 1409.989,
-            "upper": 1497.928,
+            "basis": 1446.798,
+            "lower": 1401.726,
+            "upper": 1491.87,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 1366.032,
-            "lower": 1326.288,
-            "upper": 1405.776,
+            "basis": 1364.16,
+            "lower": 1324.789,
+            "upper": 1403.531,
             "sdMultiplier": 0.25,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 59.9,
+        "stochRsi14": 25.4,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 41.5,
-        "volumeToPrior20": 0.97
+        "rsi14": 33.7,
+        "volumeToPrior20": 1.36
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/ASML.AS?interval=1d&range=2y&includePrePost=false",
@@ -918,7 +918,7 @@
         "stochRsi14": 61.9,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 48.8,
-        "volumeToPrior20": 0.97
+        "volumeToPrior20": 1.01
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/AVGO?interval=1d&range=2y&includePrePost=false",
@@ -1473,7 +1473,7 @@
         "stochRsi14": 43.9,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 37.2,
-        "volumeToPrior20": 0.8
+        "volumeToPrior20": 0.81
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRDO?interval=1d&range=2y&includePrePost=false",
@@ -1532,7 +1532,7 @@
         "stochRsi14": 16.8,
         "stochRsiZone": "OVERSOLD",
         "rsi14": 37.1,
-        "volumeToPrior20": 0.78
+        "volumeToPrior20": 0.87
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRM?interval=1d&range=2y&includePrePost=false",
@@ -1591,7 +1591,7 @@
         "stochRsi14": 21.2,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 40.5,
-        "volumeToPrior20": 0.69
+        "volumeToPrior20": 0.7
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRWD?interval=1d&range=2y&includePrePost=false",
@@ -1650,7 +1650,7 @@
         "stochRsi14": 56.3,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 40.5,
-        "volumeToPrior20": 0.72
+        "volumeToPrior20": 0.73
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/CRWV?interval=1d&range=2y&includePrePost=false",
@@ -1945,7 +1945,7 @@
         "stochRsi14": 33.9,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 33.3,
-        "volumeToPrior20": 1.15
+        "volumeToPrior20": 1.17
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/DELL?interval=1d&range=2y&includePrePost=false",
@@ -2240,7 +2240,7 @@
         "stochRsi14": 30.7,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 30.6,
-        "volumeToPrior20": 1.62
+        "volumeToPrior20": 1.63
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/FCX?interval=1d&range=2y&includePrePost=false",
@@ -2841,55 +2841,55 @@
       "providerSymbol": "IFX.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 49.875,
-      "previousClose": 52.11,
-      "changePct": -4.289,
-      "change3dPct": 1.682,
-      "change5dPct": 9.004,
+      "sessionDate": "2026-11-17",
+      "close": 48.685,
+      "previousClose": 49.24,
+      "changePct": -1.127,
+      "change3dPct": -6.573,
+      "change5dPct": -0.744,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 504,
+        "lookbackSessions": 506,
         "emaBands": {
           "20": {
-            "basis": 51.33,
-            "lower": 49.079,
-            "upper": 53.581,
+            "basis": 50.898,
+            "lower": 48.651,
+            "upper": 53.145,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 54.344,
-            "lower": 49.906,
-            "upper": 58.782,
+            "basis": 53.929,
+            "lower": 49.452,
+            "upper": 58.407,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 56.774,
-            "lower": 53.015,
-            "upper": 60.533,
+            "basis": 56.468,
+            "lower": 52.942,
+            "upper": 59.993,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 55.225,
-            "lower": 52.013,
-            "upper": 58.437,
+            "basis": 55.101,
+            "lower": 51.909,
+            "upper": 58.292,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 70.8,
+        "stochRsi14": 56,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 44.7,
-        "volumeToPrior20": 1.35
+        "rsi14": 42.3,
+        "volumeToPrior20": 0.96
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/IFX.DE?interval=1d&range=2y&includePrePost=false",
@@ -3007,7 +3007,7 @@
         "stochRsi14": 38,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 29.9,
-        "volumeToPrior20": 0.71
+        "volumeToPrior20": 0.73
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/INTC?interval=1d&range=2y&includePrePost=false",
@@ -3243,7 +3243,7 @@
         "stochRsi14": 36.8,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 56.3,
-        "volumeToPrior20": 0.57
+        "volumeToPrior20": 0.58
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/LNG?interval=1d&range=2y&includePrePost=false",
@@ -3313,55 +3313,55 @@
       "providerSymbol": "MC.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 403.45,
-      "previousClose": 404.7,
-      "changePct": -0.309,
-      "change3dPct": 0.611,
-      "change5dPct": -1.297,
+      "sessionDate": "2026-11-17",
+      "close": 393,
+      "previousClose": 404,
+      "changePct": -2.723,
+      "change3dPct": -2.891,
+      "change5dPct": -1.995,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 399.31,
-            "lower": 388.576,
-            "upper": 410.044,
+            "basis": 399.113,
+            "lower": 388.538,
+            "upper": 409.689,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 405.898,
-            "lower": 393.129,
-            "upper": 418.667,
+            "basis": 405.321,
+            "lower": 394.233,
+            "upper": 416.408,
             "sdMultiplier": 1,
-            "state": "INSIDE"
+            "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 426.612,
-            "lower": 406.477,
-            "upper": 446.748,
+            "basis": 425.508,
+            "lower": 405.595,
+            "upper": 445.42,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 458.782,
-            "lower": 447.666,
-            "upper": 469.898,
+            "basis": 457.588,
+            "lower": 446.524,
+            "upper": 468.651,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 48.7,
-        "stochRsiZone": "NEUTRAL",
-        "rsi14": 53.9,
-        "volumeToPrior20": 0.76
+        "stochRsi14": 15.8,
+        "stochRsiZone": "OVERSOLD",
+        "rsi14": 44.8,
+        "volumeToPrior20": 1.1
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/MC.PA?interval=1d&range=2y&includePrePost=false",
@@ -3774,7 +3774,7 @@
         "stochRsi14": 42,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 38,
-        "volumeToPrior20": 0.87
+        "volumeToPrior20": 0.88
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/MU?interval=1d&range=2y&includePrePost=false",
@@ -3785,55 +3785,55 @@
       "providerSymbol": "NOVO-B.CO",
       "currency": "DKK",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 278.45,
-      "previousClose": 275.75,
-      "changePct": 0.979,
-      "change3dPct": 2.56,
-      "change5dPct": 3.34,
+      "sessionDate": "2026-11-17",
+      "close": 275.5,
+      "previousClose": 285.25,
+      "changePct": -3.418,
+      "change3dPct": -0.091,
+      "change5dPct": 1.473,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 495,
+        "lookbackSessions": 497,
         "emaBands": {
           "20": {
-            "basis": 268.976,
-            "lower": 261.291,
-            "upper": 276.661,
+            "basis": 271,
+            "lower": 262.825,
+            "upper": 279.174,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 270.6,
-            "lower": 257.871,
-            "upper": 283.329,
+            "basis": 271.344,
+            "lower": 259.747,
+            "upper": 282.941,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 278.355,
-            "lower": 264.833,
-            "upper": 291.878,
+            "basis": 278.432,
+            "lower": 265.025,
+            "upper": 291.84,
             "sdMultiplier": 0.5,
             "state": "INSIDE"
           },
           "200": {
-            "basis": 296.504,
-            "lower": 288.65,
-            "upper": 304.358,
+            "basis": 296.184,
+            "lower": 288.692,
+            "upper": 303.677,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
-        "band20Event": "NONE",
+        "band20Event": "REJECTED_UPPER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 66.4,
+        "stochRsi14": 29.7,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 60.1,
-        "volumeToPrior20": 0.77
+        "rsi14": 54.8,
+        "volumeToPrior20": 1.1
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/NOVO-B.CO?interval=1d&range=2y&includePrePost=false",
@@ -3951,7 +3951,7 @@
         "stochRsi14": 0,
         "stochRsiZone": "OVERSOLD",
         "rsi14": 22.7,
-        "volumeToPrior20": 1.59
+        "volumeToPrior20": 1.6
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/NVDA?interval=1d&range=2y&includePrePost=false",
@@ -4021,55 +4021,55 @@
       "providerSymbol": "OR.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 451.2,
-      "previousClose": 446.85,
-      "changePct": 0.973,
-      "change3dPct": 1.656,
-      "change5dPct": 0.311,
+      "sessionDate": "2026-11-17",
+      "close": 446.35,
+      "previousClose": 450.15,
+      "changePct": -0.844,
+      "change3dPct": -0.112,
+      "change5dPct": 0.563,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 433.04,
-            "lower": 417.204,
-            "upper": 448.876,
+            "basis": 435.782,
+            "lower": 422.923,
+            "upper": 448.641,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 412.574,
-            "lower": 384.97,
-            "upper": 440.178,
+            "basis": 415.314,
+            "lower": 386.556,
+            "upper": 444.072,
             "sdMultiplier": 1,
             "state": "ABOVE_UPPER"
           },
           "100": {
-            "basis": 398.76,
-            "lower": 387.647,
-            "upper": 409.873,
+            "basis": 400.7,
+            "lower": 388.948,
+            "upper": 412.451,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 387.773,
-            "lower": 382.185,
-            "upper": 393.362,
+            "basis": 388.971,
+            "lower": 383.155,
+            "upper": 394.786,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
-        "band20Event": "BROKE_UPPER_BAND",
+        "band20Event": "REJECTED_UPPER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 31.9,
-        "stochRsiZone": "NEUTRAL",
-        "rsi14": 69.6,
-        "volumeToPrior20": 0.7
+        "stochRsi14": 0,
+        "stochRsiZone": "OVERSOLD",
+        "rsi14": 64.4,
+        "volumeToPrior20": 0.82
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/OR.PA?interval=1d&range=2y&includePrePost=false",
@@ -4246,7 +4246,7 @@
         "stochRsi14": 56.8,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 46.6,
-        "volumeToPrior20": 0.75
+        "volumeToPrior20": 0.76
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/PWR?interval=1d&range=2y&includePrePost=false",
@@ -4305,7 +4305,7 @@
         "stochRsi14": 47.9,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 37.8,
-        "volumeToPrior20": 0.87
+        "volumeToPrior20": 0.88
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/QQQ?interval=1d&range=2y&includePrePost=false",
@@ -4316,55 +4316,55 @@
       "providerSymbol": "RHM.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 765.5,
-      "previousClose": 772.6,
-      "changePct": -0.919,
-      "change3dPct": -10.289,
-      "change5dPct": -5.808,
+      "sessionDate": "2026-11-17",
+      "close": 760.9,
+      "previousClose": 769.7,
+      "changePct": -1.143,
+      "change3dPct": -1.514,
+      "change5dPct": -10.829,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 504,
+        "lookbackSessions": 506,
         "emaBands": {
           "20": {
-            "basis": 909.295,
-            "lower": 804.478,
-            "upper": 1014.112,
+            "basis": 883.133,
+            "lower": 771.512,
+            "upper": 994.755,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 974.175,
-            "lower": 899.477,
-            "upper": 1048.872,
+            "basis": 958.107,
+            "lower": 874.173,
+            "upper": 1042.04,
             "sdMultiplier": 1,
             "state": "BELOW_LOWER"
           },
           "100": {
-            "basis": 1050.08,
-            "lower": 1001.787,
-            "upper": 1098.372,
+            "basis": 1038.911,
+            "lower": 987.189,
+            "upper": 1090.634,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 1177.324,
-            "lower": 1116.169,
-            "upper": 1238.48,
+            "basis": 1169.165,
+            "lower": 1107.829,
+            "upper": 1230.501,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 1.8,
+        "stochRsi14": 2.3,
         "stochRsiZone": "OVERSOLD",
-        "rsi14": 26.8,
-        "volumeToPrior20": 1.24
+        "rsi14": 27,
+        "volumeToPrior20": 0.93
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/RHM.DE?interval=1d&range=2y&includePrePost=false",
@@ -4434,55 +4434,55 @@
       "providerSymbol": "SAP.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 213.45,
-      "previousClose": 212.55,
-      "changePct": 0.423,
-      "change3dPct": 1.667,
-      "change5dPct": 1.281,
+      "sessionDate": "2026-11-17",
+      "close": 201.5,
+      "previousClose": 213.4,
+      "changePct": -5.576,
+      "change3dPct": -5.199,
+      "change5dPct": -4.025,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 504,
+        "lookbackSessions": 506,
         "emaBands": {
           "20": {
-            "basis": 208.582,
-            "lower": 204.577,
-            "upper": 212.586,
+            "basis": 208.322,
+            "lower": 205.135,
+            "upper": 211.51,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "BELOW_LOWER"
           },
           "50": {
-            "basis": 198.221,
-            "lower": 185.526,
-            "upper": 210.917,
+            "basis": 198.922,
+            "lower": 186.335,
+            "upper": 211.509,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 186.515,
-            "lower": 174.142,
-            "upper": 198.887,
+            "basis": 187.333,
+            "lower": 175.195,
+            "upper": 199.471,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 182.705,
-            "lower": 176.951,
-            "upper": 188.459,
+            "basis": 183.194,
+            "lower": 177.35,
+            "upper": 189.039,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
-        "band20Event": "BROKE_UPPER_BAND",
+        "band20Event": "BROKE_LOWER_BAND",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 26.4,
-        "stochRsiZone": "NEUTRAL",
-        "rsi14": 61.7,
-        "volumeToPrior20": 0.69
+        "stochRsi14": 0,
+        "stochRsiZone": "OVERSOLD",
+        "rsi14": 43.8,
+        "volumeToPrior20": 1.29
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SAP.DE?interval=1d&range=2y&includePrePost=false",
@@ -4541,7 +4541,7 @@
         "stochRsi14": 49.5,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 53.7,
-        "volumeToPrior20": 1.02
+        "volumeToPrior20": 1.03
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SGOV?interval=1d&range=2y&includePrePost=false",
@@ -4552,55 +4552,55 @@
       "providerSymbol": "SIE.DE",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 279.4,
-      "previousClose": 281.7,
-      "changePct": -0.816,
-      "change3dPct": 2.891,
-      "change5dPct": 5.974,
+      "sessionDate": "2026-11-17",
+      "close": 269.8,
+      "previousClose": 272.55,
+      "changePct": -1.009,
+      "change3dPct": -4.224,
+      "change5dPct": -0.644,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 504,
+        "lookbackSessions": 506,
         "emaBands": {
           "20": {
-            "basis": 271.944,
-            "lower": 265.044,
-            "upper": 278.844,
+            "basis": 271.792,
+            "lower": 265.179,
+            "upper": 278.405,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "50": {
-            "basis": 271.456,
-            "lower": 264.877,
-            "upper": 278.036,
+            "basis": 271.433,
+            "lower": 264.853,
+            "upper": 278.013,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 269.837,
-            "lower": 266.124,
-            "upper": 273.551,
+            "basis": 269.889,
+            "lower": 266.197,
+            "upper": 273.582,
             "sdMultiplier": 0.5,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "200": {
-            "basis": 262.272,
-            "lower": 257.068,
-            "upper": 267.477,
+            "basis": 262.449,
+            "lower": 257.255,
+            "upper": 267.642,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 84,
-        "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 56.9,
-        "volumeToPrior20": 1.12
+        "stochRsi14": 23.7,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 48.6,
+        "volumeToPrior20": 0.84
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SIE.DE?interval=1d&range=2y&includePrePost=false",
@@ -4777,7 +4777,7 @@
         "stochRsi14": 38.9,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 31.3,
-        "volumeToPrior20": 0.81
+        "volumeToPrior20": 0.82
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SMR?interval=1d&range=2y&includePrePost=false",
@@ -4836,7 +4836,7 @@
         "stochRsi14": 33.5,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 31.3,
-        "volumeToPrior20": 1.03
+        "volumeToPrior20": 1.05
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SNDK?interval=1d&range=2y&includePrePost=false",
@@ -5047,55 +5047,55 @@
       "providerSymbol": "SU.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 243.45,
-      "previousClose": 244.8,
-      "changePct": -0.551,
-      "change3dPct": 3.442,
-      "change5dPct": 6.473,
+      "sessionDate": "2026-11-17",
+      "close": 236.6,
+      "previousClose": 241.55,
+      "changePct": -2.049,
+      "change3dPct": -3.35,
+      "change5dPct": 0.531,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 243.416,
-            "lower": 236.637,
-            "upper": 250.195,
+            "basis": 242.606,
+            "lower": 236.596,
+            "upper": 248.616,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 257.567,
-            "lower": 233.955,
-            "upper": 281.178,
+            "basis": 256.141,
+            "lower": 233.049,
+            "upper": 279.233,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "100": {
-            "basis": 265.762,
-            "lower": 254.59,
-            "upper": 276.935,
+            "basis": 264.715,
+            "lower": 253.288,
+            "upper": 276.142,
             "sdMultiplier": 0.5,
             "state": "BELOW_LOWER"
           },
           "200": {
-            "basis": 264.359,
-            "lower": 259.49,
-            "upper": 269.228,
+            "basis": 263.858,
+            "lower": 258.96,
+            "upper": 268.756,
             "sdMultiplier": 0.25,
             "state": "BELOW_LOWER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 93.3,
-        "stochRsiZone": "OVERBOUGHT",
-        "rsi14": 46.6,
-        "volumeToPrior20": 0.62
+        "stochRsi14": 59.9,
+        "stochRsiZone": "NEUTRAL",
+        "rsi14": 41.4,
+        "volumeToPrior20": 0.92
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/SU.PA?interval=1d&range=2y&includePrePost=false",
@@ -5331,7 +5331,7 @@
         "stochRsi14": 49.1,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 49.5,
-        "volumeToPrior20": 0.76
+        "volumeToPrior20": 0.77
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TSLA?interval=1d&range=2y&includePrePost=false",
@@ -5390,7 +5390,7 @@
         "stochRsi14": 48.2,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 38.7,
-        "volumeToPrior20": 1.35
+        "volumeToPrior20": 1.36
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TSM?interval=1d&range=2y&includePrePost=false",
@@ -5401,55 +5401,55 @@
       "providerSymbol": "TTE.PA",
       "currency": "EUR",
       "status": "CLOSED",
-      "sessionDate": "2026-11-13",
-      "close": 82.17,
-      "previousClose": 80.63,
-      "changePct": 1.91,
-      "change3dPct": 5.077,
-      "change5dPct": 3.06,
+      "sessionDate": "2026-11-17",
+      "close": 81.98,
+      "previousClose": 81.96,
+      "changePct": 0.024,
+      "change3dPct": 1.674,
+      "change5dPct": 4.834,
       "technicals": {
         "contractVersion": "power-stack-daily-technicals/1",
         "status": "OBSERVED",
-        "asOf": "2026-11-13",
+        "asOf": "2026-11-17",
         "timeframe": "1D",
         "indicatorBasis": "Completed daily unadjusted OHLC; EMA + rolling close SD; not 4H or corporate-action-adjusted",
-        "lookbackSessions": 508,
+        "lookbackSessions": 510,
         "emaBands": {
           "20": {
-            "basis": 80.843,
-            "lower": 78.836,
-            "upper": 82.85,
+            "basis": 81.047,
+            "lower": 79.097,
+            "upper": 82.998,
             "sdMultiplier": 1,
             "state": "INSIDE"
           },
           "50": {
-            "basis": 79.634,
-            "lower": 77.157,
-            "upper": 82.111,
+            "basis": 79.814,
+            "lower": 77.341,
+            "upper": 82.287,
             "sdMultiplier": 1,
-            "state": "ABOVE_UPPER"
+            "state": "INSIDE"
           },
           "100": {
-            "basis": 77.662,
-            "lower": 75.496,
-            "upper": 79.829,
+            "basis": 77.831,
+            "lower": 75.713,
+            "upper": 79.95,
             "sdMultiplier": 0.5,
             "state": "ABOVE_UPPER"
           },
           "200": {
-            "basis": 73.817,
-            "lower": 72.541,
-            "upper": 75.093,
+            "basis": 73.978,
+            "lower": 72.732,
+            "upper": 75.224,
             "sdMultiplier": 0.25,
             "state": "ABOVE_UPPER"
           }
         },
         "band20Event": "NONE",
         "donchian20": "INSIDE_PRIOR_20_RANGE",
-        "stochRsi14": 51.3,
+        "stochRsi14": 48.7,
         "stochRsiZone": "NEUTRAL",
-        "rsi14": 55.9,
-        "volumeToPrior20": 0.72
+        "rsi14": 55.1,
+        "volumeToPrior20": 0.65
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TTE.PA?interval=1d&range=2y&includePrePost=false",
@@ -5508,7 +5508,7 @@
         "stochRsi14": 55.5,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 51.7,
-        "volumeToPrior20": 1.82
+        "volumeToPrior20": 1.83
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/TTWO?interval=1d&range=2y&includePrePost=false",
@@ -5626,7 +5626,7 @@
         "stochRsi14": 32.4,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 35.1,
-        "volumeToPrior20": 1.39
+        "volumeToPrior20": 1.4
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/VGT?interval=1d&range=2y&includePrePost=false",
@@ -5685,7 +5685,7 @@
         "stochRsi14": 78.4,
         "stochRsiZone": "NEUTRAL",
         "rsi14": 43.7,
-        "volumeToPrior20": 0.65
+        "volumeToPrior20": 0.66
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/VLO?interval=1d&range=2y&includePrePost=false",
@@ -5803,7 +5803,7 @@
         "stochRsi14": 83.3,
         "stochRsiZone": "OVERBOUGHT",
         "rsi14": 44.1,
-        "volumeToPrior20": 0.7
+        "volumeToPrior20": 0.74
       },
       "sourceName": "Yahoo Finance daily chart (unofficial, delayed)",
       "sourceUrl": "https://query2.finance.yahoo.com/v8/finance/chart/VST?interval=1d&range=2y&includePrePost=false",
