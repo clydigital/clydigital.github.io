@@ -101,7 +101,8 @@ test("Top Stock Picks and full tables remain owner-gated but start collapsed",()
  const radar=read("owner-radar-workspace.mjs"),gate=read("auth-gate.mjs"),
   html=read("index.html"),css=read("top-stock-picks.css");
  assert.match(radar,/node\.id==="ps-top-stock-picks-20261113"/);
- assert.match(radar,/if\(original!==topPicks\)legacy\.append\(original\)/);
+ assert.match(radar,/if\(original!==topPicks&&original!==dailyBrief\)legacy\.append\(original\)/);
+ assert(radar.includes('node.id.startsWith("ps-market-update-")'));
  assert(radar.includes('featured.append(topPicks)'));
  assert(radar.includes('featured.id="featured-picks"'));
  assert(radar.includes('tableDrawer.id="market-table"'));
