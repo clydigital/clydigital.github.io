@@ -101,11 +101,11 @@ test("countertrend daily recovery blocks a short even when Stoch RSI is overboug
  assert.equal(scanMarketOpportunities(new Map([["CRWV",quote]]),now)[0].direction,"LONG");
 });
 test("oscillator extremes appear in a neutral screen, never create shorts by themselves",()=>{
- const now=new Date("2026-11-12T03:00:00Z"),map=new Map([
-  ["CF",{close:120,session:"2026-11-11",technical:{asOf:"2026-11-11",
+ const now=new Date("2026-11-18T03:00:00Z"),map=new Map([
+  ["CF",{close:120,session:"2026-11-17",technical:{asOf:"2026-11-17",
    band20Event:"NONE",donchian20:"INSIDE_PRIOR_20_RANGE",stochRsiZone:"OVERBOUGHT",
    stochRsi14:93,ema20State:"ABOVE_UPPER"}}],
-  ["TLT",{close:81,session:"2026-11-11",technical:{asOf:"2026-11-11",
+  ["TLT",{close:81,session:"2026-11-17",technical:{asOf:"2026-11-17",
    band20Event:"NONE",donchian20:"INSIDE_PRIOR_20_RANGE",stochRsiZone:"OVERSOLD",
    stochRsi14:2.5,ema20State:"INSIDE"}}]
  ]);
