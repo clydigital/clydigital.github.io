@@ -118,7 +118,7 @@ export function mountNov17Research(page,main){
   main.querySelector("#nov17-research")?.remove();
   const key=page==="ideas"?(location.hash==="#trades"?"trades":"prospects"):page==="portfolio"?(location.hash==="#bonds"?"bonds":"holdings"):page;
   const rows=SECTIONS[key];if(!rows)return;
-  const box=el("section","pscr-root");box.id="nov17-research";box.setAttribute("aria-label","17 November market research");
+  const box=el("section","pscr-root");box.id="nov17-research-content";box.setAttribute("aria-label","17 November market research");
   const upper=el("div","pscr-upper");
   upper.append(el("span","pscr-kicker","MATT'S TEAM · PUBLIC-SOURCE RESEARCH"),el("span","pscr-date","17 NOV 2026"));
   box.append(upper,el("h2","pscr-title",key==="prospects"?"Food and fertiliser: cash before scarcity":key==="trades"?"Trade watch · confirmation first":key==="bonds"?"Rates · no assumed easing":"New findings · 17 November"));
@@ -126,7 +126,8 @@ export function mountNov17Research(page,main){
   for(const [name,headline,body,source] of rows){const card=el("article","pscr-card");card.append(el("span","pscr-kicker",name),el("h3",null,headline),el("p","pscr-reason",body));const a=el("a","pscr-case-link","Original source ↗");a.href=source;a.target="_blank";a.rel="noopener noreferrer";card.append(a);grid.append(card);}
   box.append(grid,el("p","pscr-footnote","Dated research only. No broker data, current account decision, live quote or order. Existing private records are unchanged."));
   const anchor=page==="index"?main.querySelector("#war-room"):main.querySelector(".pscr-root");
-  if(anchor)anchor.before(box);else main.prepend(box);
+  const archive=el("details","pscr-details");archive.id="nov17-research";archive.append(el("summary",null,"17 November research supplement · historical context"),box);
+  if(anchor)anchor.after(archive);else main.append(archive);
  };
  render();if(page==="ideas"||page==="portfolio")window.addEventListener("hashchange",render);
 }
