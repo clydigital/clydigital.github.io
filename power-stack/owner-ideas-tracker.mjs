@@ -18,7 +18,7 @@ const get=(form,name)=>String(form.elements.namedItem(name)?.value||"").trim();
 const num=v=>v===""?null:Number(v);
 const clean=(v,n=450)=>String(v||"").trim().slice(0,n);
 
-export async function initIdeasTracker(db,main,user){
+export async function initIdeasTracker(db,main,user,{deferInitial=false}={}){
  if(!user?.id||!main)throw Error("Private owner access required");
  main.className="psi-shell";
  main.innerHTML=`
@@ -266,5 +266,7 @@ export async function initIdeasTracker(db,main,user){
   }catch(error){notice.textContent="Not saved: "+String(error.message||error).slice(0,240);}
   finally{btn.disabled=false;}
  });
- try{await refresh()}catch(error){setStatus("Tracker data unavailable; no investment signal. "+String(error.message||error).slice(0,220));}
+ $("psi-add").disabled=true;
+ const initial=refresh().then(()=>{$("psi-add").disabled=false;}).catch(error=>{setStatus("Tracker data unavailable; no investment signal. "+String(error.message||error).slice(0,220));});
+ if(!deferInitial)await initial;
 }

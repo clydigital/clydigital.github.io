@@ -26,14 +26,25 @@
 .ps-row-details p{margin:8px 0;font-size:12px}
 @media(max-width:680px){.gate-wrap{margin:6vh auto}.gate-box{padding:20px}.ps-owner-table{padding:10px}.ps-table-head{display:block}}
 
-/* Fin Pulse sign-in experience — no auth or access-control changes. */
-body:not(.ps-fin-pulse){background:#020617;color:#f1f5f9}
-.gate-wrap{max-width:565px;min-height:70vh;margin:9vh auto;padding:0 20px;display:flex;align-items:flex-start}
-.gate-box{width:100%;background:linear-gradient(155deg,#111f36,#0f172a 70%);border:1px solid #273d5d;border-radius:24px;padding:36px 36px 33px;box-shadow:0 30px 65px #0007}
-.gate-mark{color:#60a5fa;font-size:10px;letter-spacing:.18em}
-.gate-box h1{font-size:clamp(29px,4vw,43px);line-height:1.13;letter-spacing:-.045em;color:#f8fafc;margin:15px 0}
-.gate-box p{color:#9aadc6;font-size:13px;line-height:1.7}
-.gate-button{background:#2563eb;color:#fff;border:1px solid #3b82f6;padding:12px 18px;border-radius:11px;box-shadow:0 9px 30px rgba(37,99,235,.15)}
-.gate-button:hover{background:#1d4ed8;border-color:#60a5fa}
-.gate-status{color:#90a6c3;font-size:11px;margin-top:18px}
-@media(max-width:550px){.gate-wrap{margin:8vh auto;padding:0 14px}.gate-box{padding:26px 22px}}
+
+/* Single first-paint gate, deliberately isolated from the private desk theme. */
+html[data-private-page] body.ps-auth-pending{
+ margin:0!important;min-height:100vh;display:flow-root!important;color:#f8fafc!important;
+ background:repeating-linear-gradient(90deg,transparent 0 120px,#14282125 121px 124px),linear-gradient(165deg,#0b1916,#101c17 65%,#0b1916)!important;
+ font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+}
+html[data-private-page] body.ps-auth-pending::before,
+html[data-private-page] body.ps-auth-pending::after{display:none!important}
+#gate-panel.gate-wrap{box-sizing:border-box;width:calc(100% - 2 * clamp(18px,5.2vw,60px));max-width:920px;min-height:0;
+ margin:clamp(24px,5.4vw,65px) auto;padding:0;display:block;position:relative;z-index:1;}
+#gate-panel .gate-box{box-sizing:border-box;width:100%;min-height:clamp(380px,53.6vw,514px);padding:clamp(25px,6.05vw,58px);
+ background:#111827;border:1px solid #4a6788;border-radius:7px;box-shadow:none;}
+#gate-panel .gate-mark{color:#60a5fa;font-size:clamp(13px,1.75vw,17px);font-weight:850;letter-spacing:.17em;line-height:1.4;}
+#gate-panel h1{font-family:inherit;font-size:clamp(33px,7.1vw,68px);font-weight:800;line-height:1.17;letter-spacing:-.045em;
+ color:#fff;margin:clamp(22px,3.2vw,33px) 0 23px;max-width:790px;}
+#gate-panel p{font-size:clamp(16px,2.2vw,21px);line-height:1.7;color:#c7dcf6;margin:0;}
+#gate-panel .gate-status{margin-top:clamp(24px,3.5vw,34px);min-height:1.7em;color:#c7dcf6;font-size:clamp(16px,2.2vw,21px);}
+#gate-panel .gate-button{margin-top:24px;background:#2563eb;color:#fff;border:1px solid #60a5fa;padding:12px 18px;border-radius:7px;
+ font:700 15px/1.4 system-ui,sans-serif;cursor:pointer;}
+#gate-panel .gate-button:is(:hover,:focus-visible){background:#1d4ed8;outline:2px solid #93c5fd;outline-offset:3px;}
+@media(max-width:550px){#gate-panel .gate-box{min-height:0;padding:28px 24px}#gate-panel h1{margin-bottom:18px;line-height:1.15}}

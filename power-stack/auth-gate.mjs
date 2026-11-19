@@ -4,10 +4,14 @@ import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mj
 const OAUTH_CALLBACK="https://clydigital.github.io/power-stack/portfolio.html";
 const PAGE=document.documentElement.dataset.privatePage||"index";
 const $=id=>document.getElementById(id);
-let db=null, authorised=false;
+let db=null, authorised=false, privateContent=null, ownerId=null;
 function status(message){$("gate-status").textContent=message;}
 function deny(message){
- authorised=false;$("site-header").hidden=true;$("private-main").replaceChildren();$("private-main").hidden=true;
+ authorised=false;ownerId=null;$("site-header").hidden=true;
+ if(privateContent){privateContent.replaceChildren();privateContent.hidden=true;}
+ $("private-main")?.replaceChildren();
+ document.body.classList.remove("ps-fin-pulse","psr-landing-active");
+ document.body.classList.add("ps-auth-pending");
  $("gate-panel").hidden=false;$("login-button").hidden=false;$("logout-button").hidden=true;
  status(message);
 }
@@ -24,36 +28,46 @@ function secureMain(html){
  }
  return main;
 }
+// One verified Auth identity and one owner-only page lookup. The existing
+// private-pages RLS policy checks the exact Google owner AND retired snapshot.
+// No cached session, public fallback, or client-only identity can unlock a page.
+const specialistPages=["portfolio","ideas","research","sectors","decisions"];
 async function authenticate(){
- const {data:{user},error}=await db.auth.getUser();
+ const {data:{user}={},error}=await db.auth.getUser();
  if(error||!user)return null;
- if(user.app_metadata?.provider!=="google"){
-  await db.auth.signOut();return null;
- }
- const {data, error:ownerError}=await db.from("power_stack_owner_snapshots")
-  .select("owner_user_id,legacy_source_retired,snapshot_as_of").eq("owner_user_id",user.id).limit(1).maybeSingle();
- if(ownerError||!data?.legacy_source_retired)return null;
+ if(user.app_metadata?.provider!=="google"){await db.auth.signOut();return null;}
  return user;
 }
+function privateStyles(){
+ // Start loading private theme CSS only as a non-blocking resource at first paint.
+ // Before showing private content, activate it all, keeping the gate visible.
+ return Promise.all([...document.querySelectorAll("link[data-private-style]")].map(link=>{
+  const ready=link.sheet?Promise.resolve():new Promise(resolve=>{
+   const finish=()=>{clearTimeout(timer);resolve();};
+   const timer=setTimeout(finish,3500);
+   link.addEventListener("load",finish,{once:true});
+   link.addEventListener("error",finish,{once:true});
+  });
+  link.media="all";return ready;
+ }));
+}
 async function load(){
- status("Checking owner access…");
  const user=await authenticate();
  if(!user){deny("Google sign-in required. Only the registered owner may enter.");return;}
+ const keys=[...new Set([PAGE==="ideas"?"index":PAGE,...(specialistPages.includes(PAGE)?["index"]:[])])];
+ const {data:pages,error}=await db.from("power_stack_private_pages").select("page_key,body_html")
+  .eq("owner_user_id",user.id).in("page_key",keys);
+ const page=pages?.find(row=>row.page_key===(PAGE==="ideas"?"index":PAGE));
+ if(error||!page?.body_html){deny("Owner access could not be verified. Sign in with the registered Google account.");return;}
+ const styleReady=privateStyles();
+ const roomsPage=pages.find(row=>row.page_key==="index");
  let content;
- if(PAGE==="ideas"){
-  // The shell is empty until owner authentication; ideas are fetched with RLS.
-  content=document.createElement("main");
-  content.id="owner-ideas-content";
- }else{
-  const {data,error}=await db.from("power_stack_private_pages").select("body_html")
-   .eq("page_key",PAGE).limit(1).maybeSingle();
-  if(error||!data?.body_html){deny("Private research could not be retrieved. No public fallback is available.");return;}
-  content=secureMain(data.body_html);
- }
+ if(PAGE==="ideas"){content=document.createElement("main");content.id="owner-ideas-content";}
+ else{content=secureMain(page.body_html);}
  // Keep the authenticated view invisible until its final layout is ready.
  content.hidden=true;
  $("private-main").replaceWith(content);
- authorised=true;
+ privateContent=content;ownerId=user.id;authorised=true;
  $("owner-indicator").textContent="Owner · "+user.email;
  const nav=$("site-header").querySelector("nav");
  if(PAGE!=="ideas"&&nav&&!nav.querySelector('a[href="ideas.html"]')){
@@ -74,8 +88,8 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261119-radar2");
-   await initDecisionDesk(db,content,user);
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261120-one-gate1");
+   await initDecisionDesk(db,content,user,{deferInitial:true});
   }catch(error){
    const notice=document.createElement("p");
    notice.setAttribute("role","status");
@@ -92,9 +106,12 @@ async function load(){
   slot.textContent="Loading historical portfolio table…";
   content.querySelector("#login-panel")?.before(slot);
   try{
-   const {initPortfolioTable}=await import("./owner-portfolio-table.mjs?v=20261110-coverage1");
-   await initPortfolioTable(db,slot);
-   await import("./owner-portfolio.js");
+   const [{initPortfolioTable},{initOwnerPortfolio}]=await Promise.all([
+    import("./owner-portfolio-table.mjs?v=20261120-one-gate1"),import("./owner-portfolio.js?v=20261120-one-gate1")
+   ]);
+   // Both use the single verified client/identity. These are data reads, not login gates.
+   initPortfolioTable(db,slot,user).catch(e=>{slot.textContent="Private portfolio table unavailable.";console.error(e);});
+   initOwnerPortfolio(db,user).catch(e=>console.error("Private ledger unavailable",e));
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
  }
  if(PAGE==="decisions"){
@@ -103,8 +120,8 @@ async function load(){
  }
  if(PAGE==="ideas"){
   try{
-   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261117-agri1");
-   await initIdeasTracker(db,content,user);
+   const {initIdeasTracker}=await import("./owner-ideas-tracker.mjs?v=20261120-one-gate1");
+   await initIdeasTracker(db,content,user,{deferInitial:true});
   }catch(error){
    content.replaceChildren();
    const alert=document.createElement("p");
@@ -138,10 +155,8 @@ async function load(){
    // The public GitHub Pages asset contains presentation logic only. All specific
    // holding and prospect instructions are read from a separately RLS-protected
    // owner-only payload AFTER Google account authorization.
-   const {data:roomPage,error:roomError}=await db.from("power_stack_private_pages")
-    .select("body_html").eq("page_key","index").eq("owner_user_id",user.id).limit(1).maybeSingle();
-   if(roomError||!roomPage?.body_html)throw Error("Owner room data unavailable");
-   const privateSource=secureMain(roomPage.body_html);
+   if(!roomsPage?.body_html)throw Error("Owner room data unavailable");
+   const privateSource=secureMain(roomsPage.body_html);
    const raw=privateSource.querySelector("#ps-owner-command-rooms-data")?.textContent;
    if(!raw)throw Error("Owner room instructions missing");
    const privateRooms=JSON.parse(raw);
@@ -150,13 +165,10 @@ async function load(){
   }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }
  try{const {mountNov17Research}=await import("./owner-nov17-research.mjs?v=20261119-action2");mountNov17Research(PAGE,content);}catch(error){console.error("Dated market supplement unavailable",error);}
- const planned=sessionStorage.getItem("power-stack-target");
- if(planned){
-  sessionStorage.removeItem("power-stack-target");
-  const safe=["index","research","sectors","decisions","portfolio","archive","ideas","dossiers"].includes(planned)?planned:"index";
-  if(safe!==PAGE){location.replace(safe+".html");return;}
- }
+ await styleReady;
+ if(!authorised)return;
  // Reveal everything together; no intermediate old-theme page is shown.
+ document.body.classList.remove("ps-auth-pending");
  document.body.classList.add("ps-fin-pulse");
  content.hidden=false;
  $("site-header").hidden=false;
@@ -166,13 +178,14 @@ async function init(){
  $("login-button").addEventListener("click",async()=>{
   $("login-button").disabled=true;status("Opening Google sign-in…");
   try{
-   sessionStorage.setItem("power-stack-target",PAGE);
+   sessionStorage.setItem("power-stack-target",PAGE+location.hash);
    const {error}=await db.auth.signInWithOAuth({provider:"google",options:{redirectTo:OAUTH_CALLBACK}});
    if(error)throw error;
   }catch(e){status("Google sign-in failed. Please retry.");}
   finally{$("login-button").disabled=false;}
  });
  $("logout-button").addEventListener("click",async()=>{
+  deny("Signing out…");$("login-button").hidden=true;
   try{await db?.auth.signOut()}finally{sessionStorage.removeItem("power-stack-target");location.replace("index.html");}
  });
  try{
@@ -183,6 +196,23 @@ async function init(){
   db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
    auth:{flowType:"pkce",detectSessionInUrl:true,persistSession:true,autoRefreshToken:true},
    global:{headers:{"X-Client-Info":"power-stack-login-first/1"}}
+  });
+  // Let the SDK finish PKCE on the approved callback, then route BEFORE
+  // auditing/assembling the wrong page. getSession is routing only, never authorization.
+  const planned=sessionStorage.getItem("power-stack-target");
+  if(PAGE==="portfolio"&&planned){
+   sessionStorage.removeItem("power-stack-target");
+   const match=/^(index|research|sectors|decisions|portfolio|archive|ideas|dossiers)(#[a-zA-Z0-9_-]+)?$/.exec(planned);
+   if(match&&(match[1]!==PAGE||match[2])){
+    const {data:{session}={}}=await db.auth.getSession();
+    if(session){location.replace(match[1]+".html"+(match[2]||""));return;}
+   }
+  }
+  db.auth.onAuthStateChange((event,session)=>{
+   if(authorised&&(event==="SIGNED_OUT"||(session?.user?.id&&session.user.id!==ownerId))){
+    deny("Google sign-in required. Only the registered owner may enter.");
+    location.replace("index.html");
+   }
   });
   await load();
  }catch(e){deny("Authentication unavailable. The private site is locked.");}

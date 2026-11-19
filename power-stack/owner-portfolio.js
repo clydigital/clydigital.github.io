@@ -1,4 +1,3 @@
-import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mjs";
 import {normalizeEntry,ledgerSummary,parsePrivateResearch}
   from "./owner-portfolio-model.mjs";
 
@@ -6,7 +5,6 @@ import {normalizeEntry,ledgerSummary,parsePrivateResearch}
  * Static browser runtime. Auth/data access goes directly to Supabase under RLS.
  * No Vercel, Bluebelly API, proxy, SSR, broker API or investing-side mutation.
  */
-const canonical="https://clydigital.github.io/power-stack/portfolio.html";
 const $=id=>document.getElementById(id);
 const msg=(id,text)=>{const node=$(id);if(node)node.textContent=text;};
 const small=(txt)=>{const node=document.createElement("small");node.textContent=txt;return node;};
@@ -17,7 +15,7 @@ const txt=(tag,value,cls)=>{
  return node;
 };
 const fmt=(value,max=4)=>Number(value).toLocaleString("en-MY",{maximumFractionDigits:max});
-let client=null,authed=false,entries=[],research=null;
+let client=null,owner=null,authed=false,entries=[],research=null;
 
 function setAuthState(ok,status){
  authed=ok;
@@ -25,11 +23,11 @@ function setAuthState(ok,status){
  // The site-wide Google gate has identically named controls. Keep its
  // navigation sign-out independent of this nested private ledger.
  const panel=$("login-panel");
- if(panel)panel.hidden=ok;
+ if(panel)panel.hidden=true; // The shared site gate is the sole login surface.
  const localLogin=panel?.querySelector("#login-button");
  const localLogout=panel?.querySelector("#logout-button");
- if(localLogin)localLogin.hidden=ok;
- if(localLogout)localLogout.hidden=!ok;
+ if(localLogin)localLogin.hidden=true;
+ if(localLogout)localLogout.hidden=true;
  msg("private-status",status);
 }
 function clearLocal(){
@@ -114,16 +112,16 @@ async function refresh(){
  const [snap,ledger]=await Promise.all([
   client.from("power_stack_owner_snapshots")
     .select("snapshot_as_of,imported_at")
-    .order("snapshot_as_of",{ascending:false}).limit(1),
+    .eq("owner_user_id",owner.id).order("snapshot_as_of",{ascending:false}).limit(1),
   client.from("power_stack_portfolio_entries")
     .select("entry_id,occurred_on,entry_type,symbol,currency,quantity_delta,cash_delta,unit_price,note,source_kind,created_at")
-    .order("occurred_on",{ascending:false})
+    .eq("owner_user_id",owner.id).order("occurred_on",{ascending:false})
     .order("created_at",{ascending:false}).limit(500)
  ]);
  if(snap.error)throw new Error("Historical owner snapshot access failed: "+snap.error.message);
  if(!snap.data?.length){
   clearLocal();msg("auth-message","Authenticated, but the account is not registered as the Power Stack owner. No private holdings are accessible.");
-  await client.auth.signOut();return;
+  return;
  }
  msg("snapshot-status","Existing private research snapshot: "+
    snap.data[0].snapshot_as_of+
@@ -131,30 +129,6 @@ async function refresh(){
  if(ledger.error)throw new Error("Private ledger access failed: "+ledger.error.message);
  entries=Array.isArray(ledger.data)?ledger.data:[];
  renderSummary();renderHistory();
-}
-async function verifyUser(){
- const response=await client.auth.getUser();
- if(response.error||!response.data?.user){clearLocal();return false;}
- setAuthState(true,"Owner session · RLS enforced");
- msg("auth-message","Authenticated Google account. Access to account records is checked by database owner policies.");
- await refresh();return authed;
-}
-async function signIn(){
- msg("auth-message","Starting Google sign-in…");
- $("login-button").disabled=true;
- try{
-  // Exact callback must be in Supabase Auth's allowed redirects before launch.
-  const response=await client.auth.signInWithOAuth({
-   provider:"google",options:{redirectTo:canonical}
-  });
-  if(response.error)throw response.error;
- }catch(e){msg("auth-message","Google sign-in unavailable: "+String(e.message).slice(0,150))}
- finally{$("login-button").disabled=false}
-}
-async function signOut(){
- try{if(client)await client.auth.signOut()}finally{
-  clearLocal();msg("auth-message","Signed out. Account details are no longer shown.");
- }
 }
 async function addEntry(ev){
  ev.preventDefault();if(!authed||!client)return;
@@ -186,34 +160,22 @@ async function previewPrivateFile(){
   renderResearch();
  }catch(e){research=null;renderResearch();msg("research-message","Research preview rejected: "+String(e.message).slice(0,150))}
 }
-async function initialize(){
+export async function initOwnerPortfolio(db,user){
+ if(!db||!user?.id)return;
+ client=db;owner=user;
  $("entry-date").value=todayLocal();
- $("login-panel")?.querySelector("#login-button")?.addEventListener("click",signIn);
- $("login-panel")?.querySelector("#logout-button")?.addEventListener("click",signOut);
  $("entry-form").addEventListener("submit",addEntry);
  $("research-file").addEventListener("change",previewPrivateFile);
  $("clear-research").addEventListener("click",()=>{
    research=null;$("research-file").value="";msg("research-message","Preview cleared; no data saved.");msg("research-ticker","");renderResearch();
  });
  clearLocal();
- if(location.protocol!=="https:"||location.hostname!=="clydigital.github.io"||
-   location.pathname!=="/power-stack/portfolio.html"){
-  msg("auth-message","Owner sign-in is disabled on previews. The approved GitHub Pages callback must be configured and the original site restored first.");
-  $("login-button").disabled=true;return;
- }
- try{
-  if(!SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_"))throw Error("Public client config invalid");
-  // The SDK version is pinned; it does not route through Vercel.
-  const {createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/+esm");
-  client=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
-    auth:{detectSessionInUrl:true,flowType:"pkce",persistSession:true,autoRefreshToken:true},
-    global:{headers:{"X-Client-Info":"power-stack-private-static/1"}}
-  });
-  await verifyUser();
-  if(!authed)msg("auth-message","Sign in with the Google account already linked to the private Power Stack owner snapshot.");
- }catch(e){
-  clearLocal();msg("auth-message","Authentication unavailable: "+String(e.message).slice(0,200));
-  $("login-button").disabled=true;
+ setAuthState(true,"Owner session · RLS enforced");
+ msg("auth-message","Owner identity verified by the site gate.");
+ $("add-entry").disabled=true;
+ try{await refresh();if(authed)$("add-entry").disabled=false;}
+ catch(e){
+  clearLocal();msg("auth-message","Private ledger unavailable.");
+  console.error("Private ledger unavailable",e);
  }
 }
-await initialize();

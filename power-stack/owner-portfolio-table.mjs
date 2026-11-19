@@ -134,9 +134,8 @@ function rowValue(r,key){
  if(key==="quantity")return r.held?r.quantity:null;
  return r[key]??null;
 }
-export async function initPortfolioTable(db,host){
- const {data:{user}={},error:authError}=await db.auth.getUser();
- if(authError||!user?.id){host.textContent="Owner session unavailable; no private portfolio displayed.";return;}
+export async function initPortfolioTable(db,host,user){
+ if(!user?.id){host.textContent="Owner session unavailable; no private portfolio displayed.";return;}
  const {data,error}=await db.from("power_stack_owner_snapshots")
   .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",user.id)
   .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();

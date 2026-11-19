@@ -80,7 +80,7 @@ function historicalRisk(snapshot){
  if(names.has("YTLPOWR"))items.push({name:"YTL Power concentration",detail:"Earlier research raised parent/warrant exposure concerns. Current combined weight is unknown.",type:"Historical risk check"});
  return items;
 }
-export async function initDecisionDesk(db,main,user){
+export async function initDecisionDesk(db,main,user,{deferInitial=false}={}){
  if(!user?.id||!main)return;
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
@@ -491,7 +491,8 @@ export async function initDecisionDesk(db,main,user){
   }catch(err){note.textContent=String(err?.message||err).slice(0,400)}
   finally{button.disabled=false}
  });
- try{await refresh()}catch(err){
+ $(host,"psd-open-import").disabled=true;
+ const initial=refresh().then(()=>{$(host,"psd-open-import").disabled=false;}).catch(err=>{
   renderEmpty($(host,"psd-risk-rows"),"Owner data access unavailable");
   renderEmpty($(host,"psd-active-rows"),"No fallback to historical data as current recommendation");
   renderEmpty($(host,"psd-watch-rows"),"Triggers cannot be evaluated without private access");
@@ -499,5 +500,6 @@ export async function initDecisionDesk(db,main,user){
   status(String(err.message||err).slice(0,250));
   $(host,"psd-open-import").disabled=true;
   radarUI.render();
- }
+ });
+ if(!deferInitial)await initial;
 }
