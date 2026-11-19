@@ -74,7 +74,7 @@ async function load(){
  }
  if(PAGE==="index"){
   try{
-   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261117-market2");
+   const {initDecisionDesk}=await import("./owner-decision-desk.mjs?v=20261119-action1");
    await initDecisionDesk(db,content,user);
   }catch(error){
    const notice=document.createElement("p");
@@ -145,7 +145,7 @@ async function load(){
    const raw=privateSource.querySelector("#ps-owner-command-rooms-data")?.textContent;
    if(!raw)throw Error("Owner room instructions missing");
    const privateRooms=JSON.parse(raw);
-   const {mountCommandRoom}=await import("./owner-command-rooms.mjs?v=20261117-market2");
+   const {mountCommandRoom}=await import("./owner-command-rooms.mjs?v=20261119-action1");
    mountCommandRoom(PAGE,content,privateRooms);
   }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }

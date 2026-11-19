@@ -239,6 +239,8 @@ export function summarizeRegionalCloses(map,region="US"){
 export function installRadarWorkspace(main,getState){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
+ // Owner-only dated action plan: surface before any research; absence preserves prior layout.
+ const actionPlan=originals.find(node=>node.nodeType===1&&node.id==="ps-current-action-plan")||null;
  const dailyBrief=originals.find(node=>node.nodeType===1&&node.id.startsWith("ps-market-update-"))||null;
  // Keep the private, source-dated stock picks visible in the normal workspace.
  // They are fetched only after owner authentication; do not copy them into static assets.
@@ -432,9 +434,9 @@ export function installRadarWorkspace(main,getState){
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
- for(const original of originals){if(original!==topPicks&&original!==dailyBrief)legacy.append(original);}
+ for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(...(actionPlan?[actionPlan]:[]),quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  // Market Radar is the first screen. Matt's source-dated briefing is a separate,
  // deep-linkable room; the archive stays available without hiding active radar data.
  const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
@@ -454,9 +456,9 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
- if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+ if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  window.addEventListener("hashchange",()=>{
-  if(["#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+  if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  });
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
@@ -464,7 +466,8 @@ export function installRadarWorkspace(main,getState){
   if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
   if(["#desk-tools","#advanced-research"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
-  if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
+  if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
+  else if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
   else if(target.startsWith("#warroom-"))(main.querySelector(target)||warRoomDrawer).scrollIntoView({block:"start"});
   else if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
   else if(target==="#scenario-matrix"){matrixDrawer.open=true;matrixDrawer.scrollIntoView({block:"start"});}

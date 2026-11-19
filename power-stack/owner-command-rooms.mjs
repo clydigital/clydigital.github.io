@@ -21,8 +21,9 @@ export function mountCommandRoom(page,main,privateRooms){
   const key=where(page),r=privateRooms?.[key]||null;
   if(!r){mount.replaceChildren(elem("p","pscr-footnote","Owner-only reviewed instructions unavailable. Use the existing records below and verify sources before making decisions."));return;}
   mount.id=r.id;mount.replaceChildren();
+  const edition=/^\d{4}-\d{2}-\d{2}$/.test(r.edition||"")?r.edition:ROOM_EDITION;
   const above=elem("div","pscr-upper");
-  above.append(elem("span","pscr-kicker","POWER STACK / "+r.eyebrow),elem("span","pscr-date","RESEARCH EDITION · "+ROOM_EDITION));
+  above.append(elem("span","pscr-kicker","POWER STACK / "+r.eyebrow),elem("span","pscr-date","RESEARCH EDITION · "+edition));
   const title=elem("h1","pscr-title",r.title);
   const line=elem("p","pscr-lead",r.lead);
   const finding=elem("div","pscr-verdict");
@@ -85,8 +86,9 @@ export function mountCommandRoom(page,main,privateRooms){
    const a=elem("a","pscr-case-link","Open supporting workspace →");a.href=href;body.append(a);
    details.append(body);card.append(details);cards.append(card);
   }
-  const foot=elem("p","pscr-footnote","Research-only · Based on a dated 14 November 2026 review and existing source-led cases. No trades, broker reconciliations, live price guarantees or underlying model-score changes. Recheck primary sources before acting.");
-  mount.append(above,title,line,finding,nav);if(researchPanel)mount.append(researchPanel);mount.append(heading,cards,foot);
+  const foot=elem("p","pscr-footnote","Research-only · Proposed calls as of "+edition+". Archived research has its own source dates. No trades, broker reconciliation, live quote guarantees or automatic model-score changes.");
+  mount.append(above,title,line,finding,nav,heading,cards,foot);
+  if(researchPanel){const archived=elem("details","pscr-details");archived.append(elem("summary",null,"Earlier source-dated examples · open for context"),researchPanel);mount.append(archived);}
  }
  render();
  window.addEventListener("hashchange",render);

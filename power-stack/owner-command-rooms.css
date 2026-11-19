@@ -93,3 +93,16 @@ html[data-private-page="index"] body.ps-fin-pulse .psr-workspace > #desk-tools{
   padding:0 12px!important;
  }
 }
+
+/* Decision-first owner-only plan; no private data in this stylesheet. */
+#ps-current-action-plan{padding:18px;margin:0 0 16px;border:1px solid #56769a;border-top:4px solid #f3d294;border-radius:8px;background:#14243a;color:#edf4fc;scroll-margin-top:20px}
+#ps-current-action-plan h1{font-size:clamp(1.5rem,3vw,2.1rem);margin:4px 0;color:#fff}
+#ps-current-action-plan p{color:#dbe8f5;line-height:1.5}
+#ps-current-action-plan .ps-action-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px;margin:12px 0}
+#ps-current-action-plan .ps-action-card{border:1px solid #65758b;padding:12px;border-radius:5px;display:grid;gap:4px}
+#ps-current-action-plan .ps-action-card small{color:#c6d2e0;font-weight:700;letter-spacing:.04em}
+#ps-current-action-plan .ps-action-red{color:#ff9a9a!important}#ps-current-action-plan .ps-action-amber{color:#f3d294!important}#ps-current-action-plan .ps-action-green{color:#93e1b2!important}
+#ps-current-action-plan .actions{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}#ps-current-action-plan a{color:#a9dcff}
+#ps-current-action-plan details{margin:10px 0;padding:8px 0;border-top:1px solid #506783}#ps-current-action-plan summary{cursor:pointer;color:#fff;font-weight:700}
+#ps-current-action-plan .psd-coverage-scroll{overflow-x:auto}#ps-current-action-plan table{width:100%;min-width:560px}#ps-current-action-plan th,#ps-current-action-plan td{text-align:left;padding:8px;vertical-align:top;color:#edf4fc}#ps-current-action-plan tbody tr{border-top:1px solid #506783}
+@media(max-width:600px){#ps-current-action-plan{padding:12px}#ps-current-action-plan .ps-action-cards{grid-template-columns:repeat(2,minmax(0,1fr))}#ps-current-action-plan .ps-action-card{padding:9px}}
