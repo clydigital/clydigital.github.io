@@ -30,7 +30,8 @@ function navIcon(kind){
  return svg;
 }
 export function presentClientView(page,main){
- document.body.classList.add("ps-fin-pulse");
+ // The shared auth gate applies the private theme atomically on reveal.
+ if(!document.getElementById("gate-panel")||document.getElementById("gate-panel").hidden)document.body.classList.add("ps-fin-pulse");
  document.documentElement.dataset.psTheme="fin-pulse";
  const nav=document.querySelector("#site-header nav");
  if(nav){

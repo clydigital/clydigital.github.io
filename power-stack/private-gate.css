@@ -48,3 +48,22 @@ html[data-private-page] body.ps-auth-pending::after{display:none!important}
  font:700 15px/1.4 system-ui,sans-serif;cursor:pointer;}
 #gate-panel .gate-button:is(:hover,:focus-visible){background:#1d4ed8;outline:2px solid #93c5fd;outline-offset:3px;}
 @media(max-width:550px){#gate-panel .gate-box{min-height:0;padding:28px 24px}#gate-panel h1{margin-bottom:18px;line-height:1.15}}
+
+/* Isolated fixed surface: no desk stylesheet can resize, recolour or move it. */
+html[data-private-page] body #gate-panel:not([hidden]){
+ position:fixed!important;inset:0!important;z-index:2147483000!important;display:block!important;
+ box-sizing:border-box!important;width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;
+ margin:0!important;padding:clamp(24px,5.4vw,65px) clamp(18px,5.2vw,60px)!important;
+ overflow:auto!important;transform:none!important;transition:none!important;animation:none!important;
+ background:repeating-linear-gradient(90deg,transparent 0 120px,#14282125 121px 124px),linear-gradient(165deg,#0b1916,#101c17 65%,#0b1916)!important;
+ font:400 16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+ color:#f8fafc!important;
+}
+html[data-private-page] body #gate-panel .gate-box{
+ width:100%!important;max-width:920px!important;margin:0 auto!important;box-sizing:border-box!important;
+ background:#111827!important;border:1px solid #4a6788!important;border-radius:7px!important;
+ box-shadow:none!important;transform:none!important;transition:none!important;animation:none!important;
+}
+html[data-private-page] body #gate-panel h1{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;letter-spacing:-.045em!important;line-height:1.17!important;}
+html[data-private-page] body #gate-panel .gate-mark{color:#60a5fa!important;}
+html[data-private-page] body #gate-panel p{color:#c7dcf6!important;}

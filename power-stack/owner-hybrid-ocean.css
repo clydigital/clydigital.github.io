@@ -253,9 +253,7 @@ body.ps-fin-pulse .psi-shell .psi-tools input,body.ps-fin-pulse .psi-shell .psi-
 body.ps-fin-pulse .psi-card.psi-aligned{border-left:4px solid #73d9c3!important}
 body.ps-fin-pulse .psi-card.psi-divergence{border-left:4px solid #eecb82!important}
 body.ps-fin-pulse .psd-root .psd-coverage-table{background:rgba(9,40,63,.65)}
-/* Auth gate has no owner content. Shared look, no hidden private data. */
-body:not(.ps-fin-pulse){background:radial-gradient(circle at 95% 0%,rgba(36,124,161,.13),transparent 52%),#061927!important;color:#e9f8fe!important}
-body:not(.ps-fin-pulse) .gate-box{background:linear-gradient(145deg,#0d4561,#0b2f4a)!important;border:1px solid #427f9b!important;border-radius:17px!important}
+/* Private theme deliberately does not style the independent login gate. */
 @media(max-width:1180px){
  body.ps-fin-pulse .psh-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
  body.ps-fin-pulse .psd-root .psd-top{grid-template-columns:minmax(0,1fr) 205px!important}

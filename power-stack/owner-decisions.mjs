@@ -1,9 +1,7 @@
-import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mjs";
 import {RESEARCH_AS_OF,researchFor,researchPriority} from "./research-cases.mjs?v=20261106-riskoff1";
 /** Owner identity and row-level security live in Supabase. No backend proxy or Vercel. */
 const $=id=>document.getElementById(id);
-const root="https://clydigital.github.io/power-stack/decisions.html";
-let supabase=null,records=[],snapshotDate=null;
+let supabase=null,owner=null,records=[],snapshotDate=null;
 const clean=(value,max=150)=>typeof value==="string"?value.trim().slice(0,max):"";
 const symbol=(value)=>{const v=clean(value,24).toUpperCase();return /^[A-Z0-9][A-Z0-9._:-]{0,19}$/.test(v)?v:null;};
 function text(name,content,cls){
@@ -12,7 +10,7 @@ function text(name,content,cls){
 }
 function link(url,label){const a=text("a",label);a.href=url;a.rel="noopener noreferrer";a.target="_blank";return a;}
 function setStatus(s){$("decisions-status").textContent=s;}
-function showOwner(yes){$("decisions-owner").hidden=!yes;$("decisions-login").hidden=yes;$("decisions-logout").hidden=!yes;}
+function showOwner(yes){$("decisions-owner").hidden=!yes;$("decisions-login").hidden=true;$("decisions-logout").hidden=true;}
 function rows(v,limit){return Array.isArray(v)?v.slice(0,limit).filter(x=>x&&typeof x==="object"&&!Array.isArray(x)):[];}
 // Research status ranking is centralised in research-cases.mjs.
 function projection(snapshot){
@@ -80,10 +78,9 @@ function render(){
  );
 }
 async function refresh(){
- const u=await supabase.auth.getUser();
- if(u.error||!u.data?.user?.id){records=[];showOwner(false);setStatus("Locked · sign in with the owner account");return;}
+ if(!owner?.id){records=[];showOwner(false);setStatus("Owner access unavailable");return;}
  const {data,error}=await supabase.from("power_stack_owner_snapshots")
-  .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",u.data.user.id)
+  .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",owner.id)
   .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired){
   records=[];showOwner(false);setStatus("No eligible owner-private snapshot for this account");
@@ -99,41 +96,12 @@ async function refresh(){
   "; each issuer has its own original source date. No verified cost basis, cash or transaction advice is inferred.";
  render();
 }
-async function signIn(){
- if(!supabase)return;
- $("decisions-login").disabled=true;
- try{
-  const res=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:root}});
-  if(res.error)throw res.error;
- }catch(e){setStatus("Google sign-in failed: "+String(e.message).slice(0,160))}
- finally{$("decisions-login").disabled=false}
-}
-async function signOut(){
- try{await supabase?.auth.signOut()}finally{
-  records=[];snapshotDate=null;showOwner(false);
-  $("decision-body").replaceChildren();
-  $("decision-stats").replaceChildren();
-  setStatus("Signed out · owner decision records cleared");
+export async function initOwnerDecisions(db,user){
+ if(!db||!user?.id)return;
+ supabase=db;owner=user;
+ showOwner(false);setStatus("Loading owner decision records…");
+ for(const id of ["decision-search","decision-scope","decision-order"]){
+  $(id).addEventListener(id==="decision-search"?"input":"change",render);
  }
-}
-function fallback(e){showOwner(false);setStatus("Owner authentication unavailable: "+String(e?.message||e).slice(0,180));}
-$("decisions-login").addEventListener("click",signIn);
-$("decisions-logout").addEventListener("click",signOut);
-for(const id of ["decision-search","decision-scope","decision-order"]){
- $(id).addEventListener(id==="decision-search"?"input":"change",render);
-}
-showOwner(false);
-if(location.protocol!=="https:"||location.hostname!=="clydigital.github.io"||
- location.pathname!=="/power-stack/decisions.html"){
- $("decisions-login").disabled=true;setStatus("Owner sign-in disabled outside canonical GitHub Pages"); 
-}else{
- try{
-  if(!SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_"))throw Error("Invalid public client configuration");
-  const sdk=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/+esm");
-  supabase=sdk.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
-   auth:{detectSessionInUrl:true,flowType:"pkce",persistSession:true,autoRefreshToken:true},
-   global:{headers:{"X-Client-Info":"power-stack-private-decisions/1"}}
-  });
-  await refresh();
- }catch(e){fallback(e)}
+ try{await refresh()}catch(e){showOwner(false);setStatus("Owner decision records unavailable.");console.error(e);}
 }
