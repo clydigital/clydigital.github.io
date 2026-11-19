@@ -272,16 +272,21 @@ export function installRadarWorkspace(main,getState){
  const landingFooter=add(landing,node("p","psr-landing-footer","Delayed observations · not live quotes."));
  const workspace=node("div","psr-workspace");workspace.id="workspace";workspace.hidden=true;
  const quick=add(workspace,node("section","psr-simple-header"));quick.setAttribute("aria-label","Power Stack quick navigation");
- quick.append(node("p","psr-simple-eyebrow","THE POWER STACK HOMEPAGE"),
+ const scene=add(quick,node("div","psr-tavern-scene"));
+ const sceneCopy=add(scene,node("div","psr-tavern-scene-copy"));
+ sceneCopy.append(node("p","psr-simple-eyebrow","PRIVATE MARKET DESK"),
   node("h1",null,"Market Radar"));
- quick.append(node("p","psr-room-brief","Source-dated market observations below. Open a specialist command room for what the evidence means for your positions, prospects or trades."));
+ sceneCopy.append(node("p","psr-room-brief","See direction. Read today's actions below."));
  const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
- for(const [label,url,kind] of [["Matt\x27s War Room","index.html#war-room","warroom"],
-  ["Holdings Command","portfolio.html#holdings","portfolio"],
-  ["Opportunity Command","ideas.html","ideas"],
-  ["Market watch","portfolio.html#watchlist","market"]]){
+ for(const [label,url,kind] of [["Today's actions","index.html#ps-current-action-plan","actions"],
+  ["Holdings","portfolio.html#holdings","portfolio"],
+  ["Opportunities","ideas.html","ideas"],
+  ["Trade setups","ideas.html#trades","trades"],
+  ["Market watch","portfolio.html#watchlist","market"],
+  ["Matt's War Room","index.html#war-room","warroom"],
+  ["Dossiers","dossiers.html","dossiers"]]){
   const a=add(nav,node("a","psr-simple-link psr-simple-"+kind,label));a.href=url;
-  a.prepend(psIcon(kind==="ideas"?"target":kind==="market"?"chart":"wallet","psr-nav-icon"));
+  a.prepend(psIcon(kind==="ideas"||kind==="trades"?"target":kind==="market"?"chart":"wallet","psr-nav-icon"));
  }
  const hub=node("section","psr-room-hub");hub.id="command-rooms";
  hub.setAttribute("aria-label","Specialist decision rooms");
@@ -302,11 +307,11 @@ export function installRadarWorkspace(main,getState){
   const a=add(roomGrid,node("a","psr-room-card"+(mainRoom?" psr-room-main":"")));
   a.href=href;a.append(node("span","psr-room-verb",verb),node("strong",null,heading),node("small",null,description));
  }
- const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Open animated radar"));radarToggle.type="button";
+ const radarToggle=add(nav,node("button","psr-simple-link psr-simple-radar","Full radar"));radarToggle.type="button";
  radarToggle.prepend(psIcon("compass","psr-nav-icon"));
  // A working visual radar in the hero: it reflects the SAME price/decision state
  // as the full radar, never decorative or fabricated "live" market signals.
- const heroInstruments=add(quick,node("div","psr-tavern-hero-instruments"));
+ const heroInstruments=add(scene,node("div","psr-tavern-hero-instruments"));
  heroInstruments.setAttribute("aria-label","Radar and source-dated watchlist context");
  const heroRadar=add(heroInstruments,node("button","psr-tavern-hero-radar"));
  heroRadar.type="button";heroRadar.setAttribute("aria-label","Open interactive stock radar");
