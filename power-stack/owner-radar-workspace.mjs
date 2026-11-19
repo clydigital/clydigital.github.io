@@ -436,7 +436,7 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(...(actionPlan?[actionPlan]:[]),quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(quick,...(actionPlan?[actionPlan]:[]),hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  // Market Radar is the first screen. Matt's source-dated briefing is a separate,
  // deep-linkable room; the archive stays available without hiding active radar data.
  const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
