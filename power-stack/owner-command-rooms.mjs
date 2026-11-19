@@ -32,6 +32,7 @@ export function mountCommandRoom(page,main,privateRooms){
   const nav=elem("nav","pscr-links");
   nav.setAttribute("aria-label","Command room navigation");
   const navLinks=[link("index.html","Market Radar"),link("index.html#war-room","Matt's War Room"),link("portfolio.html#holdings","Holdings Command"),link("ideas.html","Opportunity Command"),link("ideas.html#trades","Trade Setups"),link("index.html#scenario-matrix","Scenario Matrix"),link("research.html","Evidence Command")];
+  if(/^dossiers\.html(?:#[a-zA-Z0-9-]+)?$/.test(r.dossierHref||""))navLinks.push(link(r.dossierHref,"Dated dossier"));
   for(const dest of navLinks){const a=elem("a",null,dest.label);a.href=dest.href;nav.append(a);}
   // General public-company research is displayed ONLY after the RLS room
   // payload has been loaded. No account position is inferred from these cases.
