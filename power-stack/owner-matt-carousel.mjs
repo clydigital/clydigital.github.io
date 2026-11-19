@@ -1,6 +1,7 @@
 // Presentation only: enhance the already authenticated, original briefing DOM.
 export function mountMattCarousel(main){
  const desk=main.querySelector('.matt-desk-tavern');
+ if(desk)mountMattAction(desk);
  const list=desk?.querySelector('.matt-topic-list');
  if(!list||list.dataset.carouselMounted)return;
  const slides=[...list.children].filter(node=>node.matches('.matt-topic'));
@@ -62,4 +63,21 @@ export function mountMattCarousel(main){
  const fromHash=()=>{const index=target(doc.defaultView?.location.hash);if(index>=0)show(index);};
  doc.defaultView?.addEventListener('hashchange',fromHash);
  show(0);fromHash();
+}
+
+// Preserve the authenticated action plan and every nested reference as original DOM.
+function mountMattAction(desk){
+ const action=desk.querySelector('.matt-action');
+ if(!action||action.dataset.actionMounted)return;
+ const title=[...action.children].find(node=>node.matches('h3'));
+ if(!title)return;
+ const doc=desk.ownerDocument;
+ const drawer=doc.createElement('details');drawer.className='matt-action-drawer';
+ const summary=doc.createElement('summary');
+ const body=doc.createElement('div');body.className='matt-action-body';
+ const original=[...action.children];
+ summary.append(title);
+ for(const node of original)if(node!==title)body.append(node);
+ drawer.append(summary,body);action.append(drawer);
+ action.dataset.actionMounted='true';
 }

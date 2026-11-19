@@ -81,3 +81,48 @@ html[data-private-page="index"] body.ps-fin-pulse .psr-workspace :is(.psr-collap
 .matt-desk-tavern .matt-topic-list[data-carousel-mounted]{display:block}
 .matt-desk-tavern .matt-topic-list[data-carousel-mounted] .matt-topic-head{touch-action:pan-y}
 @media(max-width:650px){.matt-desk-tavern .matt-carousel-controls{gap:8px}.matt-desk-tavern .matt-topic-nav a{padding:7px 10px;font-size:13px}}
+
+/* High contrast reading surfaces; keep the warm tavern identity and signal semantics. */
+html[data-private-page="index"] body.ps-fin-pulse .matt-desk-tavern{
+ --md-ink:#fff7e8;--md-muted:#e5dbca;--md-brass:#ffd08a;--md-line:#c99a60;
+ background:linear-gradient(140deg,#09271e,#071b16 72%,#21170f)!important;
+}
+.matt-desk-tavern .matt-hero{background:linear-gradient(120deg,#39291b,#172920)!important;border-color:#dca968!important}
+.matt-desk-tavern .matt-topic{background:#172820!important;border-color:#b88c56!important}
+.matt-desk-tavern :is(.matt-topic-head h3,.matt-hero-dialogue h3,.matt-action h3){color:#ffdfa4!important}
+.matt-desk-tavern .matt-dialogue p.matt-next{background:#103b2d!important;color:#fff6e7!important;border-left-color:#ffce80!important}
+.matt-desk-tavern .matt-evidence{background:#131f1a!important;border-color:#b48a56!important}
+.matt-desk-tavern .matt-evidence summary{color:#ffda98!important}
+.matt-desk-tavern .matt-evidence summary:hover{background:#493521!important}
+.matt-desk-tavern .matt-evidence-body :is(th,td){color:#fff6e5!important;border-bottom-color:#a18355!important}
+.matt-desk-tavern .matt-evidence-body th{background:#3a2b1d!important;color:#ffdb97!important}
+.matt-desk-tavern .matt-topic-nav a{color:#fff2d6!important;border-color:#c99a60!important;background:#2d261c!important}
+.matt-desk-tavern .matt-topic-nav a[aria-current="true"]{color:#23170c!important;background:#ffd08a!important;border-color:#ffe5b8!important;box-shadow:none!important}
+.matt-desk-tavern .matt-carousel-controls{background:#211e17;border-color:#c99a60}
+.matt-desk-tavern .matt-carousel-controls button{background:#674526;color:#fff7e8;border-color:#ffcf88}
+.matt-desk-tavern .matt-carousel-status{color:#ffdfa4}
+.matt-desk-tavern .matt-action[data-action-mounted]{padding:0!important;background:#211d16!important;border:1px solid #d6a363!important}
+.matt-desk-tavern .matt-action-drawer>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:50px;cursor:pointer;list-style:none;padding:12px 18px;color:#ffdfa4;background:#39291b;border-radius:8px}
+.matt-desk-tavern .matt-action-drawer>summary::-webkit-details-marker{display:none}
+.matt-desk-tavern .matt-action-drawer>summary::after{content:"+";font:700 26px/1 Georgia,serif;flex:none;color:#ffda96}
+.matt-desk-tavern .matt-action-drawer[open]>summary::after{content:"−"}
+.matt-desk-tavern .matt-action-drawer>summary:hover{background:#523921}
+.matt-desk-tavern .matt-action-drawer>summary h3{font-size:clamp(18px,2vw,23px)!important;line-height:1.3!important;margin:0!important}
+.matt-desk-tavern .matt-action-drawer[open]>summary{border-bottom:1px solid #c99a60;border-radius:8px 8px 0 0}
+.matt-desk-tavern .matt-action-body{padding:18px}
+.matt-desk-tavern .matt-action small{color:#e5dbca!important}
+/* Tonight's Watchlist: clear column labels, stronger row separation and bright signed changes. */
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-house-table th{
+ background:#3b2a1b!important;color:#ffe0a7!important;border-bottom:2px solid #d9a75f!important;font-size:12px!important;padding:10px 9px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-house-table td{
+ background:#0e2922!important;color:#fff8e9!important;border-bottom:1px solid #96774d!important;padding:12px 9px!important;
+}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-house-table tr:nth-child(even) td{background:#17382d!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-watch-theme{color:#e7eddd!important;font-size:12px!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-watch-link{color:#fff7e6!important;text-decoration-color:#ffd28d!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-watch-link:is(:hover,:focus-visible){color:#ffd28d!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-watch-change[data-direction=up]{color:#78ffc3!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch .psr-tavern-watch-change[data-direction=down]{color:#ffadad!important}
+html[data-private-page="index"] body.ps-fin-pulse .psr-tavern-house-watch :is(.psr-tavern-watch-note,.psr-tavern-house-footer){color:#e4e8da!important}
+@media(max-width:650px){.matt-desk-tavern .matt-action-drawer>summary{padding:12px}.matt-desk-tavern .matt-action-body{padding:13px}}

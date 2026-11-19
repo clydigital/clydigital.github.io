@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mountMattCarousel} from '../owner-matt-carousel.mjs';
 class Node {
  constructor(tag,cls='',text=''){this.tag=tag;this.className=cls;this.textContent=text;this.children=[];this.dataset={};this.attrs={};this.id='';this.hidden=false;this.listeners={};this.ownerDocument=doc;}
- append(...nodes){nodes.forEach(n=>{n.parent=this;this.children.push(n);});}
+ append(...nodes){nodes.forEach(n=>{if(n.parent)n.parent.children.splice(n.parent.children.indexOf(n),1);n.parent=this;this.children.push(n);});}
  before(node){node.parent=this.parent;this.parent.children.splice(this.parent.children.indexOf(this),0,node);}
  setAttribute(n,v){this.attrs[n]=v;} getAttribute(n){return this.attrs[n]??null;} removeAttribute(n){delete this.attrs[n];}
  set href(v){this.attrs.href=v;} get href(){return this.attrs.href;}
@@ -16,6 +16,7 @@ class Node {
 const doc={createElement:tag=>new Node(tag),defaultView:{location:{hash:''},listeners:{},addEventListener(n,f){this.listeners[n]=f;}}};
 const main=new Node('main'),desk=new Node('section','matt-desk-tavern'),hero=new Node('div','matt-hero','Matt complete'),nav=new Node('nav','matt-topic-nav'),list=new Node('div','matt-topic-list'),action=new Node('section','matt-action','All decisions');
 main.append(desk);desk.append(hero,nav,list,action);
+const actionTitle=new Node('h3','','What we’re doing next'),actionCopy=new Node('p','','Full action plan'),actionEvidence=new Node('details','matt-evidence','Original references');action.append(actionTitle,actionCopy,actionEvidence);
 const slides=['Jimmy','David','Mike'].map((name,i)=>{const s=new Node('article','matt-topic'),h=new Node('div','matt-topic-head'),p=new Node('p','','Entire briefing '+name),d=new Node('details','','Full evidence '+name),a=new Node('a','',name);s.id=name.toLowerCase();a.href='#'+s.id;nav.append(a);h.append(new Node('span','matt-name-bubble',name));s.append(h,p,d);list.append(s);return s;});
 const content=slides.map(s=>s.children.slice());
 const visible=()=>slides.filter(s=>!s.hidden);
@@ -27,4 +28,5 @@ nav.children[2].emit('click');assert.deepEqual(visible(),[slides[2]]);assert.equ
 prev.emit('click');slides[1].children[2].open=true;prev.emit('click');next.emit('click');assert.equal(slides[1].children[2].open,true);
 doc.defaultView.location.hash='#mike';doc.defaultView.listeners.hashchange();assert.deepEqual(visible(),[slides[2]]);
 assert.equal(hero.hidden,false);assert.equal(action.hidden,false);assert.deepEqual(slides.map(s=>s.children),content);
-console.log('PASS: manual navigation, direct selector/hash, fixed Matt, all original content and evidence state preserved, no duplicate carousel');
+const drawer=action.querySelector('.matt-action-drawer');assert.ok(drawer);assert.equal(Boolean(drawer.open),false);assert.equal(drawer.children[0].children[0],actionTitle);assert.deepEqual(drawer.children[1].children,[actionCopy,actionEvidence]);assert.equal(action.children.length,1);drawer.open=true;mountMattCarousel(main);assert.equal(drawer.open,true);
+console.log('PASS: collapsed action plan preserves every original node and remains toggleable;  manual navigation, direct selector/hash, fixed Matt, all original content and evidence state preserved, no duplicate carousel');
