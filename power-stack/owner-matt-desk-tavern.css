@@ -67,3 +67,17 @@ html[data-private-page="index"] body.ps-fin-pulse .pscr-card{background:#292d28!
 html[data-private-page="index"] body.ps-fin-pulse .pscr-links a{background:#35332b!important;border-color:#8a7651!important;color:#efdab3!important}
 html[data-private-page="index"] body.ps-fin-pulse :is(.psd-coverage-panel,.psd-executive-main,.psd-summary-metrics,.psd-lane,.psd-ideas-panel):not(.matt-desk-tavern){background:linear-gradient(130deg,#24332b,#292c28)!important;border-color:#806a47!important}
 html[data-private-page="index"] body.ps-fin-pulse .psr-workspace :is(.psr-collapse,.psr-scenario-drawer,.psr-featured-drawer) summary{color:#f4dfbc!important}
+
+/* Manual analyst carousel — preserve original DOM, full dialogue and evidence. */
+.matt-desk-tavern .matt-topic-list[data-carousel-mounted]>.matt-topic[hidden]{display:none!important}
+.matt-desk-tavern .matt-carousel-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 11px;padding:7px 10px;border:1px solid #8a7048;border-radius:8px;background:#302a22}
+.matt-desk-tavern .matt-carousel-controls button{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid #c8a06a;border-radius:7px;background:#493a29;color:#ffe4ba;font:700 24px/1 Georgia,serif;cursor:pointer}
+.matt-desk-tavern .matt-carousel-controls button:disabled{opacity:.38;cursor:default}
+.matt-desk-tavern .matt-carousel-controls button:not(:disabled):hover{background:#665035}
+.matt-desk-tavern .matt-carousel-controls button:focus-visible{outline:2px solid #f4d39b;outline-offset:3px}
+.matt-desk-tavern .matt-carousel-status{color:#f4d4a0;font-size:14px;font-weight:800;text-align:center}
+.matt-desk-tavern .matt-topic-nav a[aria-current="true"]{background:#4e402e!important;border-color:#e5b977!important;color:#ffe4ba!important;box-shadow:inset 0 0 0 1px #e5b977}
+.matt-desk-tavern .matt-topic-nav{margin:14px 0 10px!important}
+.matt-desk-tavern .matt-topic-list[data-carousel-mounted]{display:block}
+.matt-desk-tavern .matt-topic-list[data-carousel-mounted] .matt-topic-head{touch-action:pan-y}
+@media(max-width:650px){.matt-desk-tavern .matt-carousel-controls{gap:8px}.matt-desk-tavern .matt-topic-nav a{padding:7px 10px;font-size:13px}}

@@ -205,6 +205,11 @@ async function load(styleReady){
   }catch(error){console.error("Specialist decision room unavailable; original private tools remain.",error);}
  }
  try{const {mountNov17Research}=await readyModule("supplement");mountNov17Research(PAGE,content);}catch(error){console.error("Dated market supplement unavailable",error);}
+ // Enhance only the owner-authenticated briefing; never replace its dialogue or evidence.
+ if(PAGE==="index"){
+  try{const {mountMattCarousel}=await import("./owner-matt-carousel.mjs?v=20261120-carousel1");mountMattCarousel(content);}
+  catch(error){console.error("Matt carousel unavailable; full original briefing remains visible.",error);}
+ }
  await styleReady;
  if(!authorised)return;
  // Remove the overlay BEFORE enabling the desk theme in the same JS task.
