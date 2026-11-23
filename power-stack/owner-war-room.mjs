@@ -1,7 +1,7 @@
 /* Evidence-first War Room. The stage voices are editorial. Findings are dated,
    sourced research snapshots; owner decisions and prices remain separately identified.
    No brokerage operations, auto-updates or invented confidence scores. */
-import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261123-findings1";
+import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261124-findings1";
 export const DESKS=Object.freeze([
  {id:"matt",name:"Matt",role:"HEAD OF THE DESK",icon:"M"},
  {id:"rates",name:"Jimmy",role:"RATES & INFLATION",icon:"%"},
@@ -11,12 +11,12 @@ export const DESKS=Object.freeze([
  {id:"selection",name:"Sarah",role:"VALUATION & STOCK SELECTION",icon:"◇"}
 ]);
 const MATT_SAYS=Object.freeze({
- matt:"THE S&P IS IN CORRECTION. THE BOUNCE IS A TRADE, NOT A BOTTOM! NOBODY PAYS FORTY TIMES EARNINGS FOR TOOTHPASTE ON MY WATCH!",
- rates:"JIMMY! WE NEED REAL YIELDS, CREDIT AND WEDNESDAY'S PCE BEFORE DECLARING THE DAMN BOTTOM!",
- ai:"DAVID! NVIDIA ALREADY REPORTED! CHECK WHO PAYS THE GPU BILLS, NOT THE OLD EARNINGS PREVIEW!",
- energy:"MIKE! A TANKER HEADLINE IS NOT A VERIFIED LOST BARREL! GET ME THE PHYSICAL FLOWS AND PRODUCT SPREADS!",
+ matt:"THE RELIEF RALLY IS REAL, BUT THE BROAD MARKET HAS NOT CONFIRMED IT! PUT FUNDED CASH FLOW, RETESTS AND THE PCE REACTION AHEAD OF ONE GREEN CANDLE!",
+ rates:"JIMMY! A +0.3% OCTOBER PCE IS NOT A MISS. SHOW ME THE 2Y, DXY BAND REJECTION AND REAL YIELDS BEFORE TALKING ABOUT GOLD!",
+ ai:"DAVID! A THIRTY-ONE-PERCENT NVIDIA REBOUND ISN'T A FREE-CASH-FLOW STATEMENT! CHECK WHO PAYS THE GPU BILL!",
+ energy:"MIKE! CRUDE IS FALLING, BUT LNG CONTRACTS AND REFINERY CRACKS ARE DIFFERENT TRADES! GET ME THE PHYSICAL NUMBERS!",
  aviation:"RACHEL! THE FAA HAS NARROWED THE INVESTIGATION, NOT PROVEN THE ROOT CAUSE. SHOW ME REAL NEW CONTRACTS!",
- selection:"SARAH! STAPLES AT TWENTY-FOUR TIMES EARNINGS? TEST PEG HORIZONS AND NORMALISED CASH BEFORE WE CALL THAT SAFE!"
+ selection:"SARAH! BWXT, MWA, ETN, LNG FIRST FOR RESEARCH, NOT AUTO-BUYS. CHECK THE PRICE WE'RE PAYING!"
 });
 const $=(root,s)=>root.querySelector(s);
 const el=(tag,cls,value)=>{
@@ -182,7 +182,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
   $(root,"#psw-matt-lead").textContent=revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
-    :'"THE MARKET IS IN CORRECTION, XLP IS EXPENSIVE, AND SMH IS OVERSOLD. PREPARE FOR A SQUEEZE, BUT NEVER BUY THE FIRST GREEN CANDLE. CREDIT GETS THE DECIDING VOTE!"';
+    :'"SMH JUST RIPPED WHILE EQUAL-WEIGHT BREADTH LAGGED. THAT IS A SETUP, NOT A NEW REGIME! THE NEXT PCE, REAL YIELDS AND CREDIT GET THE DECIDING VOTE!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
   for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));
