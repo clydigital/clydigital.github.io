@@ -1,7 +1,7 @@
 /* Evidence-first War Room. The stage voices are editorial. Findings are dated,
    sourced research snapshots; owner decisions and prices remain separately identified.
    No brokerage operations, auto-updates or invented confidence scores. */
-import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261117-market2";
+import {BRIEFING_EDITION,VERIFIED_FINDINGS,DESK_ORDER,findingsForDesk,validateFinding} from "./owner-war-room-findings.mjs?v=20261123-findings1";
 export const DESKS=Object.freeze([
  {id:"matt",name:"Matt",role:"HEAD OF THE DESK",icon:"M"},
  {id:"rates",name:"Jimmy",role:"RATES & INFLATION",icon:"%"},
@@ -11,12 +11,12 @@ export const DESKS=Object.freeze([
  {id:"selection",name:"Sarah",role:"VALUATION & STOCK SELECTION",icon:"◇"}
 ]);
 const MATT_SAYS=Object.freeze({
- matt:"NVIDIA GUIDANCE IS THE DAMN EVENT. REMOTE COMPUTE RULES, AI FUNDING AND PHYSICAL FOOD SUPPLY ALL NEED DIFFERENT TESTS!",
- rates:"JIMMY! ONE RELIEF SESSION IS NOT A RATE REVERSAL. CHECK REAL YIELDS, RETAIL SALES AND FED REPRICING!",
- ai:"DAVID! GUIDANCE, NOT JUST THE QUARTER! CHECK SUCCESSION, CUSTOMER ORDERS, MALAYSIA LICENSING AND THE ANTHROPIC OFFERING!",
- energy:"MIKE! OIL SUPPLY RISK AND A FORECAST SURPLUS CAN COEXIST. SEPARATE UREA AVAILABILITY FROM FOOD PRICES AND ACTUAL MARGINS!",
+ matt:"THE S&P IS IN CORRECTION. THE BOUNCE IS A TRADE, NOT A BOTTOM! NOBODY PAYS FORTY TIMES EARNINGS FOR TOOTHPASTE ON MY WATCH!",
+ rates:"JIMMY! WE NEED REAL YIELDS, CREDIT AND WEDNESDAY'S PCE BEFORE DECLARING THE DAMN BOTTOM!",
+ ai:"DAVID! NVIDIA ALREADY REPORTED! CHECK WHO PAYS THE GPU BILLS, NOT THE OLD EARNINGS PREVIEW!",
+ energy:"MIKE! A TANKER HEADLINE IS NOT A VERIFIED LOST BARREL! GET ME THE PHYSICAL FLOWS AND PRODUCT SPREADS!",
  aviation:"RACHEL! THE FAA HAS NARROWED THE INVESTIGATION, NOT PROVEN THE ROOT CAUSE. SHOW ME REAL NEW CONTRACTS!",
- selection:"SARAH! DON'T BUY THE FOOD SHORTAGE HEADLINE. TEST NORMALISED CASH FLOW AND VALUATION ACROSS THE SUPPLY CHAIN!"
+ selection:"SARAH! STAPLES AT TWENTY-FOUR TIMES EARNINGS? TEST PEG HORIZONS AND NORMALISED CASH BEFORE WE CALL THAT SAFE!"
 });
 const $=(root,s)=>root.querySelector(s);
 const el=(tag,cls,value)=>{
@@ -182,7 +182,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
   $(root,"#psw-matt-lead").textContent=revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
-    :'"NVIDIA GUIDANCE IS THE MAIN EVENT. CHECK AI LICENSING, ANTHROPIC FUNDING, FAA EVIDENCE AND THE PHYSICAL FERTILISER SPREAD BEFORE WE CHASE ANYTHING!"';
+    :'"THE MARKET IS IN CORRECTION, XLP IS EXPENSIVE, AND SMH IS OVERSOLD. PREPARE FOR A SQUEEZE, BUT DON'T BUY THE FIRST GREEN CANDLE. CREDIT GETS THE DECIDING VOTE!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
   for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));
