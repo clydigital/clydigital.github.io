@@ -1,0 +1,17 @@
+/* Authenticated Power Stack 23 Nov decision supplement. Reuse existing tavern design. */
+.ps-nov23-edition{--ink:#f5e6cb;--line:#8c714e;display:grid;gap:20px;background:linear-gradient(125deg,#103529,#241f1a 90%);border:2px solid #ad8750;border-radius:14px;padding:clamp(17px,2.6vw,30px);margin:20px 0;color:var(--ink);box-shadow:0 12px 28px #0006}
+.ps-nov23-edition *{box-sizing:border-box}
+.ps-nov23-edition h2,.ps-nov23-edition h3{font-family:Georgia,serif!important;letter-spacing:-.015em!important;color:#ffe1a9!important;margin:0!important}
+.ps-nov23-over{display:flex;flex-wrap:wrap;justify-content:space-between;gap:9px;border-bottom:1px solid #795f41;padding-bottom:11px;color:#e4b979;font:800 10px/1.6 system-ui;letter-spacing:.12em}
+.ps-nov23-edition h2{font-size:clamp(23px,2.9vw,38px)!important;line-height:1.1!important;margin-top:15px!important}
+.ps-nov23-head{display:grid;gap:13px}.ps-nov23-matt{font-weight:790!important;font-size:clamp(15px,1.6vw,20px)!important;line-height:1.65!important;color:#f6eddd!important}
+.ps-nov23-verdict{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ps-nov23-stat{border:1px solid #6c654d;border-radius:8px;background:#1c352b;padding:12px}.ps-nov23-stat dt{font-size:10px;color:#c7b48e;margin-bottom:7px}.ps-nov23-stat dd{margin:0;color:#fff0d7;font-size:14px;font-weight:800}
+.ps-nov23-health{border-left:3px solid #d39b64;padding:8px 13px;background:#2a342a;font-size:12px!important;color:#f2e1c7!important;line-height:1.6!important;margin:0}
+.ps-nov23-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.ps-nov23-card{min-width:0;background:#20332d;border:1px solid #685d45;border-radius:9px;padding:15px;display:grid;align-content:start;gap:9px}
+.ps-nov23-top{display:flex;flex-wrap:wrap;align-items:start;justify-content:space-between;gap:7px}.ps-nov23-top strong{color:#f5d29a;font-size:14px}.ps-nov23-top span{border:1px solid #8e7652;border-radius:30px;padding:4px 7px;font-size:9px;font-weight:800;letter-spacing:.06em;color:#ead7b8}
+.ps-nov23-finding{font-size:13px!important;line-height:1.6!important;color:#e6e4d8!important;margin:0!important}.ps-nov23-action{font-size:13px!important;line-height:1.6!important;border-left:2px solid #c59f68;padding:8px 11px;background:#133a2e;color:#f4ecd9!important;margin:0!important}
+.ps-nov23-detail{font-size:11px;color:#c6d6cc}.ps-nov23-detail summary,.ps-nov23-events summary{cursor:pointer;color:#ebc58f;font-weight:780;padding:10px 0}.ps-nov23-detail p{line-height:1.6;margin:5px 0}.ps-nov23-edition a{color:#f7c77f;text-underline-offset:3px}
+.ps-nov23-events{border:1px solid #746044;padding:10px 17px;border-radius:8px;background:#1b3028}.ps-nov23-eventgrid{display:grid;gap:5px}.ps-nov23-event{display:grid;grid-template-columns:120px 1fr;gap:5px 12px;padding:9px 0;border-bottom:1px solid #4e5c4e;font-size:12px}.ps-nov23-event strong{color:#f0c990}.ps-nov23-event span{color:#f1e8d7}.ps-nov23-event p{grid-column:2;color:#bbd1c6;line-height:1.5;margin:0}
+.ps-nov23-foot{font-size:11px!important;line-height:1.7!important;color:#c9c4b5!important;margin:0!important}
+@media(max-width:700px){.ps-nov23-deck,.ps-nov23-verdict{grid-template-columns:1fr}.ps-nov23-event{grid-template-columns:1fr}.ps-nov23-event p{grid-column:1}}
