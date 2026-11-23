@@ -4,11 +4,53 @@
 import {NOV23_DECISIONS} from "./owner-nov23-decision-edition.mjs?v=20261123-v1";
 import {LENS_CASES} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
 import {COMPARISONS} from "./owner-research-theses.mjs?v=20261113-research1";
-export const BRIEFING_EDITION="2026-11-23";
+export const BRIEFING_EDITION="2026-11-24";
 const lens=ticker=>LENS_CASES.find(x=>x.ticker===ticker);
 const comparison=id=>COMPARISONS.find(x=>x.id===id);
 const finding=(x)=>Object.freeze(x);
 export const VERIFIED_FINDINGS=Object.freeze([
+ finding({id:"nov24-macro-rebound",desk:"matt",symbol:"SMH / RSP / NVDA",headline:"AI rebound is spectacular — confirmation is still missing",
+ fact:"The 23 November US regular session saw SMH +15.03%, NVDA +31.48%, and RSP +2.59% (source-dated closes, not present-session quotes).",
+ why:"Big-cap semiconductors are recovering much faster than equal-weight equities. This is consistent with powerful short covering and concentrated leadership, not independently a durable bull-market reset.",
+ call:"MATT: SELECTIVE RISK-ON, NOT ALL-CLEAR. Track RSP/SPY, credit spreads, SMH/QQQ and 4H/daily EMA-band retests before sizing growth equities.",
+ change:"Multiple sessions of broadening breadth, stable credit, and funded AI-customer cash conversion support a stronger regime call; failed retests restore the defensive case.",
+ posture:"TACTICAL REBOUND / VERIFY",source:"https://finnhub.io/quote?symbol=SMH",secondary:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:true}),
+ finding({id:"nov24-pick-queue",desk:"matt",symbol:"BWXT / MWA / ETN / LNG",headline:"Buy the business economics, not yesterday's percentage gain",
+ fact:"The 24 November Power Stack investment committee places BWXT, MWA, ETN and Cheniere LNG first in the research queue, and VRT, PANW, XYL and ASML behind fresh valuation or operating-confirmation gates.",
+ why:"Nuclear/defence, water, electrical equipment and contracted LNG offer business pathways that can be underwritten against funded orders, cash generation and debt, rather than a single AI narrative.",
+ call:"UNDERWRITE FOUR FIRST. A research rank is not a buy or a score change; build base/bear cash-flow cases, then require 4H/daily price acceptance and risk/reward confirmation.",
+ change:"Issuer cash flows, demand orders, forward earnings, valuation compression, debt terms or retest failure change the ranking.",
+ posture:"PICKS / RESEARCH ONLY",source:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:true}),
+ finding({id:"nov24-holdings-risk",desk:"matt",symbol:"XOM / DAYANG / YTLPOWR",headline:"Portfolio risk review comes before any new order",
+ fact:"Power Stack's recorded eight holdings are sourced from a 23 October owner snapshot; present broker quantities and cash are not verified. Dayang oil-services and the 6742UW warrant are first exposure reviews.",
+ why:"Crude weakness affects producers and services differently; shipping and contracted power have their own financing risks. Warrants add expiry, strike and liquidity risks which parent-company upside does not remove.",
+ call:"VERIFY BROKER LEDGER; REVIEW DAYANG AND 6742UW FIRST. Preserve existing positions, transaction history and historical scores.",
+ change:"Actual broker quantities, cost bases, warrant terms, cash and issuer financing disclosures could change any action decision.",
+ posture:"OWNER RISK / VERIFY",source:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:true}),
+ finding({id:"nov24-pce-rates",desk:"rates",symbol:"PCE / DXY / US02Y",headline:"Lower November oil is not an automatic October core-PCE miss",
+ fact:"As reviewed on 24 November, October headline/core PCE consensus is +0.3% month-on-month. October CPI and PPI showed persistent core/services pressure, while the substantial fall in crude and pump prices came mainly in November.",
+ why:"Oil transmits directly into headline prices but only indirectly and often with a lag into core PCE. The user's bearish-DXY and softer-PCE technical thesis remains a valid competing scenario, not a settled forecast.",
+ call:"JIMMY: RECORD PCE ACTUAL VS PRIOR CONSENSUS; REQUIRE DXY 4H/1D EMA-SD BAND REJECTION, 2Y AND REAL-YIELD FOLLOW-THROUGH BEFORE A RATES OR GOLD REGIME SHIFT.",
+ change:"Core at/below +0.2% and falling DXY/2Y supports relief; +0.4% and yields/USD higher favours renewed tightening risk. Neither reaction is guaranteed.",
+ posture:"PCE CONDITIONAL",source:"https://www.bea.gov/data/personal-consumption-expenditures-price-index",secondary:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:false}),
+ finding({id:"nov24-ai-financing",desk:"ai",symbol:"NVDA / TSM / MU / VRT",headline:"AI leadership rebounds; the funding question survives",
+ fact:"The 23 November US close showed NVDA +31.48%, TSM +14.08%, MU +19.04%, and Vertiv +12.10%. These are historic one-session changes, not investment return forecasts.",
+ why:"Leadership headlines and valuation rebounds do not guarantee that model operators and GPU-cloud customers can pay for capacity after debt service, depreciation and capex.",
+ call:"DAVID: NO GAP CHASING. Test original issuer margins, cash, funded contracts, balance sheets and sector retests; treat GPU supplier, hyperscaler and leveraged AI cloud as separate cash-flow layers.",
+ change:"Positive capacity utilisation, customer prepayments and post-capex free cash flow would improve the case; cancellations, weak financing and failed price structures would hurt it.",
+ posture:"AI QUALITY / WAIT",source:"https://finnhub.io/quote?symbol=NVDA",secondary:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:false}),
+ finding({id:"nov24-crude-gas",desk:"energy",symbol:"XOM / LNG / CF",headline:"Falling oil helps inflation but not every energy stock",
+ fact:"The November crude-price decline creates disinflation potential after October's expensive oil period. Cheniere's long-term LNG contracts, Exxon refining/upstream mix and CF gas-to-urea spreads have distinct economics.",
+ why:"Lower crude can reduce realised upstream cash prices, while cheaper gas can improve some industrial costs. A lower feedstock cost is not sufficient to establish a producer-margin expansion.",
+ call:"MIKE: UNDERWRITE ACTUAL PHYSICAL FLOWS, CRACK SPREADS, LNG CONTRACT CASH AND NITROGEN MARGINS; DO NOT CONVERT OIL HEADLINES INTO AUTOMATIC BUY SIGNALS.",
+ change:"Material physical export disruption, producer spreads, contract renegotiation, shipping routes or issuer cash guidance.",
+ posture:"OIL DOWN / SECTOR SPLIT",source:"https://www.eia.gov/outlooks/steo/",secondary:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:false}),
+ finding({id:"nov24-selection-relative",desk:"selection",symbol:"BWXT / MWA / ETN / PANW",headline:"Resilience, valuation and entry price must agree",
+ fact:"Research priority is BWXT, MWA, ETN and LNG. The new PANW, VRT, XYL and ASML candidates are on a valuation/technical evidence gate; no positions or legacy conviction scores were revised.",
+ why:"Defensive-looking names can already be expensive; AI-adjacent suppliers can enjoy durable demand but still deliver poor shareholder returns if the starting multiple is inflated.",
+ call:"SARAH: COMPARE BASE/BEAR CASH YIELDS, EV/FCF, NET DEBT AND PAID BACKLOG. KEEP 'RESEARCH A' SEPARATE FROM 'BUY'.",
+ change:"New filings, revisions, margin conversion, funding risk, and price band retest after the next completed session.",
+ posture:"STOCK PICK / RESEARCH",source:"https://chatgpt.com/api/library/files/libfile_864b6097678c8191a37d1dad5d6d9e58/download",asOf:"2026-11-24",featured:false}),
  ...NOV23_DECISIONS.map((item,i)=>finding({
   id:"nov23-decision-"+(i+1),
   desk:({David:"ai",Sarah:"selection",Mike:"energy",Jimmy:"rates",Rachel:"aviation"})[item.desk]||"matt",
