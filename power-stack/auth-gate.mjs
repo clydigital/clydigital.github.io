@@ -72,7 +72,7 @@ const modules={
  advisor:()=>import("./owner-advisor-presentation.mjs?v=20261120-stable-gate2"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
- index:()=>import("./owner-decision-desk.mjs?v=20261120-one-gate1"),
+ index:()=>import("./owner-decision-desk.mjs?v=20261123-warroom1"),
  table:()=>import("./owner-portfolio-table.mjs?v=20261120-one-gate1"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
@@ -209,6 +209,13 @@ async function load(styleReady){
  if(PAGE==="index"){
   try{const {mountMattCarousel}=await import("./owner-matt-carousel.mjs?v=20261120-contrast2");mountMattCarousel(content);}
   catch(error){console.error("Matt carousel unavailable; full original briefing remains visible.",error);}
+ }
+ // Authorised public-market research; quote freshness is checked via owner RLS.
+ try {
+  const {mountNov23DecisionEdition}=await import("./owner-nov23-decision-edition.mjs?v=20261123-v1");
+  await mountNov23DecisionEdition(PAGE,content,db,user);
+ } catch(error) {
+  console.error("Nov 23 private decision overlay unavailable",error);
  }
  await styleReady;
  if(!authorised)return;
