@@ -182,7 +182,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
   $(root,"#psw-matt-lead").textContent=revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
-    :'"THE MARKET IS IN CORRECTION, XLP IS EXPENSIVE, AND SMH IS OVERSOLD. PREPARE FOR A SQUEEZE, BUT DON'T BUY THE FIRST GREEN CANDLE. CREDIT GETS THE DECIDING VOTE!"';
+    :'"THE MARKET IS IN CORRECTION, XLP IS EXPENSIVE, AND SMH IS OVERSOLD. PREPARE FOR A SQUEEZE, BUT NEVER BUY THE FIRST GREEN CANDLE. CREDIT GETS THE DECIDING VOTE!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
   for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));
