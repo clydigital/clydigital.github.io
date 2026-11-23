@@ -18,6 +18,7 @@ const decisions=[
  {ticker:"CF / LNG / ENERGY",posture:"SELECTIVE CASH-FLOW WATCH",desk:"Mike",finding:"Oil risk and oil oversupply can coexist. Tanker incidents, urea availability, refined-product cracks and upstream-service work orders are economically distinct. No verified cargo loss should be invented.",action:"Research cash generation and product spreads. CF remains a midcycle spread test; LNG requires price and cash conversion; do not buy every energy ticker on Hormuz headlines.",wrong:"Physical flows normalise, gas/input spreads squeeze margins or customer demand deteriorates.",source:SOURCE.evidence},
  {ticker:"AI / CASH CONVERSION",posture:"CASH QUALITY GATE",desk:"Rachel",finding:"Nvidia's strong reported demand did not prevent Friday's equity collapse. GPU orders are not proof that cloud customers earn adequate returns after financing, leases and capex.",action:"Separate profitable hardware suppliers from leveraged capacity operators. Review NVDA/GOOGL/VRT/NVT issuer cash, financing and guidance; no forced buy ranking without verified estimates.",wrong:"Issuer order revisions or debt/cash changes fail the investment thesis.",source:SOURCE.correction}
 ];
+export {decisions as NOV23_DECISIONS};
 const calendar=[
  ["Mon 23","US flash PMI; Bursa KLCI-50 ranking cut-off","Check growth/prices and local index-flow effects; no implied order"],
  ["Tue 24","US consumer confidence; Dell, Analog Devices, Workday results","Separate hardware demand, software spending and margins"],
