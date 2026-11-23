@@ -361,7 +361,7 @@ test("Matt leads an evidence-first War Room without standing instruction cards",
 });
 
 test("all desk results are actual source-dated findings with inference and a call",()=>{
- assert.equal(BRIEFING_EDITION,"2026-11-17");
+ assert.equal(BRIEFING_EDITION,"2026-11-23");
  for(const id of ["nov17-bis-remote","nov17-anthropic","nov17-fed-usd","nov17-urea-recovery"])assert(VERIFIED_FINDINGS.some(x=>x.id===id&&validateFinding(x)),id);
  assert(VERIFIED_FINDINGS.some(x=>x.id==="nov17-agriculture"&&x.posture==="RESEARCH / WAIT"));
  assert(SCENARIOS.some(x=>x.id==="agri-supply-squeeze"));
@@ -375,11 +375,16 @@ test("all desk results are actual source-dated findings with inference and a cal
    assert(result.every(x=>x.fact.length>40&&x.why.length>40&&x.call.length>25));
  }
  const matt=findingsForDesk("matt");
- assert(matt.length>=5);
- assert(matt.some(x=>x.symbol==="NVDA"&&x.posture==="EVENT VETO"));
- assert(matt.some(x=>x.symbol==="FAA / AIRLINES"));
- assert(matt.some(x=>x.symbol==="BRENT / CVX"));
- assert(matt.some(x=>x.symbol==="CPI / PPI"));
+ assert(matt.length>=6);
+ for(const symbol of ["SPY / SMH","XLP / STAPLES","RSP / PHO","TLT / CREDIT","CF / LNG / ENERGY","AI / CASH CONVERSION"])
+  assert(matt.some(x=>x.symbol===symbol&&x.asOf==="2026-11-23"),symbol);
+ assert(!matt.some(x=>x.id.startsWith("nov17-")),"Old findings must remain accessible to desks but not crowd the 23 Nov lead.");
+ const current=read("owner-nov23-decision-edition.mjs");
+ const gate=read("auth-gate.mjs");
+ assert(current.includes("owner_user_id")&&current.includes("observed_on"),"Private quote freshness must use source dates under owner RLS.");
+ assert(current.includes("XLP / STAPLES")&&current.includes("NOV23_DECISIONS"),"Valuation and tactical decisions should come from one edition.");
+ assert(gate.includes("mountNov23DecisionEdition(PAGE,content,db,user)"));
+ assert(!/placeOrder|createOrder|service_role|sb_secret_/i.test(current),"Public decision supplement must not contain order or service credentials.");
  const war=read("owner-war-room.mjs");
  assert(war.includes("findingsForDesk(desk.id).filter(validateFinding)"));
  assert(war.includes("readChanges(state)"));
