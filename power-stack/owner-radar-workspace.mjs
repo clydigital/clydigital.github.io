@@ -458,11 +458,15 @@ export function installRadarWorkspace(main,getState){
  const introLog=add(log,node("header","ps-al-header"));
  introLog.append(node("p","ps-al-kicker","POWER STACK / PRIVATE"),node("h1",null,"What to do"),node("p",null,"Latest saved instructions. Review the evidence and conditions before acting."));
  const links=add(log,node("nav","ps-al-nav"));links.setAttribute("aria-label","Investment destinations");
- for(const [label,url] of [["War Room","#war-room"],["Holdings","portfolio.html#holdings"],["Watchlist","portfolio.html#watchlist"],["Bluebelly research","https://bluebelly-desk.vercel.app/research"]]){
+ for(const [label,url] of [["War Room","#war-room"],["Holdings","portfolio.html#holdings"],["Ideas","ideas.html"],["Watchlist","portfolio.html#watchlist"],["Bluebelly research","https://bluebelly-desk.vercel.app/research"]]){
   const a=add(links,node("a",null,label));a.href=url;
  }
  const logStatus=add(log,node("p","ps-al-status","Loading private decision history…"));logStatus.setAttribute("role","status");
+ const logSearch=add(log,node("input","ps-al-search"));logSearch.type="search";logSearch.placeholder="Find company, ticker or industry";logSearch.setAttribute("aria-label","Find investment instructions by company, ticker or industry");
  const logList=add(log,node("div","ps-al-list"));
+ const moreLog=add(log,node("details","ps-al-history"));const moreTitle=add(moreLog,node("summary",null,"More instructions"));const moreList=add(moreLog,node("div","ps-al-list"));
+ const researchCandidates=dailyWarRoom?.querySelector("#ps-priority-ideas");
+ if(researchCandidates){log.append(researchCandidates);researchCandidates.classList.add("ps-al-candidates");}
  const logHistory=add(log,node("details","ps-al-history"));logHistory.id="decision-history";
  const historyTitle=add(logHistory,node("summary",null,"Decision history"));
  const historyList=add(logHistory,node("div","ps-al-list"));
@@ -477,10 +481,19 @@ export function installRadarWorkspace(main,getState){
   const expired=Boolean(v.review_by&&v.review_by<localDate()),gap=["STALE","UNAVAILABLE"].includes(e.source_status);
   const original=labels[r.action]||pretty(r.action);
   const blocked=!historical&&(expired||gap||["BLOCKED_BY_EVIDENCE","RECHECK_REQUIRED","REJECTED"].includes(r.decision_state));
-  head.append(node("strong",null,s.instrument_id||s.name||"Unnamed case"),node("span","ps-al-action",blocked?"Recheck · was "+original:original));
+  const ticker=String(s.instrument_id||"").trim();
+  const matched=(getState()?.ideaRows||[]).find(x=>String(x.ticker||"").toUpperCase()===ticker.toUpperCase());
+  const name=s.name&&s.name.toUpperCase()!==ticker.toUpperCase()?s.name:matched?.name||s.name||ticker||"Unnamed case";
+  const identity=add(head,node("div","ps-al-identity"));
+  identity.append(node("strong",null,name));
+  if(ticker&&ticker.toUpperCase()!==String(name).toUpperCase())identity.append(node("small","ps-al-ticker",ticker));
+  if(s.industry)identity.append(node("small","ps-al-industry",s.industry));
+  else if(ticker){const theme=MARKET_THEMES.find(x=>x.id===themeFor(ticker));identity.append(node("small","ps-al-industry",theme?"Research theme: "+theme.name:"Industry not recorded"));}
+  head.append(node("span","ps-al-action",blocked?"Recheck · was "+original:original));
+  if(s.business_summary)item.append(node("p","ps-al-business",s.business_summary));
   item.append(node("p","ps-al-meta",(historical?"Saved ":"Reviewed ")+stampLog(row.created_at)+" · "+pretty(r.decision_state)+" · "+pretty(e.source_status)));
   if(!historical&&(expired||gap))item.append(node("p","ps-al-warning",expired?"Review overdue. Do not treat the previous action as a fresh instruction.":"Source evidence is stale or unavailable. Recheck before acting."));
-  if(r.rationale)item.append(node("p",null,r.rationale));
+  if(r.rationale)item.append(node("p",null,"Why: "+r.rationale));
   if(r.condition)item.append(node("p","ps-al-condition","When: "+r.condition));
   const detail=add(item,node("details","ps-al-detail"));detail.append(node("summary",null,"Invalidation, review & evidence"));
   if(v.thesis_invalidation)detail.append(node("p",null,"Invalidation: "+v.thesis_invalidation));
@@ -489,18 +502,28 @@ export function installRadarWorkspace(main,getState){
   return item;
  }
  function renderLog(){
-  const state=getState()||{};logList.replaceChildren();historyList.replaceChildren();
+  const state=getState()||{};logList.replaceChildren();historyList.replaceChildren();moreList.replaceChildren();moreLog.hidden=true;
   if(!state.dataReady){logStatus.textContent="Private decisions not yet verified. No current instruction is inferred.";historyTitle.textContent="Decision history";return;}
   const rows=Array.isArray(state.rows)?state.rows.filter(row=>row?.ticket?.recommendation&&row.case_key):[];
   const priority={risk:0,decision:1,watch:2};
   const latest=latestByCase(rows).sort((a,b)=>(priority[lane(a)]??3)-(priority[lane(b)]??3)||String(b.created_at).localeCompare(String(a.created_at)));
   logStatus.textContent=latest.length?latest.length+" saved cases · latest revision "+stampLog(rows[0]?.created_at)+" · Not broker orders.": "No saved instructions yet. Open the War Room for dated research; no new action is inferred.";
-  for(const row of latest)logList.append(instruction(row));
+  const term=logSearch.value.trim().toLowerCase();
+  const filtered=latest.filter(row=>{const s=row.ticket?.subject||{},m=(state.ideaRows||[]).find(x=>String(x.ticker||"").toUpperCase()===String(s.instrument_id||"").toUpperCase());return !term||lane(row)==="risk"||[s.name,s.instrument_id,s.industry,s.business_summary,m?.name].join(" ").toLowerCase().includes(term);});
+  const urgent=filtered.filter(row=>lane(row)==="risk");
+  const primary=[...urgent,...filtered.filter(row=>lane(row)!=="risk").slice(0,Math.max(0,5-urgent.length))];
+  const primaryIds=new Set(primary.map(row=>row.case_key));
+  const rest=filtered.filter(row=>!primaryIds.has(row.case_key));
+  for(const row of primary)logList.append(instruction(row));
+  if(term&&!primary.length)logList.append(node("p",null,"No matching saved instructions."));
+  moreLog.hidden=!rest.length;moreTitle.textContent="More instructions · "+rest.length;
+  for(const row of rest)moreList.append(instruction(row));
   historyTitle.textContent="Decision history · "+rows.length+" loaded revisions"+(state.totalRows>rows.length?" (partial)":"");
   for(const row of rows.slice(0,30))historyList.append(instruction(row,true));
   if(!rows.length)historyList.append(node("p",null,"No verified revisions saved."));
   if(rows.length>30){const a=add(historyList,node("a",null,"Open detailed decision archive"));a.href="#advanced-research";}
  }
+ logSearch.addEventListener("input",renderLog);
  workspace.prepend(log);
  const marketTools=add(workspace,node("details","psw-tools ps-al-tools"));marketTools.id="market-tools";
  marketTools.append(node("summary",null,"Optional market radar & research"),quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
