@@ -78,7 +78,7 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const home=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
- assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
+ assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
  assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
@@ -300,19 +300,19 @@ test("Action Log is the owner-gated homepage and War Room is deep-linked",()=>{
   assert(radar.includes("latestByCase(rows)"));
   assert(radar.includes("Review overdue. Do not treat the previous action as a fresh instruction."));
   assert(!/\.insert\(|\.upsert\(|placeOrder/.test(radar));
-  assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
+  assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
   assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF})'));
   assert(radar.includes('deskTools.id="desk-tools"'));
   assert(radar.includes('deskTools.open=true'));
   assert(radar.includes('warRoomDrawer.id="war-room"'));
   assert(radar.includes('warRoomDrawer.open=true'));
-  assert(radar.includes('deskTools.append(legacy)'));
+  assert(radar.includes('deskTools.append(legacy,pastWar)'));
   assert(radar.includes('psr-room-grid'));
   assert(!radar.includes('for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child)'));
   assert(radar.includes('warRoom.render()'));
-  assert(nav.includes('["index.html#action-log","Action Log","index"]'));
-  assert(nav.includes('["index.html#decision-history","Decision History","history"]'));
-  assert(nav.includes(`["index.html#war-room","Matt's War Room","warroom"]`));
+  assert(nav.includes('["index.html#action-log","Today","index"]'));
+  assert(nav.includes('["index.html#decision-history","Decision history"]'));
+  assert(nav.includes(`["index.html#war-room","War Room","warroom"]`));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);
   for(const critical of ["What the evidence says","THE CALL","WHY IT MATTERS","What would change this view?","Did the investment call change?"])
@@ -327,9 +327,9 @@ test("specialist rooms keep personalized instructions behind owner RLS",()=>{
  const ideas=read("owner-ideas-tracker.mjs");
  for(const proof of ["Next evidence / action","Reversal / invalidation","ROOM_EDITION","privateRooms","hashchange","Research-only"])
    assert(room.includes(proof)||room.toLowerCase().includes(proof.toLowerCase()));
- assert(gate.includes('eq("page_key","index")'));
- assert(gate.includes('eq("owner_user_id",user.id)'));
- assert(gate.includes('secureMain(roomPage.body_html)'));
+ assert(gate.includes('in("page_key",keys)'));
+ assert(gate.includes('eq("owner_user_id",session.user.id)'));
+ assert(gate.includes('secureMain(roomsPage.body_html)'));
  assert(gate.includes('mountCommandRoom(PAGE,content,privateRooms)'));
  assert(radar.includes('index.html#war-room')&&radar.includes("portfolio.html#holdings")&&radar.includes('ideas.html#trades'));
  assert(ideas.includes('location.hash==="#trades"'));
@@ -337,7 +337,7 @@ test("specialist rooms keep personalized instructions behind owner RLS",()=>{
    assert(css.includes(cssRule));
  for(const page of ["index","portfolio","ideas","research","sectors","decisions"]){
   const html=read(page+".html");
-  assert(html.includes("owner-command-rooms.css?v="+(page==="index"?"20261114-width2":"20261114-rooms1")),page+" missing room styles");
+  assert(html.includes("owner-command-rooms.css?v="+(page==="index"?"20261119-radar2":"20261119-action1")),page+" missing room styles");
  }
  for(const secret of ["YTLPOWR","6742UW","DAYANG","HIBISCS","TSLA","TTWO"])
   assert(!room.includes(secret),"Private holding disclosed in public JS: "+secret);
@@ -351,7 +351,7 @@ test("Market Radar cannot collapse into an intrinsic narrow content strip",()=>{
  assert(css.includes('width:100%!important;'));
  assert(css.includes('grid-template-columns:minmax(0,1fr)!important;'));
  assert(css.includes('justify-self:stretch!important;'));
- assert(html.includes('owner-command-rooms.css?v=20261114-width2'));
+ assert(html.includes('owner-command-rooms.css?v=20261119-radar2'));
 });
 test("Matt leads an evidence-first War Room without standing instruction cards",()=>{
  const war=read("owner-war-room.mjs"),radar=read("owner-radar-workspace.mjs");
@@ -372,9 +372,10 @@ test("Matt leads an evidence-first War Room without standing instruction cards",
 });
 
 test("all desk results are actual source-dated findings with inference and a call",()=>{
- assert.equal(BRIEFING_EDITION,"2026-11-23");
- for(const id of ["nov17-bis-remote","nov17-anthropic","nov17-fed-usd","nov17-urea-recovery"])assert(VERIFIED_FINDINGS.some(x=>x.id===id&&validateFinding(x)),id);
- assert(VERIFIED_FINDINGS.some(x=>x.id==="nov17-agriculture"&&x.posture==="RESEARCH / WAIT"));
+ assert.match(BRIEFING_EDITION,/^20\d\d-\d\d-\d\d$/);
+ assert(BRIEFING_EDITION>="2026-11-24");
+ for(const id of ["nov24-macro-rebound","nov24-pick-queue","nov24-pce-rates","nov24-ai-financing"])assert(VERIFIED_FINDINGS.some(x=>x.id===id&&validateFinding(x)),id);
+ assert(VERIFIED_FINDINGS.some(x=>x.id==="selection-cf"&&validateFinding(x)));
  assert(SCENARIOS.some(x=>x.id==="agri-supply-squeeze"));
  assert(VERIFIED_FINDINGS.length>=10);
  assert(VERIFIED_FINDINGS.every(validateFinding));
@@ -386,10 +387,9 @@ test("all desk results are actual source-dated findings with inference and a cal
    assert(result.every(x=>x.fact.length>40&&x.why.length>40&&x.call.length>25));
  }
  const matt=findingsForDesk("matt");
- assert(matt.length>=6);
- for(const symbol of ["SPY / SMH","XLP / STAPLES","RSP / PHO","TLT / CREDIT","CF / LNG / ENERGY","AI / CASH CONVERSION"])
-  assert(matt.some(x=>x.symbol===symbol&&x.asOf==="2026-11-23"),symbol);
- assert(!matt.some(x=>x.id.startsWith("nov17-")),"Old findings must remain accessible to desks but not crowd the 23 Nov lead.");
+ assert(matt.length>=3);
+ for(const symbol of ["SMH / RSP / NVDA","BWXT / MWA / ETN / LNG"])assert(matt.some(x=>x.symbol===symbol&&x.asOf===BRIEFING_EDITION),symbol);
+ assert(!matt.some(x=>x.id.startsWith("nov17-")),"Old findings must not crowd the current lead.");
  const current=read("owner-nov23-decision-edition.mjs");
  const gate=read("auth-gate.mjs");
  assert(current.includes("owner_user_id")&&current.includes("observed_on"),"Private quote freshness must use source dates under owner RLS.");

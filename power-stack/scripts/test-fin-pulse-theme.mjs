@@ -5,10 +5,11 @@ const read=name=>readFileSync(new URL("../"+name,import.meta.url),"utf8");
 
 test("Fin Pulse CSS preloads while owner content stays hidden until final layout",()=>{
  const gate=read("auth-gate.mjs"),styles=read("owner-fin-pulse.css");
- const auth=gate.indexOf('const user=await authenticate()');
+ const auth=gate.indexOf('const access=await authenticateAndRead()');
  const hidden=gate.indexOf('content.hidden=true');
  const present=gate.indexOf('presentClientView(PAGE,content)');
  const reveal=gate.indexOf('content.hidden=false');
+ assert(gate.indexOf("finalizeRecap(PAGE,content)")<reveal&&gate.indexOf("await styleReady")<reveal);
  assert(auth>=0&&hidden>auth&&present>hidden&&reveal>present,"No intermediate unthemed owner content");
  assert(!gate.includes('document.head.append(pulse)'),"Do not inject the theme after rendering");
  assert(!gate.includes('document.head.append(link)'),"Advisor theme must also preload");
@@ -30,7 +31,7 @@ test("no copied template assets or external design dependencies",()=>{
 });
 test("client sidebar links retain every major investment workflow",()=>{
  const ui=read("owner-advisor-presentation.mjs");
- for(const item of ["Market Radar","Matt\'s War Room","Opportunity Command","Market watch","Holdings Command","Evidence Command","Sector Strategy","Decision Control","Past editions"]){
+ for(const item of ["Today","Portfolio","Ideas","War Room","Archive","Decision history","Investment dossiers","Research evidence","Sector analysis","Decision records"]){
   assert(ui.includes(item),item);
  }
  assert(ui.includes('fragment.append(signout)'),"Sign out control must remain reachable");
@@ -59,7 +60,7 @@ test("market watch sorting and PEG gates are preserved",()=>{
 });
 test("login card matches the slate-blue palette before auth",()=>{
  const gate=read("private-gate.css");
- assert(gate.includes('background:#020617'));
+ assert(gate.includes('#gate-panel')&&gate.includes('background:#111827'));
  assert(gate.includes('background:#2563eb'));
  assert(gate.includes('.gate-wrap'));
 });
@@ -68,7 +69,7 @@ test("each private page loads the final theme in head before auth script",()=>{
  for(const page of ["index","ideas","portfolio","research","sectors","decisions","archive"]){
   const html=read(page+".html");
   const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
-  const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
+  const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261120-stable-gate2"');
   const auth=html.indexOf('src="auth-gate.mjs?v=');
   assert(advisor>0&&pulse>advisor&&auth>pulse,page+" theme must precede auth script");
  }

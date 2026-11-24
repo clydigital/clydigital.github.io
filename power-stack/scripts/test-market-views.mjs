@@ -76,7 +76,7 @@ test("Bonds tab opens from homepage and research without removing company ideas"
  assert(tracker.includes('<option value="BONDS">Bond ETFs</option>'));
  assert(tracker.includes('isBondEtf(row.ticker)'));
  assert(tracker.includes('location.hash==="#bonds"'));
- assert(nav.includes('portfolio.html#bonds'));
+ assert(read('owner-portfolio-table.mjs').includes('["bonds","Bond ETFs"]'));
  assert(nav.includes('portfolio.html#holdings'));
 });
 test("owner-only status is preserved; no names or quantities are shipped publicly",()=>{

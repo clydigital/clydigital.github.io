@@ -9,7 +9,7 @@ test("angular high-contrast design loads before authenticated content on every p
  for(const page of pages){
   const html=read(page+".html");
   const advisor=html.indexOf('href="owner-advisor-theme.css?v=20261110-noflash1"');
-  const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261110-noflash1"');
+  const pulse=html.indexOf('href="owner-fin-pulse.css?v=20261120-stable-gate2"');
   const angular=html.indexOf('href="owner-angular-contrast.css?v=20261110-checks4"');
   const auth=html.indexOf('src="auth-gate.mjs?v=');
   const visual=html.indexOf('href="owner-visual-hierarchy.css?v=20261110-checks4"');

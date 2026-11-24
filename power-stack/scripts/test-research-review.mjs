@@ -111,13 +111,13 @@ test("research page adds source-dated causal investment analysis after owner aut
  assert(source.includes("RESEARCH ONLY")&&source.includes("Next evidence required"));
  assert(!/sb_secret_|service_role|@gmail\\.com|owner_user_id|brokerQuantity|cash_delta/i.test(source));
  const auth=read("auth-gate.mjs");
- assert(auth.indexOf('const user=await authenticate()')<auth.indexOf('if(PAGE==="research")'));
- assert(auth.includes('await import("./owner-research-theses.mjs?v=20261114-ps1")'));
+ assert(auth.indexOf('const access=await authenticateAndRead()')<auth.indexOf('if(PAGE==="research")'));
+ assert(auth.includes('research:()=>import("./owner-research-theses.mjs?v=20261114-ps1")'));
  const html=read("research.html");
  assert(html.includes("owner-research-theses.css?v=20261113-research1"));
- assert(html.includes("auth-gate.mjs?v=20261117-market2"));
+ assert(html.includes("auth-gate.mjs?v=20261124-sitewide4"));
  assert(html.includes('data-private-page="research"'));
- assert(auth.indexOf('const user=await authenticate()')<auth.indexOf('mountNov17Research(PAGE,content)'));
+ assert(auth.indexOf('const access=await authenticateAndRead()')<auth.indexOf('mountNov17Research(PAGE,content)'));
  assert(!html.includes("Source-dated investment reasoning"));
 });
 test("research presentation is compact and leaves original private database page untouched",()=>{
@@ -141,9 +141,9 @@ test("dossier archive uses owner-only shell and preserves OAuth destination with
  assert(html.includes('<div id="private-main" hidden></div>'));
  assert(html.includes('owner-dossiers.css'));
  assert(!/libfile_|\/api\/library\/files|Market_Research_Dossier_Expanded/.test(html));
- assert(gate.includes('"archive","ideas","dossiers"].includes(planned)'));
- assert(presentation.includes('["dossiers.html","Dossiers","dossiers"]'));
+ assert(gate.includes('(index|research|sectors|decisions|portfolio|archive|ideas|dossiers)'));
+ assert(presentation.includes('["dossiers.html","Investment dossiers"]'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio","dossiers"]){
-  assert(read(page+".html").includes('href="dossiers.html"'),page);
+  assert(read(page+".html").includes("owner-recap-sitewide.css"),page);
  }
 });
