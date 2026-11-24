@@ -68,3 +68,45 @@ html[data-private-page="index"] #workspace .ps-al-candidates dl{display:grid!imp
 html[data-private-page="index"] #workspace .ps-al-candidates dt,html[data-private-page="index"] #workspace .ps-al-candidates dd{padding:12px 0!important;margin:0!important;border-bottom:1px solid #343c43!important}
 html[data-private-page="index"] #workspace .ps-al-candidates dd{color:#c9d0d6!important}
 @media(max-width:740px){html[data-private-page="index"] #workspace .ps-al-candidates dl{display:block!important}html[data-private-page="index"] #workspace .ps-al-candidates dt{border:0!important;padding-bottom:2px!important}html[data-private-page="index"] #workspace .ps-al-candidates dd{padding-top:0!important}}
+
+/* Daily recap reading mode: reference palette from the approved HTML deck.
+   Quiet cream canvas, navy text, lavender/peach/mint, large type, one view. */
+html[data-private-page="index"] body.ps-fin-pulse{--recap-ink:#25324c;--recap-cream:#fff9ef;--recap-purple:#5a55cb;--recap-line:#35405c;--recap-muted:#637087;background:#fff9ef!important;color:#25324c!important;font:16px/1.45 Figtree,"Trebuchet MS",system-ui,sans-serif!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{background:#f0eaff!important;border:0!important;border-right:1px solid #d7cfee!important;box-shadow:none!important;color:#25324c!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .brand,html[data-private-page="index"] body.ps-fin-pulse #site-header .brand em{color:#25324c!important}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a:not(.brand),html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-more>summary{color:#495671!important;font-size:15px!important}
+html[data-private-page="index"] body.ps-fin-pulse .ps-advisor-nav>a[aria-current="page"]{background:#5a55cb!important;color:#fff!important;border-radius:10px!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .gate-logout{border:1px solid #a8a1c1!important;color:#495671!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .ps-advisor-more>div{background:transparent!important;border-color:#d7cfee!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header .ps-advisor-more>div a{color:#495671!important}
+html[data-private-page="index"] body.ps-fin-pulse #site-header #owner-indicator{color:#637087!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace.psr-workspace{max-width:1250px!important;padding:clamp(24px,4vw,60px)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #action-log{color:#25324c!important}
+html[data-private-page="index"] #workspace #action-log .ps-al-kicker{color:#5a55cb!important;font-size:12px!important;font-weight:850!important;letter-spacing:.1em!important;margin:0 0 12px!important}
+html[data-private-page="index"] #workspace #action-log .ps-al-header h1{font:900 clamp(36px,5vw,62px)/1.04 Figtree,"Trebuchet MS",system-ui,sans-serif!important;color:#25324c!important;letter-spacing:-.045em!important;margin:0 0 20px!important}
+html[data-private-page="index"] #workspace .ps-al-status{background:#eee9ff!important;color:#25324c!important;font-size:16px!important;font-weight:650!important;border-radius:12px!important;border:0!important;padding:14px 18px!important;margin:0 0 20px!important}
+html[data-private-page="index"] #workspace .ps-al-search{background:#fff!important;border:1px solid #bab8cb!important;color:#25324c!important;border-radius:10px!important}
+html[data-private-page="index"] #workspace .ps-al-list{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+html[data-private-page="index"] #workspace .ps-al-item{background:#fff!important;color:#25324c!important;border:1.5px solid #b9b8ce!important;border-radius:16px!important;padding:clamp(16px,2vw,24px)!important;box-shadow:none!important}
+html[data-private-page="index"] #workspace .ps-al-item strong,html[data-private-page="index"] #workspace .ps-al-item h3{color:#25324c!important;font-size:clamp(22px,2.1vw,30px)!important}
+html[data-private-page="index"] #workspace .ps-al-item p{color:#25324c!important;font-size:16px!important;line-height:1.45!important}
+html[data-private-page="index"] #workspace .ps-al-item .ps-al-meta,html[data-private-page="index"] #workspace .ps-al-ticker,html[data-private-page="index"] #workspace .ps-al-industry{color:#637087!important;font-size:13px!important}
+html[data-private-page="index"] #workspace .ps-al-action{background:#e2ddff!important;color:#4742ae!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;font-weight:800!important}
+html[data-private-page="index"] #workspace .ps-al-item .ps-al-warning{color:#8b3c29!important;background:#ffeadc!important;border-radius:10px!important;padding:10px 12px!important}
+html[data-private-page="index"] #workspace .ps-al-detail summary,html[data-private-page="index"] #workspace .ps-al-history summary{color:#5a55cb!important}
+html[data-private-page="index"] #workspace .ps-al-candidates{background:none!important;border:0!important;color:#25324c!important;margin-top:24px!important;padding:0!important}
+html[data-private-page="index"] #workspace .ps-al-candidates h2{font:850 clamp(25px,3vw,36px)/1.1 Figtree,system-ui,sans-serif!important;color:#25324c!important;margin:0 0 10px!important;letter-spacing:-.03em}
+html[data-private-page="index"] #workspace .ps-al-candidates>p{color:#637087!important;font-size:15px!important}
+html[data-private-page="index"] #workspace .ps-al-candidate-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px!important}
+html[data-private-page="index"] #workspace .ps-al-candidate-card{background:#eee9ff!important;color:#25324c!important;border:2px solid #35405c!important;border-radius:19px!important;padding:clamp(16px,2vw,24px)!important;box-shadow:3px 4px 0 #25324c13!important;min-width:0}
+html[data-private-page="index"] #workspace .ps-al-candidate-card:nth-child(3n+2){background:#ffeadc!important}
+html[data-private-page="index"] #workspace .ps-al-candidate-card:nth-child(3n){background:#d4f5ea!important}
+html[data-private-page="index"] #workspace .ps-al-candidate-card h3{font:850 clamp(20px,2vw,28px)/1.12 Figtree,system-ui,sans-serif!important;color:#25324c!important;margin:0 0 12px!important;text-shadow:none!important;overflow-wrap:anywhere}
+html[data-private-page="index"] #workspace .ps-al-candidate-card dd{color:#25324c!important;font-size:16px!important;line-height:1.45!important;padding:0!important;margin:0!important;border:0!important}
+html[data-private-page="index"] #workspace .ps-al-candidate-card a,html[data-private-page="index"] #workspace .ps-al-detail a{color:#4a43b9!important}
+html[data-private-page="index"] #workspace[data-ps-view="war"] #war-room.psw-war-room-drawer{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+html[data-private-page="index"] #workspace[data-ps-view="war"] #war-room.psw-war-room-drawer>summary{color:#25324c!important;background:none!important;border:0!important;box-shadow:none!important;font-size:26px!important;text-shadow:none!important}
+html[data-private-page="index"] #workspace[data-ps-view="war"] #ps-daily-war-room{background:#fff!important;color:#25324c!important;border:2px solid #35405c!important;border-radius:20px!important;padding:clamp(18px,3vw,36px)!important;box-shadow:none!important}
+html[data-private-page="index"] #workspace[data-ps-view="war"] #ps-daily-war-room :is(h1,h2,h3,h4,p,li,strong,small,dt,dd){color:#25324c!important;text-shadow:none!important}
+html[data-private-page="index"] #workspace[data-ps-view="war"] #ps-daily-war-room a{color:#5a55cb!important}
+@media(max-width:700px){html[data-private-page="index"] #workspace .ps-al-candidate-grid{grid-template-columns:1fr!important}html[data-private-page="index"] body.ps-fin-pulse #workspace.psr-workspace{padding:20px!important}}
