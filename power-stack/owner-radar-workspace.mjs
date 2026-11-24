@@ -275,7 +275,7 @@ export function installRadarWorkspace(main,getState){
  const scene=add(quick,node("div","psr-tavern-scene"));
  const sceneCopy=add(scene,node("div","psr-tavern-scene-copy"));
  sceneCopy.append(node("p","psr-simple-eyebrow","PRIVATE MARKET DESK"),
-  node("h1",null,"Market Radar"));
+  node("h1",null,"Daily action log"));
  sceneCopy.append(node("p","psr-room-brief","See direction. Read today's actions below."));
  const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
  for(const [label,url,kind] of [["Today's actions","index.html#ps-current-action-plan","actions"],
@@ -441,7 +441,41 @@ export function installRadarWorkspace(main,getState){
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
  for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(quick,...(actionPlan?[actionPlan]:[]),hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ const actionLog=node("section","psr-snapshot");actionLog.id="ps-action-log";
+ actionLog.setAttribute("aria-label","Latest saved investment instructions");
+ actionLog.append(node("h2",null,"Latest instructions"),
+  node("p",null,"Reviewed, owner-only decisions. Check the date and conditions before acting."));
+ const actionStatus=add(actionLog,node("p","psr-snapshot-note","Loading saved decisions…"));
+ const actionRows=add(actionLog,node("div","psr-region-card"));
+ const historyLink=add(actionLog,node("a",null,"Decision history & supporting evidence →"));historyLink.href="#advanced-research";
+ const marketContext=node("details","psr-collapse");marketContext.id="ps-market-context";
+ marketContext.append(node("summary",null,"Optional market context, radar & research"),
+  heroInstruments,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+ workspace.prepend(quick,actionLog,...(actionPlan?[actionPlan]:[]));
+ function renderActionLog(){
+  const state=getState();
+  actionRows.replaceChildren();
+  if(!state?.dataReady){actionStatus.textContent="Saved decisions unavailable or still loading. No new recommendation inferred.";return;}
+  const latest=new Map();
+  for(const row of [...(state.rows||[])].sort((a,b)=>String(b.created_at||"").localeCompare(String(a.created_at||"")))){
+   if(row?.case_key&&row.ticket?.recommendation&&!latest.has(row.case_key))latest.set(row.case_key,row);
+  }
+  if(!latest.size){actionStatus.textContent="No reviewed instructions saved.";return;}
+  actionStatus.textContent=latest.size+" active cases · newest saved "+String([...latest.values()][0].created_at||"unknown").slice(0,10)+" · not a live signal";
+  for(const row of latest.values()){
+   const t=row.ticket,r=t.recommendation,card=add(actionRows,node("article","psr-scenario-card"));
+   card.append(node("h3",null,String(r.action||"REVIEW").replaceAll("_"," ")+" · "+(t.subject?.name||t.subject?.instrument_id||"Investment case")),
+    node("small",null,"Reviewed "+String(t.as_of||row.created_at||"unknown").slice(0,10)+(t.review?.review_by?" · review by "+t.review.review_by:"")),
+    node("p",null,r.rationale||"No rationale recorded."));
+   if(r.condition)card.append(node("p",null,"Condition: "+r.condition));
+   if(t.review?.review_by&&t.review.review_by<new Date().toLocaleDateString("sv-SE",{timeZone:"Asia/Kuala_Lumpur"}))card.append(node("strong",null,"Review overdue — reassess before acting."));
+   for(const raw of (t.evidence?.source_refs||[]).slice(0,2)){
+    try{const u=new URL(raw);if(u.protocol!=="https:"||u.username||u.password)continue;
+     const link=add(card,node("a",null,"Supporting evidence ↗"));link.href=u.href;link.target="_blank";link.rel="noopener noreferrer";
+    }catch{}
+   }
+  }
+ }
  // Market Radar is the first screen. Matt's source-dated briefing is a separate,
  // deep-linkable room; the archive stays available without hiding active radar data.
  const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
@@ -453,6 +487,7 @@ export function installRadarWorkspace(main,getState){
  const toolsHeading=add(deskTools,node("summary",null,"Open detailed research & decision archive"));
  toolsHeading.setAttribute("aria-label","Expand the original investment decision tools");
  deskTools.append(legacy);
+ workspace.append(marketContext);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
  if(location.hash==="#radar"){
@@ -471,6 +506,7 @@ export function installRadarWorkspace(main,getState){
   if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
   if(["#desk-tools","#advanced-research"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
+  if(["#market-table","#scenario-matrix","#ps-top-stock-picks-20261113"].includes(target))marketContext.open=true;
   if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
   else if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
   else if(target.startsWith("#warroom-"))(main.querySelector(target)||warRoomDrawer).scrollIntoView({block:"start"});
@@ -703,11 +739,11 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();
+ renderActionLog();renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();
  loadBluebellyStockCoverage().then(report=>{
   if(!bridge.isConnected)return;
   bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
    " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
  });
- return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render()},openWorkspace};
+ return {render(){renderActionLog();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render()},openWorkspace};
 }
