@@ -3,6 +3,7 @@
    Bluebelly scenarios are dated conditional editorial hypotheses, not live forecasts.
 */
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
+import {latestByCase,lane,localDate} from "./owner-decision-core.mjs";
 import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
 import {renderResearchReview} from "./owner-research-review.mjs";
 import {mountWarRoom} from "./owner-war-room.mjs?v=20261124-warroom1";
@@ -242,6 +243,7 @@ export function installRadarWorkspace(main,getState){
  // Owner-only dated action plan: surface before any research; absence preserves prior layout.
  const actionPlan=originals.find(node=>node.nodeType===1&&node.id==="ps-current-action-plan")||null;
  const dailyBrief=originals.find(node=>node.nodeType===1&&node.id.startsWith("ps-market-update-"))||null;
+ const dailyWarRoom=originals.find(node=>node.nodeType===1&&node.id==="ps-daily-war-room")||null;
  // Keep the private, source-dated stock picks visible in the normal workspace.
  // They are fetched only after owner authentication; do not copy them into static assets.
  const topPicks=originals.find(node=>node.nodeType===1&&node.id==="ps-top-stock-picks-20261113")||null;
@@ -439,9 +441,9 @@ export function installRadarWorkspace(main,getState){
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
- for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}
+ for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan&&original!==dailyWarRoom)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
- workspace.prepend(quick,...(actionPlan?[actionPlan]:[]),hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
+
  // Market Radar is the first screen. Matt's source-dated briefing is a separate,
  // deep-linkable room; the archive stays available without hiding active radar data.
  const warRoomDrawer=add(workspace,node("details","psw-tools psw-war-room-drawer"));
@@ -449,9 +451,63 @@ export function installRadarWorkspace(main,getState){
  const warHeading=add(warRoomDrawer,node("summary",null,"Enter Matt's War Room · findings and conclusions"));
  warHeading.setAttribute("aria-label","Open Matt's War Room with analyst findings");
  const warRoom=mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF});
+ warRoom.root.id="war-room-content";
+ warRoomDrawer.prepend(warHeading);
+ if(dailyWarRoom)warHeading.after(dailyWarRoom);
+ const log=node("section","ps-action-log");log.id="action-log";log.setAttribute("aria-label","Daily investment instructions");
+ const introLog=add(log,node("header","ps-al-header"));
+ introLog.append(node("p","ps-al-kicker","POWER STACK / PRIVATE"),node("h1",null,"What to do"),node("p",null,"Latest saved instructions. Review the evidence and conditions before acting."));
+ const links=add(log,node("nav","ps-al-nav"));links.setAttribute("aria-label","Investment destinations");
+ for(const [label,url] of [["War Room","#war-room"],["Holdings","portfolio.html#holdings"],["Watchlist","portfolio.html#watchlist"],["Bluebelly research","https://bluebelly-desk.vercel.app/research"]]){
+  const a=add(links,node("a",null,label));a.href=url;
+ }
+ const logStatus=add(log,node("p","ps-al-status","Loading private decision history…"));logStatus.setAttribute("role","status");
+ const logList=add(log,node("div","ps-al-list"));
+ const logHistory=add(log,node("details","ps-al-history"));logHistory.id="decision-history";
+ const historyTitle=add(logHistory,node("summary",null,"Decision history"));
+ const historyList=add(logHistory,node("div","ps-al-list"));
+ const labels={BUY_STARTER:"Buy review",ADD_IF_CONFIRMED:"Add if confirmed",HOLD:"Hold",TRIM:"Trim review",SELL_REVIEW:"Sell review",WAIT:"Wait",PASS:"Pass",NO_ACTION:"No new action"};
+ const pretty=v=>String(v||"Unknown").replaceAll("_"," ");
+ function stampLog(value){const d=new Date(value);return value&&!Number.isNaN(d.getTime())?d.toLocaleString("en-GB",{timeZone:"Asia/Kuala_Lumpur",dateStyle:"medium",timeStyle:"short"})+" MYT":"Undated";}
+ function safeLogLink(value){try{const u=new URL(value);return u.protocol==="https:"&&!u.username&&!u.password?u.href:null}catch{return null}}
+ function instruction(row,historical=false){
+  const t=row.ticket||{},r=t.recommendation||{},v=t.review||{},e=t.evidence||{},s=t.subject||{};
+  const item=node("article","ps-al-item");
+  const head=add(item,node("div","ps-al-item-head"));
+  const expired=Boolean(v.review_by&&v.review_by<localDate()),gap=["STALE","UNAVAILABLE"].includes(e.source_status);
+  const original=labels[r.action]||pretty(r.action);
+  const blocked=!historical&&(expired||gap||["BLOCKED_BY_EVIDENCE","RECHECK_REQUIRED","REJECTED"].includes(r.decision_state));
+  head.append(node("strong",null,s.instrument_id||s.name||"Unnamed case"),node("span","ps-al-action",blocked?"Recheck · was "+original:original));
+  item.append(node("p","ps-al-meta",(historical?"Saved ":"Reviewed ")+stampLog(row.created_at)+" · "+pretty(r.decision_state)+" · "+pretty(e.source_status)));
+  if(!historical&&(expired||gap))item.append(node("p","ps-al-warning",expired?"Review overdue. Do not treat the previous action as a fresh instruction.":"Source evidence is stale or unavailable. Recheck before acting."));
+  if(r.rationale)item.append(node("p",null,r.rationale));
+  if(r.condition)item.append(node("p","ps-al-condition","When: "+r.condition));
+  const detail=add(item,node("details","ps-al-detail"));detail.append(node("summary",null,"Invalidation, review & evidence"));
+  if(v.thesis_invalidation)detail.append(node("p",null,"Invalidation: "+v.thesis_invalidation));
+  if(v.review_by||v.review_event)detail.append(node("p",null,"Review: "+[v.review_by,v.review_event].filter(Boolean).join(" · ")));
+  for(const ref of (Array.isArray(e.source_refs)?e.source_refs:[])){const url=safeLogLink(ref);if(url){const a=add(detail,node("a","ps-al-source","Evidence ↗"));a.href=url;a.target="_blank";a.rel="noopener noreferrer";}}
+  return item;
+ }
+ function renderLog(){
+  const state=getState()||{};logList.replaceChildren();historyList.replaceChildren();
+  if(!state.dataReady){logStatus.textContent="Private decisions not yet verified. No current instruction is inferred.";historyTitle.textContent="Decision history";return;}
+  const rows=Array.isArray(state.rows)?state.rows.filter(row=>row?.ticket?.recommendation&&row.case_key):[];
+  const priority={risk:0,decision:1,watch:2};
+  const latest=latestByCase(rows).sort((a,b)=>(priority[lane(a)]??3)-(priority[lane(b)]??3)||String(b.created_at).localeCompare(String(a.created_at)));
+  logStatus.textContent=latest.length?latest.length+" saved cases · latest revision "+stampLog(rows[0]?.created_at)+" · Not broker orders.": "No saved instructions yet. Open the War Room for dated research; no new action is inferred.";
+  for(const row of latest)logList.append(instruction(row));
+  historyTitle.textContent="Decision history · "+rows.length+" loaded revisions"+(state.totalRows>rows.length?" (partial)":"");
+  for(const row of rows.slice(0,30))historyList.append(instruction(row,true));
+  if(!rows.length)historyList.append(node("p",null,"No verified revisions saved."));
+  if(rows.length>30){const a=add(historyList,node("a",null,"Open detailed decision archive"));a.href="#advanced-research";}
+ }
+ workspace.prepend(log);
+ const marketTools=add(workspace,node("details","psw-tools ps-al-tools"));marketTools.id="market-tools";
+ marketTools.append(node("summary",null,"Optional market radar & research"),quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
  const deskTools=add(workspace,node("details","psw-tools"));deskTools.id="desk-tools";
  const toolsHeading=add(deskTools,node("summary",null,"Open detailed research & decision archive"));
  toolsHeading.setAttribute("aria-label","Expand the original investment decision tools");
+ if(actionPlan){const old=add(deskTools,node("details","ps-al-history"));old.append(node("summary",null,"Previous action-plan publication · source dated"),actionPlan);}
  deskTools.append(legacy);
  main.replaceChildren(landing,workspace);
  // The research overview is the default; the decorative radar remains optional.
@@ -461,14 +517,17 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
- if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+ if(["#action-log","#decision-history","#market-tools","#command-rooms","#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  window.addEventListener("hashchange",()=>{
-  if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+  if(["#action-log","#decision-history","#market-tools","#command-rooms","#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  });
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
   if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
+  if(["#market-tools","#command-rooms","#scenario-matrix","#market-table","#ps-top-stock-picks-20261113"].includes(target))marketTools.open=true;
+  if(target==="#ps-current-action-plan"&&actionPlan){deskTools.open=true;actionPlan.closest("details").open=true;}
+  if(target==="#decision-history")logHistory.open=true;
   if(["#desk-tools","#advanced-research"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
   if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
@@ -479,6 +538,7 @@ export function installRadarWorkspace(main,getState){
   else if(target==="#ps-top-stock-picks-20261113"&&featured){featured.open=true;featured.scrollIntoView({block:"start"});}
   else if(target==="#market-table"){tableDrawer.open=true;tableDrawer.scrollIntoView({block:"start"});}
   else if(target==="#advanced-research")legacy.scrollIntoView({block:"start"});
+  else if(target==="#market-tools"||target==="#command-rooms"||target==="#decision-history"||target==="#action-log")(main.querySelector(target)||workspace).scrollIntoView({block:"start"});
   else workspace.scrollIntoView({block:"start"});
   if(location.hash!==target)history.replaceState(null,"",target);
  }
@@ -703,11 +763,11 @@ export function installRadarWorkspace(main,getState){
    outcome.title=compat.compatible?"Conditional overlap only · inspect each scenario's confirming tests":compat.reason;
   }
  }
- renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();
+ renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();renderLog();
  loadBluebellyStockCoverage().then(report=>{
   if(!bridge.isConnected)return;
   bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
    " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
  });
- return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render()},openWorkspace};
+ return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();renderLog()},openWorkspace};
 }

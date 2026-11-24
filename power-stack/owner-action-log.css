@@ -1,0 +1,20 @@
+/* Authenticated instruction-first view; no private data in static assets. */
+#workspace .ps-action-log{display:block;max-width:100%;padding:clamp(1rem,3vw,2rem);margin:0 0 1rem;border:1px solid currentColor;border-radius:16px}
+#workspace .ps-al-header h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1;margin:.2em 0}
+#workspace .ps-al-header p{margin:.35rem 0}
+#workspace .ps-al-kicker{font-size:.75rem;font-weight:700;letter-spacing:.09em}
+#workspace .ps-al-nav{display:flex;flex-wrap:wrap;gap:.6rem 1.2rem;margin:1rem 0}
+#workspace .ps-al-nav a,#workspace .ps-al-source{color:inherit;text-decoration:underline;text-underline-offset:3px}
+#workspace .ps-al-status,#workspace .ps-al-meta{font-size:.85rem;line-height:1.45}
+#workspace .ps-al-list{display:grid;gap:.7rem;margin:.8rem 0}
+#workspace .ps-al-item{border:1px solid currentColor;border-radius:10px;padding:1rem;min-width:0;overflow-wrap:anywhere}
+#workspace .ps-al-item-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem}
+#workspace .ps-al-item-head strong{font-size:1.1rem}
+#workspace .ps-al-action{font-weight:750;text-transform:uppercase;font-size:.8rem}
+#workspace .ps-al-item p{margin:.4rem 0;line-height:1.5}
+#workspace .ps-al-condition,#workspace .ps-al-warning{font-weight:650}
+#workspace .ps-al-detail summary,#workspace .ps-al-history summary{cursor:pointer;font-weight:650;padding:.4rem 0}
+#workspace .ps-al-history{margin-top:1rem}
+#workspace .ps-al-source{display:inline-block;margin-right:1rem}
+#workspace .ps-al-tools{margin-top:1rem}
+#workspace .ps-action-log a:focus-visible,#workspace .ps-action-log summary:focus-visible{outline:2px solid currentColor;outline-offset:3px}
