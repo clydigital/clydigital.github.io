@@ -456,7 +456,7 @@ export function installRadarWorkspace(main,getState){
  if(dailyWarRoom)warHeading.after(dailyWarRoom);
  const log=node("section","ps-action-log");log.id="action-log";log.setAttribute("aria-label","Daily investment instructions");
  const introLog=add(log,node("header","ps-al-header"));
- introLog.append(node("p","ps-al-kicker","POWER STACK / PRIVATE"),node("h1",null,"What to do"),node("p",null,"Latest saved instructions. Review the evidence and conditions before acting."));
+ introLog.append(node("h1",null,"Investment instructions"));
  const links=add(log,node("nav","ps-al-nav"));links.setAttribute("aria-label","Investment destinations");
  for(const [label,url] of [["War Room","#war-room"],["Holdings","portfolio.html#holdings"],["Ideas","ideas.html"],["Watchlist","portfolio.html#watchlist"],["Bluebelly research","https://bluebelly-desk.vercel.app/research"]]){
   const a=add(links,node("a",null,label));a.href=url;
@@ -533,7 +533,19 @@ export function installRadarWorkspace(main,getState){
  if(actionPlan){const old=add(deskTools,node("details","ps-al-history"));old.append(node("summary",null,"Previous action-plan publication · source dated"),actionPlan);}
  deskTools.append(legacy);
  main.replaceChildren(landing,workspace);
- // The research overview is the default; the decorative radar remains optional.
+ function selectView(target){
+  const war=target==="#war-room"||target.startsWith("#warroom-");
+  const tools=["#market-tools","#command-rooms","#scenario-matrix","#market-table","#ps-top-stock-picks-20261113"].includes(target);
+  const archive=["#desk-tools","#advanced-research","#ps-current-action-plan"].includes(target);
+  const history=target==="#decision-history";
+  workspace.dataset.psView=war?"war":tools?"tools":archive?"archive":history?"history":"instructions";
+  log.hidden=war||tools||archive;warRoomDrawer.hidden=!war;marketTools.hidden=!tools;deskTools.hidden=!archive;
+  for(const child of log.children)if(child!==logHistory)child.hidden=history;
+  logHistory.hidden=!history;
+  if(history)logHistory.open=true;
+ }
+ selectView(location.hash);
+ // Only the selected destination occupies the screen. The underlying research is preserved.
  if(location.hash==="#radar"){
   landing.hidden=false;workspace.hidden=true;document.body.classList.add("psr-landing-active");
  }else{
@@ -547,6 +559,7 @@ export function installRadarWorkspace(main,getState){
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
+  selectView(target);
   if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
   if(["#market-tools","#command-rooms","#scenario-matrix","#market-table","#ps-top-stock-picks-20261113"].includes(target))marketTools.open=true;
   if(target==="#ps-current-action-plan"&&actionPlan){deskTools.open=true;actionPlan.closest("details").open=true;}
