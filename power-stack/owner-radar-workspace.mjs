@@ -278,7 +278,7 @@ export function installRadarWorkspace(main,getState){
   node("h1",null,"Daily action log"));
  sceneCopy.append(node("p","psr-room-brief","See direction. Read today's actions below."));
  const nav=add(quick,node("nav","psr-simple-nav"));nav.setAttribute("aria-label","Research destinations");
- for(const [label,url,kind] of [["Today's actions","index.html#ps-current-action-plan","actions"],
+ for(const [label,url,kind] of [["Today's actions","index.html#ps-action-log","actions"],
   ["Holdings","portfolio.html#holdings","portfolio"],
   ["Opportunities","ideas.html","ideas"],
   ["Trade setups","ideas.html#trades","trades"],
@@ -496,9 +496,9 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active");
  }
  let selectedTheme="all",sorting="ticker",showAllThemes=false;
- if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+ if(["#ps-action-log","#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  window.addEventListener("hashchange",()=>{
-  if(["#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
+  if(["#ps-action-log","#ps-current-action-plan","#desk-tools","#scenario-matrix","#advanced-research","#ps-top-stock-picks-20261113","#market-table","#war-room","#warroom-team","#warroom-findings","#warroom-changes"].includes(location.hash))openWorkspace(location.hash);
  });
  function openWorkspace(target="#workspace"){
   landing.hidden=true;workspace.hidden=false;
@@ -507,7 +507,8 @@ export function installRadarWorkspace(main,getState){
   if(["#desk-tools","#advanced-research"].includes(target))deskTools.open=true;
   if(target==="#advanced-research")legacy.open=true;
   if(["#market-table","#scenario-matrix","#ps-top-stock-picks-20261113"].includes(target))marketContext.open=true;
-  if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
+  if(target==="#ps-action-log")actionLog.scrollIntoView({block:"start"});
+  else if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
   else if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
   else if(target.startsWith("#warroom-"))(main.querySelector(target)||warRoomDrawer).scrollIntoView({block:"start"});
   else if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
