@@ -69,7 +69,7 @@ function privateStyles(){
 // These modules contain presentation code only. Download in parallel with
 // auth/RLS; constructors are called only after authorization succeeds.
 const modules={
- advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-actionlog1"),
+ advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-sitewide4"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
  index:()=>import("./owner-decision-desk.mjs?v=20261124-recap3"),
@@ -219,6 +219,7 @@ async function load(styleReady){
   console.error("Nov 23 private decision overlay unavailable",error);
  }
  if(PAGE==="index"){const room=content.querySelector("#ps-war-archive"),supplement=content.querySelector("#nov17-research");if(room&&supplement)room.append(supplement);}
+ try{const {finalizeRecap}=await readyModule("advisor");finalizeRecap(PAGE,content);}catch(error){console.error("Recap layout unavailable",error);}
  await styleReady;
  if(!authorised)return;
  // Remove the overlay BEFORE enabling the desk theme in the same JS task.
