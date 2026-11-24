@@ -242,6 +242,7 @@ export function installRadarWorkspace(main,getState){
  // Owner-only dated action plan: surface before any research; absence preserves prior layout.
  const actionPlan=originals.find(node=>node.nodeType===1&&node.id==="ps-current-action-plan")||null;
  const dailyBrief=originals.find(node=>node.nodeType===1&&node.id.startsWith("ps-market-update-"))||null;
+ const dailyWarRoom=originals.find(node=>node.nodeType===1&&node.id==="ps-daily-war-room")||null;
  // Keep the private, source-dated stock picks visible in the normal workspace.
  // They are fetched only after owner authentication; do not copy them into static assets.
  const topPicks=originals.find(node=>node.nodeType===1&&node.id==="ps-top-stock-picks-20261113")||null;
@@ -439,7 +440,7 @@ export function installRadarWorkspace(main,getState){
  const legacy=add(workspace,node("details","psr-legacy"));
  legacy.id="advanced-research";
  const legacySummary=add(legacy,node("summary",null,"Open the full research, portfolio checks & decision tools"));
- for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}
+ for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan&&original!==dailyWarRoom)legacy.append(original);}
  const opportunityOverview=renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true});
  const actionLog=node("section","psr-snapshot");actionLog.id="ps-action-log";
  actionLog.setAttribute("aria-label","Latest saved investment instructions");
@@ -451,7 +452,8 @@ export function installRadarWorkspace(main,getState){
  const marketContext=node("details","psr-collapse");marketContext.id="ps-market-context";
  marketContext.append(node("summary",null,"Optional market context, radar & research"),
   heroInstruments,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section,...(featured?[featured]:[]),matrixDrawer);
- workspace.prepend(quick,actionLog,...(actionPlan?[actionPlan]:[]));
+ workspace.prepend(quick,actionLog);
+ if(actionPlan){const pastPlan=node("details","psr-collapse");pastPlan.append(node("summary",null,"Earlier action plan (dated research, not saved instructions)"),actionPlan);marketContext.prepend(pastPlan);}
  function renderActionLog(){
   const state=getState();
   actionRows.replaceChildren();
@@ -482,6 +484,7 @@ export function installRadarWorkspace(main,getState){
  warRoomDrawer.id="war-room";
  const warHeading=add(warRoomDrawer,node("summary",null,"Enter Matt's War Room · findings and conclusions"));
  warHeading.setAttribute("aria-label","Open Matt's War Room with analyst findings");
+ if(dailyWarRoom)warRoomDrawer.append(dailyWarRoom);
  const warRoom=mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF});
  const deskTools=add(workspace,node("details","psw-tools"));deskTools.id="desk-tools";
  const toolsHeading=add(deskTools,node("summary",null,"Open detailed research & decision archive"));
@@ -508,7 +511,7 @@ export function installRadarWorkspace(main,getState){
   if(target==="#advanced-research")legacy.open=true;
   if(["#market-table","#scenario-matrix","#ps-top-stock-picks-20261113"].includes(target))marketContext.open=true;
   if(target==="#ps-action-log")actionLog.scrollIntoView({block:"start"});
-  else if(target==="#ps-current-action-plan"&&actionPlan)actionPlan.scrollIntoView({block:"start"});
+  else if(target==="#ps-current-action-plan"&&actionPlan){marketContext.open=true;actionPlan.closest("details").open=true;actionPlan.scrollIntoView({block:"start"});}
   else if(target==="#war-room")warRoomDrawer.scrollIntoView({block:"start"});
   else if(target.startsWith("#warroom-"))(main.querySelector(target)||warRoomDrawer).scrollIntoView({block:"start"});
   else if(target==="#desk-tools")deskTools.scrollIntoView({block:"start"});
