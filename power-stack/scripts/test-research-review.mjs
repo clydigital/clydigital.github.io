@@ -83,7 +83,8 @@ test("first screen stays compact and research remains private and non-executable
  const radar=read("owner-radar-workspace.mjs"),desk=read("owner-decision-desk.mjs"),
   module=read("owner-research-review.mjs");
  assert.match(radar,/renderResearchReview\(reviewStrip,/);
- assert.match(radar,/workspace\.prepend\(quick,hub,reviewStrip,snapshot/);
+ assert.match(radar,/workspace\.prepend\(log\)/);
+ assert.match(radar,/marketTools\.append\(node\("summary",null,"Optional market radar & research"\),quick,hub,reviewStrip,snapshot/);
  assert.match(radar,/decisionCount:s\.dataReady\?s\.totalRows:null/);
  assert.match(desk,/power_stack_private_pages/);
  assert.match(desk,/page_key,updated_at/);

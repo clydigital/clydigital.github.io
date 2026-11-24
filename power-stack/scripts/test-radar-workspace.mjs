@@ -101,7 +101,7 @@ test("Top Stock Picks and full tables remain owner-gated but start collapsed",()
  const radar=read("owner-radar-workspace.mjs"),gate=read("auth-gate.mjs"),
   html=read("index.html"),css=read("top-stock-picks.css");
  assert.match(radar,/node\.id==="ps-top-stock-picks-20261113"/);
- assert.match(radar,/if\(original!==topPicks&&original!==dailyBrief\)legacy\.append\(original\)/);
+ assert.match(radar,/if\(original!==topPicks&&original!==dailyBrief&&original!==actionPlan&&original!==dailyWarRoom\)legacy\.append\(original\)/);
  assert(radar.includes('node.id.startsWith("ps-market-update-")'));
  assert(radar.includes('featured.append(topPicks)'));
  assert(radar.includes('featured.id="featured-picks"'));
@@ -109,7 +109,9 @@ test("Top Stock Picks and full tables remain owner-gated but start collapsed",()
  assert(radar.includes('matrixDrawer.id="scenario-panel"'));
  assert(radar.includes("tableDrawer.open=true"));
  assert(radar.includes("matrixDrawer.open=true"));
- assert(gate.indexOf('const user=await authenticate()')<gate.indexOf('const {data,error}=await db.from("power_stack_private_pages")'));
+ assert(gate.includes('db.from("power_stack_private_pages")'));
+ assert(gate.includes('eq("owner_user_id",session.user.id)'));
+ assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf("await initDecisionDesk(db,content,user"));
  assert(html.includes("top-stock-picks.css?v=20261113-a1"));
  assert(css.includes('.ps-picks .ps-picks-grid'));
  assert(css.includes('@media(max-width:500px)'));
@@ -276,20 +278,28 @@ test("Guildhall opportunity lens sits after market boards, before thematic drill
  const radar=read("owner-radar-workspace.mjs");
  const terminal=read("owner-opportunity-terminal.mjs");
  assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
- assert(radar.includes('workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section'));
+ assert(radar.includes('marketTools.append(node("summary",null,"Optional market radar & research"),quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section'));
  assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
  assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
- assert(radar.includes('for(const original of originals){if(original!==topPicks&&original!==dailyBrief)legacy.append(original);}'));
+ assert(radar.includes('for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan&&original!==dailyWarRoom)legacy.append(original);}'));
 });
 
 
-test("Market Radar is the owner-gated homepage and War Room is deep-linked",()=>{
+test("Action Log is the owner-gated homepage and War Room is deep-linked",()=>{
   const war=read("owner-war-room.mjs");
   const radar=read("owner-radar-workspace.mjs");
   const home=read("index.html"),gate=read("auth-gate.mjs");
   const nav=read("owner-advisor-presentation.mjs");
   assert(home.includes('owner-war-room.css?v=20261114-rooms1'));
-  assert(home.includes("Market Radar · Private Power Stack"));
+  assert(home.includes("Action Log · Private Power Stack"));
+  assert(radar.includes("workspace.prepend(log)"));
+  assert(radar.includes('logHistory.id="decision-history"'));
+  assert(radar.includes('dailyWarRoom=originals.find'));
+  assert(radar.includes('if(dailyWarRoom)warHeading.after(dailyWarRoom)'));
+  assert(radar.includes("if(!state.dataReady)"));
+  assert(radar.includes("latestByCase(rows)"));
+  assert(radar.includes("Review overdue. Do not treat the previous action as a fresh instruction."));
+  assert(!/\.insert\(|\.upsert\(|placeOrder/.test(radar));
   assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
   assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF})'));
   assert(radar.includes('deskTools.id="desk-tools"'));
@@ -300,7 +310,8 @@ test("Market Radar is the owner-gated homepage and War Room is deep-linked",()=>
   assert(radar.includes('psr-room-grid'));
   assert(!radar.includes('for(const child of [...workspace.children])if(child!==deskTools)deskTools.append(child)'));
   assert(radar.includes('warRoom.render()'));
-  assert(nav.includes('["index.html","Market Radar","index"]'));
+  assert(nav.includes('["index.html#action-log","Action Log","index"]'));
+  assert(nav.includes('["index.html#decision-history","Decision History","history"]'));
   assert(nav.includes(`["index.html#war-room","Matt's War Room","warroom"]`));
   for(const desk of ['id:"rates"','id:"ai"','id:"energy"','id:"aviation"','id:"selection"'])
     assert(war.includes(desk),"Missing analyst desk "+desk);

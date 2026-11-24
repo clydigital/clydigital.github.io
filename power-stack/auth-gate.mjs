@@ -69,7 +69,7 @@ function privateStyles(){
 // These modules contain presentation code only. Download in parallel with
 // auth/RLS; constructors are called only after authorization succeeds.
 const modules={
- advisor:()=>import("./owner-advisor-presentation.mjs?v=20261120-stable-gate2"),
+ advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-actionlog1"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
  index:()=>import("./owner-decision-desk.mjs?v=20261124-actionlog1"),
