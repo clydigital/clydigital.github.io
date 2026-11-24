@@ -13,7 +13,9 @@ test("Fin Pulse CSS preloads while owner content stays hidden until final layout
  assert(auth>=0&&hidden>auth&&present>hidden&&reveal>present,"No intermediate unthemed owner content");
  assert(!gate.includes('document.head.append(pulse)'),"Do not inject the theme after rendering");
  assert(!gate.includes('document.head.append(link)'),"Advisor theme must also preload");
- assert(styles.includes('body:not(.ps-fin-pulse){background:#020617'));
+ const loginCSS=read("private-gate.css");
+ assert(loginCSS.includes('body.ps-auth-pending')&&loginCSS.includes('#gate-panel:not([hidden])'));
+ assert(loginCSS.includes('[hidden]{display:none!important}'));
  assert(styles.includes("body.ps-fin-pulse"));
  assert(styles.includes("#site-header.site-header"));
  assert(styles.includes("position:fixed"));

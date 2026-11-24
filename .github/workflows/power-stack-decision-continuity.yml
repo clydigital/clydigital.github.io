@@ -2,81 +2,13 @@ name: Power Stack decision continuity checks
 on:
   pull_request:
     paths:
-      - 'power-stack/owner-decision-*.mjs'
-      - 'power-stack/owner-decision-*.css'
-      - 'power-stack/owner-framework-*.mjs'
-      - 'power-stack/auth-gate.mjs'
-      - 'power-stack/ideas.html'
-      - 'power-stack/owner-ideas-*.mjs'
-      - 'power-stack/owner-entry-plans.mjs'
-      - 'power-stack/owner-visual-icons.mjs'
-      - 'power-stack/owner-visual-hierarchy.css'
-      - 'power-stack/scripts/test-visual-hierarchy.mjs'
-      - 'power-stack/scripts/test-entry-plans.mjs'
-      - 'power-stack/owner-ideas.css'
-      - 'power-stack/owner-opportunity-lenses.mjs'
-      - 'power-stack/owner-opportunity-terminal.mjs'
-      - 'power-stack/owner-radar-workspace.mjs'
-      - 'power-stack/owner-research-review.mjs'
-      - 'power-stack/owner-research-theses.mjs'
-      - 'power-stack/owner-research-theses.css'
-      - 'power-stack/owner-calm-layout.css'
-      - 'power-stack/scripts/test-research-review.mjs'
-      - 'power-stack/owner-radar-workspace.css'
-      - 'power-stack/owner-tavern-guildhall.css'
-      - 'power-stack/owner-tavern-sitewide.css'
-      - 'power-stack/scripts/test-tavern-sitewide.mjs'
-      - 'power-stack/*.html'
-      - 'power-stack/assets/tavern/**'
-      - 'power-stack/scripts/test-radar-workspace.mjs'
-      - 'power-stack/scripts/price-technicals.mjs'
-      - 'power-stack/scripts/test-technicals.mjs'
-      - 'power-stack/owner-opportunity-terminal.css'
-      - 'power-stack/scripts/test-opportunity-terminal.mjs'
-      - 'power-stack/owner-advisor-presentation.mjs'
-      - 'power-stack/owner-advisor-theme.css'
-      - 'power-stack/owner-fin-pulse.css'
-      - 'power-stack/owner-angular-contrast.css'
-      - 'power-stack/scripts/test-angular-contrast.mjs'
-      - 'power-stack/private-gate.css'
-      - 'power-stack/scripts/test-fin-pulse-theme.mjs'
-      - 'power-stack/scripts/test-advisor-ui.mjs'
-      - 'power-stack/owner-portfolio-table.mjs'
-      - 'power-stack/owner-market-views.mjs'
-      - 'power-stack/scripts/test-market-views.mjs'
-      - 'power-stack/owner-portfolio-model.mjs'
-      - 'power-stack/owner-portfolio.js'
-      - 'power-stack/scripts/test-ideas.mjs'
-      - 'power-stack/index.html'
-      - 'power-stack/scripts/test-decision-continuity.mjs'
-      - 'power-stack/scripts/test-decision-performance.mjs'
-      - 'power-stack/scripts/test-framework-evidence.mjs'
-      - 'power-stack/scripts/test-ideas.mjs'
-      - 'power-stack/scripts/test-advisor-ui.mjs'
-      - 'power-stack/owner-advisor-presentation.mjs'
-      - 'power-stack/owner-advisor-theme.css'
-      - 'power-stack/owner-fin-pulse.css'
-      - 'power-stack/owner-angular-contrast.css'
-      - 'power-stack/scripts/test-angular-contrast.mjs'
-      - 'power-stack/scripts/test-fin-pulse-theme.mjs'
+      - 'power-stack/**'
       - '.github/workflows/power-stack-decision-continuity.yml'
   push:
     branches: [main]
     paths:
-      - 'power-stack/owner-decision-*.mjs'
-      - 'power-stack/scripts/test-decision-continuity.mjs'
-      - 'power-stack/scripts/test-decision-performance.mjs'
-      - 'power-stack/owner-radar-workspace.mjs'
-      - 'power-stack/owner-research-review.mjs'
-      - 'power-stack/owner-calm-layout.css'
-      - 'power-stack/scripts/test-research-review.mjs'
-      - 'power-stack/owner-radar-workspace.css'
-      - 'power-stack/owner-tavern-guildhall.css'
-      - 'power-stack/owner-tavern-sitewide.css'
-      - 'power-stack/scripts/test-tavern-sitewide.mjs'
-      - 'power-stack/*.html'
-      - 'power-stack/assets/tavern/**'
-      - 'power-stack/scripts/test-radar-workspace.mjs'
+      - 'power-stack/**'
+      - '.github/workflows/power-stack-decision-continuity.yml'
 permissions:
   contents: read
 jobs:
@@ -133,6 +65,8 @@ jobs:
           test -f power-stack/owner-radar-workspace.mjs
           test -f power-stack/owner-radar-workspace.css
           test -f power-stack/owner-tavern-guildhall.css
+          test -f power-stack/owner-recap-sitewide.css
+          test -f power-stack/owner-action-log.css
           test -f power-stack/owner-tavern-sitewide.css
           test -f power-stack/assets/tavern/tavern-room-guildhall-1400.webp
           test -f power-stack/owner-fin-pulse.css
