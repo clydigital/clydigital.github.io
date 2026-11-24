@@ -540,7 +540,6 @@ export function installRadarWorkspace(main,getState){
   const history=target==="#decision-history";
   workspace.dataset.psView=war?"war":tools?"tools":archive?"archive":history?"history":"instructions";
   log.hidden=war||tools||archive;warRoomDrawer.hidden=!war;marketTools.hidden=!tools;deskTools.hidden=!archive;
-  for(const child of log.children)if(child!==logHistory)child.hidden=history;
   logHistory.hidden=!history;
   if(history)logHistory.open=true;
  }
