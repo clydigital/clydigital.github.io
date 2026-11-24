@@ -18,3 +18,21 @@
 #workspace .ps-al-source{display:inline-block;margin-right:1rem}
 #workspace .ps-al-tools{margin-top:1rem}
 #workspace .ps-action-log a:focus-visible,#workspace .ps-action-log summary:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+/* 80/20: quiet, scan-friendly single list, no decorative widgets. */
+#workspace .ps-action-log{border:0;padding:clamp(.7rem,2vw,1.5rem)}
+#workspace .ps-al-list{gap:0}
+#workspace .ps-al-item{border:0;border-bottom:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:0;padding:1rem 0}
+#workspace .ps-al-identity{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .6rem;min-width:0}
+#workspace .ps-al-identity strong{font-size:1.25rem;line-height:1.25}
+#workspace .ps-al-industry{flex-basis:100%;opacity:.8;font-size:.85rem}
+#workspace .ps-al-ticker{font-size:.85rem;font-weight:650}
+#workspace .ps-al-business{font-size:.95rem;opacity:.9}
+#workspace .ps-al-search{display:block;box-sizing:border-box;width:100%;max-width:32rem;background:transparent;color:inherit;border:1px solid currentColor;border-radius:8px;padding:.65rem .8rem;font:inherit;margin:1rem 0}
+#workspace .ps-al-search::placeholder{color:inherit;opacity:.7}
+#workspace .ps-al-candidates{margin-top:1.5rem;border-top:1px solid color-mix(in srgb,currentColor 20%,transparent);padding-top:1rem}
+#workspace .ps-al-candidates dl{display:grid;gap:.4rem;margin:.7rem 0}
+#workspace .ps-al-candidates dt{font-weight:700;margin-top:.6rem}
+#workspace .ps-al-candidates dd{margin:0;line-height:1.45}
+#workspace .ps-al-action{white-space:normal;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:520px){#workspace .ps-al-item-head{align-items:flex-start;flex-direction:column}}
