@@ -73,7 +73,7 @@ const modules={
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
  index:()=>import("./owner-decision-desk.mjs?v=20261124-recap3"),
- table:()=>import("./owner-portfolio-table.mjs?v=20261120-one-gate1"),
+ table:()=>import("./owner-portfolio-table.mjs?v=20261124-dailyclose1"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
  ideas:()=>import("./owner-ideas-tracker.mjs?v=20261120-one-gate1"),

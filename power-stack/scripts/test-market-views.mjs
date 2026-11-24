@@ -87,3 +87,13 @@ test("owner-only status is preserved; no names or quantities are shipped publicl
  assert(home.includes('.eq("owner_user_id",user.id)'));
  assert(!home.includes('const hardcodedHoldings='));
 });
+
+import {applyOwnerCloseObservations} from "../owner-portfolio-table.mjs";
+test("Portfolio uses newer source-qualified private closes without mixing return dates or modifying holdings",()=>{
+ const now=new Date("2026-11-24T04:00:00Z"),base=[{ticker:"EXAMPLE",held:true,quantity:12,currency:"USD",session:"2026-11-20",close:100,day:1,threeDay:2,fiveDay:3},{ticker:"PUBLIC",marketOnly:true,currency:"USD",session:"2026-11-20",close:50}];
+ const q={ticker:"EXAMPLE",observed_on:"2026-11-23",price:105,currency:"USD",source_name:"Finnhub / US regular close",source_url:"https://finnhub.io/docs/api",timestamp_basis:"source_observation",ingested_at:"2026-11-23T22:00:00Z"};
+ const out=applyOwnerCloseObservations(base,[q,{...q,ticker:"PUBLIC",price:60},{...q,price:999,currency:"EUR"}],now);
+ assert.equal(out.count,1);assert.equal(out.lines[0].close,105);assert.equal(out.lines[0].quantity,12);assert.equal(out.lines[0].day,null);assert.equal(out.lines[0].threeDay,null);assert.equal(out.lines[0].session,"2026-11-23");assert.equal(out.lines[1].close,50);
+ for(const bad of [{...q,source_url:"https://example.com/"},{...q,timestamp_basis:"retrieved_at"},{...q,observed_on:"2026-11-25"},{...q,observed_on:"2026-11-01"}])assert.equal(applyOwnerCloseObservations(base,[bad],now).count,0);
+ assert(read("owner-portfolio-table.mjs").includes('db.from("power_stack_quote_observations")'));assert(read("owner-portfolio-table.mjs").includes('.eq("owner_user_id",user.id).gte("observed_on"'));
+});
