@@ -61,6 +61,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify authenticated Bursa providers (private-use data, no prices in logs)
+        env:
+          DATACEDAR_API_KEY: ${{ secrets.DATACEDAR_API_KEY }}
+          OANOR_API_KEY: ${{ secrets.OANOR_API_KEY }}
+        run: node power-stack/scripts/check-bursa-providers.mjs
       - name: Refresh source-dated delayed closes
         env:
           # Optional free CoinGecko Demo key; unconfigured runs use the public endpoint.
