@@ -78,7 +78,8 @@ test("authenticated entry keeps existing private research and uses no modelled t
  const home=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
  assert(home.includes("installRadarWorkspace(main,()=>state)"));
- assert(gate.indexOf("const user=await authenticate()")<gate.indexOf('if(PAGE==="index")'));
+ assert(gate.includes("const access=await authenticateAndRead()"));
+  assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
  assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
  assert(radar.includes("ENTER THE RADAR")&&radar.includes("Scenario Matrix"));
@@ -132,7 +133,7 @@ test("market snapshot uses latest matching completed-session signs and counts mi
 });
 test("simple homepage defaults to direct overview and preserves optional radar and scenario deep links",()=>{
  const radar=read("owner-radar-workspace.mjs"),html=read("index.html"),css=read("owner-calm-layout.css");
- assert(radar.includes('node("h1",null,"Market Radar")'));
+ assert(radar.includes('node("h1",null,"Daily action log")'));
  assert(radar.includes('if(location.hash==="#radar")'));
  assert(radar.includes('landing.hidden=true;workspace.hidden=false;document.body.classList.remove("psr-landing-active")'));
  assert(radar.includes('if(target==="#scenario-matrix"){matrixDrawer.open=true;'));
@@ -276,10 +277,10 @@ test("Guildhall opportunity lens sits after market boards, before thematic drill
  const radar=read("owner-radar-workspace.mjs");
  const terminal=read("owner-opportunity-terminal.mjs");
  assert(radar.includes('renderOpportunityLensSummary({id:"ps-home-opportunity-lenses",compact:true})'));
- assert(radar.includes('workspace.prepend(quick,hub,reviewStrip,snapshot,houseBoard,...(dailyBrief?[dailyBrief]:[]),opportunityOverview,section'));
+ assert(radar.includes('workspace.prepend(quick,actionLog,...(actionPlan?[actionPlan]:[]))'));
  assert(terminal.includes('if(!home)shell.append(renderOpportunityLensSummary({id:"ps-ideas-opportunity-lenses",compact:false}))'));
  assert(terminal.includes("ADDITIONAL_OPPORTUNITIES"));
- assert(radar.includes('for(const original of originals){if(original!==topPicks&&original!==dailyBrief)legacy.append(original);}'));
+ assert(radar.includes('for(const original of originals){if(original!==topPicks&&original!==dailyBrief&&original!==actionPlan)legacy.append(original);}'));
 });
 
 
@@ -316,9 +317,9 @@ test("specialist rooms keep personalized instructions behind owner RLS",()=>{
  const ideas=read("owner-ideas-tracker.mjs");
  for(const proof of ["Next evidence / action","Reversal / invalidation","ROOM_EDITION","privateRooms","hashchange","Research-only"])
    assert(room.includes(proof)||room.toLowerCase().includes(proof.toLowerCase()));
- assert(gate.includes('eq("page_key","index")'));
- assert(gate.includes('eq("owner_user_id",user.id)'));
- assert(gate.includes('secureMain(roomPage.body_html)'));
+ assert(gate.includes('in("page_key",keys)'));
+ assert(gate.includes('eq("owner_user_id",session.user.id)'));
+ assert(gate.includes('secureMain(roomsPage.body_html)'));
  assert(gate.includes('mountCommandRoom(PAGE,content,privateRooms)'));
  assert(radar.includes('index.html#war-room')&&radar.includes("portfolio.html#holdings")&&radar.includes('ideas.html#trades'));
  assert(ideas.includes('location.hash==="#trades"'));
@@ -393,3 +394,15 @@ test("all desk results are actual source-dated findings with inference and a cal
  assert(!war.includes("STANDING RESEARCH MANDATE"));
  assert(!war.includes("YOUR ORDERS"));
 });
+
+ test("Action log is first, private, and fail-closed; market context remains optional",()=>{
+ const radar=read("owner-radar-workspace.mjs");
+ assert(radar.includes('workspace.prepend(quick,actionLog,...(actionPlan?[actionPlan]:[]))'));
+ assert(radar.includes('marketContext=node("details"'));
+ assert(radar.includes('workspace.append(marketContext)'));
+ assert(radar.includes('if(!state?.dataReady)'));
+ assert(radar.includes('!latest.has(row.case_key)'));
+ assert(radar.includes('Review overdue'));
+ assert(radar.includes('render(){renderActionLog()'));
+ assert(!/\.insert\(|\.upsert\(|placeOrder/.test(radar));
+ });
