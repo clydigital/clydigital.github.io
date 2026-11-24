@@ -9,3 +9,9 @@ test("All eight owner pages load recap CSS after earlier styles and before auth"
  assert.doesNotMatch(css,/MARKET LIVE|fakeQuotes|service_role|sb_secret_|cash_delta|\.insert\(|\.upsert\(/);
 });
 test("Recap consolidates navigation without deleting archive records, ledger, or live research controls",()=>{const ui=read("owner-advisor-presentation.mjs"),gate=read("auth-gate.mjs"),radar=read("owner-radar-workspace.mjs");const nav=ui.slice(ui.indexOf("const links=["),ui.indexOf("const fragment="));for(const label of ["Today","Portfolio","Ideas","War Room","Archive"])assert(nav.includes('"'+label+'"'));assert.equal((nav.match(/\["/g)||[]).length,5);assert(ui.includes("for(const n of original)drawer.append(n)"));assert(ui.includes("if(account)main.append(account)"));assert(ui.includes("tracked.open=true"));assert(gate.indexOf("finalizeRecap(PAGE,content)")<gate.indexOf("content.hidden=false"));assert(radar.includes("lane(row)===\"risk\"||"));assert(radar.includes("deskTools.append(legacy,pastWar)"));});
+
+test("Archived public War Room assets contain no owner-specific portfolio snapshot or private file identifiers",()=>{
+ const findings=read("owner-war-room-findings.mjs");
+ assert.doesNotMatch(findings,/libfile_|api\/library\/files|6742UW|Power Stack's recorded eight holdings/);
+ assert(findings.includes("https://clydigital.github.io/power-stack/dossiers.html"));
+});
