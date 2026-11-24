@@ -92,6 +92,34 @@ export function quotes(feed,now=new Date()){
  return {asOf:typeof feed?.generatedAt==="string"?feed.generatedAt:null,holding:result,watch:result,
   tracked:feed?.coverage?.tracked??0,fresh:feed?.coverage?.fresh??0};
 }
+
+/** Merge only source-qualified regular-session closes for already-private instruments.
+ * Do not carry return metrics from an older session into a newer close. */
+export function applyOwnerCloseObservations(lines,observations,now=new Date()){
+ const best=new Map();
+ for(const row of Array.isArray(observations)?observations:[]){
+  const id=ticker(row?.ticker),date=row?.observed_on,price=typeof row?.price==="number"?row.price:typeof row?.price==="string"&&/^\d+(?:\.\d+)?$/.test(row.price)?Number(row.price):NaN;
+  if(!id||!recentSession(date,now)||!Number.isFinite(price)||price<=0||row.timestamp_basis!=="source_observation"||!["USD","HKD","MYR","CNY","EUR","DKK"].includes(row.currency))continue;
+  let host;try{const u=new URL(row.source_url);if(u.protocol!=="https:"||u.username||u.password)continue;host=u.hostname;}catch{continue;}
+  const source=String(row.source_name||"");
+  const approved=(source==="Finnhub / US regular close"&&host==="finnhub.io"&&row.currency==="USD")
+   ||(source==="Nasdaq official stocks history"&&host==="www.nasdaq.com"&&row.currency==="USD")
+   ||(source==="Massive / regular session close"&&["massive.com","api.massive.com","polygon.io","api.polygon.io"].includes(host))
+   ||(source==="Twelve Data / regular session close"&&["twelvedata.com","api.twelvedata.com"].includes(host));
+  const recorded=Date.parse(row.source_recorded_at||row.ingested_at||"");
+  if(!approved||!Number.isFinite(recorded)||recorded>now.getTime())continue;
+  const old=best.get(id);if(!old||date>old.observed_on||date===old.observed_on&&recorded>old.recorded)best.set(id,{...row,price,recorded});
+ }
+ let count=0;
+ const updated=lines.map(line=>{
+  if(!line.held&&!line.onWatchlist&&!line.ideaTracked)return line;
+  const q=best.get(line.ticker);if(!q||line.currency&&line.currency!==q.currency||line.session&&line.session>=q.observed_on)return line;
+  count++;
+  return {...line,close:q.price,currency:q.currency,session:q.observed_on,day:null,threeDay:null,fiveDay:null,basis:"Private verified exchange close",quoteSource:q.source_name};
+ });
+ return {lines:updated,count};
+}
+
 function project(snapshot,priceFeed){
  const scan=quotes(priceFeed),result=new Map();
  for(const h of list(snapshot?.holdings,100)){
@@ -140,18 +168,20 @@ export async function initPortfolioTable(db,host,user){
   .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",user.id)
   .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
- const [priceFeed,ideaResult]=await Promise.all([
+ const [priceFeed,ideaResult,privateQuotes]=await Promise.all([
   loadPriceFeed(),
   db.from("power_stack_idea_tracker")
    .select("ticker,name,idea_type,currency,macro_state,macro_reason")
-   .eq("owner_user_id",user.id).limit(150)
+   .eq("owner_user_id",user.id).limit(150),
+  db.from("power_stack_quote_observations").select("ticker,observed_on,price,currency,source_name,source_url,timestamp_basis,source_recorded_at,ingested_at").eq("owner_user_id",user.id).gte("observed_on",new Date(Date.now()-14*86400000).toISOString().slice(0,10)).order("observed_on",{ascending:false}).limit(1000)
  ]);
  const feedAt=Date.parse(priceFeed?.generatedAt||"");
  const validFeed=Number.isFinite(feedAt)&&feedAt<=Date.now()
   &&Date.now()-feedAt<=72*3600000?priceFeed:null;
  const {lines:recorded,asOf}=project(data.snapshot,validFeed);
  const trackedIdeas=ideaResult.error?[]:(ideaResult.data||[]);
- const lines=expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding);
+ const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data);
+ const lines=merged.lines;
  const scopeFromHash=hash=>({"#holdings":"holdings","#watchlist":"watchlist",
   "#bonds":"bonds","#research":"ideas","#markets":"markets"})[hash]||"all";
  let sort="ticker",direction="asc",scope=scopeFromHash(location.hash),search="",expanded=null;
@@ -173,6 +203,7 @@ export async function initPortfolioTable(db,host,user){
  heading.append(title,el("span","Delayed closes · "+
   (validFeed?asOf:"feed unavailable or overdue")+
   (validFeed?" · "+eligibleNow+" source-qualified quotes":""),"ps-table-note"));
+ heading.append(el("p",privateQuotes.error?"Private quote refresh unavailable; showing verified public observations only.":merged.count+" instruments updated from newer private closes; unavailable same-session returns show —.","ps-table-note"));
  const opportunities=el("a","Review investment ideas →","ps-table-opportunities");
  opportunities.href="ideas.html";heading.append(opportunities);host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
@@ -235,7 +266,7 @@ export async function initPortfolioTable(db,host,user){
     for(const [label,val] of [["Research",r.action||r.thesis||"Pending"],["Category",
       r.held?"Recorded holding":r.ideaTracked?"Research idea":r.onWatchlist?"Watchlist":"Market tape"],
       ["Entry / confirmation",r.entry||"Not recorded"],
-      ["Invalidation",r.invalidation||"Not recorded"],["Quantity date",r.quantityAsOf||"Unknown"]]){
+      ["Invalidation",r.invalidation||"Not recorded"],["Quote source",r.quoteSource||r.basis||"Unavailable"],["Quantity date",r.quantityAsOf||"Unknown"]]){
       const p=el("p");p.append(el("strong",label+": "),document.createTextNode(val));td.append(p);
     }
     detail.append(td);tbody.append(detail);
