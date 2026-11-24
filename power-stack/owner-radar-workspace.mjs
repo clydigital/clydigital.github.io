@@ -454,9 +454,10 @@ export function installRadarWorkspace(main,getState){
  warRoom.root.id="war-room-content";
  warRoomDrawer.prepend(warHeading);
  if(dailyWarRoom)warHeading.after(dailyWarRoom);
+ const pastWar=node("details","ps-al-past");pastWar.id="ps-war-archive";pastWar.append(node("summary",null,"Earlier War Room editions (historical)"),warRoom.root);
  const log=node("section","ps-action-log");log.id="action-log";log.setAttribute("aria-label","Daily investment instructions");
  const introLog=add(log,node("header","ps-al-header"));
- introLog.append(node("h1",null,"Investment instructions"));
+ introLog.append(node("p","ps-al-kicker","DAILY INVESTMENT BRIEF"),node("h1",null,"What to do next."));
  const links=add(log,node("nav","ps-al-nav"));links.setAttribute("aria-label","Investment destinations");
  for(const [label,url] of [["War Room","#war-room"],["Holdings","portfolio.html#holdings"],["Ideas","ideas.html"],["Watchlist","portfolio.html#watchlist"],["Bluebelly research","https://bluebelly-desk.vercel.app/research"]]){
   const a=add(links,node("a",null,label));a.href=url;
@@ -466,7 +467,7 @@ export function installRadarWorkspace(main,getState){
  const logList=add(log,node("div","ps-al-list"));
  const moreLog=add(log,node("details","ps-al-history"));const moreTitle=add(moreLog,node("summary",null,"More instructions"));const moreList=add(moreLog,node("div","ps-al-list"));
  const researchCandidates=dailyWarRoom?.querySelector("#ps-priority-ideas");
- if(researchCandidates){log.append(researchCandidates);researchCandidates.classList.add("ps-al-candidates");}
+ if(researchCandidates){log.append(researchCandidates);researchCandidates.classList.add("ps-al-candidates");const dl=researchCandidates.querySelector("dl");if(dl){const grid=node("div","ps-al-candidate-grid");for(const term of [...dl.querySelectorAll(":scope > dt")]){const desc=term.nextElementSibling;if(desc?.tagName!=="DD")continue;const card=node("article","ps-al-candidate-card");card.append(node("h3",null,term.textContent.trim()),desc);grid.append(card);}if(grid.childElementCount)dl.replaceWith(grid);}}
  const logHistory=add(log,node("details","ps-al-history"));logHistory.id="decision-history";
  const historyTitle=add(logHistory,node("summary",null,"Decision history"));
  const historyList=add(logHistory,node("div","ps-al-list"));
@@ -495,7 +496,7 @@ export function installRadarWorkspace(main,getState){
   if(!historical&&(expired||gap))item.append(node("p","ps-al-warning",expired?"Review overdue. Do not treat the previous action as a fresh instruction.":"Source evidence is stale or unavailable. Recheck before acting."));
   if(r.rationale)item.append(node("p",null,"Why: "+r.rationale));
   if(r.condition)item.append(node("p","ps-al-condition","When: "+r.condition));
-  const detail=add(item,node("details","ps-al-detail"));detail.append(node("summary",null,"Invalidation, review & evidence"));
+  const detail=add(item,node("details","ps-al-detail"));detail.append(node("summary",null,"Full case & evidence"));
   if(v.thesis_invalidation)detail.append(node("p",null,"Invalidation: "+v.thesis_invalidation));
   if(v.review_by||v.review_event)detail.append(node("p",null,"Review: "+[v.review_by,v.review_event].filter(Boolean).join(" · ")));
   for(const ref of (Array.isArray(e.source_refs)?e.source_refs:[])){const url=safeLogLink(ref);if(url){const a=add(detail,node("a","ps-al-source","Evidence ↗"));a.href=url;a.target="_blank";a.rel="noopener noreferrer";}}
@@ -506,8 +507,9 @@ export function installRadarWorkspace(main,getState){
   if(!state.dataReady){logStatus.textContent="Private decisions not yet verified. No current instruction is inferred.";historyTitle.textContent="Decision history";return;}
   const rows=Array.isArray(state.rows)?state.rows.filter(row=>row?.ticket?.recommendation&&row.case_key):[];
   const priority={risk:0,decision:1,watch:2};
-  const latest=latestByCase(rows).sort((a,b)=>(priority[lane(a)]??3)-(priority[lane(b)]??3)||String(b.created_at).localeCompare(String(a.created_at)));
-  logStatus.textContent=latest.length?latest.length+" saved cases · latest revision "+stampLog(rows[0]?.created_at)+" · Not broker orders.": "No saved instructions yet. Open the War Room for dated research; no new action is inferred.";
+  const allLatest=latestByCase(rows).sort((a,b)=>(priority[lane(a)]??3)-(priority[lane(b)]??3)||String(b.created_at).localeCompare(String(a.created_at)));
+  const latest=allLatest.filter(row=>{const t=row.ticket||{};return lane(row)==="risk"||(!["STALE","UNAVAILABLE"].includes(t.evidence?.source_status)&&(!t.review?.review_by||t.review.review_by>=localDate()));});
+  logStatus.textContent=latest.length?latest.length+" saved cases · latest revision "+stampLog(rows[0]?.created_at)+" · Not broker orders.": "No current reviewed instruction. Research candidates below are not buy calls.";
   const term=logSearch.value.trim().toLowerCase();
   const filtered=latest.filter(row=>{const s=row.ticket?.subject||{},m=(state.ideaRows||[]).find(x=>String(x.ticker||"").toUpperCase()===String(s.instrument_id||"").toUpperCase());return !term||lane(row)==="risk"||[s.name,s.instrument_id,s.industry,s.business_summary,m?.name].join(" ").toLowerCase().includes(term);});
   const urgent=filtered.filter(row=>lane(row)==="risk");
@@ -531,12 +533,12 @@ export function installRadarWorkspace(main,getState){
  const toolsHeading=add(deskTools,node("summary",null,"Open detailed research & decision archive"));
  toolsHeading.setAttribute("aria-label","Expand the original investment decision tools");
  if(actionPlan){const old=add(deskTools,node("details","ps-al-history"));old.append(node("summary",null,"Previous action-plan publication · source dated"),actionPlan);}
- deskTools.append(legacy);
+ deskTools.append(legacy,pastWar);
  main.replaceChildren(landing,workspace);
  function selectView(target){
-  const war=target==="#war-room"||target.startsWith("#warroom-");
+  const war=target==="#war-room";
   const tools=["#market-tools","#command-rooms","#scenario-matrix","#market-table","#ps-top-stock-picks-20261113"].includes(target);
-  const archive=["#desk-tools","#advanced-research","#ps-current-action-plan"].includes(target);
+  const archive=target.startsWith("#warroom-")||["#desk-tools","#advanced-research","#ps-current-action-plan"].includes(target);
   const history=target==="#decision-history";
   workspace.dataset.psView=war?"war":tools?"tools":archive?"archive":history?"history":"instructions";
   log.hidden=war||tools||archive;warRoomDrawer.hidden=!war;marketTools.hidden=!tools;deskTools.hidden=!archive;
@@ -559,7 +561,8 @@ export function installRadarWorkspace(main,getState){
   landing.hidden=true;workspace.hidden=false;
   document.body.classList.remove("psr-landing-active");
   selectView(target);
-  if(target==="#war-room"||target.startsWith("#warroom-"))warRoomDrawer.open=true;
+  if(target==="#war-room")warRoomDrawer.open=true;
+  if(target.startsWith("#warroom-")){deskTools.open=true;pastWar.open=true;}
   if(["#market-tools","#command-rooms","#scenario-matrix","#market-table","#ps-top-stock-picks-20261113"].includes(target))marketTools.open=true;
   if(target==="#ps-current-action-plan"&&actionPlan){deskTools.open=true;actionPlan.closest("details").open=true;}
   if(target==="#decision-history")logHistory.open=true;
