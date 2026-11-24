@@ -132,8 +132,9 @@ export function finalizeRecap(page,main){
   const intro=make("header","ps-recap-intro");intro.append(make("p","ps-recap-kicker","POWER STACK / PORTFOLIO"),make("h1",null,"Your portfolio"));
   const table=main.querySelector("#owner-sortable-portfolio"),account=main.querySelector(".ps-advisor-records");
   const earlier=make("details","ps-recap-archive-drawer");earlier.append(make("summary",null,"Earlier portfolio notes and research"));
-  for(const n of [...main.children])if(n!==table&&n!==account&&!n.contains(table)&&!n.contains(account)&&!n.matches(".ps-recap-archive-drawer"))earlier.append(n);
-  main.prepend(intro);if(table&&table.parentElement!==main)intro.after(table);
+  if(table)main.append(table);if(account)main.append(account);
+  for(const n of [...main.children])if(n!==table&&n!==account&&!n.matches(".ps-recap-archive-drawer"))earlier.append(n);
+  main.prepend(intro);if(table)intro.after(table);if(account&&table)table.after(account);
   if(earlier.childElementCount>1)main.append(earlier);
   const reveal=()=>{const id=location.hash.slice(1);if(id&&[...earlier.querySelectorAll("[id]")].some(n=>n.id===id))earlier.open=true;};reveal();window.addEventListener("hashchange",reveal);
  }
