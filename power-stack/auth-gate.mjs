@@ -72,7 +72,7 @@ const modules={
  advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-actionlog1"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
- index:()=>import("./owner-decision-desk.mjs?v=20261124-quiet2"),
+ index:()=>import("./owner-decision-desk.mjs?v=20261124-recap3"),
  table:()=>import("./owner-portfolio-table.mjs?v=20261120-one-gate1"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
@@ -214,11 +214,11 @@ async function load(styleReady){
  try {
   const {mountNov23DecisionEdition}=await import("./owner-nov23-decision-edition.mjs?v=20261123-v1");
   await mountNov23DecisionEdition(PAGE,content,db,user);
-  if(PAGE==="index"){const room=content.querySelector(".psw-war-room-drawer"),edition=content.querySelector("#ps-nov23-edition");if(room&&edition)room.append(edition);}
+  if(PAGE==="index"){const room=content.querySelector("#ps-war-archive"),edition=content.querySelector("#ps-nov23-edition");if(room&&edition)room.append(edition);}
  } catch(error) {
   console.error("Nov 23 private decision overlay unavailable",error);
  }
- if(PAGE==="index"){const room=content.querySelector(".psw-war-room-drawer"),supplement=content.querySelector("#nov17-research");if(room&&supplement)room.append(supplement);}
+ if(PAGE==="index"){const room=content.querySelector("#ps-war-archive"),supplement=content.querySelector("#nov17-research");if(room&&supplement)room.append(supplement);}
  await styleReady;
  if(!authorised)return;
  // Remove the overlay BEFORE enabling the desk theme in the same JS task.
