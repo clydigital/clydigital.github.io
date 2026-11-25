@@ -38,10 +38,11 @@ export function presentClientView(page,main){
   const owner=nav.querySelector("#owner-indicator");
   const signout=nav.querySelector("#logout-button");
   const links=[
-   ["index.html#action-log","Overview","index"],
+   ["index.html#action-log","Today","index"],
    ["sectors.html","Sectors","sectors"],
    ["research.html","Research","research"],
-   ["portfolio.html#holdings","Portfolio","portfolio"],
+   ["portfolio.html#holdings","Holdings","portfolio"],
+   ["portfolio.html#watchlist","Watchlist","watchlist"],
    ["ideas.html","Ideas","ideas"],
    ["index.html#war-room","War Room","warroom"],
    ["decisions.html","Decisions","decisions"],
@@ -49,7 +50,7 @@ export function presentClientView(page,main){
    ["archive.html","Archive","archive"]
   ];
   const fragment=document.createDocumentFragment();
-  const activeSlug=()=>page==="index"?(location.hash.startsWith("#war")?"warroom":location.hash==="#decision-history"||["#desk-tools","#advanced-research"].includes(location.hash)?"archive":"index"):["portfolio","ideas","research","sectors","decisions","dossiers"].includes(page)?page:"archive";
+  const activeSlug=()=>page==="index"?(location.hash.startsWith("#war")?"warroom":location.hash==="#decision-history"||["#desk-tools","#advanced-research"].includes(location.hash)?"archive":"index"):page==="portfolio"&&location.hash==="#watchlist"?"watchlist":["portfolio","ideas","research","sectors","decisions","dossiers"].includes(page)?page:"archive";
   for(const [href,label,slug] of links){
    const a=document.createElement("a");a.href=href;a.textContent=label;a.dataset.slug=slug;
    if(activeSlug()===slug)a.setAttribute("aria-current","page");
@@ -104,9 +105,9 @@ export function presentClientView(page,main){
 export function finalizeRecap(page,main){
  if(!main)return;
  if(page==="index"){
-  const old=main.querySelector("#ps-daily-war-room");if(old)old.hidden=true;
-  const picks=main.querySelector("#ps-priority-ideas");if(picks)picks.hidden=true;
-  const landing=main.querySelector("#psr-landing");if(landing)landing.hidden=true;
+  const old=main.querySelector("#ps-daily-war-room"),past=main.querySelector("#ps-war-archive");
+  const picks=main.querySelector("#ps-priority-ideas");if(picks&&old)old.append(picks);
+  if(old&&past)past.append(old);
   return;
  }
  const make=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt)e.textContent=txt;return e;};
