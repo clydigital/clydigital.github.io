@@ -2,15 +2,15 @@
 html[data-private-page] body.ps-fin-pulse{
  --ps-bg:#fff9ef;--ps-sidebar:#f0eaff;--ps-panel:#fff;--ps-panel-alt:#eee9ff;--ps-panel-soft:#f7f4ff;--ps-stroke:#c8c6d9;--ps-fg:#25324c;--ps-subtle:#637087;--ps-blue:#5a55cb;--ps-blue-bright:#5a55cb;--ps-success:#246b54;--ps-danger:#a23f36;--ps-warn:#8b5e26;
  --psh-line:#c8c6d9;--psh-surface:#fff;--psh-ink:#25324c;--psh-muted:#637087;--psh-bright:#5a55cb;--text:#25324c;--muted:#637087;--line:#c8c6d9;--mint:#246b54;
- background:#fff9ef!important;color:#25324c!important;font:16px/1.55 Figtree,system-ui,sans-serif!important;padding-left:220px!important;
+ background:#fff9ef!important;color:#25324c!important;font:16px/1.55 ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important;padding-left:220px!important;
 }
 html[data-private-page] body.ps-fin-pulse::before{display:none!important}
 html[data-private-page] body.ps-fin-pulse #site-header.site-header{background:#f0eaff!important;border:0!important;border-right:1px solid #d7cfee!important;box-shadow:none!important;width:220px!important}
 html[data-private-page] body.ps-fin-pulse #site-header .wrap.nav{padding:24px 16px!important;gap:24px!important}
-html[data-private-page] body.ps-fin-pulse #site-header .brand,html[data-private-page] body.ps-fin-pulse #site-header .brand em{background:none!important;color:#25324c!important;border:0!important;box-shadow:none!important;text-shadow:none!important;font:900 19px/1.15 Figtree,system-ui,sans-serif!important;padding:0!important;margin:0!important;justify-content:flex-start!important}
+html[data-private-page] body.ps-fin-pulse #site-header .brand,html[data-private-page] body.ps-fin-pulse #site-header .brand em{background:none!important;color:#25324c!important;border:0!important;box-shadow:none!important;text-shadow:none!important;font:900 19px/1.15 ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important;padding:0!important;margin:0!important;justify-content:flex-start!important}
 html[data-private-page] body.ps-fin-pulse #site-header .brand::after,html[data-private-page] body.ps-fin-pulse #site-header .brand small,html[data-private-page] body.ps-fin-pulse #site-header .ps-pulse-mark{display:none!important}
 html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav{border:0!important;padding:0!important;gap:4px!important}
-html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:not(.brand){color:#495671!important;background:none!important;border:0!important;border-radius:9px!important;box-shadow:none!important;text-shadow:none!important;padding:12px 14px!important;min-height:44px!important;font:650 16px/1.3 Figtree,system-ui,sans-serif!important}
+html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:not(.brand){color:#495671!important;background:none!important;border:0!important;border-radius:9px!important;box-shadow:none!important;text-shadow:none!important;padding:12px 14px!important;min-height:44px!important;font:650 16px/1.3 ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important}
 html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a[aria-current="page"]{background:#5a55cb!important;color:#fff!important}
 html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:hover{background:#ded7f8!important;color:#25324c!important}
 html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a[aria-current="page"]:hover{background:#4843ae!important;color:#fff!important}
@@ -18,7 +18,7 @@ html[data-private-page] body.ps-fin-pulse #site-header .gate-logout{background:t
 html[data-private-page] body.ps-fin-pulse #site-header #owner-indicator{color:#637087!important;font-size:11px!important}
 html[data-private-page] body.ps-fin-pulse main:is(.wrap,.shell,.psi-shell){max-width:1180px!important;margin:0 auto!important;padding:clamp(22px,4vw,54px)!important;background:none!important}
 html[data-private-page="index"] body.ps-fin-pulse main.wrap{max-width:1400px!important;padding:0!important}
-html[data-private-page] body.ps-fin-pulse main :is(h1,h2,h3,h4){color:#25324c!important;font-family:Figtree,system-ui,sans-serif!important;text-shadow:none!important;letter-spacing:-.025em}
+html[data-private-page] body.ps-fin-pulse main :is(h1,h2,h3,h4){color:#25324c!important;font-family:ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important;text-shadow:none!important;letter-spacing:-.025em}
 html[data-private-page] body.ps-fin-pulse main h1{font-size:clamp(34px,5vw,58px)!important;line-height:1.08!important;font-weight:900!important}
 html[data-private-page] body.ps-fin-pulse main h2{font-size:clamp(23px,3vw,32px)!important;line-height:1.2!important}
 html[data-private-page] body.ps-fin-pulse main a:not([role="button"]){color:#5149b8}
@@ -57,3 +57,59 @@ html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-drawer{margin:1
 html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-drawer>summary{cursor:pointer;background:none!important;color:#5149b8!important;border:0!important;font-size:16px!important;font-weight:750;box-shadow:none!important}
 html[data-private-page] body.ps-fin-pulse main [hidden]{display:none!important}
 @media(max-width:800px){html[data-private-page] body.ps-fin-pulse{padding-left:0!important}html[data-private-page] body.ps-fin-pulse #site-header.site-header{position:sticky!important;inset:0 0 auto!important;width:100%!important;height:auto!important;overflow:visible!important;border:0!important;border-bottom:1px solid #d7cfee!important}html[data-private-page] body.ps-fin-pulse #site-header .wrap.nav{padding:10px 12px!important;gap:8px!important;min-height:0!important}html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important}html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:not(.brand){font-size:13px!important;min-height:36px!important;padding:8px!important}html[data-private-page] body.ps-fin-pulse #site-header .ps-sidebar-spacer,html[data-private-page] body.ps-fin-pulse #site-header #owner-indicator{display:none!important}html[data-private-page] body.ps-fin-pulse main .psv-group-cards,html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-links{grid-template-columns:1fr!important}}
+
+/* Canonical recap deck vocabulary — adapted for responsive, scrolling research views.
+   Source: AI Financing Explained, 23 Nov 2026. No private content in CSS. */
+html[data-private-page] body.ps-fin-pulse{
+ --recap-ink:#25324c;--recap-purple:#5a55cb;--recap-line:#35405c;--recap-cream:#fff9ef;
+ --recap-lav:#eee9ff;--recap-peach:#ffeadc;--recap-mint:#d4f5ea;--recap-gold:#fff0c5;
+ --recap-shadow:4px 5px 0 #25324c1b;
+ --ps-stroke:#35405c;--psh-line:#35405c;
+}
+html[data-private-page] body.ps-fin-pulse main{font:17px/1.48 ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important;overflow-wrap:anywhere}
+html[data-private-page] body.ps-fin-pulse main :is(h1,h2,h3,h4){font-family:ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important;font-weight:900!important;letter-spacing:-.035em!important;line-height:1.12!important}
+html[data-private-page] body.ps-fin-pulse main h1{font-size:clamp(34px,4.5vw,62px)!important;letter-spacing:-.05em!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-kicker,
+html[data-private-page] body.ps-fin-pulse main .ps-recap-section-label{
+ display:inline-block;width:fit-content;max-width:100%;background:#26334d!important;color:white!important;
+ border:0!important;border-radius:999px!important;padding:7px 13px!important;font-size:11px!important;font-weight:900!important;letter-spacing:.08em!important;line-height:1.3!important
+}
+html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence{display:grid;gap:22px;min-width:0;margin-bottom:32px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-intro{padding:clamp(18px,3vw,32px)!important;background:var(--recap-peach)!important;border:2px solid var(--recap-line)!important;border-radius:24px!important;box-shadow:var(--recap-shadow)!important;margin:0!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-intro h1{margin:14px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel{min-width:0;margin:0!important;padding:clamp(16px,3vw,30px)!important;background:var(--recap-cream)!important;border:2px solid var(--recap-line)!important;border-radius:24px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel:nth-of-type(3n+2){background:var(--recap-peach)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel:nth-of-type(3n){background:var(--recap-lav)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel>h2{font-size:clamp(27px,3vw,42px)!important;margin:12px 0 14px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-lead{font-size:clamp(18px,2vw,24px)!important;font-weight:800!important;margin:12px 0 18px!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-grid,.ps-recap-fact-grid){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-visual-card{padding:clamp(16px,2vw,24px);border:2px solid var(--recap-line);border-radius:20px;background:var(--recap-lav);box-shadow:var(--recap-shadow);min-width:0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-visual-card:nth-child(3n+2){background:var(--recap-mint)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-visual-card:nth-child(3n){background:var(--recap-peach)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-visual-card h3{font-size:clamp(20px,2.2vw,29px)!important;margin:10px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact{display:grid;gap:5px;margin:10px 0;line-height:1.45;white-space:pre-line}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact>strong{font-size:12px!important;letter-spacing:.04em;text-transform:uppercase;color:#5149b8!important;font-weight:850!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact-grid>.ps-recap-fact{background:#fffdf9;border:1.5px solid var(--recap-line);border-radius:14px;padding:14px;margin:0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge{display:grid;gap:9px;background:var(--recap-lav);border:2px solid var(--recap-line);border-radius:20px;padding:22px;margin:16px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge small{font-size:12px;font-weight:800;letter-spacing:.04em}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge meter{display:block;width:100%;height:24px;accent-color:var(--recap-purple)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge meter::-webkit-meter-bar{background:#fff;border:1px solid var(--recap-line);border-radius:999px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge meter::-webkit-meter-optimum-value,
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge meter::-webkit-meter-suboptimum-value,
+html[data-private-page] body.ps-fin-pulse main .ps-recap-gauge meter::-webkit-meter-even-less-good-value{background:var(--recap-purple);border-radius:999px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-big-number{display:block;font-size:clamp(28px,4vw,48px)!important;line-height:1.06!important;letter-spacing:-.04em!important;font-weight:900!important;font-variant-numeric:tabular-nums}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-state{font-size:12px;font-weight:900;letter-spacing:.04em;color:#5149b8!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow{display:grid;gap:8px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow>.ps-recap-fact{margin:0;padding:12px;background:#fffdf9;border:1.5px solid var(--recap-line);border-radius:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow>.ps-recap-fact+ .ps-recap-fact{border-top:3px solid var(--recap-purple)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-universe>details{min-width:0;margin:0!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-drawer{background:#fffdf9!important;border:1.5px solid var(--recap-line)!important;border-radius:16px!important;box-shadow:none!important;min-width:0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-drawer>summary{font-weight:900!important;color:#5149b8!important;line-height:1.35!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel label{display:inline-grid;gap:6px;font-size:13px;font-weight:800;margin:8px 12px 8px 0;max-width:100%}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel :is(input,select){max-width:100%;min-height:42px;padding:9px 12px;font:inherit}
+html[data-private-page] body.ps-fin-pulse main :is(.psi-card,.ps-owner-table,.ps-advisor-records,.psi-tracked-drawer,.psi-editor,.pscr-card,.ps-dossier-card){border:2px solid var(--recap-line)!important;border-radius:20px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item{background:#fffdf9!important;border:2px solid var(--recap-line)!important;border-radius:20px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-header h1{font-family:ui-rounded,"Trebuchet MS","Avenir Next",Arial,sans-serif!important}
+html[data-private-page] body.ps-fin-pulse main :is(button,a,input,select,summary):focus-visible{outline:3px solid var(--recap-purple)!important;outline-offset:3px!important}
+@media(max-width:760px){html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-grid,.ps-recap-fact-grid){grid-template-columns:minmax(0,1fr)}html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence{gap:16px}html[data-private-page] body.ps-fin-pulse main .ps-recap-panel{padding:16px!important}}
+@media(prefers-reduced-motion:reduce){html[data-private-page] body.ps-fin-pulse main *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
