@@ -38,7 +38,7 @@ async function authenticateAndRead(){
  // The local session is only a request hint. It never authorizes content.
  const {data:{session}={},error:sessionError}=await db.auth.getSession();
  if(sessionError||!session?.access_token||!session.user?.id)return null;
- const keys=[...new Set([PAGE==="ideas"?"index":PAGE,...(specialistPages.includes(PAGE)?["index"]:[])])];
+ const keys=[...new Set([PAGE==="ideas"?"index":PAGE,...((specialistPages.includes(PAGE)||PAGE==="archive")?["index"]:[])])];
  const epoch=authEpoch;
  // Verify the token with Auth and perform the owner-only RLS read concurrently.
  // Both must succeed and the verified user must match the query owner.
@@ -220,6 +220,15 @@ async function load(styleReady){
  }
  if(PAGE==="index"){const room=content.querySelector("#ps-war-archive"),supplement=content.querySelector("#nov17-research");if(room&&supplement)room.append(supplement);}
  try{const {finalizeRecap}=await readyModule("advisor");finalizeRecap(PAGE,content);}catch(error){console.error("Recap layout unavailable",error);}
+ // Read only the owner-approved manual edition, from the existing private page.
+ // Dossiers are not an input or a dependency.
+ if(PAGE!=="dossiers"){
+  try{
+   const raw=roomsPage?.body_html?secureMain(roomsPage.body_html).querySelector("#ps-investment-intelligence-data")?.textContent:null;
+   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261126-v1");
+   if(authorised)mountInvestmentIntelligence(PAGE,content,raw);
+  }catch(error){console.error("Investment intelligence edition unavailable",error);}
+ }
  await styleReady;
  if(!authorised)return;
  // Remove the overlay BEFORE enabling the desk theme in the same JS task.
