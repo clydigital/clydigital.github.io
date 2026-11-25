@@ -100,3 +100,17 @@ test("white editorial scenes show distinct compositions with retained source lab
  for(const cls of ["ps-recap-position-hero","ps-recap-position-price","ps-recap-allocation","ps-recap-position-valuation"])assert(card.all().some(x=>x.className===cls),cls);
  }finally{globalThis.document=prior}
 });
+
+import {currentDeskBrief} from "../owner-war-room.mjs";
+import {applyOwnerCloseObservations} from "../owner-portfolio-table.mjs";
+test("current private War Room briefing takes precedence without promoting partial evidence",()=>{
+ const ed={...edition([]),teamBrief:{asOf:"2026-11-26",status:"PARTIAL",deskViews:{Matt:"Lean wait",Sarah:"Recheck valuation"},coverageNote:"Missing transcript",sourceResearch:["https://app.notion.com/p/example","javascript:alert(1)"]},macro:{why:"Mixed observations",invalidation:"Credit and breadth"},opportunities:[{ticker:"CI",name:"CI",entry:"Research only"}]};
+ const lead=currentDeskBrief(ed,"matt");assert.equal(lead.view,"Lean wait");assert.equal(lead.status,"PARTIAL");assert.equal(lead.sources.length,1);assert.equal(lead.cases[0].ticker,"CI");assert.equal(currentDeskBrief(ed,"selection").view,"Recheck valuation");assert.equal(currentDeskBrief(ed,"ai"),null);assert.equal(currentDeskBrief(edition([]),"matt"),null);
+});
+test("BB alias survives missing residual legacy feed; private fallback cannot overwrite a covered close",()=>{
+ const ed=edition([bb("5141.KL","MYR"),bb("NVDA")]);const q=quotes(mergeEditionQuotes(null,ed,now),now).holding;
+ assert.equal(q.get("DAYANG").close,50);assert(!q.has("5141.KL"));
+ const lines=[marketRow("NVDA",{session:"2026-11-24"}),marketRow("A",{session:"2026-11-24"})];
+ const observations=["NVDA","A"].map(ticker=>({ticker,observed_on:"2026-11-25",price:60,currency:"USD",timestamp_basis:"source_observation",source_name:"Nasdaq official stocks history",source_url:"https://www.nasdaq.com/market-activity/stocks/x/historical",source_recorded_at:"2026-11-25T23:00:00Z"}));
+ const result=applyOwnerCloseObservations(lines,observations,now,ed);assert.equal(result.lines[0].close,50);assert.equal(result.lines[1].close,60);assert.equal(result.count,1);
+});
