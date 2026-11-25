@@ -66,7 +66,19 @@ function priceFor(finding,state){
  const pct=Number.isFinite(q.day)?(q.day>0?"+":"")+q.day.toFixed(2)+"%":null;
  return {ticker,close:q.close,currency:q.currency||"USD",session:q.session,pct};
 }
-export function mountWarRoom(workspace,getState,{asOf}={}){
+
+// The owner edition is the current research source. Fixed public findings are
+// retained as an explicitly historical fallback, never silently redated.
+export function currentDeskBrief(edition,desk){
+ if(edition?.contract!=="ps-investment-intelligence/1"||!edition.teamBrief||!Number.isFinite(Date.parse(edition.asOf)))return null;
+ const b=edition.teamBrief,m=edition.macro||{},ops=Array.isArray(edition.opportunities)?edition.opportunities:[],divs=Array.isArray(edition.divergences)?edition.divergences:[];
+ const names={matt:"Matt",rates:"Jimmy",ai:"David",energy:"Mike",aviation:"Rachel",selection:"Sarah"};
+ const name=names[desk],view=b.deskViews?.[name];if(typeof view!=="string"||!view.trim())return null;
+ const cases=desk==="ai"?["NVDA","DELL","MU","CRWV","ORCL","NBIS","AVGO","MSFT","GOOGL"]:desk==="selection"?["CI","XYL","NVDA","BWXT","CF","TTWO","TSLA"]:desk==="energy"?["CF","XOM","DHT","FRO","CMBT","INSW"]:desk==="rates"?["SGOV","USFR","IEF","TLT","LQD","HYG"]:desk==="aviation"?["BWXT"]:["CI","XYL","NVDA","DELL","MU","TTWO","TSLA"];
+ return {name,view,asOf:b.asOf||edition.asOf,status:b.status||"PARTIAL",note:b.coverageNote||"Source coverage not established",sources:(Array.isArray(b.sourceResearch)?b.sourceResearch:[]).map(safeSource).filter(Boolean),cases:cases.map(t=>ops.find(x=>x.ticker===t)).filter(Boolean),divergences:desk==="matt"?divs:divs.filter(x=>typeof x.name==="string"&&x.name.includes(name)),context:desk==="matt"?m.why:desk==="rates"?[m.credit,m.opportunityCost,m.inflation].filter(Boolean).join(" · "):desk==="selection"?m.deployment:desk==="energy"?divs.find(x=>String(x.name).includes("lower crude"))?.why:desk==="ai"?divs.find(x=>String(x.name).includes("Adoption"))?.why:null,next:desk==="matt"?m.invalidation:desk==="rates"?m.credit:desk==="aviation"?"Verify incremental awarded scope, actual funding, issuer cash conversion and operational recovery; no new aviation-specific evidence in this edition.":null};
+}
+
+export function mountWarRoom(workspace,getState,{asOf,edition=null}={}){
  const root=el("section","psw-root");root.id="war-room";
  root.setAttribute("aria-label","The War Room: findings and investment conclusions");
  root.innerHTML=`
@@ -103,6 +115,7 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
  `;
  workspace.prepend(root);
  const tabs=$(root,"#psw-tabs"),panel=$(root,"#psw-analyst-panel");
+ const current=desk=>currentDeskBrief(edition,desk);
  let chosen="matt";
  for(const desk of DESKS){
   const button=el("button","psw-tab");button.type="button";
@@ -149,6 +162,23 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   }
   card.append(meta);return card;
  }
+ function makeCurrentCard(brief){
+ const card=el("article","psw-finding-card ps-recap-visual-card psw-current-brief");
+ card.append(el("small",null,brief.name.toUpperCase()+" · "+brief.asOf+" · "+brief.status),el("h3",null,brief.view));
+ if(brief.context)card.append(el("p",null,brief.context));
+ if(brief.next){const next=el("div","psw-finding-call");next.append(el("strong",null,"NEXT TEST"),el("p",null,brief.next));card.append(next);}
+ card.append(el("small",null,brief.note));
+ for(const url of brief.sources){const link=el("a",null,"Saved research evidence");link.href=url;link.rel="noopener noreferrer";link.target="_blank";card.append(link);}
+ return card;
+ }
+ function makeCaseCard(x){
+ const card=el("article","psw-finding-card ps-recap-visual-card");
+ card.append(el("small",null,"RESEARCH / RECHECK"),el("h3",null,x.ticker+" · "+x.name));
+ const q=x.marketObservation;if(q?.status==="SOURCE_DATED"&&Number.isFinite(q.price)&&q.asOf)card.append(el("strong","ps-recap-big-number",q.currency+" "+q.price.toFixed(2)),el("small",null,"BB dated close · "+q.asOf));
+ const ec=x.entryCheck;if(ec&&Number.isFinite(ec.ceiling)&&ec.currency===q?.currency&&ec.asOf===q?.asOf&&ec.price===q?.price)card.append(el("p",null,"Research ceiling "+ec.currency+" "+ec.ceiling.toFixed(2)+" · "+(q.price<=ec.ceiling?"Price-only pass; underwriting pending":Number.isFinite(ec.declineRequiredPct)?ec.declineRequiredPct.toFixed(2)+"% further decline required":"Recheck")));
+ for(const [label,v] of [["Why",x.why],["Entry",x.entry],["Catalyst",x.catalyst],["Invalidation",x.invalidation]])if(typeof v==="string"&&v.trim()){const f=el("p","ps-recap-fact");f.append(el("strong",null,label),document.createTextNode(v));card.append(f);}
+ return card;
+ }
  function renderDesk(){
   const desk=DESKS.find(x=>x.id===chosen)||DESKS[0],state=getState()||{};
   for(const btn of tabs.querySelectorAll("[data-desk]")){
@@ -163,28 +193,27 @@ export function mountWarRoom(workspace,getState,{asOf}={}){
   head.append(title);panel.append(head);
   const matt=el("aside","psw-matt-interrupt");
   const mark=el("span","psw-matt-mini","M"),msg=el("div");
-  msg.append(el("strong",null,"MATT SAYS"),el("p",null,MATT_SAYS[desk.id]));
+  const brief=current(desk.id);msg.append(el("strong",null,"MATT SAYS"),el("p",null,brief?brief.view:MATT_SAYS[desk.id]));
   matt.append(mark,msg);panel.append(matt);
   const set=findingsForDesk(desk.id).filter(validateFinding);
-  const collection=el("div","psw-desk-findings");
-  for(const item of set)collection.append(makeFindingCard(item,state));
-  if(!set.length)collection.append(el("p","psw-empty","No verified dated findings for this desk."));
-  panel.append(collection);
+  if(brief){panel.append(makeCurrentCard(brief));const collection=el("div","psw-desk-findings");for(const x of brief.cases)collection.append(makeCaseCard(x));for(const d of brief.divergences){const card=el("article","psw-finding-card");card.append(el("h3",null,d.name),el("p",null,d.why),el("p",null,d.countercase),el("p",null,d.resolution));collection.append(card);}panel.append(collection);}
+  const archive=el("details","ps-recap-archive-drawer");archive.open=!brief;archive.append(el("summary",null,"Historical desk findings · "+BRIEFING_EDITION));const collection=el("div","psw-desk-findings");for(const item of set)collection.append(makeFindingCard(item,state));if(!set.length)collection.append(el("p","psw-empty","No verified dated findings for this desk."));archive.append(collection);panel.append(archive);
   const link=el("a","psw-desk-research",desk.id==="matt"?"Open all investment decisions ↗":"Read the detailed research ↗");
   link.href=desk.id==="matt"?"decisions.html":"research.html";panel.append(link);
  }
  function render(){
   const state=getState()||{};
-  $(root,"#psw-edition").textContent="RESEARCH EDITION · "+BRIEFING_EDITION;
-  $(root,"#psw-research-date").textContent=BRIEFING_EDITION+" · fixed edition";
+  const brief=current("matt");
+  $(root,"#psw-edition").textContent=brief?"PRIVATE RESEARCH · "+brief.asOf+" · "+brief.status:"HISTORICAL EDITION · "+BRIEFING_EDITION;
+  $(root,"#psw-research-date").textContent=brief?brief.asOf+" · manual research; mixed evidence dates":BRIEFING_EDITION+" · fixed historical edition";
   $(root,"#psw-price-date").textContent=state.marketAsOf?dateText(state.marketAsOf)+" · delayed":"Unavailable / too old";
   $(root,"#psw-decision-date").textContent=state.rows?.[0]?.created_at?dateText(state.rows[0].created_at):"No verified revision";
   const saved=readChanges(state),revised=saved.find(x=>x.label==="ACTION REVISED");
-  $(root,"#psw-matt-lead").textContent=revised
+  $(root,"#psw-matt-lead").textContent=brief?brief.view:revised
     ?'"ALRIGHT! '+String(revised.name).toUpperCase()+' MOVED TO '+revised.change.toUpperCase()+'. BUT LOOK AT THE ACTUAL MARKET EVIDENCE BEFORE YOU CHANGE ANOTHER GODDAMN POSITION!"'
     :'"SMH JUST RIPPED WHILE EQUAL-WEIGHT BREADTH LAGGED. THAT IS A SETUP, NOT A NEW REGIME! THE NEXT PCE, REAL YIELDS AND CREDIT GET THE DECIDING VOTE!"';
   const summary=$(root,"#psw-chief-findings");summary.replaceChildren();
-  for(const item of findingsForDesk("matt").filter(validateFinding))
+  if(brief){summary.append(makeCurrentCard(brief));for(const x of brief.cases.slice(0,3))summary.append(makeCaseCard(x));}else for(const item of findingsForDesk("matt").filter(validateFinding))
    summary.append(makeFindingCard(item,state,{compact:true}));
   const history=$(root,"#psw-change-list");history.replaceChildren();
   if(!saved.length)history.append(el("p","psw-empty","No saved decision revisions verified."));
