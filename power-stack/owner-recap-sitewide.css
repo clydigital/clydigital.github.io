@@ -113,3 +113,21 @@ html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-header h1{fo
 html[data-private-page] body.ps-fin-pulse main :is(button,a,input,select,summary):focus-visible{outline:3px solid var(--recap-purple)!important;outline-offset:3px!important}
 @media(max-width:760px){html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-grid,.ps-recap-fact-grid){grid-template-columns:minmax(0,1fr)}html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence{gap:16px}html[data-private-page] body.ps-fin-pulse main .ps-recap-panel{padding:16px!important}}
 @media(prefers-reduced-motion:reduce){html[data-private-page] body.ps-fin-pulse main *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Holdings and watchlist: recap instrument cards and completed-session observations. */
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid{margin:20px 0;align-items:start}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card{display:grid;gap:8px;min-width:0}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card h3{margin:0!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card meter{width:100%;height:18px;accent-color:var(--recap-purple)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-moves{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-move{background:#fffdf9;border:1px solid var(--recap-line);border-radius:12px;padding:9px;display:grid;gap:3px;font-variant-numeric:tabular-nums}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-move[data-direction="up"]{background:var(--recap-mint);color:#205847}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-move[data-direction="down"]{background:#ffd6df;color:#8c342c}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-move small{font-size:11px;font-weight:900}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell{display:grid;gap:4px;border:1px solid var(--recap-line);border-radius:12px;padding:10px;background:#fff9ef}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell span{font-size:20px;font-weight:900}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell small{font-size:12px;line-height:1.4}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card>details{margin:0!important;padding:12px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card .ps-recap-fact{margin:4px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card small{font-size:12px}
