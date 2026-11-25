@@ -25,7 +25,7 @@ test("stale edition and old tape cannot invent a valid quote",()=>{const p=merge
 
 import {mountInvestmentIntelligence} from "../owner-investment-intelligence.mjs";
 class TestNode {
- constructor(tag){this.tagName=tag;this.childNodes=[];this.listeners={};this.attrs={};this.open=false;this.value="";this._text="";this.id="";}
+ constructor(tag){this.tagName=tag;this.childNodes=[];this.listeners={};this.attrs={};this.dataset={};this.style={};this.open=false;this.value="";this._text="";this.id="";}
  set textContent(v){this._text=String(v);this.childNodes=[]}
  get textContent(){return this._text+this.childNodes.map(x=>x.textContent).join("")}
  append(...xs){this.childNodes.push(...xs)}
@@ -54,4 +54,29 @@ test("sitewide mount preserves Action Log and shows historical gauge with full s
  assert.ok(war.querySelector("#ps-war-intelligence"));
  const dossier=new TestNode("main");mountInvestmentIntelligence("dossiers",dossier,p);assert.equal(dossier.childNodes.length,0);
  }finally{globalThis.document=prior;}
+});
+
+import {cardResearch,sleeveWeights,holdingCard} from "../owner-portfolio-table.mjs";
+const level=(over={})=>({frame:"D",period:20,multiplier:1,asOf:"2026-11-25",ema:52,lower:48,upper:56,warmup:"READY",distancePct:-3.846,side:"below",band:"inside",windows:{"3":{approach:"up_to",emaCross:"none",upperCross:"none",lowerCross:"none"}},...over});
+const marketRow=(ticker="XYL",over={})=>({ticker,name:ticker,held:true,quantity:2,quantityAsOf:"2026-10-02",currency:"USD",close:50,session:"2026-11-25",basis:"Bluebelly source-dated close",day:-2,threeDay:0,fiveDay:3,...over});
+const cardEdition=(ticker="XYL",over={})=>({...edition([{...bb(ticker),emaScan:{asOf:"2026-11-25",method:"FIRST_CLOSE_EMA_ROLLING_CLOSE_POPULATION_SD",observations:[level(),level({frame:"W",warmup:"SHORT_WARMUP"}),level({period:200,multiplier:1})]},...over}]),opportunities:[]});
+test("instrument level cards use only exact session, currency, price, method and ready observations",()=>{
+ const ed=cardEdition();const row=marketRow();
+ assert.equal(cardResearch(row,ed).levels.length,1);
+ assert.equal(cardResearch({...row,session:"2026-11-24"},ed).levels.length,0);
+ assert.equal(cardResearch({...row,currency:"EUR"},ed).levels.length,0);
+ assert.equal(cardResearch({...row,close:51},ed).levels.length,0);
+ assert.equal(cardResearch(marketRow("TOL"),cardEdition("TOL")).levels.length,0);
+ const wrong=cardEdition();wrong.universe[0].emaScan.method="OTHER";
+ assert.equal(cardResearch(row,wrong).levels.length,0);
+});
+test("sleeve weights never combine currencies or sessions and exclude the warrant",()=>{
+ const lines=[marketRow("A"),marketRow("B"),marketRow("C",{currency:"MYR"}),marketRow("D",{session:"2026-11-24"}),marketRow("6742UW")];
+ const w=sleeveWeights(lines);
+ assert.equal(w.get("A").weight,50);assert.equal(w.get("C").weight,100);
+ assert.equal(w.get("D").weight,100);assert(!w.has("6742UW"));
+});
+test("render individual holding with a visible level diagram, quantity date, and explicit stale session",()=>{
+ const prior=globalThis.document;globalThis.document={createElement:t=>new TestNode(t),createTextNode:t=>{const n=new TestNode("#text");n.textContent=t;return n}};
+ try{const row=marketRow();const card=holdingCard(row,cardEdition(),sleeveWeights([row]));assert.match(card.textContent,/RECORDED HOLDING/);assert.match(card.textContent,/2026-10-02/);assert.match(card.textContent,/D 20 EMA/);assert.match(card.textContent,/3D · approach up_to/);assert(card.all().some(x=>x.className==="ps-recap-band-marker"));const outdated=holdingCard({...row,session:"2026-11-24"},cardEdition(),new Map());assert.match(outdated.textContent,/No matching BB close/);assert(!outdated.all().some(x=>x.className==="ps-recap-band-marker"));}finally{globalThis.document=prior}
 });
