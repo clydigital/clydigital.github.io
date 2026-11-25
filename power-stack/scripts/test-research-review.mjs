@@ -115,7 +115,7 @@ test("research page adds source-dated causal investment analysis after owner aut
  assert(auth.includes('research:()=>import("./owner-research-theses.mjs?v=20261114-ps1")'));
  const html=read("research.html");
  assert(html.includes("owner-research-theses.css?v=20261113-research1"));
- assert(html.includes("auth-gate.mjs?v=20261126-contrast1"));
+ assert(html.includes("auth-gate.mjs?v=20261126-warroom2"));
  assert(html.includes('data-private-page="research"'));
  assert(auth.indexOf('const access=await authenticateAndRead()')<auth.indexOf('mountNov17Research(PAGE,content)'));
  assert(!html.includes("Source-dated investment reasoning"));

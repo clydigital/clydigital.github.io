@@ -6,7 +6,7 @@ import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {latestByCase,lane,localDate} from "./owner-decision-core.mjs";
 
 import {renderResearchReview} from "./owner-research-review.mjs";
-import {mountWarRoom} from "./owner-war-room.mjs?v=20261124-warroom1";
+import {mountWarRoom} from "./owner-war-room.mjs?v=20261126-warroom2";
 import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
 export const RADAR_CONTRACT="power-stack-radar-workspace/1";
 export const RESEARCH_ASOF="2026-11-11";
