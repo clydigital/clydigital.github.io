@@ -139,3 +139,119 @@ html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell .ps-recap-band
 html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-section-label{white-space:normal}
 html[data-private-page] body.ps-fin-pulse main .ps-position-grid>article:focus-within{outline:2px solid #5a55cb;outline-offset:2px}
 html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-links>a{border:2px solid var(--recap-line);border-radius:16px;box-shadow:var(--recap-shadow)}
+
+/* Final contrast pass. Semantic surfaces, not alternating colours by row order. */
+html[data-private-page] body.ps-fin-pulse{
+ --recap-ink:#25324c;--recap-muted:#4b5871;--recap-link:#443c9f;
+ --recap-macro:#e4ddff;--recap-rotation:#d4f5ea;--recap-divergence:#ffddc5;
+ --recap-technical:#d9ebff;--recap-fundamental:#fff0c5;
+ --recap-risk:#ffdce0;--recap-white:#fffdf9;
+}
+html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence,
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid{
+ color:var(--recap-ink)!important;isolation:isolate;
+}
+/* Explicit foregrounds defeat inherited white text from older dark themes.
+   Restore light text only where a deliberately dark surface requires it. */
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid,.ps-owner-table,.psi-card,.ps-advisor-records,.ps-recap-archive-drawer) :is(p,span,strong,b,small,em,li,dt,dd,label,summary,th,td){
+ color:var(--recap-ink)!important;text-shadow:none!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid,.ps-owner-table,.psi-card,.ps-advisor-records,.ps-recap-archive-drawer) :is(a,summary){
+ color:var(--recap-link)!important;text-decoration-color:currentColor!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) :is(.ps-recap-kicker,.ps-recap-section-label){
+ background:#26334d!important;color:#fff!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) :is(.ps-recap-big-number,.ps-recap-lead){color:var(--recap-ink)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) .ps-recap-fact>strong{color:#443c9f!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) small:not(.ps-recap-section-label){color:var(--recap-muted)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) .ps-recap-state{color:#634719!important;background:#fff0c5!important;border:1px solid #ae8540;border-radius:8px;padding:6px 9px;width:fit-content}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="01"]{background:var(--recap-macro)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="02"]{background:var(--recap-rotation)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="03"]{background:var(--recap-divergence)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="04"]{background:var(--recap-technical)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="05"]{background:var(--recap-fundamental)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="strategy"]{background:var(--recap-risk)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card{background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card .ps-recap-fact-grid>.ps-recap-fact{background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="holding"]{background:#e4ddff!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="watchlist"]{background:#d4f5ea!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="research"]{background:#ffddc5!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="coverage"]{background:#fffdf9!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="up"] :is(strong,small){color:#205847!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="down"] :is(strong,small){color:#8c342c!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="unknown"] :is(strong,small){color:#4b5871!important}
+html[data-private-page] body.ps-fin-pulse main :is(button[aria-pressed="true"],#psi-add,#psi-save){background:#443c9f!important;color:#fff!important}
+html[data-private-page] body.ps-fin-pulse main :is(button[aria-pressed="true"],#psi-add,#psi-save) :is(span,strong,small){color:#fff!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-archive-drawer,.ps-advisor-records,.psi-tracked-drawer) a{color:#443c9f!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions{margin-top:26px;padding:20px;background:#fffdf9;border:2px solid var(--recap-line);border-radius:20px;color:var(--recap-ink)}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions[hidden]{display:none!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions .ps-al-header h2{color:var(--recap-ink)!important;margin:0 0 12px!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions :is(.ps-al-item,.ps-al-status){color:var(--recap-ink)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-panel,.ps-position-card) :is(input,select,textarea){color:var(--recap-ink)!important;background:#fffdf9!important}
+
+/* White editorial canvas. Colour belongs to the explanation, not the whole page. */
+html[data-private-page] body.ps-fin-pulse,html[data-private-page="index"] body.ps-fin-pulse{
+ --ps-bg:#fff;--ps-sidebar:#fff;--ps-panel:#fff;--recap-cream:#fff;--recap-white:#fff;
+ background:#fff!important;color:#25324c!important;color-scheme:light;
+}
+html[data-private-page] body.ps-fin-pulse #site-header.site-header,html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{
+ background:#fff!important;border-right:1px solid #e1e0ea!important;
+}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-intro{background:white!important;border:0!important;box-shadow:none!important;padding:12px 0 22px!important;border-bottom:2px solid #25324c!important;border-radius:0!important}
+html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence{gap:36px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0 0 30px!important;border-bottom:1px solid #dedee8!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="01"]{--scene-tint:var(--recap-macro)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="02"]{--scene-tint:var(--recap-rotation)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="03"]{--scene-tint:var(--recap-divergence)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="04"]{--scene-tint:var(--recap-technical)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="05"]{--scene-tint:var(--recap-fundamental)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="strategy"]{--scene-tint:var(--recap-risk)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]>.ps-recap-section-label{background:var(--scene-tint)!important;color:#25324c!important;border:1px solid #35405c!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-macro-scene,.ps-recap-sector-scene){display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:stretch;margin:18px 0}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-macro-takeaway,.ps-recap-sector-note,.ps-recap-sector-chart){background:#fff;border:2px solid var(--recap-line);border-radius:22px;padding:clamp(16px,2.5vw,28px);min-width:0;box-shadow:var(--recap-shadow)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-macro-takeaway{background:var(--recap-macro)}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-macro-takeaway h3{font-size:clamp(27px,3.1vw,42px)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-macro-scene .ps-recap-gauge{margin:0;background:#fff;align-content:center;gap:18px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-macro-scene .ps-recap-gauge .ps-recap-big-number{font-size:clamp(38px,5vw,64px)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact-grid>.ps-recap-fact{border:1px solid #dedee8;border-left:4px solid #5a55cb;border-radius:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-note{background:var(--recap-rotation);align-self:center}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{display:grid;grid-template-columns:52px minmax(0,1fr) 75px;gap:8px;align-items:center;margin:10px 0;font-size:13px;font-variant-numeric:tabular-nums}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar>strong:last-child{text-align:right}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-zero-track{position:relative;height:18px;background:#f0f1f5;border-radius:5px;overflow:hidden}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-zero-track::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px solid #35405c}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-fill{position:absolute;top:0;height:100%;background:#168475;left:50%;border-radius:3px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-fill[data-sign="negative"]{left:auto;right:50%;background:#c65660}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-sector-detail-grid,.ps-recap-technical-grid,.ps-recap-scenario-grid){display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:16px;margin:18px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-contrast-grid{display:grid;gap:18px;margin:18px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-contrast-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-contrast-pair>.ps-recap-fact{background:var(--recap-divergence);border:1px solid #35405c;border-radius:14px;padding:16px;margin:0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-contrast-pair>.ps-recap-fact:nth-child(2){background:#f0eaff}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-opportunities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-opportunities>.ps-recap-visual-card:first-child{grid-column:1/-1;background:var(--recap-fundamental)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-opportunities>.ps-recap-visual-card:first-child .ps-recap-big-number{font-size:clamp(36px,5vw,60px)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-technical-grid .ps-recap-visual-card{border-top:6px solid #5b81b5!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-scenario-grid .ps-recap-visual-card:first-child{grid-column:1/-1;background:var(--recap-risk)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-scenario-grid .ps-recap-flow{grid-template-columns:repeat(3,minmax(0,1fr))}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow>.ps-recap-fact:first-child{background:#d4f5ea}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow>.ps-recap-fact:nth-child(2){background:#ffdce0}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-flow>.ps-recap-fact:nth-child(3){background:#eee9ff}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,390px),1fr));gap:20px}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind]{background:#fff!important;border-top:6px solid #d3d0db!important;gap:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="holding"]{border-top-color:#8d80d0!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="watchlist"]{border-top-color:#75b8a8!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="research"]{border-top-color:#dcab80!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-position-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-position-price{padding:14px;background:#eee9ff;border:1px solid #35405c;border-radius:15px;min-width:0}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="watchlist"] .ps-recap-position-price{background:#d4f5ea}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="research"] .ps-recap-position-price{background:#ffddc5}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card .ps-recap-position-price .ps-recap-big-number{font-size:clamp(24px,3vw,39px)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-allocation,.ps-recap-position-thesis,.ps-recap-position-valuation){border:1px solid #d5d4df;border-radius:14px;padding:12px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-allocation{background:#f0eaff;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-allocation meter{grid-column:1/-1}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-position-valuation{background:#fff0c5}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-position-thesis{background:#fff}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell{background:#f3f7ff;border-color:#aebbd1}
+@media(max-width:1000px){html[data-private-page] body.ps-fin-pulse main .ps-recap-scenario-grid .ps-recap-flow{grid-template-columns:1fr}}
+@media(max-width:760px){html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-macro-scene,.ps-recap-sector-scene,.ps-recap-contrast-pair,.ps-recap-opportunities,.ps-recap-position-hero){grid-template-columns:minmax(0,1fr)}html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{padding:0 0 24px!important}html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{grid-template-columns:44px minmax(0,1fr) 66px}}

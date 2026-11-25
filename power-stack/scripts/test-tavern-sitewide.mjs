@@ -15,3 +15,14 @@ test("Archived public War Room assets contain no owner-specific portfolio snapsh
  assert.doesNotMatch(findings,/libfile_|api\/library\/files|6742UW|Power Stack's recorded eight holdings/);
  assert(findings.includes("https://clydigital.github.io/power-stack/dossiers.html"));
 });
+
+test("recap colours are semantic, dark ink is explicit, and empty instructions stay hidden",()=>{
+ const css=read("owner-recap-sitewide.css"),radar=read("owner-radar-workspace.mjs"),intelligence=read("owner-investment-intelligence.mjs"),portfolio=read("owner-portfolio-table.mjs");
+ assert(radar.includes("currentLog.hidden=true"));assert(radar.includes("currentLog.hidden=latest.length===0"));
+ assert(!radar.includes("DAILY INVESTMENT BRIEF"));assert(!radar.includes("No current reviewed instruction. Research candidates below are not buy calls."));
+ assert(radar.includes('logHistory.id="decision-history"'));assert(!intelligence.includes("Jump to saved Action Log instructions"));
+ for(const section of ["01","02","03","04","05","strategy"])assert(css.includes('.ps-recap-panel[data-section="'+section+'"]'));
+ for(const kind of ["holding","watchlist","research","coverage"])assert(css.includes('.ps-position-card[data-kind="'+kind+'"]'));
+ assert(intelligence.includes("n.dataset.section="));assert(portfolio.includes("card.dataset.kind="));
+ assert(css.includes("color:var(--recap-ink)!important"));assert(css.includes("background:#26334d!important;color:#fff!important"));
+});

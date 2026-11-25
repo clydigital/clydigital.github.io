@@ -23,7 +23,7 @@ test("unavailable BB observation cannot silently resurrect legacy equity price",
 test("new full universe is not truncated in holdings and market selectors",()=>{const p=mergeEditionQuotes(legacy([]),edition(Array.from({length:180},(_,i)=>bb("Z"+i))),now);const q=quotes(p,now).holding;assert.equal(q.size,180);assert.equal(expandMarketRows([],[],p,q).length,180)});
 test("stale edition and old tape cannot invent a valid quote",()=>{const p=mergeEditionQuotes(legacy([legacyRow("TLT")]),edition([bb("NVDA")]),new Date("2026-12-10T00:00:00Z"));assert.equal(quotes(p,new Date("2026-12-10T00:00:00Z")).holding.size,0)});
 
-import {mountInvestmentIntelligence} from "../owner-investment-intelligence.mjs";
+import {mountInvestmentIntelligence,sectorDailyReturn} from "../owner-investment-intelligence.mjs";
 class TestNode {
  constructor(tag){this.tagName=tag;this.childNodes=[];this.listeners={};this.attrs={};this.dataset={};this.style={};this.open=false;this.value="";this._text="";this.id="";}
  set textContent(v){this._text=String(v);this.childNodes=[]}
@@ -79,4 +79,24 @@ test("sleeve weights never combine currencies or sessions and exclude the warran
 test("render individual holding with a visible level diagram, quantity date, and explicit stale session",()=>{
  const prior=globalThis.document;globalThis.document={createElement:t=>new TestNode(t),createTextNode:t=>{const n=new TestNode("#text");n.textContent=t;return n}};
  try{const row=marketRow();const card=holdingCard(row,cardEdition(),sleeveWeights([row]));assert.match(card.textContent,/RECORDED HOLDING/);assert.match(card.textContent,/2026-10-02/);assert.match(card.textContent,/D 20 EMA/);assert.match(card.textContent,/3D · approach up_to/);assert(card.all().some(x=>x.className==="ps-recap-band-marker"));const outdated=holdingCard({...row,session:"2026-11-24"},cardEdition(),new Map());assert.match(outdated.textContent,/No matching BB close/);assert(!outdated.all().some(x=>x.className==="ps-recap-band-marker"));}finally{globalThis.document=prior}
+});
+
+test("sector charts only use explicitly comparable dated secondary returns",()=>{
+ assert.equal(sectorDailyReturn("Nov25 secondary close +2.05%; BB confirmation pending."),2.05);
+ assert.equal(sectorDailyReturn("Nov25 secondary close -0.81%; BB confirmation pending."),-.81);
+ assert.equal(sectorDailyReturn("Nov24 secondary close +3.00%"),null);
+ assert.equal(sectorDailyReturn("BB matched tape pending."),null);
+});
+test("white editorial scenes show distinct compositions with retained source labels",()=>{
+ const prior=globalThis.document;globalThis.document={createElement:t=>new TestNode(t),createTextNode:t=>{const n=new TestNode("#text");n.textContent=t;return n}};
+ try{const main=new TestNode("main"),p={...edition([]),macro:{verdict:"Lean wait",score:null,previousScore:6.5,evidenceStatus:"PARTIAL"},rotation:{verdict:"Mixed"},sectors:[{name:"Materials (XLB)",performance:"Nov25 secondary close +2.05%"},{name:"Technology (XLK)",performance:"Nov25 secondary close -0.81%"},{name:"Other",performance:"Unavailable"}],divergences:[{name:"Divergence",why:"A",countercase:"B",resolution:"C"}]};
+ mountInvestmentIntelligence("index",main,p);const all=main.all();
+ assert(all.some(x=>x.className==="ps-recap-macro-scene"));
+ assert(all.some(x=>x.className==="ps-recap-sector-scene"));
+ const bars=all.filter(x=>x.className==="ps-recap-sector-fill");assert.equal(bars.length,2);assert.equal(bars[0].dataset.sign,"positive");assert.equal(bars[1].dataset.sign,"negative");
+ assert(all.some(x=>x.className==="ps-recap-contrast-pair"));
+ assert.match(main.textContent,/Dated secondary 1D returns/);
+ const row=marketRow();const card=holdingCard(row,cardEdition(),sleeveWeights([row]));
+ for(const cls of ["ps-recap-position-hero","ps-recap-position-price","ps-recap-allocation","ps-recap-position-valuation"])assert(card.all().some(x=>x.className===cls),cls);
+ }finally{globalThis.document=prior}
 });
