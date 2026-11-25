@@ -72,11 +72,11 @@ const modules={
  advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-sitewide4"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
- index:()=>import("./owner-decision-desk.mjs?v=20261124-recap3"),
- table:()=>import("./owner-portfolio-table.mjs?v=20261124-dailyclose1"),
+ index:()=>import("./owner-decision-desk.mjs?v=20261126-bbfirst"),
+ table:()=>import("./owner-portfolio-table.mjs?v=20261126-bbfirst"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
- ideas:()=>import("./owner-ideas-tracker.mjs?v=20261120-one-gate1"),
+ ideas:()=>import("./owner-ideas-tracker.mjs?v=20261126-bbfirst"),
  research:()=>import("./owner-research-theses.mjs?v=20261114-ps1")
 };
 const warmed=new Map();
@@ -96,6 +96,8 @@ async function load(styleReady){
  const page=pages?.find(row=>row.page_key===(PAGE==="ideas"?"index":PAGE));
  if(error||!page?.body_html){deny("Owner access could not be verified. Sign in with the registered Google account.");return;}
  const roomsPage=pages.find(row=>row.page_key==="index");
+ // One authenticated manual edition read for both existing tools and new intelligence views.
+ const editionPromise=PAGE==="dossiers"?Promise.resolve(null):Promise.resolve(db.from("power_stack_intelligence_editions").select("edition_as_of,payload").eq("owner_user_id",user.id).order("edition_as_of",{ascending:false}).limit(1).maybeSingle()).then(({data,error})=>error?null:data?.payload??null,()=>null);
  let content;
  if(PAGE==="ideas"){content=document.createElement("main");content.id="owner-ideas-content";}
  else{content=secureMain(page.body_html);}
@@ -124,7 +126,7 @@ async function load(styleReady){
  if(PAGE==="index"){
   try{
    const {initDecisionDesk}=await readyModule("index");
-   await initDecisionDesk(db,content,user,{deferInitial:true});
+   await initDecisionDesk(db,content,user,{deferInitial:true,edition:await editionPromise});
   }catch(error){
    const notice=document.createElement("p");
    notice.setAttribute("role","status");
@@ -146,7 +148,7 @@ async function load(styleReady){
     readyModule("table"),readyModule("ledger")
    ]);
    // Both use the single verified client/identity. These are data reads, not login gates.
-   initPortfolioTable(db,slot,user).catch(e=>{slot.textContent="Private portfolio table unavailable.";console.error(e);});
+   initPortfolioTable(db,slot,user,{edition:await editionPromise}).catch(e=>{slot.textContent="Private portfolio table unavailable.";console.error(e);});
    initOwnerPortfolio(db,user).catch(e=>console.error("Private ledger unavailable",e));
   }catch(e){slot.textContent="Private portfolio interface unavailable; no account data displayed.";console.error("Portfolio UI unavailable",e);}
  }
@@ -161,7 +163,7 @@ async function load(styleReady){
  if(PAGE==="ideas"){
   try{
    const {initIdeasTracker}=await readyModule("ideas");
-   await initIdeasTracker(db,content,user,{deferInitial:true});
+   await initIdeasTracker(db,content,user,{deferInitial:true,edition:await editionPromise});
   }catch(error){
    content.replaceChildren();
    const alert=document.createElement("p");
@@ -224,11 +226,9 @@ async function load(styleReady){
  // Dossiers are not an input or a dependency; no public or cached fallback.
  if(PAGE!=="dossiers"){
   try{
-   const {data:edition,error:editionError}=await db.from("power_stack_intelligence_editions")
-    .select("edition_as_of,payload").eq("owner_user_id",user.id)
-    .order("edition_as_of",{ascending:false}).limit(1).maybeSingle();
+   const edition=await editionPromise;
    const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261126-v2");
-   if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,editionError?null:edition?.payload);
+   if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,edition);
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }
  await styleReady;
