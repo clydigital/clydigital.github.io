@@ -69,11 +69,11 @@ function privateStyles(){
 // These modules contain presentation code only. Download in parallel with
 // auth/RLS; constructors are called only after authorization succeeds.
 const modules={
- advisor:()=>import("./owner-advisor-presentation.mjs?v=20261124-sitewide4"),
+ advisor:()=>import("./owner-advisor-presentation.mjs?v=20261126-recapcards1"),
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
  index:()=>import("./owner-decision-desk.mjs?v=20261126-bbfirst"),
- table:()=>import("./owner-portfolio-table.mjs?v=20261126-bbfirst"),
+ table:()=>import("./owner-portfolio-table.mjs?v=20261126-recapcards1"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
  ideas:()=>import("./owner-ideas-tracker.mjs?v=20261126-bbfirst"),
@@ -227,7 +227,7 @@ async function load(styleReady){
  if(PAGE!=="dossiers"){
   try{
    const edition=await editionPromise;
-   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261126-v2");
+   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261126-recapcards1");
    if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,edition);
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }
