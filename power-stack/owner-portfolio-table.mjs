@@ -182,6 +182,62 @@ function rowValue(r,key){
  if(key==="quantity")return r.held?r.quantity:null;
  return r[key]??null;
 }
+
+// Presentation-only: join the owner snapshot to the same manual BB edition by listing identity.
+const cardAliases={"688825":"688825.SS","DAYANG":"5141.KL","HIBISCS":"5199.KL","MISC":"3816.KL","MNHLDG":"0245.KL","TENAGA":"5347.KL","YTLPOWR":"6742.KL"};
+export function cardResearch(row,edition){
+ const id=cardAliases[row.ticker]||row.ticker;
+ const u=(edition?.universe||[]).find(x=>x.ticker===id);
+ const a=(edition?.opportunities||[]).find(x=>x.ticker===id||x.ticker===row.ticker);
+ const obs=u?.marketObservation;
+ const same=obs?.status==="SOURCE_DATED"&&obs.asOf===row.session&&obs.currency===row.currency&&obs.price===row.close;
+ const theme=String(a?.theme||u?.theme||"").toUpperCase();
+ const realEstate=theme==="REAL_ESTATE"||String(a?.sector||"").toLowerCase()==="real estate";
+ const technical=(edition?.technicals||[]).find(x=>String(x.name||"").endsWith("("+id+")")&&x.asOf===row.session);
+ const scan=u?.emaScan;
+ const levels=same&&!realEstate&&scan?.asOf===row.session?(scan.observations||[]).filter(x=>x.warmup==="READY"&&x.asOf===row.session&&["D","W","M"].includes(x.frame)&&[20,50,100,200].includes(x.period)&&[x.ema,x.lower,x.upper,x.distancePct].every(Number.isFinite)&&x.lower<=x.ema&&x.ema<=x.upper&&x.lower>0&&x.multiplier===({20:1,50:1,100:.5,200:.25})[x.period]):[];
+ return {a,u,same,realEstate,technical:same&&!realEstate?technical:null,levels};
+}
+export function sleeveWeights(lines){
+ const totals=new Map(),weights=new Map();
+ for(const r of lines){if(!r.held||!r.currency||!r.session||!Number.isFinite(r.quantity)||r.quantity<=0||!Number.isFinite(r.close)||r.close<=0||r.ticker==="6742UW")continue;
+ const key=r.currency+"|"+r.session;totals.set(key,(totals.get(key)||0)+r.quantity*r.close);}
+ for(const r of lines){const key=r.currency+"|"+r.session;if(r.held&&r.ticker!=="6742UW"&&Number.isFinite(r.quantity)&&r.quantity>0&&Number.isFinite(r.close)&&r.close>0&&totals.has(key))weights.set(r.ticker,{value:r.quantity*r.close,total:totals.get(key),weight:100*r.quantity*r.close/totals.get(key),currency:r.currency,session:r.session});}
+ return weights;
+}
+function fact(root,label,value){const p=el("p",null,"ps-recap-fact");p.append(el("strong",label),document.createTextNode(String(value||"Not recorded")));root.append(p);}
+function detail(root,label){const d=el("details",null,"ps-recap-archive-drawer");d.append(el("summary",label));root.append(d);return d;}
+function holdingCard(row,edition,weights){
+ const {a,u,same,realEstate,technical,levels}=cardResearch(row,edition),w=weights.get(row.ticker);
+ const card=el("article",null,"ps-recap-visual-card ps-position-card");
+ card.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
+ card.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
+ const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
+ if(row.held){fact(card,"Recorded units",row.quantity===null?"Unknown":fmt(row.quantity,8)+" · quantity date "+(row.quantityAsOf||"unknown"));if(w){fact(card,"Indicative sleeve value",w.currency+" "+fmt(w.value)+" · "+w.weight.toFixed(1)+"% of valued "+w.currency+" sleeve · "+w.session);const m=el("meter");m.min=0;m.max=100;m.value=w.weight;m.setAttribute("aria-label","Share of same-currency same-session valued sleeve, not total portfolio");card.append(m);}else fact(card,"Indicative value","Not calculable from matched recorded quantity and price");}
+ fact(card,"Research posture",a?.evidenceStatus==="VERIFIED"?a.action:"RESEARCH / RECHECK · no fresh approval");
+ if(row.action)fact(card,"Saved owner decision",row.action+" · review date/evidence before acting");
+ fact(card,"Why / thesis",a?.why||row.thesis||"Issuer underwriting pending");
+ const ec=a?.entryCheck;
+ if(same&&ec?.currency===row.currency&&ec.asOf===row.session&&ec.price===row.close&&Number.isFinite(ec.ceiling)&&ec.ceiling>0){fact(card,"Valuation ceiling",ec.currency+" "+fmt(ec.ceiling,3)+" · "+(row.close<=ec.ceiling?"Price-only pass":((1-ec.ceiling/row.close)*100).toFixed(2)+"% further decline required")+" · not a trade signal");}
+ else fact(card,"Key valuation / entry levels",a?.entry||row.entry||"No verified private level recorded");
+ if(a?.valuation)fact(card,"Normalised valuation",a.valuation);
+ const tech=detail(card,"Technical levels · 20 / 50 / 100 / 200 EMA & SD");
+ if(realEstate)fact(tech,"Valuation only","Real estate exception: no EMA/SD entry gate.");
+ else if(!same)fact(tech,"Technical status","No matching BB close and technical observation. Do not mix sessions.");
+ else{
+  fact(tech,"EMA framework","D / W / M · 20 and 50 ±1 SD; 100 ±0.5 SD; 200 ±0.25 SD. Completed-session observations only.");
+  if(levels.length){const grid=el("div",null,"ps-recap-ema-grid");for(const v of levels){const b=el("div",null,"ps-recap-ema-cell");b.append(el("strong",v.frame+" "+v.period+" EMA"),el("span",row.currency+" "+fmt(v.ema,3)),el("small","SD "+fmt(v.lower,3)+" – "+fmt(v.upper,3)),el("small",v.side+" EMA · "+pct(v.distancePct)+" · "+String(v.band).replaceAll("_"," ")));for(const day of ["1","3","5"]){const z=v.windows?.[day];if(z){const events=[z.approach&&z.approach!=="none"?"approach "+z.approach:null,z.emaCross&&z.emaCross!=="none"?"EMA "+z.emaCross:null,z.upperCross&&z.upperCross!=="none"?"upper SD "+z.upperCross:null,z.lowerCross&&z.lowerCross!=="none"?"lower SD "+z.lowerCross:null].filter(Boolean);if(events.length)b.append(el("small",day+"D · "+events.join(" · ")));}}grid.append(b);}tech.append(grid);fact(tech,"Coverage","Only verified READY observations appear; other timeframe/period levels unavailable.");}
+  else if(technical){fact(tech,"Verified interesting zone",technical.zone);fact(tech,"Direction / band state",technical.position);}
+  else fact(tech,"EMA / SD coverage","No verified structured levels in this manual edition; not a neutral signal.");
+  if(a?.technical)fact(tech,"Dated technical context",a.technical);
+ }
+ const more=detail(card,"Investment case, risk & evidence");for(const [label,val] of [["Business",a?.business],["Sector / theme",a?.sector||u?.theme],["Customers / suppliers",a?.relationships],["Downside",a?.downside],["Catalyst",a?.catalyst],["Invalidation",a?.invalidation||row.invalidation],["Portfolio fit",a?.portfolioFit]])if(val)fact(more,label,val);
+ for(const v of a?.scenarios||[])fact(more,v.name||"Scenario",[v.impact,v.why,v.trigger,v.failure].filter(Boolean).join(" · "));
+ for(const v of a?.hedges||[])fact(more,v.name||"Hedge",[v.mechanism,v.cost,v.failure].filter(Boolean).join(" · "));
+ for(const ev of a?.evidence||[]){if(ev.claim)fact(more,ev.asOf||"Evidence",ev.claim);try{const url=new URL(ev.url);if(url.protocol==="https:"&&!url.username&&!url.password){const link=el("a","Original evidence");link.href=url.href;link.target="_blank";link.rel="noopener noreferrer";more.append(link);}}catch{}}
+ return card;
+}
+
 export async function initPortfolioTable(db,host,user,{edition=null}={}){
  if(!user?.id){host.textContent="Owner session unavailable; no private portfolio displayed.";return;}
  const {data,error}=await db.from("power_stack_owner_snapshots")
@@ -201,7 +257,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
  const {lines:recorded,asOf}=project(data.snapshot,validFeed);
  const trackedIdeas=ideaResult.error?[]:(ideaResult.data||[]);
  const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data);
- const lines=merged.lines;
+ const lines=merged.lines;const weights=sleeveWeights(lines);
  const scopeFromHash=hash=>({"#holdings":"holdings","#watchlist":"watchlist",
   "#bonds":"bonds","#research":"ideas","#markets":"markets"})[hash]||"all";
  let sort="ticker",direction="asc",scope=scopeFromHash(location.hash),search="",expanded=null;
@@ -239,7 +295,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
    if(location.hash!==hashes[key])history.replaceState(null,"",location.pathname+hashes[key]);
    render();});chips.append(b);
  }
- const wrap=el("div",null,"table-wrap"),table=el("table",null,"ps-table"),
+ const cards=el("div",null,"ps-recap-grid ps-position-grid");host.append(cards);const compare=el("details",null,"ps-recap-archive-drawer");compare.append(el("summary","Compact comparison table · sort by column"));host.append(compare);const wrap=el("div",null,"table-wrap"),table=el("table",null,"ps-table"),
   thead=el("thead"),hrow=el("tr"),tbody=el("tbody");
  for(const [key,label,numeric] of columns){
   const th=el("th"),button=el("button",label+" ↕","ps-sort");button.type="button";
@@ -247,7 +303,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
    else{sort=key;direction=numeric?"desc":"asc";}render();});
   th.append(button);hrow.append(th);
  }
- thead.append(hrow);table.append(thead,tbody);wrap.append(table);host.append(wrap);
+ thead.append(hrow);table.append(thead,tbody);wrap.append(table);compare.append(wrap);
  host.append(el("p","Prices are delayed. Recorded holdings and available cash require broker reconciliation; unavailable quotes show —.","ps-table-note"));
  function render(){
   for(const b of chips.children)b.setAttribute("aria-pressed",String(b.dataset.scope===scope));
@@ -266,7 +322,8 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
    const v=typeof av==="number"&&typeof bv==="number"?av-bv:String(av).localeCompare(String(bv));
    return v*mult||a.ticker.localeCompare(b.ticker);
   });
-  tbody.replaceChildren();
+  tbody.replaceChildren();cards.replaceChildren();
+  const shown=selected.filter(r=>r.ticker!=="6742UW");for(const r of shown)cards.append(holdingCard(r,edition,weights));if(!shown.length)cards.append(el("p","No matching instruments."));
   if(!selected.length){const tr=el("tr");const td=cell(tr,"No matching instruments.");td.colSpan=8;tbody.append(tr);return;}
   for(const r of selected){
    const tr=el("tr"),th=el("th"),button=el("button",r.ticker+" · "+r.name,"ps-ticker");
