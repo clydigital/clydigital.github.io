@@ -209,7 +209,7 @@ function fact(root,label,value){const p=el("p",null,"ps-recap-fact");p.append(el
 function detail(root,label){const d=el("details",null,"ps-recap-archive-drawer");d.append(el("summary",label));root.append(d);return d;}
 export function holdingCard(row,edition,weights){
  const {a,u,same,realEstate,technical,levels}=cardResearch(row,edition),w=weights.get(row.ticker);
- const card=el("article",null,"ps-recap-visual-card ps-position-card");
+ const card=el("article",null,"ps-recap-visual-card ps-position-card");card.dataset.kind=row.held?"holding":row.onWatchlist?"watchlist":row.ideaTracked?"research":"coverage";
  card.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
  card.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
  const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
