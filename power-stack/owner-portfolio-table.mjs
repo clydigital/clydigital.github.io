@@ -210,17 +210,17 @@ function detail(root,label){const d=el("details",null,"ps-recap-archive-drawer")
 export function holdingCard(row,edition,weights){
  const {a,u,same,realEstate,technical,levels}=cardResearch(row,edition),w=weights.get(row.ticker);
  const card=el("article",null,"ps-recap-visual-card ps-position-card");card.dataset.kind=row.held?"holding":row.onWatchlist?"watchlist":row.ideaTracked?"research":"coverage";
- card.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
- card.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
- const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
- if(row.held){fact(card,"Recorded units",row.quantity===null?"Unknown":fmt(row.quantity,8)+" · quantity date "+(row.quantityAsOf||"unknown"));if(w){fact(card,"Indicative sleeve value",w.currency+" "+fmt(w.value)+" · "+w.weight.toFixed(1)+"% of valued "+w.currency+" sleeve · "+w.session);const m=el("meter");m.min=0;m.max=100;m.value=w.weight;m.setAttribute("aria-label","Share of same-currency same-session valued sleeve, not total portfolio");card.append(m);}else fact(card,"Indicative value","Not calculable from matched recorded quantity and price");}
- fact(card,"Research posture","RESEARCH / RECHECK · validate current underwriting before action");
- if(row.action)fact(card,"Saved owner decision",row.action+" · review date/evidence before acting");
- fact(card,"Why / thesis",a?.why||row.thesis||"Issuer underwriting pending");
+ const hero=el("div",null,"ps-recap-position-hero");const identity=el("div",null,"ps-recap-position-identity");const priceBox=el("div",null,"ps-recap-position-price");identity.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
+ priceBox.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
+ hero.append(identity,priceBox);card.append(hero);const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
+ if(row.held){const allocation=el("div",null,"ps-recap-allocation");fact(allocation,"Recorded units",row.quantity===null?"Unknown":fmt(row.quantity,8)+" · quantity date "+(row.quantityAsOf||"unknown"));if(w){fact(allocation,"Indicative sleeve value",w.currency+" "+fmt(w.value)+" · "+w.weight.toFixed(1)+"% of valued "+w.currency+" sleeve · "+w.session);const m=el("meter");m.min=0;m.max=100;m.value=w.weight;m.setAttribute("aria-label","Share of same-currency same-session valued sleeve, not total portfolio");allocation.append(m);}else fact(allocation,"Indicative value","Not calculable from matched recorded quantity and price");card.append(allocation);}
+ const thesis=el("div",null,"ps-recap-position-thesis");fact(thesis,"Research posture","RESEARCH / RECHECK · validate current underwriting before action");
+ if(row.action)fact(thesis,"Saved owner decision",row.action+" · review date/evidence before acting");
+ fact(thesis,"Why / thesis",a?.why||row.thesis||"Issuer underwriting pending");card.append(thesis);const valuation=el("div",null,"ps-recap-position-valuation");
  const ec=a?.entryCheck;
- if(same&&ec?.currency===row.currency&&ec.asOf===row.session&&ec.price===row.close&&Number.isFinite(ec.ceiling)&&ec.ceiling>0){fact(card,"Valuation ceiling",ec.currency+" "+fmt(ec.ceiling,3)+" · "+(row.close<=ec.ceiling?"Price-only pass":((1-ec.ceiling/row.close)*100).toFixed(2)+"% further decline required")+" · not a trade signal");}
- else fact(card,"Key valuation / entry levels",a?.entry||row.entry||"No verified private level recorded");
- if(a?.valuation)fact(card,"Normalised valuation",a.valuation);
+ if(same&&ec?.currency===row.currency&&ec.asOf===row.session&&ec.price===row.close&&Number.isFinite(ec.ceiling)&&ec.ceiling>0){fact(valuation,"Valuation ceiling",ec.currency+" "+fmt(ec.ceiling,3)+" · "+(row.close<=ec.ceiling?"Price-only pass":((1-ec.ceiling/row.close)*100).toFixed(2)+"% further decline required")+" · not a trade signal");}
+ else fact(valuation,"Key valuation / entry levels",a?.entry||row.entry||"No verified private level recorded");
+ if(a?.valuation)fact(valuation,"Normalised valuation",a.valuation);card.append(valuation);
  const tech=detail(card,"Technical levels · 20 / 50 / 100 / 200 EMA & SD");if(row.held)tech.open=true;
  if(realEstate)fact(tech,"Valuation only","Real estate exception: no EMA/SD entry gate.");
  else if(!same)fact(tech,"Technical status","No matching BB close and technical observation. Do not mix sessions.");
