@@ -255,3 +255,82 @@ html[data-private-page] body.ps-fin-pulse main .ps-recap-position-thesis{backgro
 html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell{background:#f3f7ff;border-color:#aebbd1}
 @media(max-width:1000px){html[data-private-page] body.ps-fin-pulse main .ps-recap-scenario-grid .ps-recap-flow{grid-template-columns:1fr}}
 @media(max-width:760px){html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-macro-scene,.ps-recap-sector-scene,.ps-recap-contrast-pair,.ps-recap-opportunities,.ps-recap-position-hero){grid-template-columns:minmax(0,1fr)}html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{padding:0 0 24px!important}html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{grid-template-columns:44px minmax(0,1fr) 66px}}
+
+
+/* 26 Nov 2026 — Paper & Play. Final authenticated editorial layer.
+   No layout state, source data, auth or decision logic is changed. */
+html[data-private-page] body.ps-fin-pulse,html[data-private-page="index"] body.ps-fin-pulse{
+ --recap-cream:#faf5eb;--recap-white:#fffdf8;--recap-ink:#28334b;
+ --recap-line:#41465d;--recap-purple:#6354bd;--recap-link:#49409d;
+ --recap-muted:#515b70;--recap-shadow:4px 5px 0 #41465d20;
+ --ps-bg:#faf5eb;--ps-sidebar:#f2eadf;--ps-panel:#fffdf8;--ps-fg:#28334b;
+ background:var(--recap-cream)!important;color:var(--recap-ink)!important;
+ font:19px/1.58 Figtree,"Trebuchet MS",system-ui,sans-serif!important;
+}
+html[data-private-page] body.ps-fin-pulse main{font:19px/1.58 Figtree,"Trebuchet MS",system-ui,sans-serif!important}
+html[data-private-page] body.ps-fin-pulse #site-header.site-header,html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{
+ background:#f2eadf!important;border-right:1px solid #d9cebd!important;
+}
+html[data-private-page] body.ps-fin-pulse #site-header .brand,html[data-private-page] body.ps-fin-pulse #site-header .brand em{font:900 23px/1.15 ui-rounded,"Trebuchet MS",Figtree,sans-serif!important;letter-spacing:-.055em!important}
+html[data-private-page] body.ps-fin-pulse #site-header .brand em{color:#6354bd!important}
+html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:not(.brand){font-size:17px!important;line-height:1.4!important;border-radius:14px!important}
+html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a[aria-current="page"]{background:#e0d7ff!important;color:#332a70!important;box-shadow:2px 2px 0 #4d41772b!important}
+html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a[aria-current="page"]:hover{background:#d5caff!important;color:#332a70!important}
+html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-more>summary{font-size:16px!important;color:#495671!important}
+html[data-private-page] body.ps-fin-pulse main :is(h1,h2,h3,h4){font-family:ui-rounded,"Trebuchet MS",Figtree,system-ui,sans-serif!important;letter-spacing:-.035em!important}
+html[data-private-page] body.ps-fin-pulse main h1,html[data-private-page="index"] body.ps-fin-pulse #workspace #action-log .ps-al-header h1{font-size:clamp(40px,5.4vw,72px)!important;line-height:1.04!important}
+html[data-private-page] body.ps-fin-pulse main h2,html[data-private-page] body.ps-fin-pulse main .ps-recap-panel>h2{font-size:clamp(29px,3.5vw,44px)!important;line-height:1.15!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-visual-card h3,html[data-private-page] body.ps-fin-pulse main .ps-position-card h3{font-size:clamp(23px,2.7vw,33px)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-lead{font-size:clamp(21px,2.35vw,28px)!important;line-height:1.32!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-fact,.ps-recap-visual-card,.ps-recap-macro-takeaway,.ps-recap-sector-note,.ps-position-card) :is(p,li,dd){font-size:18px!important;line-height:1.55!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact{font-size:18px!important;line-height:1.55!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact>strong{font-size:13px!important;letter-spacing:.035em!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-fact,.ps-recap-gauge,.ps-position-card) small{font-size:14px!important;line-height:1.45!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-state{font-size:14px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence{gap:38px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-intro{position:relative;background:#ffead7!important;border:2px solid var(--recap-line)!important;border-radius:30px 30px 30px 9px!important;box-shadow:var(--recap-shadow)!important;padding:clamp(24px,4vw,46px)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-intro::after{content:"";display:block;width:90px;height:9px;border-radius:99px;background:linear-gradient(90deg,#a699ec 0 31%,transparent 31% 35%,#7bbda9 35% 65%,transparent 65% 69%,#e6a77d 69%);margin-top:20px;pointer-events:none}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{background:transparent!important;border:0!important;border-bottom:2px dashed #d7cbbc!important;border-radius:0!important;padding:12px 0 34px!important;box-shadow:none!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]>.ps-recap-section-label{font-size:13px!important;padding:8px 15px!important;border:1.5px solid var(--recap-line)!important;border-radius:999px!important;box-shadow:2px 2px 0 #41465d26}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-kicker{font-size:13px!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-visual-card,.ps-recap-macro-takeaway,.ps-recap-sector-chart,.ps-recap-sector-note,.ps-recap-gauge){border-radius:24px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card{background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card h3{margin-bottom:12px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact-grid>.ps-recap-fact{padding:17px!important;border-radius:16px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{font-size:15px!important;grid-template-columns:58px minmax(0,1fr) 85px;gap:10px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-zero-track{height:22px;border-radius:999px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-band{height:17px}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-moves .ps-recap-move{font-size:17px!important;padding:12px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell{padding:13px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind]{border-radius:24px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-archive-drawer,.ps-advisor-records,.ps-owner-table,.psi-card,.ps-dossier-card,.pscr-card){border-radius:22px!important;background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-archive-drawer,.ps-recap-archive-drawer>summary,.ps-table-note,.psi-feed,.psi-disclaimer){font-size:15px!important;line-height:1.5!important}
+html[data-private-page] body.ps-fin-pulse main :is(button,input,select,textarea){font-size:15px!important}
+html[data-private-page] body.ps-fin-pulse main :is(th,td){font-size:14px!important;line-height:1.45!important}
+html[data-private-page] body.ps-fin-pulse main thead th{font-size:13px!important;background:#eee8fa!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-table,.ownerTable,.researchTable,.psx-table) :is(td,th) small{font-size:12px!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item{background:var(--recap-white)!important;border-radius:23px 23px 23px 8px!important;border:1.5px solid var(--recap-line)!important;box-shadow:var(--recap-shadow)!important;padding:clamp(20px,3vw,30px)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item h3{font-size:clamp(25px,3vw,36px)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item p,html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-candidate-card dd{font-size:19px!important;line-height:1.5!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item .ps-al-meta,html[data-private-page="index"] body.ps-fin-pulse #workspace :is(.ps-al-ticker,.ps-al-industry,.ps-al-detail summary,.ps-al-history summary){font-size:15px!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-status{font-size:18px!important;border-radius:16px!important;background:#e9e1ff!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-candidate-card{border-radius:25px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace[data-ps-view="war"] #ps-daily-war-room{background:var(--recap-white)!important;border-radius:24px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-card,.psi-card){background:var(--recap-white)!important;border:1.5px solid var(--recap-line)!important;border-radius:22px!important;box-shadow:var(--recap-shadow)!important;padding:22px!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-lead,.pso-thesis,.pso-step p,.pso-condition span,.psi-detail,.psv-plan-line p){font-size:17px!important;line-height:1.55!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content .psi-hero h1{font-size:clamp(38px,4.8vw,62px)!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-ticker,.psi-ticker){font-size:28px!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-company,.psi-card-head>div:first-child>small){font-size:16px!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-step strong,.pso-details summary,.pso-details a,.pso-meta span,.pso-direction){font-size:14px!important}
+@media(max-width:800px){
+ html[data-private-page] body.ps-fin-pulse #site-header.site-header,html[data-private-page="index"] body.ps-fin-pulse #site-header.site-header{border-right:0!important;border-bottom:1px solid #d9cebd!important}
+ html[data-private-page] body.ps-fin-pulse #site-header .ps-advisor-nav>a:not(.brand){font-size:14px!important;min-height:38px!important;padding:8px!important}
+ html[data-private-page] body.ps-fin-pulse main{font-size:17px!important;line-height:1.55!important}
+ html[data-private-page] body.ps-fin-pulse main h1,html[data-private-page="index"] body.ps-fin-pulse #workspace #action-log .ps-al-header h1{font-size:clamp(36px,8vw,52px)!important}
+ html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{padding:6px 0 28px!important}
+ html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{grid-template-columns:42px minmax(0,1fr) 67px;font-size:13px!important}
+ html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-fact,.ps-recap-visual-card,.ps-position-card) :is(p,li,dd),html[data-private-page] body.ps-fin-pulse main .ps-recap-fact{font-size:17px!important}
+ html[data-private-page] body.ps-fin-pulse main .ps-recap-moves .ps-recap-move{padding:8px!important;font-size:15px!important}
+ html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item p,html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-candidate-card dd{font-size:17px!important}
+}
+@media(prefers-reduced-motion:reduce){html[data-private-page] body.ps-fin-pulse main *{transition:none!important;animation:none!important}}
