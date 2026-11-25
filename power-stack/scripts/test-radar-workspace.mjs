@@ -302,7 +302,7 @@ test("Action Log is the owner-gated homepage and War Room is deep-linked",()=>{
   assert(radar.includes("Review overdue. Do not treat the previous action as a fresh instruction."));
   assert(!/\.insert\(|\.upsert\(|placeOrder/.test(radar));
   assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
-  assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF})'));
+  assert(radar.includes('mountWarRoom(warRoomDrawer,getState,{asOf:RESEARCH_ASOF,edition})'));
   assert(radar.includes('deskTools.id="desk-tools"'));
   assert(radar.includes('deskTools.open=true'));
   assert(radar.includes('warRoomDrawer.id="war-room"'));
@@ -405,3 +405,5 @@ test("all desk results are actual source-dated findings with inference and a cal
  assert(!war.includes("STANDING RESEARCH MANDATE"));
  assert(!war.includes("YOUR ORDERS"));
 });
+
+test("Current War Room remains in the active drawer rather than the historical archive",()=>{const radar=read("owner-radar-workspace.mjs");assert(!radar.includes('historical)"),warRoom.root'));assert(radar.includes('const war=target==="#war-room"||["#warroom-findings","#warroom-team","#warroom-changes"].includes(target)'));});
