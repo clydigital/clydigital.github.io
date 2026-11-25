@@ -139,3 +139,53 @@ html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell .ps-recap-band
 html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-section-label{white-space:normal}
 html[data-private-page] body.ps-fin-pulse main .ps-position-grid>article:focus-within{outline:2px solid #5a55cb;outline-offset:2px}
 html[data-private-page] body.ps-fin-pulse main .ps-recap-archive-links>a{border:2px solid var(--recap-line);border-radius:16px;box-shadow:var(--recap-shadow)}
+
+/* Final contrast pass. Semantic surfaces, not alternating colours by row order. */
+html[data-private-page] body.ps-fin-pulse{
+ --recap-ink:#25324c;--recap-muted:#4b5871;--recap-link:#443c9f;
+ --recap-macro:#e4ddff;--recap-rotation:#d4f5ea;--recap-divergence:#ffddc5;
+ --recap-technical:#d9ebff;--recap-fundamental:#fff0c5;
+ --recap-risk:#ffdce0;--recap-white:#fffdf9;
+}
+html[data-private-page] body.ps-fin-pulse main .ps-investment-intelligence,
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid{
+ color:var(--recap-ink)!important;isolation:isolate;
+}
+/* Explicit foregrounds defeat inherited white text from older dark themes.
+   Restore light text only where a deliberately dark surface requires it. */
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid,.ps-owner-table,.psi-card,.ps-advisor-records,.ps-recap-archive-drawer) :is(p,span,strong,b,small,em,li,dt,dd,label,summary,th,td){
+ color:var(--recap-ink)!important;text-shadow:none!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid,.ps-owner-table,.psi-card,.ps-advisor-records,.ps-recap-archive-drawer) :is(a,summary){
+ color:var(--recap-link)!important;text-decoration-color:currentColor!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) :is(.ps-recap-kicker,.ps-recap-section-label){
+ background:#26334d!important;color:#fff!important;
+}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) :is(.ps-recap-big-number,.ps-recap-lead){color:var(--recap-ink)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) .ps-recap-fact>strong{color:#443c9f!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) small:not(.ps-recap-section-label){color:var(--recap-muted)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-investment-intelligence,.ps-position-grid) .ps-recap-state{color:#634719!important;background:#fff0c5!important;border:1px solid #ae8540;border-radius:8px;padding:6px 9px;width:fit-content}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="01"]{background:var(--recap-macro)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="02"]{background:var(--recap-rotation)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="03"]{background:var(--recap-divergence)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="04"]{background:var(--recap-technical)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="05"]{background:var(--recap-fundamental)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section="strategy"]{background:var(--recap-risk)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card{background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section] .ps-recap-visual-card .ps-recap-fact-grid>.ps-recap-fact{background:var(--recap-white)!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="holding"]{background:#e4ddff!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="watchlist"]{background:#d4f5ea!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="research"]{background:#ffddc5!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-card[data-kind="coverage"]{background:#fffdf9!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="up"] :is(strong,small){color:#205847!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="down"] :is(strong,small){color:#8c342c!important}
+html[data-private-page] body.ps-fin-pulse main .ps-position-grid .ps-recap-move[data-direction="unknown"] :is(strong,small){color:#4b5871!important}
+html[data-private-page] body.ps-fin-pulse main :is(button[aria-pressed="true"],#psi-add,#psi-save){background:#443c9f!important;color:#fff!important}
+html[data-private-page] body.ps-fin-pulse main :is(button[aria-pressed="true"],#psi-add,#psi-save) :is(span,strong,small){color:#fff!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-archive-drawer,.ps-advisor-records,.psi-tracked-drawer) a{color:#443c9f!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions{margin-top:26px;padding:20px;background:#fffdf9;border:2px solid var(--recap-line);border-radius:20px;color:var(--recap-ink)}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions[hidden]{display:none!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions .ps-al-header h2{color:var(--recap-ink)!important;margin:0 0 12px!important}
+html[data-private-page="index"] body.ps-fin-pulse #workspace #ps-current-instructions :is(.ps-al-item,.ps-al-status){color:var(--recap-ink)!important}
+html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-panel,.ps-position-card) :is(input,select,textarea){color:var(--recap-ink)!important;background:#fffdf9!important}
