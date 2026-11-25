@@ -218,8 +218,8 @@ test("readability layer loads last and keeps high contrast, larger fonts and mob
 test("browser module versions invalidate cached pre-12-Nov quote display and earlier stylesheet imports",()=>{
  const gate=read("auth-gate.mjs");
  const desk=read("owner-decision-desk.mjs"),ideas=read("owner-ideas-tracker.mjs");
- assert(gate.includes('owner-decision-desk.mjs?v=20261124-recap3'));
- assert(gate.includes('owner-ideas-tracker.mjs?v=20261120-one-gate1'));
+ assert(gate.includes('owner-decision-desk.mjs?v=20261126-bbfirst'));
+ assert(gate.includes('owner-ideas-tracker.mjs?v=20261126-bbfirst'));
  assert(desk.includes('owner-opportunity-terminal.mjs?v=20261117-agri1'));
  assert(ideas.includes('owner-opportunity-terminal.mjs?v=20261117-agri1'));
  for(const page of ["index","ideas","archive","research","sectors","decisions","portfolio","dossiers"]){
