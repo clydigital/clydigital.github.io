@@ -1,4 +1,4 @@
-import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261126-bbfirst";
 import {assessIdea,sweepSignals,approvedEvidence} from "./owner-ideas-core.mjs";
 import {isBondEtf} from "./owner-market-views.mjs";
 import {entryAlert,rankEntryIdeas} from "./owner-entry-plans.mjs";
@@ -18,7 +18,7 @@ const get=(form,name)=>String(form.elements.namedItem(name)?.value||"").trim();
 const num=v=>v===""?null:Number(v);
 const clean=(v,n=450)=>String(v||"").trim().slice(0,n);
 
-export async function initIdeasTracker(db,main,user,{deferInitial=false}={}){
+export async function initIdeasTracker(db,main,user,{deferInitial=false,edition=null}={}){
  if(!user?.id||!main)throw Error("Private owner access required");
  main.className="psi-shell";
  main.innerHTML=`
@@ -210,7 +210,7 @@ export async function initIdeasTracker(db,main,user,{deferInitial=false}={}){
  async function refresh(){
   const [response,feed]=await Promise.all([
    db.from(T).select("id,ticker,name,idea_type,currency,peg,peg_as_of,peg_source_url,peg_basis,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,note,updated_at").eq("owner_user_id",user.id).order("updated_at",{ascending:false}).limit(150),
-   loadPriceFeed()
+   loadPriceFeed(fetch,edition)
   ]);
   if(response.error)throw Error("Private ideas unavailable: "+response.error.message);
   state.ideas=response.data||[];
