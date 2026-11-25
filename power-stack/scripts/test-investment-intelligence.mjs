@@ -22,3 +22,36 @@ test("covered equities use BB, uncovered bond ETF keeps dated legacy, aliases ma
 test("unavailable BB observation cannot silently resurrect legacy equity price",()=>{const q=quotes(mergeEditionQuotes(legacy([legacyRow("NVDA")]),edition([bb("NVDA","USD","MONITORED_UNAVAILABLE")]),now),now).holding;assert.equal(q.has("NVDA"),false)});
 test("new full universe is not truncated in holdings and market selectors",()=>{const p=mergeEditionQuotes(legacy([]),edition(Array.from({length:180},(_,i)=>bb("Z"+i))),now);const q=quotes(p,now).holding;assert.equal(q.size,180);assert.equal(expandMarketRows([],[],p,q).length,180)});
 test("stale edition and old tape cannot invent a valid quote",()=>{const p=mergeEditionQuotes(legacy([legacyRow("TLT")]),edition([bb("NVDA")]),new Date("2026-12-10T00:00:00Z"));assert.equal(quotes(p,new Date("2026-12-10T00:00:00Z")).holding.size,0)});
+
+import {mountInvestmentIntelligence} from "../owner-investment-intelligence.mjs";
+class TestNode {
+ constructor(tag){this.tagName=tag;this.childNodes=[];this.listeners={};this.attrs={};this.open=false;this.value="";this._text="";this.id="";}
+ set textContent(v){this._text=String(v);this.childNodes=[]}
+ get textContent(){return this._text+this.childNodes.map(x=>x.textContent).join("")}
+ append(...xs){this.childNodes.push(...xs)}
+ prepend(...xs){this.childNodes.unshift(...xs)}
+ replaceChildren(...xs){this.childNodes=xs}
+ setAttribute(k,v){this.attrs[k]=String(v)}
+ addEventListener(k,fn){this.listeners[k]=fn}
+ querySelector(q){return this.all().find(n=>q.startsWith("#")&&n.id===q.slice(1))||null}
+ all(){return [this,...this.childNodes.flatMap(x=>x.all())]}
+}
+test("sitewide mount preserves Action Log and shows historical gauge with full searchable universe",()=>{
+ const prior=globalThis.document;globalThis.document={createElement:t=>new TestNode(t),createTextNode:t=>{const n=new TestNode("#text");n.textContent=t;return n}};
+ try{
+ const main=new TestNode("main"),log=new TestNode("section"),war=new TestNode("section"),old=new TestNode("p");log.id="action-log";war.id="war-room";old.textContent="Saved instructions";log.append(old);main.append(log,war);
+ const p={...edition(Array.from({length:155},(_,i)=>bb("Z"+i))),macro:{score:null,previousScore:6.5,evidenceStatus:"PARTIAL",verdict:"Previous lean buy"},scenarios:[{name:"Recession",response:"Keep liquidity"}]};
+ mountInvestmentIntelligence("index",main,p);
+ const root=main.querySelector("#ps-investment-intelligence");
+ assert.equal(log.childNodes[0],root);assert.equal(log.childNodes.includes(old),true);
+ assert.match(root.textContent,/Not scored/);assert.match(root.textContent,/historical/);
+ assert.equal(root.all().find(x=>x.tagName==="meter").value,6.5);
+ assert.match(root.textContent,/Browse all 155 candidates/);
+ const drawer=root.all().find(x=>x.tagName==="details"&&x.childNodes[0]?.textContent.startsWith("Browse all 155"));
+ for(const s of drawer.all().filter(x=>x.tagName==="select"))s.value=s.childNodes[0].value;
+ drawer.open=true;drawer.listeners.toggle();assert.match(drawer.textContent,/155 of 155 candidates/);
+ const input=drawer.all().find(x=>x.tagName==="input");input.value="Z154";input.listeners.input();assert.match(drawer.textContent,/1 of 155 candidates/);
+ assert.ok(war.querySelector("#ps-war-intelligence"));
+ const dossier=new TestNode("main");mountInvestmentIntelligence("dossiers",dossier,p);assert.equal(dossier.childNodes.length,0);
+ }finally{globalThis.document=prior;}
+});
