@@ -1,0 +1,39 @@
+/* Ideas-only workspace. Scoped to the authenticated view; existing site theme is preserved. */
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content{max-width:1440px!important;padding:clamp(16px,3vw,38px)!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.psi-hero,.pso-head){display:flex!important;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+html[data-private-page="ideas"] #owner-ideas-content .psi-hero h1{font-size:clamp(30px,4vw,46px)!important;line-height:1.12!important}
+html[data-private-page="ideas"] #owner-ideas-content .psx-jumps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+html[data-private-page="ideas"] #owner-ideas-content .pso-shell{padding:clamp(14px,2.2vw,26px)!important;border-radius:14px!important;min-width:0}
+html[data-private-page="ideas"] #owner-ideas-content .pso-shell h2{font-size:24px!important;margin:5px 0!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-lead,.pso-thesis,.pso-step p,.pso-condition span,.psi-detail,.psv-plan-line p){font-size:14px!important;line-height:1.55!important;overflow-wrap:anywhere}
+html[data-private-page="ideas"] #owner-ideas-content .pso-head{margin:20px 0 8px!important}
+html[data-private-page="ideas"] #owner-ideas-content .pso-head h3{font-size:22px!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-cards,.psv-group-cards){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;align-items:start!important}
+html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.pso-card,.psi-card){padding:18px!important;border:1px solid #cbd1df!important;border-radius:12px!important;background:#fff!important;color:#25324c!important;box-shadow:none!important;min-width:0;gap:12px!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-ticker,.psi-ticker){font-size:24px!important;font-weight:850!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-company,.psi-card-head>div:first-child>small){font-size:13px!important;font-weight:600!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-condition,.pso-research-status,.psi-entry-plan){background:#f4f3f9!important;color:#25324c!important;border:1px solid #d9d9e5!important;border-radius:8px!important;padding:12px!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-condition,.pso-research-status,.psi-entry-plan) :is(p,strong,span){color:#25324c!important;text-shadow:none!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-step,.pso-details){border-color:#d9dce6!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-step strong,.pso-details summary,.pso-details a){color:#394572!important;font-size:13px!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(.pso-meta span,.pso-direction){font-size:11px!important;line-height:1.4!important;white-space:normal!important}
+html[data-private-page="ideas"] #owner-ideas-content .psx-secondary{margin:18px 0;border:1px solid #cbd1df;border-radius:10px;padding:14px;background:#f8f8fc;color:#25324c}
+html[data-private-page="ideas"] #owner-ideas-content .psx-secondary>summary{font-weight:750;cursor:pointer;font-size:15px}
+html[data-private-page="ideas"] #owner-ideas-content .psx-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+html[data-private-page="ideas"] #owner-ideas-content .psx-count{font-size:13px;color:#526078;margin-right:auto}
+html[data-private-page="ideas"] #owner-ideas-content .psx-toggle{display:flex;gap:4px}
+html[data-private-page="ideas"] #owner-ideas-content :is(.psx-toolbar button,.psx-jumps button){padding:9px 13px!important;font-size:13px!important;min-height:38px;cursor:pointer}
+html[data-private-page="ideas"] #owner-ideas-content .psx-search{min-width:0;max-width:100%;font:inherit;font-size:13px;background:#fff;color:#25324c;border:1px solid #cbd1df;border-radius:8px;padding:9px 12px}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table-wrap{overflow-x:auto;max-width:100%;border:1px solid #cbd1df;border-radius:10px;background:#fff;margin-bottom:14px}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table{width:100%;min-width:680px;border-collapse:collapse;table-layout:fixed;font-size:13px;color:#25324c}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table :is(th,td){padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid #e1e4ed;line-height:1.5;overflow-wrap:anywhere}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table th{background:#f0eff8;font-weight:750}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table th:first-child{width:18%}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table th:nth-child(2){width:23%}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table th:nth-child(3){width:25%}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table button{cursor:pointer;text-align:left;padding:5px 8px!important;font-weight:750;font-size:13px!important}
+html[data-private-page="ideas"] #owner-ideas-content .psx-company{display:block;margin-top:4px;color:#526078}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table-mode :is(.psi-card,.pso-card):not([data-psx-active]),html[data-private-page="ideas"] #owner-ideas-content .psx-filtered,html[data-private-page="ideas"] #owner-ideas-content .psx-table-mode .psv-idea-group:not(:has([data-psx-active])),html[data-private-page="ideas"] #owner-ideas-content .psx-table-wrap[hidden]{display:none!important}
+html[data-private-page="ideas"] #owner-ideas-content .psx-table-mode :is(.psi-card,.pso-card)[data-psx-active]{grid-column:1/-1!important}
+html[data-private-page="ideas"] #owner-ideas-content :is(button,input,summary):focus-visible{outline:2px solid #6359c9!important;outline-offset:3px}
+@media(max-width:760px){html[data-private-page="ideas"] #owner-ideas-content :is(.pso-cards,.psv-group-cards){grid-template-columns:minmax(0,1fr)!important}html[data-private-page="ideas"] #owner-ideas-content .psx-toolbar{align-items:flex-start}}
