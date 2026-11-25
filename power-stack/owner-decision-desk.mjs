@@ -1,13 +1,13 @@
 import {renderFrameworkAppendix,renderEntryComparison} from "./owner-framework-view.mjs";
 import {CONTRACT,validateTicket,compareDecision,latestByCase,lane,caseKey,fingerprint,localDate} from "./owner-decision-core.mjs";
 import {decisionReviewStats,portfolioReconciliationStatus} from "./owner-decision-performance.mjs";
-import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261112-tech1";
+import {loadPriceFeed,quotes} from "./owner-portfolio-table.mjs?v=20261126-bbfirst";
 import {sweepSignals} from "./owner-ideas-core.mjs";
 import {rankEntryIdeas,entryAlert} from "./owner-entry-plans.mjs";
 import {renderOpportunityTerminal,scanMarketOpportunities,scanOscillatorExtremes} from "./owner-opportunity-terminal.mjs?v=20261117-agri1";
 import {psIcon,iconText,addHeadingIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {recordedHoldings,bondWatch,isBondEtf} from "./owner-market-views.mjs";
-import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261124-recap3";
+import {installRadarWorkspace} from "./owner-radar-workspace.mjs?v=20261126-bbfirst";
 const $=(root,id)=>root.querySelector("#"+id);
 const txt=(tag,value,cls)=>{
  const el=document.createElement(tag);
@@ -80,7 +80,7 @@ function historicalRisk(snapshot){
  if(names.has("YTLPOWR"))items.push({name:"YTL Power concentration",detail:"Earlier research raised parent/warrant exposure concerns. Current combined weight is unknown.",type:"Historical risk check"});
  return items;
 }
-export async function initDecisionDesk(db,main,user,{deferInitial=false}={}){
+export async function initDecisionDesk(db,main,user,{deferInitial=false,edition=null}={}){
  if(!user?.id||!main)return;
  const host=document.createElement("section");host.id="ps-decision-desk";host.className="psd-root";
  host.innerHTML=`
@@ -197,7 +197,7 @@ export async function initDecisionDesk(db,main,user,{deferInitial=false}={}){
   pageRows:null,pagesError:true,feedCoverage:null,dataReady:false};
  // Radar is the authenticated first screen; existing owner research is retained
  // below the theme grid and scenario matrix in an expandable detail drawer.
- const radarUI=installRadarWorkspace(main,()=>state);
+ const radarUI=installRadarWorkspace(main,()=>state,edition);
  function status(s){$(host,"psd-status").textContent=s}
  function renderCoverage(){
   const numeric=(v,d=2)=>Number(v).toLocaleString("en-GB",{maximumFractionDigits:d});
@@ -430,7 +430,7 @@ export async function initDecisionDesk(db,main,user,{deferInitial=false}={}){
    db.from("power_stack_portfolio_entries").select("entry_id",{count:"exact",head:true}).eq("owner_user_id",user.id),
    db.from("power_stack_idea_tracker").select("ticker,name,idea_type,peg,peg_as_of,peg_basis,peg_source_url,macro_state,macro_as_of,macro_reason,macro_source_url,watch_low,watch_high,currency,note,updated_at")
     .eq("owner_user_id",user.id).order("updated_at",{ascending:false}).limit(100),
-   loadPriceFeed(),
+   loadPriceFeed(fetch,edition),
    db.from("power_stack_private_pages").select("page_key,updated_at")
     .eq("owner_user_id",user.id).in("page_key",["index","research","sectors","portfolio","decisions"])
   ]);
