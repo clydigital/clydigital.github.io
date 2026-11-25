@@ -38,14 +38,18 @@ export function presentClientView(page,main){
   const owner=nav.querySelector("#owner-indicator");
   const signout=nav.querySelector("#logout-button");
   const links=[
-   ["index.html#action-log","Today","index"],
+   ["index.html#action-log","Overview","index"],
+   ["sectors.html","Sectors","sectors"],
+   ["research.html","Research","research"],
    ["portfolio.html#holdings","Portfolio","portfolio"],
    ["ideas.html","Ideas","ideas"],
    ["index.html#war-room","War Room","warroom"],
+   ["decisions.html","Decisions","decisions"],
+   ["dossiers.html","Dossiers","dossiers"],
    ["archive.html","Archive","archive"]
   ];
   const fragment=document.createDocumentFragment();
-  const activeSlug=()=>page==="index"?(location.hash.startsWith("#war")?"warroom":location.hash==="#decision-history"||["#desk-tools","#advanced-research"].includes(location.hash)?"archive":"index"):["portfolio","ideas"].includes(page)?page:"archive";
+  const activeSlug=()=>page==="index"?(location.hash.startsWith("#war")?"warroom":location.hash==="#decision-history"||["#desk-tools","#advanced-research"].includes(location.hash)?"archive":"index"):["portfolio","ideas","research","sectors","decisions","dossiers"].includes(page)?page:"archive";
   for(const [href,label,slug] of links){
    const a=document.createElement("a");a.href=href;a.textContent=label;a.dataset.slug=slug;
    if(activeSlug()===slug)a.setAttribute("aria-current","page");
@@ -98,35 +102,46 @@ export function presentClientView(page,main){
 }
 /** Owner-authenticated presentation only. Historical nodes are moved, never deleted. */
 export function finalizeRecap(page,main){
- if(!main||page==="index")return;
+ if(!main)return;
+ if(page==="index"){
+  const old=main.querySelector("#ps-daily-war-room");if(old)old.hidden=true;
+  const picks=main.querySelector("#ps-priority-ideas");if(picks)picks.hidden=true;
+  const landing=main.querySelector("#psr-landing");if(landing)landing.hidden=true;
+  return;
+ }
  const make=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt)e.textContent=txt;return e;};
+ const historyRequested=()=>new URLSearchParams(location.search).get("view")==="history";
  const legacyPages=["research","sectors","decisions","dossiers","archive"];
  if(legacyPages.includes(page)){
   const intro=make("header","ps-recap-intro");
   intro.append(make("p","ps-recap-kicker","POWER STACK / ARCHIVE"),make("h1",null,({research:"Research evidence",sectors:"Sector research",decisions:"Decision records",dossiers:"Investment dossiers",archive:"Research archive"})[page]));
   if(page==="archive"){
    const links=make("nav","ps-recap-archive-links");links.setAttribute("aria-label","Archived research destinations");
-   for(const [url,label] of [["index.html#decision-history","Decision history"],["index.html#desk-tools","Past War Room editions"],["dossiers.html","Investment dossiers"],["research.html","Research evidence"],["sectors.html","Sector analysis"],["decisions.html","Decision records"],["index.html#market-tools","Market tools"]]){
+   for(const [url,label] of [["index.html#decision-history","Decision history"],["index.html#desk-tools","Past War Room editions"],["dossiers.html","Investment dossiers"],["research.html?view=history","Research evidence"],["sectors.html?view=history","Sector analysis"],["decisions.html?view=history","Decision records"],["index.html#market-tools","Market tools"],["ideas.html?view=history","Earlier idea screens"],["portfolio.html?view=history","Earlier portfolio research"]]){
     const a=make("a",null,label);a.href=url;links.append(a);
    }
    intro.append(links);
   }else{const a=make("a",null,"Back to archive");a.href="archive.html";intro.append(a);}
   const drawer=make("details","ps-recap-archive-drawer");drawer.append(make("summary",null,page==="archive"?"Earlier market reports":"Open dated records and supporting research"));
   const original=[...main.childNodes];for(const n of original)drawer.append(n);
-  main.append(intro,drawer);if(page!=="archive"||location.hash)drawer.open=true;
-  window.addEventListener("hashchange",()=>{if(location.hash)drawer.open=true;});
+  main.append(intro,drawer);
+  const historicalView=page==="archive"||page==="dossiers"||historyRequested();
+  // Historical original HTML stays accessible through the explicit archive, never alongside current intelligence.
+  if(!historicalView){intro.hidden=true;drawer.hidden=true;}
+  else if(page!=="archive"||location.hash)drawer.open=true;
+  window.addEventListener("hashchange",()=>{if(historicalView&&location.hash)drawer.open=true;});
   return;
  }
  const historical=[...main.querySelectorAll(".pscr-root,#nov17-research,#ps-nov23-edition")].filter(n=>!n.parentElement?.closest(".pscr-root,#nov17-research,#ps-nov23-edition"));
  if(historical.length){
   const archive=make("details","ps-recap-archive-drawer");archive.append(make("summary",null,"Earlier research (historical)"));
-  for(const n of historical)archive.append(n);main.append(archive);
-  const reveal=()=>{const id=location.hash.slice(1);if(id&&[...archive.querySelectorAll("[id]")].some(n=>n.id===id))archive.open=true;};reveal();window.addEventListener("hashchange",reveal);
+  for(const n of historical)archive.append(n);main.append(archive);archive.hidden=!historyRequested();
+  const reveal=()=>{const id=location.hash.slice(1);if(historyRequested()&&id&&[...archive.querySelectorAll("[id]")].some(n=>n.id===id))archive.open=true;};reveal();window.addEventListener("hashchange",reveal);
  }
  if(page==="ideas"){
   const hero=main.querySelector(".psi-hero h1");if(hero)hero.textContent="Investment ideas";
   const tracked=main.querySelector("#psi-tracked-drawer"),extra=main.querySelector("#psi-opportunity-mount");
-  if(tracked){tracked.open=true;if(extra){const drawer=make("details","ps-recap-archive-drawer");drawer.append(make("summary",null,"Additional screens and technical research"),extra);tracked.after(drawer);if(location.hash==="#trades")drawer.open=true;window.addEventListener("hashchange",()=>{if(location.hash==="#trades")drawer.open=true;});}}
+  if(tracked){tracked.open=false;if(extra){const drawer=make("details","ps-recap-archive-drawer");drawer.append(make("summary",null,"Archived screens and technical research"),extra);tracked.after(drawer);drawer.hidden=!historyRequested();if(location.hash==="#trades"){tracked.open=true;}window.addEventListener("hashchange",()=>{if(location.hash==="#trades")tracked.open=true;});}}
  }
  if(page==="portfolio"){
   const intro=make("header","ps-recap-intro");intro.append(make("p","ps-recap-kicker","POWER STACK / PORTFOLIO"),make("h1",null,"Your portfolio"));
@@ -135,7 +150,7 @@ export function finalizeRecap(page,main){
   if(table)main.append(table);if(account)main.append(account);
   for(const n of [...main.children])if(n!==table&&n!==account&&!n.matches(".ps-recap-archive-drawer"))earlier.append(n);
   main.prepend(intro);if(table)intro.after(table);if(account&&table)table.after(account);
-  if(earlier.childElementCount>1)main.append(earlier);
-  const reveal=()=>{const id=location.hash.slice(1);if(id&&[...earlier.querySelectorAll("[id]")].some(n=>n.id===id))earlier.open=true;};reveal();window.addEventListener("hashchange",reveal);
+  if(earlier.childElementCount>1){main.append(earlier);earlier.hidden=!historyRequested();}
+  const reveal=()=>{const id=location.hash.slice(1);if(historyRequested()&&id&&[...earlier.querySelectorAll("[id]")].some(n=>n.id===id))earlier.open=true;};reveal();window.addEventListener("hashchange",reveal);
  }
 }
