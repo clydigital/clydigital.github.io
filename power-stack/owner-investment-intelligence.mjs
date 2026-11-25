@@ -68,11 +68,11 @@ export function mountInvestmentIntelligence(page,main,raw){
  if(page==="index"){macro(root,p);sectors(root,p);divergences(root,p);technical(root,p);opportunities(root,p);}
  if(page==="sectors"){sectors(root,p);opportunities(root,p);scenarioRisk(root,p)}
  if(page==="ideas"){opportunities(root,p);technical(root,p)}
- if(page==="portfolio"){scenarioRisk(root,p);opportunities(root,p)}
+ if(page==="portfolio"){scenarioRisk(root,p)}
  if(page==="research"){divergences(root,p);scenarioRisk(root,p);opportunities(root,p)}
  if(page==="decisions"){opportunities(root,p);scenarioRisk(root,p)}
  if(page==="archive"){macro(root,p);records(root,p.history,[["asOf","Edition"],["verdict","Verdict"],["why","What changed"]]);}
  }
  const target=page==="index"?main.querySelector("#action-log")||main:main;
- if(page==="index"&&target!==main){const jump=el("a","Jump to saved Action Log instructions");jump.href="#ps-intelligence-action-instructions";root.prepend(jump);const anchor=el("span");anchor.id="ps-intelligence-action-instructions";target.prepend(root,anchor);const war=main.querySelector("#war-room");if(war&&p){const w=el("section",undefined,"ps-investment-intelligence");w.id="ps-war-intelligence";scenarioRisk(w,p);war.append(w);}}else target.prepend(root);
+ if(page==="index"&&target!==main){const jump=el("a","Jump to saved Action Log instructions");jump.href="#ps-intelligence-action-instructions";root.prepend(jump);const anchor=el("span");anchor.id="ps-intelligence-action-instructions";target.prepend(root,anchor);const war=main.querySelector("#war-room");if(war&&p){const w=el("section",undefined,"ps-investment-intelligence");w.id="ps-war-intelligence";scenarioRisk(w,p);war.append(w);}}else if(page==="portfolio"){target.append(root);}else target.prepend(root);
 }
