@@ -8,7 +8,7 @@ const MONEY=new Set(["USD","EUR","DKK","MYR","KRW","TWD","HKD","CNY","GBP","JPY"
 const STATES=new Set(["SOURCE_DATED","MONITORED_UNAVAILABLE"]);
 const finite=x=>typeof x==="number"&&Number.isFinite(x);
 function validZone(x){try{new Intl.DateTimeFormat("en",{timeZone:x});return typeof x==="string"&&!!x}catch{return false}}
-function url(x){try{const u=new URL(x);return u.protocol==="https:"&&!u.username&&!u.password?u.href:null}catch{return null}}
+function url(x){try{const u=new URL(x);return u.protocol==="https:"&&!u.username&&!u.password&&["finance.yahoo.com","www.nasdaq.com","massive.com","www.massive.com","polygon.io","www.polygon.io"].includes(u.hostname)?u.href:null}catch{return null}}
 function date(x){if(typeof x!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(x))return null;const t=Date.parse(x+"T00:00:00Z");return Number.isFinite(t)&&new Date(t).toISOString().slice(0,10)===x?t:null}
 export function validateBluebellyStockCoverage(data,now=new Date()){
  if(data?.contractVersion!=="bluebelly-equity-coverage/1"||data?.source!=="Bluebelly public market monitor"||!Array.isArray(data.rows)||!data.rows.length||!data.coverage||data.coverage.tracked!==data.rows.length)return null;
@@ -16,6 +16,8 @@ export function validateBluebellyStockCoverage(data,now=new Date()){
  for(const r of data.rows){
   if(!r||typeof r.ticker!=="string"||!/^[A-Z0-9][A-Z0-9.:-]{0,29}$/.test(r.ticker)||seen.has(r.ticker)||!REGIONS.has(r.region)||!MONEY.has(r.currency)||!STATES.has(r.status)||typeof r.company!=="string"||!r.company.trim()||!validZone(r.timeZone))return null;
   if(r.region==="US"&&(r.currency!=="USD"||r.timeZone!=="America/New_York"))return null;
+  if(r.region==="EU"&&(!["EUR","DKK","GBP","CHF","NOK","SEK"].includes(r.currency)||!r.timeZone.startsWith("Europe/")))return null;
+  if(r.region==="ASIA"&&(!["MYR","KRW","TWD","HKD","CNY","JPY","SGD","INR","AUD"].includes(r.currency)||!(/^(Asia|Australia)\//.test(r.timeZone))))return null;
   seen.add(r.ticker);counts[r.region]++;
   const dated=r.status==="SOURCE_DATED";if(dated)reportedDated++;
   const stamp=date(r.asOf),source=url(r.sourceUrl);
