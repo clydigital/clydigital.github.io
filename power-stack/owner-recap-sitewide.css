@@ -255,3 +255,17 @@ html[data-private-page] body.ps-fin-pulse main .ps-recap-position-thesis{backgro
 html[data-private-page] body.ps-fin-pulse main .ps-recap-ema-cell{background:#f3f7ff;border-color:#aebbd1}
 @media(max-width:1000px){html[data-private-page] body.ps-fin-pulse main .ps-recap-scenario-grid .ps-recap-flow{grid-template-columns:1fr}}
 @media(max-width:760px){html[data-private-page] body.ps-fin-pulse main :is(.ps-recap-macro-scene,.ps-recap-sector-scene,.ps-recap-contrast-pair,.ps-recap-opportunities,.ps-recap-position-hero){grid-template-columns:minmax(0,1fr)}html[data-private-page] body.ps-fin-pulse main .ps-recap-panel[data-section]{padding:0 0 24px!important}html[data-private-page] body.ps-fin-pulse main .ps-recap-sector-bar{grid-template-columns:44px minmax(0,1fr) 66px}}
+
+/* War Room current edition follows the same white editorial surface. */
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root{background:#fff!important;color:#25324c!important;border:0!important;box-shadow:none!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root :is(.psw-hero,.psw-hero-main,.psw-team,.psw-priority,.psw-changes,.psw-actions,.psw-analyst-panel){background:#fff!important;color:#25324c!important;border-color:#d7d6e2!important;box-shadow:none!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root :is(.psw-situation,.psw-matt-speech,.psw-matt-interrupt,.psw-finding-call){background:#eee9ff!important;color:#25324c!important;border:1.5px solid #35405c!important;border-radius:18px!important;box-shadow:none!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root :is(.psw-finding-card,.psw-change){background:#fff!important;color:#25324c!important;border:2px solid #35405c!important;border-radius:20px!important;box-shadow:var(--recap-shadow)!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root :is(p,small,strong,dt,dd,em,summary){color:#25324c!important;text-shadow:none!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root :is(.psw-finding-symbol,.psw-finding-posture,.psw-eyebrow,.psw-topline span,.psw-tab){background:#eee9ff!important;color:#25324c!important;text-shadow:none!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root .psw-tab[aria-selected="true"]{background:#443c9f!important;color:#fff!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root .psw-tab[aria-selected="true"] :is(span,small){color:#fff!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root a{color:#443c9f!important;background:#fff!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-root .psw-current-brief{background:#e4ddff!important}
+html[data-private-page="index"] body.ps-fin-pulse main .psw-chief-findings>.psw-current-brief{grid-column:1/-1}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-stale-note{display:block;margin-top:8px;color:#634719!important;background:#fff0c5!important;border-radius:8px;padding:7px 9px;font-weight:700}

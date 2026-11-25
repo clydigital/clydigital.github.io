@@ -49,7 +49,7 @@ export function mergeEditionQuotes(feed,edition,now=new Date()){
  const editionStamp=Date.parse(edition.asOf||"");const editionValid=Number.isFinite(editionStamp)&&editionStamp<=now.getTime()&&now.getTime()-editionStamp<=72*3600000;
  const legacyStamp=Date.parse(feed?.generatedAt||"");const legacyValid=Number.isFinite(legacyStamp)&&legacyStamp<=now.getTime()&&now.getTime()-legacyStamp<=72*3600000;
  for(const item of legacy){const id=ticker(item.ticker);if(!id)continue;const bb=by.get(aliases[id]||id);if(bb){const q=bbRow(id,bb);rows.push(editionValid?q:{...q,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,sourceUrl:null});used.add(aliases[id]||id);}else{rows.push(legacyValid?{...item,quoteAuthority:"LEGACY_UNCOVERED"}:{...item,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,technicals:null,quoteAuthority:"LEGACY_UNCOVERED"});}}
- for(const [id,item] of by){if(used.has(id))continue;const q=bbRow(id,item);rows.push(editionValid?q:{...q,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,sourceUrl:null});}
+ for(const [id,item] of by){if(used.has(id))continue;const ownerAlias=Object.keys(aliases).find(key=>aliases[key]===id)||id;const q=bbRow(ownerAlias,item);rows.push(editionValid?q:{...q,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,sourceUrl:null});}
  const generatedAt=editionValid&&(!legacyValid||editionStamp>=legacyStamp)?edition.asOf:legacyValid?feed.generatedAt:null;
  return {contractVersion:"power-stack-public-prices/1",generatedAt,rows,coverage:{tracked:rows.length,fresh:rows.filter(x=>x.status==="CLOSED"&&recentSession(x.sessionDate,now)).length},sourceMode:"BB_FIRST_MANUAL_EDITION"};
 }
@@ -115,7 +115,8 @@ export function quotes(feed,now=new Date()){
 
 /** Merge only source-qualified regular-session closes for already-private instruments.
  * Do not carry return metrics from an older session into a newer close. */
-export function applyOwnerCloseObservations(lines,observations,now=new Date()){
+export function applyOwnerCloseObservations(lines,observations,now=new Date(),edition=null){
+ const covered=new Set((edition?.contract==="ps-investment-intelligence/1"&&Array.isArray(edition.universe)?edition.universe:[]).map(x=>x.ticker));
  const best=new Map();
  for(const row of Array.isArray(observations)?observations:[]){
   const id=ticker(row?.ticker),date=row?.observed_on,price=typeof row?.price==="number"?row.price:typeof row?.price==="string"&&/^\d+(?:\.\d+)?$/.test(row.price)?Number(row.price):NaN;
@@ -133,6 +134,7 @@ export function applyOwnerCloseObservations(lines,observations,now=new Date()){
  let count=0;
  const updated=lines.map(line=>{
   if(!line.held&&!line.onWatchlist&&!line.ideaTracked)return line;
+  if(covered.has(cardAliases[line.ticker]||line.ticker))return line;
   const q=best.get(line.ticker);if(!q||line.currency&&line.currency!==q.currency||line.session&&line.session>=q.observed_on)return line;
   count++;
   return {...line,close:q.price,currency:q.currency,session:q.observed_on,day:null,threeDay:null,fiveDay:null,basis:"Private verified exchange close",quoteSource:q.source_name};
@@ -212,7 +214,7 @@ export function holdingCard(row,edition,weights){
  const card=el("article",null,"ps-recap-visual-card ps-position-card");card.dataset.kind=row.held?"holding":row.onWatchlist?"watchlist":row.ideaTracked?"research":"coverage";
  const hero=el("div",null,"ps-recap-position-hero");const identity=el("div",null,"ps-recap-position-identity");const priceBox=el("div",null,"ps-recap-position-price");identity.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
  priceBox.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
- hero.append(identity,priceBox);card.append(hero);const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
+ const latestUS=Object.keys(edition?.teamBrief?.usDates||{}).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)).sort().at(-1);if(u?.region==="US"&&row.session&&latestUS&&row.session<latestUS)priceBox.append(el("small","Behind latest available US session · "+latestUS,"ps-recap-stale-note"));hero.append(identity,priceBox);card.append(hero);const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
  if(row.held){const allocation=el("div",null,"ps-recap-allocation");fact(allocation,"Recorded units",row.quantity===null?"Unknown":fmt(row.quantity,8)+" · quantity date "+(row.quantityAsOf||"unknown"));if(w){fact(allocation,"Indicative sleeve value",w.currency+" "+fmt(w.value)+" · "+w.weight.toFixed(1)+"% of valued "+w.currency+" sleeve · "+w.session);const m=el("meter");m.min=0;m.max=100;m.value=w.weight;m.setAttribute("aria-label","Share of same-currency same-session valued sleeve, not total portfolio");allocation.append(m);}else fact(allocation,"Indicative value","Not calculable from matched recorded quantity and price");card.append(allocation);}
  const thesis=el("div",null,"ps-recap-position-thesis");fact(thesis,"Research posture","RESEARCH / RECHECK · validate current underwriting before action");
  if(row.action)fact(thesis,"Saved owner decision",row.action+" · review date/evidence before acting");
@@ -256,7 +258,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
   &&Date.now()-feedAt<=72*3600000?priceFeed:null;
  const {lines:recorded,asOf}=project(data.snapshot,validFeed);
  const trackedIdeas=ideaResult.error?[]:(ideaResult.data||[]);
- const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data);
+ const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data,new Date(),edition);
  const lines=merged.lines;const weights=sleeveWeights(lines);
  const scopeFromHash=hash=>({"#holdings":"holdings","#watchlist":"watchlist",
   "#bonds":"bonds","#research":"ideas","#markets":"markets"})[hash]||"all";
