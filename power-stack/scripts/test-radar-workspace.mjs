@@ -77,7 +77,7 @@ test("buy/sell considerations require an explicit current reviewed owner decisio
 test("authenticated entry keeps existing private research and uses no modelled trading orders",()=>{
  const home=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
- assert(home.includes("installRadarWorkspace(main,()=>state)"));
+ assert(home.includes("installRadarWorkspace(main,()=>state,edition)"));
  assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
  assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
@@ -175,7 +175,8 @@ test("regional data charts compare only same-session share changes and keep EUR/
  assert.equal(us.leaders[0].ticker,"TSLA");
  assert.equal(summarizeRegionalCloses(new Map(),"EU").session,null);
  const js=read("owner-radar-workspace.mjs");
- assert(js.includes('loadBluebellyStockCoverage().then'));
+ assert(js.includes('const report=edition?.marketCoverage'));
+ assert(!js.includes('loadBluebellyStockCoverage().then'));
  assert(js.includes("renderSnapshot()"));
  assert(js.includes("psr-regional-data"));
  assert(js.includes("psr-movers-panel"));
