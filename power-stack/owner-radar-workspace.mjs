@@ -4,7 +4,7 @@
 */
 import {psIcon} from "./owner-visual-icons.mjs?v=20261113-fg1";
 import {latestByCase,lane,localDate} from "./owner-decision-core.mjs";
-import {loadBluebellyStockCoverage} from "./owner-bluebelly-stocks.mjs";
+
 import {renderResearchReview} from "./owner-research-review.mjs";
 import {mountWarRoom} from "./owner-war-room.mjs?v=20261124-warroom1";
 import {renderOpportunityLensSummary} from "./owner-opportunity-lenses.mjs?v=20261117-agri1";
@@ -237,7 +237,7 @@ export function summarizeRegionalCloses(map,region="US"){
  return {session:session||null,observed:list.length,up,down,flat:list.length-up-down,
  leaders:list.slice(0,3),laggards:[...list].reverse().slice(0,3)};
 }
-export function installRadarWorkspace(main,getState){
+export function installRadarWorkspace(main,getState,edition=null){
  if(!main)return {render(){}};
  const originals=[...main.childNodes];
  // Owner-only dated action plan: surface before any research; absence preserves prior layout.
@@ -802,10 +802,8 @@ export function installRadarWorkspace(main,getState){
   }
  }
  renderMatrix();renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();renderLog();
- loadBluebellyStockCoverage().then(report=>{
-  if(!bridge.isConnected)return;
-  bridgeStatus.textContent=report?report.US.dated+"/"+report.US.tracked+" US · "+report.EU.dated+"/"+report.EU.tracked+
-   " EU source-dated (Bluebelly only)":"Bluebelly stock feed offline/not deployed · Power Stack tape unchanged";
- });
+ const report=edition?.marketCoverage;
+ bridgeStatus.textContent=report?report.sourceDated+"/"+report.tracked+" source-dated · "+report.unavailable+" unavailable · manual edition "+edition.asOf:"Bluebelly manual edition unavailable · check dated research";
+
  return {render(){renderThemes();renderGrid();renderRadar();renderSnapshot();renderEvidenceHealth();renderTavernHero();renderHouseWatch();warRoom.render();renderLog()},openWorkspace};
 }

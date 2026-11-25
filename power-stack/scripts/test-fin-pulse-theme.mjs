@@ -46,7 +46,7 @@ test("dashboard chart is derived from tracked ideas, not fabricated performance"
  assert(dashboard.includes('psd-pulse-bars'));
  assert(dashboard.includes('const bars=$(host,"psd-pulse-bars")'));
  assert(dashboard.includes('sweepSignals(companyIdeas,state.priceMap)'));
- assert(dashboard.includes('loadPriceFeed()'));
+ assert(dashboard.includes('loadPriceFeed(fetch,edition)'));
  assert(dashboard.includes('power_stack_idea_tracker'));
  assert.doesNotMatch(dashboard,/Growth Over Time|Risk Score: 64|\$22,731\.60/);
 });

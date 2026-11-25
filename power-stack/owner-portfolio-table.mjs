@@ -25,16 +25,36 @@ export function recentSession(date,now=new Date()){
  * membership. The market-prices.json endpoint has no account, holdings, size,
  * legacy scoring data, Google token, or Bluebelly-derived scan. No arbitrary ticker requests.
  */
-export async function loadPriceFeed(fetcher=fetch) {
+export async function loadPriceFeed(fetcher=fetch,edition=null) {
  try {
   const response=await fetcher("./market-prices.json",{cache:"no-store"});
   if(!response.ok)throw Error("public market quote feed "+response.status);
   const data=await response.json();
   if(data?.contractVersion!=="power-stack-public-prices/1"||!Array.isArray(data.rows)
-    ||data.rows.length>120)return null;
-  return data;
- } catch {return null;}
+    ||data.rows.length>120)return mergeEditionQuotes(null,edition);
+  return mergeEditionQuotes(data,edition);
+ } catch {return mergeEditionQuotes(null,edition);}
 }
+// Canonical manually published BB observations. Legacy tape remains only for instruments
+// not yet covered by BB; no new network call or schedule. Preserve listing identities.
+export function mergeEditionQuotes(feed,edition,now=new Date()){
+ const universe=edition?.contract==="ps-investment-intelligence/1"&&Array.isArray(edition.universe)?edition.universe:null;
+ if(!universe)return feed;
+ const aliases={"688825":"688825.SS","DAYANG":"5141.KL","HIBISCS":"5199.KL","MISC":"3816.KL","MNHLDG":"0245.KL","TENAGA":"5347.KL","YTLPOWR":"6742.KL"};
+ const by=new Map();for(const item of universe){const id=ticker(item?.ticker);if(id&&!by.has(id))by.set(id,item);}
+ const legacy=Array.isArray(feed?.rows)?feed.rows:[];
+ const used=new Set(),rows=[];
+ const bbRow=(id,item)=>{const q=item.marketObservation;const available=q?.status==="SOURCE_DATED"&&recentSession(q.asOf,now)&&Number.isFinite(q.price)&&q.price>0&&approvedBBSource(q.sourceUrl)&&["USD","EUR","DKK","MYR","KRW","TWD","HKD","CNY","GBP","JPY","SGD","CHF","CAD","AUD","NOK","SEK","INR"].includes(q.currency);
+ return {ticker:id,name:item.name,currency:q?.currency||null,status:available?"CLOSED":"UNAVAILABLE",close:available?q.price:null,sessionDate:available?q.asOf:null,changePct:available?num(q.changePct):null,change3dPct:available?num(q.change3dPct):null,change5dPct:available?num(q.change5dPct):null,sourceUrl:available?q.sourceUrl:null,quoteAuthority:"BLUEBELLY",technicals:null};};
+ const editionStamp=Date.parse(edition.asOf||"");const editionValid=Number.isFinite(editionStamp)&&editionStamp<=now.getTime()&&now.getTime()-editionStamp<=72*3600000;
+ const legacyStamp=Date.parse(feed?.generatedAt||"");const legacyValid=Number.isFinite(legacyStamp)&&legacyStamp<=now.getTime()&&now.getTime()-legacyStamp<=72*3600000;
+ for(const item of legacy){const id=ticker(item.ticker);if(!id)continue;const bb=by.get(aliases[id]||id);if(bb){const q=bbRow(id,bb);rows.push(editionValid?q:{...q,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,sourceUrl:null});used.add(aliases[id]||id);}else{rows.push(legacyValid?{...item,quoteAuthority:"LEGACY_UNCOVERED"}:{...item,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,technicals:null,quoteAuthority:"LEGACY_UNCOVERED"});}}
+ for(const [id,item] of by){if(used.has(id))continue;const q=bbRow(id,item);rows.push(editionValid?q:{...q,status:"UNAVAILABLE",close:null,sessionDate:null,changePct:null,change3dPct:null,change5dPct:null,sourceUrl:null});}
+ const generatedAt=editionValid&&(!legacyValid||editionStamp>=legacyStamp)?edition.asOf:legacyValid?feed.generatedAt:null;
+ return {contractVersion:"power-stack-public-prices/1",generatedAt,rows,coverage:{tracked:rows.length,fresh:rows.filter(x=>x.status==="CLOSED"&&recentSession(x.sessionDate,now)).length},sourceMode:"BB_FIRST_MANUAL_EDITION"};
+}
+function approvedBBSource(value){try{const u=new URL(value);return u.protocol==="https:"&&!u.username&&!u.password&&["www.nasdaq.com","finance.yahoo.com","massive.com","www.massive.com","polygon.io","www.polygon.io"].includes(u.hostname)}catch{return false}}
+
 export function approvedQuoteSource(value,id){
  try{
   const url=new URL(value);
@@ -74,19 +94,19 @@ export function validatedDailyTechnical(raw,session,close){
 
 export function quotes(feed,now=new Date()){
  const result=new Map();
- for(const raw of list(feed?.rows,120)){
+ for(const raw of (Array.isArray(feed?.rows)?feed.rows:[])){
   const id=ticker(raw.ticker),price=num(raw.close);
   if(!id||raw.status!=="CLOSED"||!recentSession(raw.sessionDate,now)
     ||price===null||price<=0)continue;
-  if(!["USD","HKD","MYR","CNY","EUR","DKK"].includes(raw.currency))continue;
+  if(!["USD","HKD","MYR","CNY","EUR","DKK","KRW","TWD","GBP","JPY","SGD","CHF","CAD","AUD","NOK","SEK","INR"].includes(raw.currency))continue;
   if(id==="BTC"&&(raw.currency!=="USD"||typeof raw.marketBasis!=="string"
     ||!raw.marketBasis.startsWith("BTC/USD daily UTC sample")))continue;
-  if(typeof raw.sourceUrl!=="string"||!approvedQuoteSource(raw.sourceUrl,id))continue;
+  if(typeof raw.sourceUrl!=="string"||!(raw.quoteAuthority==="BLUEBELLY"?approvedBBSource(raw.sourceUrl):approvedQuoteSource(raw.sourceUrl,id)))continue;
   result.set(id,{
    close:price,day:num(raw.changePct),threeDay:num(raw.change3dPct),
    fiveDay:num(raw.change5dPct),session:raw.sessionDate,currency:raw.currency,
    technical:validatedDailyTechnical(raw.technicals,raw.sessionDate,price),
-   basis:id==="BTC"?"BTC UTC daily sample":"Exchange close",
+   basis:raw.quoteAuthority==="BLUEBELLY"?"Bluebelly source-dated close":id==="BTC"?"BTC UTC daily sample":"Legacy exchange close (uncovered instrument)",
   });
  }
  return {asOf:typeof feed?.generatedAt==="string"?feed.generatedAt:null,holding:result,watch:result,
@@ -162,14 +182,14 @@ function rowValue(r,key){
  if(key==="quantity")return r.held?r.quantity:null;
  return r[key]??null;
 }
-export async function initPortfolioTable(db,host,user){
+export async function initPortfolioTable(db,host,user,{edition=null}={}){
  if(!user?.id){host.textContent="Owner session unavailable; no private portfolio displayed.";return;}
  const {data,error}=await db.from("power_stack_owner_snapshots")
   .select("snapshot_as_of,legacy_source_retired,snapshot").eq("owner_user_id",user.id)
   .order("snapshot_as_of",{ascending:false}).limit(1).maybeSingle();
  if(error||!data?.legacy_source_retired||!data.snapshot){host.textContent="No verified owner snapshot available.";return;}
  const [priceFeed,ideaResult,privateQuotes]=await Promise.all([
-  loadPriceFeed(),
+  loadPriceFeed(fetch,edition),
   db.from("power_stack_idea_tracker")
    .select("ticker,name,idea_type,currency,macro_state,macro_reason")
    .eq("owner_user_id",user.id).limit(150),

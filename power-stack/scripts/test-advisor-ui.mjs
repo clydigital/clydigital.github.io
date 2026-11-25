@@ -16,7 +16,7 @@ test("valuation and price evidence stays owner-gated, date-stamped and distinct 
  const brief=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  assert(brief.includes('power_stack_idea_tracker'));
  assert(brief.includes('sweepSignals(companyIdeas,state.priceMap)'));
- assert(brief.includes('loadPriceFeed()'));
+ assert(brief.includes('loadPriceFeed(fetch,edition)'));
  assert(brief.includes('Date.now()-generated<=72*3600000'));
  assert(brief.includes('portfolioReconciliationStatus'));
  assert(gate.includes('const access=await authenticateAndRead()'));

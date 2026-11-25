@@ -77,7 +77,7 @@ test("buy/sell considerations require an explicit current reviewed owner decisio
 test("authenticated entry keeps existing private research and uses no modelled trading orders",()=>{
  const home=read("owner-decision-desk.mjs"),gate=read("auth-gate.mjs");
  const radar=read("owner-radar-workspace.mjs"),css=read("owner-radar-workspace.css"),html=read("index.html");
- assert(home.includes("installRadarWorkspace(main,()=>state)"));
+ assert(home.includes("installRadarWorkspace(main,()=>state,edition)"));
  assert(gate.indexOf("const access=await authenticateAndRead()")<gate.indexOf('if(PAGE==="index")'));
  assert(html.includes('owner-radar-workspace.css?v=20261114-rooms1'));
  assert(html.includes('owner-hybrid-ocean.css'));
@@ -175,13 +175,14 @@ test("regional data charts compare only same-session share changes and keep EUR/
  assert.equal(us.leaders[0].ticker,"TSLA");
  assert.equal(summarizeRegionalCloses(new Map(),"EU").session,null);
  const js=read("owner-radar-workspace.mjs");
- assert(js.includes('loadBluebellyStockCoverage().then'));
+ assert(js.includes('const report=edition?.marketCoverage'));
+ assert(!js.includes('loadBluebellyStockCoverage().then'));
  assert(js.includes("renderSnapshot()"));
  assert(js.includes("psr-regional-data"));
  assert(js.includes("psr-movers-panel"));
 });
 
-test("Bluebelly cross-site stock feed accepts only fixed 25 US + 12 EU source-dated research identities",()=>{
+test("Bluebelly cross-site stock feed validates source identities and preserves partial coverage",()=>{
  const us=["NVDA","AMD","AAPL","MSFT","AMZN","GOOGL","META","TSLA","AVGO","MU","ORCL","CRWV","SPCX",
   "ADBE","CI","CVS","CF","XOM","CVX","GRAB","BWXT","OKLO","SMR","PWR","ENPH"];
  const euro=["ASML.AS","ADYEN.AS","SAP.DE","SIE.DE","RHM.DE","IFX.DE","AIR.PA","TTE.PA","MC.PA","SU.PA","OR.PA","NOVO-B.CO"];
@@ -206,8 +207,8 @@ test("Bluebelly cross-site stock feed accepts only fixed 25 US + 12 EU source-da
  assert.equal(v.rows.find(x=>x.ticker==="NVDA").price,160);
  assert.equal(validateBluebellyStockCoverage({...doc,rows:rows.map(x=>x.ticker==="ASML.AS"?{...x,currency:"USD"}:x)},now),null);
  assert.equal(validateBluebellyStockCoverage({...doc,rows:[...rows,{...rows[0]}]},now),null);
- assert.equal(validateBluebellyStockCoverage({...doc,rows:rows.map(x=>x.ticker==="NVDA"?{...x,sourceUrl:"https://evil.invalid/foo"}:x)},now),null);
- assert.equal(validateBluebellyStockCoverage(doc,new Date("2026-12-01T03:00:00Z")),null);
+ assert.equal(validateBluebellyStockCoverage({...doc,rows:rows.map(x=>x.ticker==="NVDA"?{...x,sourceUrl:"https://evil.invalid/foo"}:x)},now).rows[0].status,"MONITORED_UNAVAILABLE");
+ assert.equal(validateBluebellyStockCoverage(doc,new Date("2026-12-01T03:00:00Z")).rows[0].price,null);
  const js=read("owner-bluebelly-stocks.mjs");
  assert(!/brokerQuantity|service_role|sb_secret_|owner_user_id|\.insert\(|\.update\(/i.test(js));
 });
