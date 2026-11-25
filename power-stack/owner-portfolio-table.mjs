@@ -192,10 +192,10 @@ export function cardResearch(row,edition){
  const obs=u?.marketObservation;
  const same=obs?.status==="SOURCE_DATED"&&obs.asOf===row.session&&obs.currency===row.currency&&obs.price===row.close;
  const theme=String(a?.theme||u?.theme||"").toUpperCase();
- const realEstate=theme==="REAL_ESTATE"||String(a?.sector||"").toLowerCase()==="real estate";
+ const realEstate=theme==="REAL_ESTATE"||String(a?.sector||"").toLowerCase()==="real estate"||["MAA","CPT","O","ESS","INVH","EXR","PLD","TOL","PHM","GRBK","JLL"].includes(id);
  const technical=(edition?.technicals||[]).find(x=>String(x.name||"").endsWith("("+id+")")&&x.asOf===row.session);
  const scan=u?.emaScan;
- const levels=same&&!realEstate&&scan?.asOf===row.session?(scan.observations||[]).filter(x=>x.warmup==="READY"&&x.asOf===row.session&&["D","W","M"].includes(x.frame)&&[20,50,100,200].includes(x.period)&&[x.ema,x.lower,x.upper,x.distancePct].every(Number.isFinite)&&x.lower<=x.ema&&x.ema<=x.upper&&x.lower>0&&x.multiplier===({20:1,50:1,100:.5,200:.25})[x.period]):[];
+ const levels=same&&!realEstate&&scan?.method==="FIRST_CLOSE_EMA_ROLLING_CLOSE_POPULATION_SD"&&scan?.asOf===row.session?(scan.observations||[]).filter(x=>x.warmup==="READY"&&x.asOf===row.session&&["D","W","M"].includes(x.frame)&&[20,50,100,200].includes(x.period)&&[x.ema,x.lower,x.upper,x.distancePct].every(Number.isFinite)&&x.lower<=x.ema&&x.ema<=x.upper&&x.lower>0&&x.multiplier===({20:1,50:1,100:.5,200:.25})[x.period]):[];
  return {a,u,same,realEstate,technical:same&&!realEstate?technical:null,levels};
 }
 export function sleeveWeights(lines){
@@ -207,29 +207,29 @@ export function sleeveWeights(lines){
 }
 function fact(root,label,value){const p=el("p",null,"ps-recap-fact");p.append(el("strong",label),document.createTextNode(String(value||"Not recorded")));root.append(p);}
 function detail(root,label){const d=el("details",null,"ps-recap-archive-drawer");d.append(el("summary",label));root.append(d);return d;}
-function holdingCard(row,edition,weights){
+export function holdingCard(row,edition,weights){
  const {a,u,same,realEstate,technical,levels}=cardResearch(row,edition),w=weights.get(row.ticker);
  const card=el("article",null,"ps-recap-visual-card ps-position-card");
  card.append(el("span",row.ticker+" · "+(row.held?"RECORDED HOLDING":row.onWatchlist?"WATCHLIST":row.ideaTracked?"RESEARCH IDEA":"MARKET COVERAGE"),"ps-recap-section-label"),el("h3",row.name));
  card.append(el("strong",row.close===null?"Price unavailable":row.currency+" "+fmt(row.close,3),"ps-recap-big-number"),el("small",row.session?"Dated close · "+row.session+" · "+(row.basis||"Source unavailable"):"No source-dated close"));
  const moves=el("div",null,"ps-recap-moves");for(const [label,value] of [["1D",row.day],["3D",row.threeDay],["5D",row.fiveDay]]){const box=el("div",null,"ps-recap-move");box.dataset.direction=value===null?"unknown":value>0?"up":value<0?"down":"flat";box.append(el("small",label),el("strong",pct(value)));moves.append(box);}card.append(moves);
  if(row.held){fact(card,"Recorded units",row.quantity===null?"Unknown":fmt(row.quantity,8)+" · quantity date "+(row.quantityAsOf||"unknown"));if(w){fact(card,"Indicative sleeve value",w.currency+" "+fmt(w.value)+" · "+w.weight.toFixed(1)+"% of valued "+w.currency+" sleeve · "+w.session);const m=el("meter");m.min=0;m.max=100;m.value=w.weight;m.setAttribute("aria-label","Share of same-currency same-session valued sleeve, not total portfolio");card.append(m);}else fact(card,"Indicative value","Not calculable from matched recorded quantity and price");}
- fact(card,"Research posture",a?.evidenceStatus==="VERIFIED"?a.action:"RESEARCH / RECHECK · no fresh approval");
+ fact(card,"Research posture","RESEARCH / RECHECK · validate current underwriting before action");
  if(row.action)fact(card,"Saved owner decision",row.action+" · review date/evidence before acting");
  fact(card,"Why / thesis",a?.why||row.thesis||"Issuer underwriting pending");
  const ec=a?.entryCheck;
  if(same&&ec?.currency===row.currency&&ec.asOf===row.session&&ec.price===row.close&&Number.isFinite(ec.ceiling)&&ec.ceiling>0){fact(card,"Valuation ceiling",ec.currency+" "+fmt(ec.ceiling,3)+" · "+(row.close<=ec.ceiling?"Price-only pass":((1-ec.ceiling/row.close)*100).toFixed(2)+"% further decline required")+" · not a trade signal");}
  else fact(card,"Key valuation / entry levels",a?.entry||row.entry||"No verified private level recorded");
  if(a?.valuation)fact(card,"Normalised valuation",a.valuation);
- const tech=detail(card,"Technical levels · 20 / 50 / 100 / 200 EMA & SD");
+ const tech=detail(card,"Technical levels · 20 / 50 / 100 / 200 EMA & SD");if(row.held)tech.open=true;
  if(realEstate)fact(tech,"Valuation only","Real estate exception: no EMA/SD entry gate.");
  else if(!same)fact(tech,"Technical status","No matching BB close and technical observation. Do not mix sessions.");
  else{
   fact(tech,"EMA framework","D / W / M · 20 and 50 ±1 SD; 100 ±0.5 SD; 200 ±0.25 SD. Completed-session observations only.");
-  if(levels.length){const grid=el("div",null,"ps-recap-ema-grid");for(const v of levels){const b=el("div",null,"ps-recap-ema-cell");b.append(el("strong",v.frame+" "+v.period+" EMA"),el("span",row.currency+" "+fmt(v.ema,3)),el("small","SD "+fmt(v.lower,3)+" – "+fmt(v.upper,3)),el("small",v.side+" EMA · "+pct(v.distancePct)+" · "+String(v.band).replaceAll("_"," ")));for(const day of ["1","3","5"]){const z=v.windows?.[day];if(z){const events=[z.approach&&z.approach!=="none"?"approach "+z.approach:null,z.emaCross&&z.emaCross!=="none"?"EMA "+z.emaCross:null,z.upperCross&&z.upperCross!=="none"?"upper SD "+z.upperCross:null,z.lowerCross&&z.lowerCross!=="none"?"lower SD "+z.lowerCross:null].filter(Boolean);if(events.length)b.append(el("small",day+"D · "+events.join(" · ")));}}grid.append(b);}tech.append(grid);fact(tech,"Coverage","Only verified READY observations appear; other timeframe/period levels unavailable.");}
+  if(levels.length){const grid=el("div",null,"ps-recap-ema-grid");for(const v of levels){const b=el("div",null,"ps-recap-ema-cell");b.append(el("strong",v.frame+" "+v.period+" EMA"),el("span",row.currency+" "+fmt(v.ema,3)),el("small","SD "+fmt(v.lower,3)+" – "+fmt(v.upper,3)),el("small",v.side+" EMA · "+pct(v.distancePct)+" · "+String(v.band).replaceAll("_"," ")));const range=v.upper-v.lower;if(range>0&&Number.isFinite(row.close)){const track=el("div",null,"ps-recap-band");const marker=el("span",null,"ps-recap-band-marker");const position=Math.max(0,Math.min(100,100*(row.close-v.lower)/range));marker.style.left=position.toFixed(2)+"%";track.setAttribute("aria-label","Price relative to lower and upper SD boundaries; clipped if outside range");track.append(marker);b.append(track);}for(const day of ["1","3","5"]){const z=v.windows?.[day];if(z){const events=[z.approach&&z.approach!=="none"?"approach "+z.approach:null,z.emaCross&&z.emaCross!=="none"?"EMA "+z.emaCross:null,z.upperCross&&z.upperCross!=="none"?"upper SD "+z.upperCross:null,z.lowerCross&&z.lowerCross!=="none"?"lower SD "+z.lowerCross:null].filter(Boolean);if(events.length)b.append(el("small",day+"D · "+events.join(" · ")));}}grid.append(b);}tech.append(grid);fact(tech,"Coverage","Only verified READY observations appear; other timeframe/period levels unavailable.");}
   else if(technical){fact(tech,"Verified interesting zone",technical.zone);fact(tech,"Direction / band state",technical.position);}
   else fact(tech,"EMA / SD coverage","No verified structured levels in this manual edition; not a neutral signal.");
-  if(a?.technical)fact(tech,"Dated technical context",a.technical);
+  if(a?.technical&&a?.entryCheck?.asOf===row.session)fact(tech,"Dated technical context",a.technical);
  }
  const more=detail(card,"Investment case, risk & evidence");for(const [label,val] of [["Business",a?.business],["Sector / theme",a?.sector||u?.theme],["Customers / suppliers",a?.relationships],["Downside",a?.downside],["Catalyst",a?.catalyst],["Invalidation",a?.invalidation||row.invalidation],["Portfolio fit",a?.portfolioFit]])if(val)fact(more,label,val);
  for(const v of a?.scenarios||[])fact(more,v.name||"Scenario",[v.impact,v.why,v.trigger,v.failure].filter(Boolean).join(" · "));
@@ -263,7 +263,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
  let sort="ticker",direction="asc",scope=scopeFromHash(location.hash),search="",expanded=null;
  host.replaceChildren();
  const heading=el("div",null,"ps-table-head"),title=el("div");
- title.append(el("h2","Market watch & holdings"),
+ title.append(el("h2","Holdings & watchlist"),
   el("p",lines.filter(r=>r.held).length+" recorded holdings · "+lines.filter(r=>r.onWatchlist).length+
    " saved watchlist · "+lines.filter(r=>r.ideaTracked).length+" research ideas · "+
    lines.filter(r=>r.marketTracked).length+" market instruments · Snapshot "+data.snapshot_as_of+
@@ -286,7 +286,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
  input.type="search";input.placeholder="Search ticker or company";input.setAttribute("aria-label","Find instrument");
  input.addEventListener("input",()=>{search=input.value.trim().toLowerCase();render();});
  controls.append(input,chips);host.append(controls);
- for(const [key,label] of [["all","My coverage"],["holdings","Holdings"],["watchlist","Watchlist + ideas"],
+ for(const [key,label] of [["all","My coverage"],["holdings","Holdings"],["watchlist","Watchlist + BB coverage"],
     ["bonds","Bond ETFs"],["ideas","Research ideas"],["markets","All markets"]]){
   const b=el("button",label,"ps-chip");b.type="button";b.dataset.scope=key;
   b.addEventListener("click",()=>{scope=key;
@@ -310,7 +310,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
   const selected=lines.filter(r=>
    (scope==="all"&&!r.marketOnly
     ||scope==="holdings"&&r.held
-    ||scope==="watchlist"&&(r.onWatchlist||r.ideaTracked)
+    ||scope==="watchlist"&&(r.onWatchlist||r.ideaTracked||r.marketTracked)
     ||scope==="bonds"&&r.bond&&(r.ideaTracked||r.onWatchlist||r.held)
     ||scope==="ideas"&&r.ideaTracked
     ||scope==="markets"&&r.marketTracked)
@@ -324,8 +324,8 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
   });
   tbody.replaceChildren();cards.replaceChildren();
   const shown=selected.filter(r=>r.ticker!=="6742UW");for(const r of shown)cards.append(holdingCard(r,edition,weights));if(!shown.length)cards.append(el("p","No matching instruments."));
-  if(!selected.length){const tr=el("tr");const td=cell(tr,"No matching instruments.");td.colSpan=8;tbody.append(tr);return;}
-  for(const r of selected){
+  if(!shown.length){const tr=el("tr");const td=cell(tr,"No matching instruments.");td.colSpan=8;tbody.append(tr);return;}
+  for(const r of shown){
    const tr=el("tr"),th=el("th"),button=el("button",r.ticker+" · "+r.name,"ps-ticker");
    button.type="button";button.setAttribute("aria-expanded",String(expanded===r.ticker));
    button.addEventListener("click",()=>{expanded=expanded===r.ticker?null:r.ticker;render();});
