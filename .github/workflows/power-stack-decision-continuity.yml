@@ -48,7 +48,7 @@ jobs:
       - name: Decision reasoning regression
         run: node --test power-stack/scripts/test-decision-continuity.mjs power-stack/scripts/test-decision-performance.mjs power-stack/scripts/test-ideas.mjs power-stack/scripts/test-entry-plans.mjs power-stack/scripts/test-visual-hierarchy.mjs power-stack/scripts/test-advisor-ui.mjs power-stack/scripts/test-fin-pulse-theme.mjs power-stack/scripts/test-angular-contrast.mjs power-stack/scripts/test-framework-evidence.mjs power-stack/scripts/test-market-views.mjs power-stack/scripts/test-opportunity-terminal.mjs power-stack/scripts/test-technicals.mjs power-stack/scripts/test-radar-workspace.mjs power-stack/scripts/test-research-review.mjs power-stack/scripts/test-tavern-sitewide.mjs
       - name: Shared investment intelligence regression
-        run: node --test power-stack/scripts/test-investment-intelligence.mjs
+        run: node --test power-stack/scripts/test-investment-intelligence.mjs power-stack/scripts/test-pareto-overview.mjs
       - name: Public asset privacy smoke
         shell: bash
         run: |
