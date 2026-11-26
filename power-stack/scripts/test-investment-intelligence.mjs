@@ -23,7 +23,7 @@ test("unavailable BB observation cannot silently resurrect legacy equity price",
 test("new full universe is not truncated in holdings and market selectors",()=>{const p=mergeEditionQuotes(legacy([]),edition(Array.from({length:180},(_,i)=>bb("Z"+i))),now);const q=quotes(p,now).holding;assert.equal(q.size,180);assert.equal(expandMarketRows([],[],p,q).length,180)});
 test("stale edition and old tape cannot invent a valid quote",()=>{const p=mergeEditionQuotes(legacy([legacyRow("TLT")]),edition([bb("NVDA")]),new Date("2026-12-10T00:00:00Z"));assert.equal(quotes(p,new Date("2026-12-10T00:00:00Z")).holding.size,0)});
 
-import {mountInvestmentIntelligence,sectorDailyReturn} from "../owner-investment-intelligence.mjs";
+import {mountInvestmentIntelligence,sectorDailyReturn,businessClassification,classificationGroups} from "../owner-investment-intelligence.mjs";
 class TestNode {
  constructor(tag){this.tagName=tag;this.childNodes=[];this.listeners={};this.attrs={};this.dataset={};this.style={};this.open=false;this.value="";this._text="";this.id="";}
  set textContent(v){this._text=String(v);this.childNodes=[]}
@@ -98,5 +98,30 @@ test("white editorial scenes show distinct compositions with retained source lab
  assert.match(main.textContent,/Dated secondary 1D returns/);
  const row=marketRow();const card=holdingCard(row,cardEdition(),sleeveWeights([row]));
  for(const cls of ["ps-recap-position-hero","ps-recap-position-price","ps-recap-allocation","ps-recap-position-valuation"])assert(card.all().some(x=>x.className===cls),cls);
+ }finally{globalThis.document=prior}
+});
+
+test("classification respects curated sector, retained theme and unknown values",()=>{
+ assert.deepEqual(businessClassification({researchSector:"Industrials",sector:"Energy / shipping",industry:"Tanker shipping",theme:"ENERGY"}),{sector:"Industrials",industry:"Tanker shipping",theme:"Energy"});
+ assert.equal(businessClassification({}).industry,"Unclassified industry");
+ assert.deepEqual(classificationGroups([{sector:"Technology"},{researchSector:"Technology"},{sector:"Healthcare"}],"sector"),[["Technology",2],["Healthcare",1]]);
+});
+test("industry labels, sector filters and grouped browsing work without altering recommendation status",()=>{
+ const prior=globalThis.document;globalThis.document={createElement:t=>new TestNode(t),createTextNode:t=>{const n=new TestNode("#text");n.textContent=t;return n}};
+ try{
+ const main=new TestNode("main");
+ const p={...edition([{...bb("X"),researchSector:"Technology",industry:"Memory",theme:"AI",rank:1,why:"Check earnings"},{...bb("Y"),researchSector:"Healthcare",industry:"Insurance",theme:"HEALTH"},{...bb("Z"),theme:"ENERGY"}]),classification:{kind:"CLASSIFICATION_ONLY",researchAsOf:"2026-11-25T23:00:00Z",basis:"Curated taxonomy"}};
+ mountInvestmentIntelligence("ideas",main,p);
+ assert.match(main.textContent,/Classification-only update/);
+ assert.match(main.textContent,/Technology · Memory · AI/);
+ assert.match(main.textContent,/Candidate counts, not portfolio weights/);
+ const drawer=main.all().find(x=>x.tagName==="details"&&x.childNodes[0]?.textContent.startsWith("Browse all 3"));
+ const selects=drawer.all().filter(x=>x.tagName==="select");for(const s of selects)s.value=s.childNodes[0].value;
+ const sector=selects.find(x=>x.childNodes[0].value==="All sectors"),industry=selects.find(x=>x.childNodes[0].value==="All industries"),group=selects.find(x=>x.childNodes[0].value==="Ranked list");
+ drawer.open=true;drawer.listeners.toggle();assert.match(drawer.textContent,/3 of 3 candidates/);
+ sector.value="Technology";sector.listeners.change();assert.match(drawer.textContent,/1 of 3 candidates/);
+ industry.value="Insurance";industry.listeners.change();assert.match(drawer.textContent,/0 of 3 candidates/);
+ industry.value="All industries";sector.value="All sectors";group.value="Group by industry";group.listeners.change();
+ assert.match(drawer.textContent,/Memory · 1/);assert.match(drawer.textContent,/Unclassified industry · 1/);assert.match(drawer.textContent,/RESEARCH \/ RECHECK/);
  }finally{globalThis.document=prior}
 });

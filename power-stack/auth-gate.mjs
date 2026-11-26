@@ -73,7 +73,7 @@ const modules={
  supplement:()=>import("./owner-nov17-research.mjs?v=20261119-action2"),
  command:()=>import("./owner-command-rooms.mjs?v=20261119-dossier1"),
  index:()=>import("./owner-decision-desk.mjs?v=20261126-contrast1"),
- table:()=>import("./owner-portfolio-table.mjs?v=20261126-contrast1"),
+ table:()=>import("./owner-portfolio-table.mjs?v=20261127-industry1"),
  ledger:()=>import("./owner-portfolio.js?v=20261120-one-gate1"),
  decisions:()=>import("./owner-decisions.mjs?v=20261120-stable-gate2"),
  ideas:()=>import("./owner-ideas-tracker.mjs?v=20261126-bbfirst"),
@@ -227,7 +227,7 @@ async function load(styleReady){
  if(PAGE!=="dossiers"){
   try{
    const edition=await editionPromise;
-   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261126-contrast1");
+   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261127-industry1");
    if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,edition);
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }

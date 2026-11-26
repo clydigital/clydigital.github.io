@@ -334,3 +334,7 @@ html[data-private-page="ideas"] body.ps-fin-pulse main#owner-ideas-content :is(.
  html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-item p,html[data-private-page="index"] body.ps-fin-pulse #workspace .ps-al-candidate-card dd{font-size:17px!important}
 }
 @media(prefers-reduced-motion:reduce){html[data-private-page] body.ps-fin-pulse main *{transition:none!important;animation:none!important}}
+
+/* Business-classification grouping uses the existing editorial grid. */
+html[data-private-page] body.ps-fin-pulse main .ps-recap-class-heading{grid-column:1/-1;font-size:20px!important;margin:12px 0 4px!important}
+html[data-private-page] body.ps-fin-pulse main .ps-recap-fact-grid>button{white-space:normal;text-align:left;min-width:0}
