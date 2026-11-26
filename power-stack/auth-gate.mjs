@@ -231,6 +231,17 @@ async function load(styleReady){
    if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,edition);
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }
+ if(PAGE==="index"){
+  const brief=content.querySelector("#ps-investment-intelligence");
+  if(brief&&brief.querySelector("[data-section='01']")){
+   const legacy=document.createElement("details");legacy.className="ps-pareto-legacy";
+   const label=document.createElement("summary");label.textContent="Full War Room, tools and decision history";legacy.append(label);
+   brief.remove();for(const node of [...content.children])legacy.append(node);
+   content.prepend(brief);content.append(legacy);
+   const reveal=()=>{const id=location.hash.slice(1);if(id&&[...legacy.querySelectorAll("[id]")].some(x=>x.id===id)){legacy.open=true;document.getElementById(id)?.scrollIntoView();}};
+   window.addEventListener("hashchange",reveal);requestAnimationFrame(reveal);
+  }
+ }
  await styleReady;
  if(!authorised)return;
  // Remove the overlay BEFORE enabling the desk theme in the same JS task.
@@ -276,7 +287,7 @@ async function init(){
    const match=/^(index|research|sectors|decisions|portfolio|archive|ideas|dossiers)(#[a-zA-Z0-9_-]+)?$/.exec(planned);
    if(match&&(match[1]!==PAGE||match[2])){
     const {data:{session}={}}=await db.auth.getSession();
-    if(session){location.replace(match[1]+".html"+(match[2]||""));return;}
+    if(session){location.replace(match[1]+".html"+(match[1]==="index"?"?owner=1":"")+(match[2]||""));return;}
    }
   }
   db.auth.onAuthStateChange((event,session)=>{
@@ -289,4 +300,15 @@ async function init(){
   await load(styleReady);
  }catch(e){deny("Authentication unavailable. The private site is locked.");}
 }
-await init();
+// Anonymous overview never initializes Auth or reads protected data.
+const publicOverview=$("ps-open-overview");
+const wantsOwner=new URLSearchParams(location.search).get("owner")==="1"||Boolean(location.hash);
+if(PAGE==="index"&&publicOverview&&!wantsOwner){
+ $("gate-panel").hidden=true;
+ $("site-header").hidden=true;
+ document.body.classList.remove("ps-auth-pending");
+ document.body.classList.add("ps-open-mode");
+}else{
+ if(publicOverview){publicOverview.hidden=true;$("gate-panel").hidden=false;document.body.classList.remove("ps-open-mode");document.body.classList.add("ps-auth-pending");}
+ await init();
+}
