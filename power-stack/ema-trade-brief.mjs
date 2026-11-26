@@ -18,7 +18,7 @@ export function tradeObservation(row,now=new Date()){
  const levels=list(scan.observations).filter(o=>o?.warmup==="READY"&&o.asOf===q.asOf&&["D","W","M"].includes(o.frame)&&widths[o.period]===o.multiplier&&[o.lower,o.ema,o.upper,o.distancePct].every(finite)&&o.lower>0&&o.lower<o.upper&&o.lower<=o.ema&&o.ema<=o.upper);
  if(!levels.length)return null;
  const quality=scan.recentSessionQuality;
- const verified=quality?.status==="VERIFIED"&&quality.expectedSession===q.asOf&&list(quality.missingSessions).length===0&&list(quality.unexpectedSessions).length===0&&row.sessionFreshness!=="BEHIND_US_SESSION"&&q.sessionFreshness!=="BEHIND_US_SESSION";
+ const verified=age<=4*86400000&&quality?.status==="VERIFIED"&&quality.expectedSession===q.asOf&&list(quality.missingSessions).length===0&&list(quality.unexpectedSessions).length===0&&row.sessionFreshness!=="BEHIND_US_SESSION"&&q.sessionFreshness!=="BEHIND_US_SESSION";
  const daily=levels.filter(o=>o.frame==="D");
  const retests=daily.filter(o=>{const r=o.bandRespect?.lastRetest;return r&&day(r.session)&&days(q.asOf,r.session)>=0&&days(q.asOf,r.session)<=7&&finite(r.level)&&r.level>0&&((r.boundary==="lower"&&r.direction==="support")||(r.boundary==="upper"&&r.direction==="resistance"))}).sort((a,b)=>b.bandRespect.lastRetest.session.localeCompare(a.bandRespect.lastRetest.session)||a.period-b.period);
  const last=retests[0];let chosen=null,side=null,stage="LEVEL WATCH",eventDate=null,reason="No verified recent daily retest or hold. Proximity is not a signal.";
@@ -31,7 +31,7 @@ export function tradeObservation(row,now=new Date()){
   else if(last.bandRespect.status==="BREAK_PENDING"){stage="BREAK PENDING / WAIT";reason="Prior respected band is under pressure; the required three-close reset is not confirmed."}
   else if(last.bandRespect.status==="RESPECTED"){
    side=r.direction==="support"?"LONG":"SHORT";stage=side+" RETEST WATCH";
-   reason="Last observed daily "+last.period+" EMA band "+r.direction+" retest on "+r.session+"; closed back inside the preceding band. This is a bias observation, not an execution trigger.";
+   reason="Last observed daily "+last.period+" EMA band "+r.direction+" retest on "+r.session+" at "+fmt(r.level,q.currency)+"; closed back inside the preceding band. This is a bias observation, not an execution trigger.";
   }
  }
  if(verified&&!last){
@@ -44,7 +44,7 @@ export function tradeObservation(row,now=new Date()){
  const boundary=side==="LONG"?(isBreak?chosen.upper:chosen.lower):side==="SHORT"?(isBreak?chosen.lower:chosen.upper):null;
  const next=side?levels.flatMap(x=>[x.ema,x.lower,x.upper]).filter(n=>side==="LONG"?n>Math.max(q.price,boundary):n<Math.min(q.price,boundary)).sort((a,b)=>side==="LONG"?a-b:b-a)[0]:null;
  const higher=levels.filter(x=>x.frame!=="D").sort((a,b)=>Math.abs(a.distancePct)-Math.abs(b.distancePct))[0];
- return {ticker,name:row.name||row.company||ticker,currency:q.currency,price:q.price,asOf:q.asOf,sourceUrl:q.sourceUrl,theme:row.industry||row.theme||row.sector||"Market coverage",stage,side,reason,chosen,levels,verified,eventDate,higher,boundary,next,priority:side?0:verified?1:2};
+ return {ticker,name:row.name||row.company||ticker,currency:q.currency,price:q.price,asOf:q.asOf,sourceUrl:q.sourceUrl,moves:[q.changePct,q.change3dPct,q.change5dPct],thesis:typeof row.why==="string"?row.why:null,theme:row.industry||row.theme||row.sector||"Market coverage",stage,side,reason,chosen,levels,verified,eventDate,higher,boundary,next,priority:side?0:verified?1:2};
 }
 export function rankedTrades(rows,now=new Date()){
  return list(rows).map(x=>tradeObservation(x,now)).filter(Boolean).sort((a,b)=>a.priority-b.priority||(b.eventDate||"").localeCompare(a.eventDate||"")||b.asOf.localeCompare(a.asOf)||Math.abs(a.chosen.distancePct)-Math.abs(b.chosen.distancePct)||a.ticker.localeCompare(b.ticker));
@@ -56,7 +56,9 @@ export function renderTradeCard(t){
  const c=node("article",undefined,"ps-recap-visual-card ps-ema-trade-card"),o=t.chosen,frame={D:"Daily",W:"Weekly",M:"Monthly"}[o.frame],price=n=>fmt(n,t.currency);
  c.append(node("small",t.ticker+" · "+t.theme.replaceAll("_"," ")),node("h3",t.name),node("p",t.stage,"ps-ema-stage"));
  fact(c,"Price",price(t.price)+" · "+t.asOf+" completed-session observation");
+ if(t.moves.some(finite))fact(c,"1D / 3D / 5D",t.moves.map(n=>finite(n)?(n>0?"+":"")+n.toFixed(2)+"%":"—").join(" / "));
  fact(c,"What / why",t.reason);
+ if(t.thesis)fact(c,"Investment context",t.thesis);
  fact(c,"Key zone",frame+" "+o.period+" EMA "+price(o.ema)+" · ±"+o.multiplier+" SD "+price(o.lower)+" – "+price(o.upper));
  if(t.higher)fact(c,"Higher timeframe",t.higher.frame+" "+t.higher.period+" EMA "+price(t.higher.ema)+" · "+t.higher.side+" EMA; context, not confirmation");
  if(t.side){
@@ -73,7 +75,7 @@ export function mountTradeBrief(host,rows,now=new Date()){
  const grid=node("div",undefined,"ps-open-grid ps-recap-technical-grid");for(const t of ranked.slice(0,3))grid.append(renderTradeCard(t));host.append(grid);
  if(ranked.length>3){const d=node("details");d.append(node("summary","All "+ranked.length+" EMA observations"));let rendered=false;d.addEventListener("toggle",()=>{if(d.open&&!rendered){rendered=true;for(const t of ranked.slice(3))d.append(renderTradeCard(t));}});host.append(d);}
 }
-export async function initOpenTradeBrief(host,loader=loadBluebellyStockCoverage){
+export async function initOpenTradeBrief(host,loader=()=>loadBluebellyStockCoverage((url,opts)=>fetch(url,{...opts,signal:AbortSignal.timeout(12000)}))){
  const p=await loader();host.replaceChildren();
  if(!p){host.append(node("p","Bluebelly EMA feed unavailable or failed validation. Historical reference levels are below; no current signals."));return;}
  mountTradeBrief(host,p.rows);
