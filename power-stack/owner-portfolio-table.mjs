@@ -115,7 +115,7 @@ export function quotes(feed,now=new Date()){
 
 /** Merge only source-qualified regular-session closes for already-private instruments.
  * Do not carry return metrics from an older session into a newer close. */
-export function applyOwnerCloseObservations(lines,observations,now=new Date()){
+export function applyOwnerCloseObservations(lines,observations,now=new Date(),canonicalTickers=new Set()) {
  const best=new Map();
  for(const row of Array.isArray(observations)?observations:[]){
   const id=ticker(row?.ticker),date=row?.observed_on,price=typeof row?.price==="number"?row.price:typeof row?.price==="string"&&/^\d+(?:\.\d+)?$/.test(row.price)?Number(row.price):NaN;
@@ -133,6 +133,9 @@ export function applyOwnerCloseObservations(lines,observations,now=new Date()){
  let count=0;
  const updated=lines.map(line=>{
   if(!line.held&&!line.onWatchlist&&!line.ideaTracked)return line;
+  // Canonical BB membership wins even when its observation is missing or stale.
+  // Do not conceal a canonical gap using the historical private quote ledger.
+  if(canonicalTickers.has(line.ticker))return line;
   const q=best.get(line.ticker);if(!q||line.currency&&line.currency!==q.currency||line.session&&line.session>=q.observed_on)return line;
   count++;
   return {...line,close:q.price,currency:q.currency,session:q.observed_on,day:null,threeDay:null,fiveDay:null,basis:"Private verified exchange close",quoteSource:q.source_name};
@@ -256,7 +259,8 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
   &&Date.now()-feedAt<=72*3600000?priceFeed:null;
  const {lines:recorded,asOf}=project(data.snapshot,validFeed);
  const trackedIdeas=ideaResult.error?[]:(ideaResult.data||[]);
- const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data);
+ const canonicalTickers=new Set((priceFeed?.rows??[]).filter(row=>row.quoteAuthority==="BLUEBELLY").map(row=>ticker(row.ticker)).filter(Boolean));
+ const merged=applyOwnerCloseObservations(expandMarketRows(recorded,trackedIdeas,validFeed,quotes(validFeed).holding),privateQuotes.error?[]:privateQuotes.data,new Date(),canonicalTickers);
  const lines=merged.lines;const weights=sleeveWeights(lines);
  const scopeFromHash=hash=>({"#holdings":"holdings","#watchlist":"watchlist",
   "#bonds":"bonds","#research":"ideas","#markets":"markets"})[hash]||"all";
@@ -279,7 +283,7 @@ export async function initPortfolioTable(db,host,user,{edition=null}={}){
  heading.append(title,el("span","Delayed closes · "+
   (validFeed?asOf:"feed unavailable or overdue")+
   (validFeed?" · "+eligibleNow+" source-qualified quotes":""),"ps-table-note"));
- heading.append(el("p",privateQuotes.error?"Private quote refresh unavailable; showing verified public observations only.":merged.count+" instruments updated from newer private closes; unavailable same-session returns show —.","ps-table-note"));
+ heading.append(el("p",privateQuotes.error?"Private quote refresh unavailable; showing verified public observations only.":merged.count+" non-canonical instruments updated from newer private closes; Bluebelly-covered gaps remain visible; unavailable same-session returns show —.","ps-table-note"));
  const opportunities=el("a","Review investment ideas →","ps-table-opportunities");
  opportunities.href="ideas.html";heading.append(opportunities);host.append(heading);
  const controls=el("div",null,"ps-table-controls"),input=el("input"),chips=el("div",null,"ps-table-chips");
