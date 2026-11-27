@@ -3,6 +3,7 @@ import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from "./owner-portfolio-config.mj
 // Identity is checked by Google Auth plus Supabase owner-only row-level policies.
 const OAUTH_CALLBACK="https://clydigital.github.io/power-stack/portfolio.html";
 const PAGE=document.documentElement.dataset.privatePage||"index";
+const explicitUnlock=new URLSearchParams(location.search).get("unlock")==="1";
 const $=id=>document.getElementById(id);
 let db=null, authorised=false, privateContent=null, ownerId=null, authEpoch=0;
 const began=performance.now();
@@ -91,10 +92,11 @@ async function readyModule(key){
 }
 async function load(styleReady){
  const access=await authenticateAndRead();
- if(!access){deny("Google sign-in required. Only the registered owner may enter.");return;}
+ if(!access){if(PAGE==="index"&&!explicitUnlock){await openDesk();return;}deny("Google sign-in required for protected records.");return;}
  const {user,pages,error}=access;
  const page=pages?.find(row=>row.page_key===(PAGE==="ideas"?"index":PAGE));
- if(error||!page?.body_html){deny("Owner access could not be verified. Sign in with the registered Google account.");return;}
+ if(error||!page?.body_html){if(PAGE==="index"&&!explicitUnlock){await openDesk();return;}deny("Owner access could not be verified. Sign in with the registered Google account.");return;}
+ if(PAGE==="index"&&publicOverview){publicOverview.hidden=true;document.body.classList.remove("ps-open-mode");document.body.classList.add("ps-auth-pending");}
  const roomsPage=pages.find(row=>row.page_key==="index");
  // One authenticated manual edition read for both existing tools and new intelligence views.
  const editionPromise=PAGE==="dossiers"?Promise.resolve(null):Promise.resolve(db.from("power_stack_intelligence_editions").select("edition_as_of,payload").eq("owner_user_id",user.id).order("edition_as_of",{ascending:false}).limit(1).maybeSingle()).then(({data,error})=>error?null:data?.payload??null,()=>null);
@@ -227,8 +229,8 @@ async function load(styleReady){
  if(PAGE!=="dossiers"){
   try{
    const edition=await editionPromise;
-   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261127-industry1-ema2");
-   if(authorised&&ownerId===user.id){const {ownerFourHReader}=await import("./ema-trade-brief.mjs?v=20261127-ema2");mountInvestmentIntelligence(PAGE,content,edition,{readFourH:ownerFourHReader(db,user)});}
+   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261127-industry1-dwm1");
+   if(authorised&&ownerId===user.id){mountInvestmentIntelligence(PAGE,content,edition);if(PAGE==="index"&&edition){const {offerLocalCopy}=await import("./local-research-desk.mjs?v=20261127-dwm1");offerLocalCopy(content,edition);}}
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }
  if(PAGE==="index"){
@@ -265,14 +267,14 @@ async function init(){
  });
  $("logout-button").addEventListener("click",async()=>{
   deny("Signing out…");$("login-button").hidden=true;
-  try{await db?.auth.signOut()}finally{sessionStorage.removeItem("power-stack-target");location.replace("index.html");}
+  try{await db?.auth.signOut()}finally{sessionStorage.removeItem("power-stack-target");try{localStorage.removeItem("ps-local-research-edition/1")}catch{}location.replace("index.html");}
  });
  try{
   if(location.protocol!=="https:"||location.hostname!=="clydigital.github.io"||
     !location.pathname.startsWith("/power-stack/"))throw Error("Unapproved host");
   if(!SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_"))throw Error("Missing browser key");
   // Start static assets and the SDK together, independent of the owner request.
-  const styleReady=privateStyles();
+  const styleReady=PAGE==="index"&&!explicitUnlock?Promise.resolve():privateStyles();
   prewarm();
   const {createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/+esm");
   db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
@@ -297,18 +299,26 @@ async function init(){
     location.replace("index.html");
    }
   });
-  await load(styleReady);
- }catch(e){deny("Authentication unavailable. The private site is locked.");}
+  if(PAGE==="index"&&!explicitUnlock){const {data:{session}={}}=await db.auth.getSession();if(!session){await openDesk();return;}await load(privateStyles());}else await load(styleReady);
+ }catch(e){if(PAGE==="index"&&!explicitUnlock){await openDesk();return;}deny("Authentication unavailable. Protected records are locked.");}
 }
-// Anonymous overview never initializes Auth or reads protected data.
+// A no-login research desk always renders immediately. The owner link silently
+// restores a verified persistent session if present, otherwise opens the same desk.
+// Only an explicit unlock or a request for protected specialist records prompts login.
 const publicOverview=$("ps-open-overview");
 const wantsOwner=new URLSearchParams(location.search).get("owner")==="1"||Boolean(location.hash);
-if(PAGE==="index"&&publicOverview&&!wantsOwner){
- $("gate-panel").hidden=true;
- $("site-header").hidden=true;
- document.body.classList.remove("ps-auth-pending");
+async function openDesk(){
+ if(!publicOverview)return;
+ publicOverview.hidden=false;$("gate-panel").hidden=true;$("site-header").hidden=true;
+ if(privateContent){privateContent.replaceChildren();privateContent.hidden=true;}authorised=false;ownerId=null;
+ document.body.classList.remove("ps-auth-pending","ps-fin-pulse","psr-landing-active");
  document.body.classList.add("ps-open-mode");
- const host=$("ps-open-ema");if(host)try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-ema2");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}
+ for(const l of document.querySelectorAll("link[data-private-style]"))l.media="print";
+ const host=$("ps-open-ema");if(host&&!host.dataset.loaded){host.dataset.loaded="1";try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-dwm1");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}}
+ const local=$("ps-local-desk");if(local&&!local.dataset.loaded){local.dataset.loaded="1";try{const {mountLocalCopy}=await import("./local-research-desk.mjs?v=20261127-dwm1");mountLocalCopy(local);}catch{local.textContent="Local research copy unavailable.";}}
+}
+if(PAGE==="index"&&publicOverview&&!explicitUnlock){
+ if(wantsOwner){await init();}else await openDesk();
 }else{
  if(publicOverview){publicOverview.hidden=true;$("gate-panel").hidden=false;document.body.classList.remove("ps-open-mode");document.body.classList.add("ps-auth-pending");}
  await init();
