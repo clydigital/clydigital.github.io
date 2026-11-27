@@ -3,3 +3,6 @@ import {boundaryEvents} from "../ema-trade-brief.mjs";
 test("fresh crossing and near EMA approach remain conditional watches",()=>{const r=row({bandRespect:{status:"NONE"},windows:{"1":{events:[{session:day,boundary:"lower",direction:"up"}],approach:"none"}}});const x=tradeObservation(r,now);assert.equal(x.stage,"FRESH CROSS / WAIT");assert.equal(x.side,null);assert.equal(x.events[0].level,95);const near=row({bandRespect:{status:"NONE"},distancePct:-.5,windows:{"3":{approach:"up_to"}}});near.price=99.5;assert.equal(tradeObservation(near,now).stage,"EMA APPROACH / WATCH")});
 
 test("weekly and monthly anchored boundary observations surface as watch states",()=>{const r=row({frame:"W",bandRespect:undefined,windows:{"1":{events:[{session:day,boundary:"lower",direction:"up"}]}}});const x=tradeObservation(r,now);assert.equal(x.stage,"FRESH CROSS / WAIT");assert.equal(x.events[0].frame,"W");assert.equal(x.side,null);const m=row({frame:"M",bandRespect:undefined,windows:{"3":{approach:"up_to"}},distancePct:-.5});m.price=99.5;assert.equal(tradeObservation(m,now).events[0].frame,"M")});
+
+import {OPEN_FEED_TIMEOUT_MS} from "../ema-trade-brief.mjs";
+test("cold monitor budget accommodates the upstream bounded batches",()=>assert.ok(OPEN_FEED_TIMEOUT_MS>=60000&&OPEN_FEED_TIMEOUT_MS<=120000));

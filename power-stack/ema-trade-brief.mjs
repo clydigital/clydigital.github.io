@@ -94,8 +94,13 @@ export function mountTradeBrief(host,rows,now=new Date()){
  const grid=node("div",undefined,"ps-open-grid ps-recap-technical-grid");for(const t of ranked.slice(0,3))grid.append(renderTradeCard(t));host.append(grid);
  if(ranked.length>3){const d=node("details");d.append(node("summary","All "+ranked.length+" EMA observations"));let rendered=false;d.addEventListener("toggle",()=>{if(d.open&&!rendered){rendered=true;for(const t of ranked.slice(3))d.append(renderTradeCard(t));}});host.append(d);}
 }
-export async function initOpenTradeBrief(host,loader=()=>loadBluebellyStockCoverage((url,opts)=>fetch(url,{...opts,signal:AbortSignal.timeout(12000)}))){
- const p=await loader();host.replaceChildren();
- if(!p){host.append(node("p","Bluebelly EMA feed unavailable or failed validation. Historical reference levels are below; no current signals."));return;}
+// A cold canonical monitor refresh can exceed the normal interactive timeout.
+// One request per click; no parallel retry loop or independent scanner.
+export const OPEN_FEED_TIMEOUT_MS=90000;
+export async function initOpenTradeBrief(host,loader=()=>loadBluebellyStockCoverage((url,opts)=>fetch(url,{...opts,signal:AbortSignal.timeout(OPEN_FEED_TIMEOUT_MS)}))){
+ host.replaceChildren();const status=node("p","Reading Bluebelly D/W/M observations. A cold market cache can take longer.");status.setAttribute("role","status");host.append(status);
+ let p=null;try{p=await loader()}catch{}
+ host.replaceChildren();
+ if(!p){host.append(node("p","Bluebelly EMA feed unavailable or failed validation. Historical reference levels are below; no current signals."));const retry=node("button","Retry Bluebelly data");retry.type="button";retry.addEventListener("click",()=>{retry.disabled=true;void initOpenTradeBrief(host,loader);},{once:true});host.append(retry);return;}
  mountTradeBrief(host,p.rows);
 }
