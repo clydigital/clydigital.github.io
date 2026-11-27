@@ -314,8 +314,8 @@ async function openDesk(){
  document.body.classList.remove("ps-auth-pending","ps-fin-pulse","psr-landing-active");
  document.body.classList.add("ps-open-mode");
  for(const l of document.querySelectorAll("link[data-private-style]"))l.media="print";
- const host=$("ps-open-ema");if(host&&!host.dataset.loaded){host.dataset.loaded="1";try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-dwm1");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}}
  const local=$("ps-local-desk");if(local&&!local.dataset.loaded){local.dataset.loaded="1";try{const {mountLocalCopy}=await import("./local-research-desk.mjs?v=20261127-dwm1");mountLocalCopy(local);}catch{local.textContent="Local research copy unavailable.";}}
+ const host=$("ps-open-ema");if(host&&!host.dataset.loaded){host.dataset.loaded="1";try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-dwm1");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}}
 }
 if(PAGE==="index"&&publicOverview&&!explicitUnlock){
  if(wantsOwner){await init();}else await openDesk();
