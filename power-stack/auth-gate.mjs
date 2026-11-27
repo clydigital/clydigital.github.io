@@ -227,8 +227,8 @@ async function load(styleReady){
  if(PAGE!=="dossiers"){
   try{
    const edition=await editionPromise;
-   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261127-industry1-ema1");
-   if(authorised&&ownerId===user.id)mountInvestmentIntelligence(PAGE,content,edition);
+   const {mountInvestmentIntelligence}=await import("./owner-investment-intelligence.mjs?v=20261127-industry1-ema2");
+   if(authorised&&ownerId===user.id){const {ownerFourHReader}=await import("./ema-trade-brief.mjs?v=20261127-ema2");mountInvestmentIntelligence(PAGE,content,edition,{readFourH:ownerFourHReader(db,user)});}
   }catch(error){console.error("Investment intelligence edition unavailable",error);}
  }
  if(PAGE==="index"){
@@ -308,7 +308,7 @@ if(PAGE==="index"&&publicOverview&&!wantsOwner){
  $("site-header").hidden=true;
  document.body.classList.remove("ps-auth-pending");
  document.body.classList.add("ps-open-mode");
- const host=$("ps-open-ema");if(host)try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-ema1");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}
+ const host=$("ps-open-ema");if(host)try{const {initOpenTradeBrief}=await import("./ema-trade-brief.mjs?v=20261127-ema2");await initOpenTradeBrief(host);}catch{host.textContent="EMA feed unavailable; no current technical signal."}
 }else{
  if(publicOverview){publicOverview.hidden=true;$("gate-panel").hidden=false;document.body.classList.remove("ps-open-mode");document.body.classList.add("ps-auth-pending");}
  await init();
